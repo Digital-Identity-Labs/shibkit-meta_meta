@@ -5,8 +5,8 @@ begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
     gem.name = "shibkit"
-    gem.summary = %Q{TODO: one-line summary of your gem}
-    gem.description = %Q{TODO: longer description of your gem}
+    gem.summary = %Q{Shibboleth data toolkit}
+    gem.description = %Q{Rack and Rails libraries for using Shibboleth SP authentication and authorisation data}
     gem.email = "pete@binary-ape.org"
     gem.homepage = "http://github.com/binaryape/shibkit"
     gem.authors = ["Pete Birkinshaw"]
