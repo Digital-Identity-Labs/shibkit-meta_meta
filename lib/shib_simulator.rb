@@ -3,53 +3,18 @@ class ShibSimulator
   require 'haml'
   require 'haml/template'
   
-  DEFAULT_DATA = {
-    "Pete Birkinshaw at University of Manchester" => {
-      #Shib-Application-ID = default
-      #Shib-Session-ID = _41c1a44129c6dac0e570dc2ccc2a3b8e
-      #Shib-Identity-Provider = https://shib.manchester.ac.uk/shibboleth
-      #Shib-Authentication-Instant = 2009-12-29T20:22:16.195Z
-      #Shib-Authentication-Method = urn:oasis:names:tc:SAML:1.0:am:unspecified
-      #Shib-AuthnContext-Class = urn:oasis:names:tc:SAML:1.0:am:unspecified
-      #Shib-Assertion-01 = http://localhost/Shibboleth.sso/GetAssertion?key=_41c1a44129c6dac0e570dc2ccc2a3b8e&ID=_8c76f4d665f14df97422603f5457859b
-      #Shib-Assertion-02 = http://localhost/Shibboleth.sso/GetAssertion?key=_41c1a44129c6dac0e570dc2ccc2a3b8e&ID=_3ea034792a6fc93c158eaef138b5a30f
-      #Shib-Assertion-Count = 02
-      #affiliation = staff@manchester.ac.uk;member@manchester.ac.uk;alum@manchester.ac.uk
-      #displayName = Pete Birkinshaw
-      #entitlement = urn:mace:oclc.org:100324218;urn:mace:dir:entitlement:common-lib-terms;http://directory.manchester.ac.uk/epe/portal/role/I2005/I3049/staff;http://directory.manchester.ac.uk/epe/pkm/ra/analyst;http://directory.manchester.ac.uk/epe/man#jorumforstaff;http://directory.manchester.ac.uk/epe/man#default0;http://directory.manchester.ac.uk/epe/devtest/default;man#jorumforstaff;man#default0
-      #eppn = 50152327@manchester.ac.uk
-      #givenName = Pete
-      #mail = Peter.Birkinshaw@manchester.ac.uk
-      #ou = Infrastructure and Operations;IT Services;Administration & Central Services
-      #personalTitle = Mr
-      #sn = Birkinshaw
-      #targeted-id = oAXK0FHBjGeHud5KkNJDD+stcns=@manchester.ac.uk
-      #title = Senior IT Officer, Registration Services
-      #unscoped-affiliation = staff;member;alum
-      'unscoped-affiliation' => 'staff;member;alum'
-      }
-  }
  
-  DEFAULT_MAPPER = {}
  
-CHOOSER_HAML = <<HAML
-!!!
-%html{ :xmlns => "http://www.w3.org/1999/xhtml", :lang => "en", "xml:lang" => "en"}
-  %head
-    %title Shibboleth Simulator: Login
-    %meta{"http-equiv" => "Content-Type", :content => "text/html; charset=utf-8"}
-  %body
-    #header
-      %h1 Login
-      %h2 Please Choose A User
-    #content
-      %p
-        %a{:href => "/?shibsim_user=1"} Pete Birkinshaw at University of Manchester
-    #footer
-      %p
-        All content copyright © Pete  
+  ##
+  ## Setup views, default data, etc
+  ##
 
-HAML
+  
+  ## Load default data
+  DEFAULT_MAPPER = {}
+  #DEFAULT_DATA = prepare_user_data()
+
+   @@views = nil
  
   def initialize(app, data_source=DEFAULT_DATA, data_mapper=DEFAULT_MAPPER)
     
@@ -62,9 +27,7 @@ HAML
     
     ## Hash to change keys to match Shibboleth headers in use
     # ...
-    
-    puts '1'
-    
+
   end
 
   def call(env)
@@ -80,35 +43,24 @@ HAML
 
     ## Directly requested user or user? (via URL param)
     user_id = req.params['shibsim_user']
-    
-        puts '2'
 
     ## Bodge session or display a page showing the list of available fixtures
     if user_id 
       
       set_session(env, user_id)
-      
-               puts '3'
-      
+      tidy_request(env)
+
       return @app.call(env)
-      
- 
-      
+          
     else
  
-      page_body = generate_chooser_page(env)
+      page_body = render_page(:user_chooser)
 
-    puts '4'
-    puts page_body
-    status, headers, body = @app.call env
-    puts status.inspect
-    puts headers.inspect
-    puts page_body.inspect
-    
-    puts req.query_string
-    
-    #return [status, headers, page_body]
-    return 200, { "Content-Type" => "text/html; charset=utf-8" }, [page_body.to_s] 
+      status, headers, body = @app.call env
+      
+      tidy_request(env)
+        
+      return 200, { "Content-Type" => "text/html; charset=utf-8" }, [page_body.to_s] 
       
     end
 
@@ -116,29 +68,27 @@ HAML
   
   ## Wipe clean the Rack session info for this middleware
   def reset_session(env)
-    
-             puts '5'
-    
+ 
     env["rack.session"]['shib_simulator_active'] = false
+    
+    tidy_request(env)
     
   end
   
   ## Display a chooser page
-  def generate_chooser_page(env)
+  def render_page(view, options={})
     
     ## HAML rendering options
     Haml::Template.options[:format] = :html5
     
     ## Render and return the page
-    haml = Haml::Engine.new(CHOOSER_HAML)
+    haml = Haml::Engine.new(views[view])
     return haml.render
     
   end
   
   ## 
   def set_session(env, user_id)
-  
-           puts '7'
   
     ## Get our user information
     # ...
@@ -157,5 +107,48 @@ HAML
     
   end
 
+  ## Remove ShibSimulator params, etc from request before it reaches application
+  def tidy_request(env)
+    
+    req = Rack::Request.new(env)
+    
+    [:shibsim_user, :shibsim_reset].each do |param|
+    
+      req.params.delete(param.to_s)
+    
+    end
+    
+  end
+  
+  private
+  
+  ## Load and prepare HAML views
+  def views
+    
+    unless @@views
+    
+      @@views = Hash.new
+    
+      [:user_chooser].each do |view| 
+
+        view_file_location = "#{File.dirname(__FILE__)}/rack_views/#{view.to_s}.haml"
+        @@views[view] = IO.read(view_file_location)
+
+      end
+    
+    end
+    
+    return @@views
+    
+  end
+  
+  ## Load and prepare user fixture data or default data 
+  def prepare_user_data
+    
+    
+    
+    
+  end
+  
 end
 
