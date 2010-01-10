@@ -5,12 +5,20 @@
     %meta{"http-equiv" => "Content-Type", :content => "text/html; charset=utf-8"}
   %body
     #header
-      %h1 Login
-      %h2 Please Choose A User
+      %h1 Shibboleth Simulator - Dev Login
+      %h2 Please Select A User
+      %h3=message
     #content
-      %p
-        %a{:href => "/?shibsim_user=1"} Pete Birkinshaw at University of Manchester
+      %ul
+        - organisations.each_pair do |organisation, users|
+          %li
+            %p
+              = organisation
+              %ul
+                - users.each do |user|
+                  %li
+                    %a{:href => "/?shibsim_user=#{user['id']}"}= user['shibsim_label']
     #footer
       %p
-        All content copyright © Pete
+        Shibboleth Simulator is produced by Manchester Identity Ltd, UK.
 
