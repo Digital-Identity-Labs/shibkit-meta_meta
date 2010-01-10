@@ -57,26 +57,38 @@ class ShibSimulator
       return @app.call(env) if env["rack.session"]['shib_simulator_active']
 
       ## Directly requested user or user? (via URL param)
-      user_id = req.params['shibsim_user']
+      user_id = req.params['shibsim_user'].to_s
+
+      #raise "AAAAAA!"
 
       ## Bodge session or display a page showing the list of available fixtures
       if user_id 
-      
+        
+        puts "1"
+        
         ## Get our user information using the param
         user_details = users[user_id]
-      
+        
+        puts "2"
+        
         ## A crude check that we've really found some attributes...
-        if user_details and user_details.kind_of(Hash) and
+        if user_details and user_details.kind_of?(Hash) and
           user_details.size > 1 
+          
+          puts "3"
           
           ## Update session
           set_session(env, user_id)
+          
+          puts "4"
           
           ## Add headers to request
           # ...
           
           ## Clean up
           tidy_request(env)
+
+          puts "4"
 
           return @app.call(env)
           
@@ -97,9 +109,9 @@ class ShibSimulator
       
       end
 
-    rescue => exception
-    
-      return fatal_error_action(env, exception)
+    rescue => oops
+      
+      return fatal_error_action(env, oops)
     
     end
 
@@ -121,13 +133,15 @@ class ShibSimulator
   end
 
   ## Error page for unrecoverable situations
-  def fatal_error_action(env, exception)
+  def fatal_error_action(env, oops)
     
-    render_locals = { :message => exception.to_s }
+    puts "Shibkit Rack error: " + oops.to_s
+    
+    render_locals = { :message => oops.to_s }
     page_body = render_page(:fatal_error, render_locals)
-
-    status, headers, body = @app.call env
-
+    
+    puts page_body
+    
     return 500, CONTENT_TYPE, [page_body.to_s]
     
   end
@@ -136,7 +150,7 @@ class ShibSimulator
   def user_chooser_action(env, options={}) 
     
      message = options[:message] 
-     code    = options[:code] || 200
+     code    = options[:code].to_i || 200
     
      render_locals = { :organisations => organisations, :users => users, :message => message }
      page_body = render_page(:user_chooser, render_locals)
@@ -205,7 +219,7 @@ class ShibSimulator
   
   ## List user records by ID
   def users
-  
+    
     return user_data[0]
   
   end
@@ -240,29 +254,35 @@ class ShibSimulator
   ## Provide user data for chooser and header injection
   def user_data
     
+    puts 'A'
+    
     unless @@users && @@orgtree
     
-      @@users   = Array.new
+      @@users   = Hash.new
       @@orgtree = Hash.new 
       
       user_fixture_file_location = "#{File.dirname(__FILE__)}/default_data/user_data.yml"
-      
-      fixture_data = YAML.load_file(user_fixture_file_location)
-    
-      fixture_data.each_pair do |label, record| 
-       
-        record['shibsim_label'] = label
-      
-        rid  = record['id']
-        rorg = record['organisation']
 
-        @@users[rid]    =   record
+      fixture_data = YAML.load_file(user_fixture_file_location)
+
+      fixture_data.each_pair do |label, record| 
+ 
+        record['shibsim_label'] = label.to_s.strip
+        rid  = record['id'].to_s
+        rorg = record['organisation'].to_s.strip
+
+        @@users[rid]    =   record        
         @@orgtree[rorg] ||= Array.new
+        
         @@orgtree[rorg] <<  record 
-       
+        
       end
-    
+ 
     end
+    
+    
+    puts @@users.inspect
+    puts @@orgtree.inspect
     
     return [@@users, @@orgtree]
     
