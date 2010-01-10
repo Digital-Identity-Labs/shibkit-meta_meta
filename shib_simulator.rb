@@ -14,7 +14,8 @@ class ShibSimulator
   ## Load default data
   DEFAULT_MAPPER = {}
   #DEFAULT_DATA = prepare_user_data()
-  CONTENT_TYPE = { "Content-Type" => "text/html; charset=utf-8" }
+  CONTENT_TYPE   = { "Content-Type" => "text/html; charset=utf-8" }
+  VIEWS          = [:user_chooser, :fatal_error]
 
   ## Initial vars for storing cached data
   @@views    = nil
@@ -59,36 +60,24 @@ class ShibSimulator
       ## Directly requested user or user? (via URL param)
       user_id = req.params['shibsim_user'].to_s
 
-      #raise "AAAAAA!"
-
       ## Bodge session or display a page showing the list of available fixtures
       if user_id 
         
-        puts "1"
-        
         ## Get our user information using the param
         user_details = users[user_id]
-        
-        puts "2"
         
         ## A crude check that we've really found some attributes...
         if user_details and user_details.kind_of?(Hash) and
           user_details.size > 1 
           
-          puts "3"
-          
           ## Update session
           set_session(env, user_id)
-          
-          puts "4"
           
           ## Add headers to request
           # ...
           
           ## Clean up
           tidy_request(env)
-
-          puts "4"
 
           return @app.call(env)
           
@@ -140,8 +129,6 @@ class ShibSimulator
     render_locals = { :message => oops.to_s }
     page_body = render_page(:fatal_error, render_locals)
     
-    puts page_body
-    
     return 500, CONTENT_TYPE, [page_body.to_s]
     
   end
@@ -154,8 +141,6 @@ class ShibSimulator
     
      render_locals = { :organisations => organisations, :users => users, :message => message }
      page_body = render_page(:user_chooser, render_locals)
-
-     status, headers, body = @app.call env
        
      return code, CONTENT_TYPE, [page_body.to_s]
     
@@ -238,7 +223,7 @@ class ShibSimulator
     
       @@views = Hash.new
     
-      [:user_chooser].each do |view| 
+      VIEWS.each do |view| 
 
         view_file_location = "#{File.dirname(__FILE__)}/rack_views/#{view.to_s}.haml"
         @@views[view] = IO.read(view_file_location)
@@ -253,8 +238,6 @@ class ShibSimulator
   
   ## Provide user data for chooser and header injection
   def user_data
-    
-    puts 'A'
     
     unless @@users && @@orgtree
     
