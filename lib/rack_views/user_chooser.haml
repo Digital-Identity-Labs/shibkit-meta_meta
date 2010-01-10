@@ -7,7 +7,8 @@
     #header
       %h1 Shibboleth Simulator - Dev Login
       %h2 Please Select A User
-      %h3=message
+      - if message
+        %h3= message 
     #content
       %ul
         - organisations.each_pair do |organisation, users|
