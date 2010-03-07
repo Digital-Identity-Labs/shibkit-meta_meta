@@ -54,17 +54,25 @@ class ShibSimulator
       ## Reset session?
       reset_session(env) if req.params['shibsim_reset']
   
-      ## Already set? Then our work here is done. #### <-- Need to ReInject!
-      return @app.call(env) if env["rack.session"]['shib_simulator_active']
+      ## Already set? Then re-inject the headers (they are outside session)
+      if env["rack.session"]['shib_simulator_active']
+        
+        ## Add appropriate headers
+        inject_headers(env)#, user_details)
+        
+        ## Pass control up to higher Rack middleware and application
+        return @app.call(env) 
+        
+      end
 
       ## Directly requested user or user? (via URL param)
-      user_id = req.params['shibsim_user'].to_s
+      user_id = req.params['shibsim_user']
 
       ## Bodge session or display a page showing the list of available fixtures
       if user_id 
         
         ## Get our user information using the param
-        user_details = users[user_id]
+        user_details = users[user_id.to_s]
         
         ## A crude check that we've really found some attributes...
         if user_details and user_details.kind_of?(Hash) and
@@ -74,17 +82,19 @@ class ShibSimulator
           set_session(env, user_id)
           
           ## Add headers to request
-          # ...
+          inject_headers(env, user_details)
           
           ## Clean up
           tidy_request(env)
 
           return @app.call(env)
           
-        end
+        else
       
-        ## User was request but no user details were found
-        message = "User with ID '#{user_id}' could not be found!" 
+          ## User was requested but no user details were found
+          message = "User with ID '#{user_id}' could not be found!"
+
+        end
 
         tidy_request(env)
         
@@ -125,6 +135,7 @@ class ShibSimulator
   def fatal_error_action(env, oops)
     
     puts "Shibkit Rack error: " + oops.to_s
+    puts "Backtrace is:\n#{oops.backtrace.to_yaml}"
     
     render_locals = { :message => oops.to_s }
     page_body = render_page(:fatal_error, render_locals)
