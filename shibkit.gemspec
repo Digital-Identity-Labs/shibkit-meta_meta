@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Pete Birkinshaw"]
-  s.date = %q{2010-03-07}
+  s.date = %q{2010-03-14}
   s.description = %q{Rack and Rails libraries for using Shibboleth SP authentication and authorisation data}
   s.email = %q{pete@binary-ape.org}
   s.extra_rdoc_files = [
@@ -26,6 +26,10 @@ Gem::Specification.new do |s|
      "features/shibkit.feature",
      "features/step_definitions/shibkit_steps.rb",
      "features/support/env.rb",
+     "lib/default_config/shibsim_config.yml",
+     "lib/default_config/shibsim_filter.rb",
+     "lib/default_data/federation_data.yml",
+     "lib/default_data/idp_data.yml",
      "lib/default_data/user_data.yml",
      "lib/rack_views/fatal_error.haml",
      "lib/rack_views/user_chooser.haml",
