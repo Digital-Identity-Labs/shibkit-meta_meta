@@ -4,7 +4,29 @@ require 'yaml'
 
 
 module Shibkit
-  module Metadata
+  module Metameta
+   
+    
+    class Person
+      
+      include SAXMachine
+      
+      element "GivenName", :as => 'given_name'
+      element "EmailAddress", :as => 'email_url'
+      element "SurName", :as => 'surname'
+      
+    end
+    
+    class Organization
+    
+      include SAXMachine
+      
+      element "OrganizationName", :as => :name
+      element "OrganizationDisplayName", :as => :display_name
+      element "OrganisationURL", :as => :url
+      element "OrganisationName", :value => 'xml:lang', :as => :language
+    
+    end
    
     class Entity
      
@@ -12,7 +34,11 @@ module Shibkit
      
       element "EntityDescriptor", :value => :ID, :as => :metadata_id
       element "EntityDescriptor", :value => :entityID, :as => :entity_id
-    
+      
+      element "Organization", :as => 'organization', :class => Organization
+      
+      elements "ContactPerson", :as => 'people', :where => {:contactType => "support"}, :class => Person
+      
     end
     
     class Federation
@@ -39,8 +65,8 @@ module Shibkit
 
 end
 
-data = IO.read('metadata.xml')
-metadata = Shibkit::Metadata::Metadata.parse(data)
+data = IO.read(File.join(File.dirname(__FILE__), '..','scratch','ukfederation-metadata.xml'))
+metadata = Shibkit::Metameta::Metadata.parse(data)
 
 metadata.federations.each do |f| 
   
@@ -52,7 +78,14 @@ metadata.federations.each do |f|
     puts 
     puts e.metadata_id
     puts e.entity_id
-    
+    puts e.organization.name if e.organization
+    puts e.organization.language if e.organization
+     
+    e.people do |p|
+      
+      puts p.email_url
+      
+    end
     
   end
   
