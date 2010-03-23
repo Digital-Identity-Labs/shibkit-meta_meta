@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{shibkit}
-  s.version = "0.1.0"
+  s.version = "0.2.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Pete Birkinshaw"]
-  s.date = %q{2010-03-14}
+  s.date = %q{2010-03-23}
   s.description = %q{Rack and Rails libraries for using Shibboleth SP authentication and authorisation data}
   s.email = %q{pete@binary-ape.org}
   s.extra_rdoc_files = [
@@ -26,17 +26,19 @@ Gem::Specification.new do |s|
      "features/shibkit.feature",
      "features/step_definitions/shibkit_steps.rb",
      "features/support/env.rb",
-     "lib/default_config/shibsim_config.yml",
-     "lib/default_config/shibsim_filter.rb",
-     "lib/default_data/federation_data.yml",
-     "lib/default_data/idp_data.yml",
-     "lib/default_data/user_data.yml",
-     "lib/rack_views/fatal_error.haml",
-     "lib/rack_views/user_chooser.haml",
+     "lib/metameta.rb",
      "lib/shib_shim.rb",
-     "lib/shib_simulator.rb",
+     "lib/shib_sim.rb",
+     "lib/shib_sim/default_config/shibsim_config.yml",
+     "lib/shib_sim/default_config/shibsim_filter.rb",
+     "lib/shib_sim/default_data/federation_data.yml",
+     "lib/shib_sim/default_data/idp_data.yml",
+     "lib/shib_sim/default_data/shibsim_config.yml",
+     "lib/shib_sim/default_data/shibsim_filter.rb",
+     "lib/shib_sim/default_data/user_data.yml",
+     "lib/shib_sim/rack_views/fatal_error.haml",
+     "lib/shib_sim/rack_views/user_chooser.haml",
      "lib/shibkit.rb",
-     "lib/shibsp_mapper.rb",
      "shibkit.gemspec",
      "spec/shibkit_spec.rb",
      "spec/spec.opts",

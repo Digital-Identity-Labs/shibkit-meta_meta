@@ -4,7 +4,7 @@
 #module Rack
   
   ##
-  class ShibSimulator
+  class ShibSim
   
     require 'haml'
     require 'haml/template'
@@ -16,8 +16,8 @@
     ##
 
     ## If no user created/edited files are present, use these from the gem
-    DEFAULT_CONFIG = "#{File.dirname(__FILE__)}/default_config/shibsim_config.yml"
-    DEFAULT_FILTER = "#{File.dirname(__FILE__)}/default_config/shibsim_filter.rb"
+    DEFAULT_CONFIG = "#{File.dirname(__FILE__)}/shib_sim/default_config/shibsim_config.yml"
+    DEFAULT_FILTER = "#{File.dirname(__FILE__)}/shib_sim/default_config/shibsim_filter.rb"
     
     ## These are the default locations of user-edited versions of the above files (Rails only at the moment)
     APP_CONFIG = RAILS_ROOT ? "#{RAILS_ROOT}/config/shibsim_config.yml" : DEFAULT_CONFIG
@@ -67,7 +67,8 @@
         reset_session(env) if req.params['shibsim_reset']
   
         ## Already set? Then re-inject the headers (they are outside session)
-        if env["rack.session"]['shibkit-sp_simulator'][:userid]
+        if env["rack.session"]['shibkit-sp_simulator'] and
+          env["rack.session"]['shibkit-sp_simulator'][:userid]
         
           ## The user id
           user_id = env['rack.session']['shibkit-sp_simulator'][:userid]
@@ -336,7 +337,7 @@
     
         VIEWS.each do |view| 
 
-          view_file_location = "#{File.dirname(__FILE__)}/rack_views/#{view.to_s}.haml"
+          view_file_location = "#{File.dirname(__FILE__)}/shib_sim/rack_views/#{view.to_s}.haml"
           @views[view] = IO.read(view_file_location)
 
         end
@@ -355,7 +356,7 @@
         @users   = Hash.new
         @orgtree = Hash.new 
       
-        user_fixture_file_location = "#{File.dirname(__FILE__)}/default_data/user_data.yml"
+        user_fixture_file_location = "#{File.dirname(__FILE__)}/shib_sim/default_data/user_data.yml"
 
         fixture_data = YAML.load_file(user_fixture_file_location)
 
@@ -417,7 +418,7 @@
       
       ## Mixin the filter Mixin
       require file_location
-      extend Rack::ShibSimulatorFilter
+      extend Rack::ShibSimFilter
       
     end
     
