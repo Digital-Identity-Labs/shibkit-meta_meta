@@ -9,14 +9,14 @@ module Rack
     require 'haml/template'
     require 'yaml'
     require 'time'
-  
+    
     ##
     ## Setup views, default data, etc
     ##
 
     ## If no user created/edited files are present, use these from the gem
-    DEFAULT_CONFIG = "#{File.dirname(__FILE__)}/shib_sim/default_config/config.yml"
-    DEFAULT_FILTER = "#{File.dirname(__FILE__)}/shib_sim/default_config/record_filter.rb"
+    DEFAULT_CONFIG = "#{::File.dirname(__FILE__)}/shib_sim/default_config/config.yml"
+    DEFAULT_FILTER = "#{::File.dirname(__FILE__)}/shib_sim/default_config/record_filter.rb"
     
     ## These are the default locations of user-edited versions of the above files (Rails only at the moment)
     APP_CONFIG = RAILS_ROOT ? "#{RAILS_ROOT}/config/shibsim_config.yml" : DEFAULT_CONFIG
@@ -336,7 +336,7 @@ module Rack
     
         VIEWS.each do |view| 
 
-          view_file_location = "#{File.dirname(__FILE__)}/shib_sim/views/#{view.to_s}.haml"
+          view_file_location = "#{::File.dirname(__FILE__)}/shib_sim/views/#{view.to_s}.haml"
           @views[view] = IO.read(view_file_location)
 
         end
@@ -355,7 +355,7 @@ module Rack
         @users   = Hash.new
         @orgtree = Hash.new 
       
-        user_fixture_file_location = "#{File.dirname(__FILE__)}/shib_sim/default_data/users.yml"
+        user_fixture_file_location = "#{::File.dirname(__FILE__)}/shib_sim/default_data/users.yml"
 
         fixture_data = YAML.load_file(user_fixture_file_location)
 
@@ -396,7 +396,7 @@ module Rack
       file_location = specified_file if specified_file
       
       ## Otherwise try the config-by-convention location if file exists
-      file_location ||= APP_CONFIG if File.exists? APP_CONFIG
+      file_location ||= APP_CONFIG if ::File.exists? APP_CONFIG
       
       ## If nothing set so far, fall back to the built-in default
       file_location ||= DEFAULT_CONFIG
@@ -410,7 +410,7 @@ module Rack
     def load_filter_mixin
       
       ## Try the config-by-convention location if file exists
-      file_location ||= APP_FILTER if File.exists? APP_FILTER
+      file_location ||= APP_FILTER if ::File.exists? APP_FILTER
       
       ## If nothing set so far, fall back to the built-in default
       file_location ||= DEFAULT_FILTER
