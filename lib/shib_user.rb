@@ -3,9 +3,7 @@ module ShibUser
   
   ## Mixin to interface to env data via Rack using default and IDP-specific maps
   module UsesSPEnvForAttrs
-    
-    private
-    
+
     ## Load the attr map hash from either default or user-specified map file
     def load_attr_hash(map_name, other_file=nil)
       
@@ -13,10 +11,10 @@ module ShibUser
       # ...
       
       ## This is the key in the hash tree for the map we want, needs to be string
-      map_name = map.to_s
+      map_name = map_name.to_s
       
       ## Load the map SP->Attribute map # TODO: Allow option to override this
-      default_file = "#{::File.dirname(__FILE__)}/shib_shim/default_config/sp_attr_map.yml"
+      default_file = "#{::File.dirname(__FILE__)}/rack/shib_shim/default_config/sp_attr_map.yml"
       
       ## Load the default file first
       attr_map = YAML.load_file(default_file)[map_name]
@@ -30,7 +28,7 @@ module ShibUser
         
       end
     
-      return map
+      return attr_map
     
     end
     
@@ -46,12 +44,7 @@ module ShibUser
       
       attribute = attribute.to_s
       
-      map = DEFAULT_SP_ATTR_MAP_DATA
-      
-      ## Check for IDP-specific attribute map
-      
-      header = map
-      
+      return @@map[attribute] || 'default'
       
     end
     
@@ -77,7 +70,7 @@ module ShibUser
     def initialize(rack_env, options={}) 
       
       ## IDP object for this assertion. Get this directly, used to get others
-      @idp_uri         = rack_env('Shib-Identity-Provider').to_s.downcase
+      @idp_uri         = rack_env['Shib-Identity-Provider'].to_s.downcase
       
       ## Check we have a valid URI for the IDP - can't continue without this
       # ...      
@@ -86,34 +79,34 @@ module ShibUser
       @login_time     = Time.new
       
       ## The Web server's remote user env variable - not always set! Avoid!
-      @remote_user    = rack_env('REMOTE_USER') || nil
+      @remote_user    = rack_env['REMOTE_USER'] || nil
       
       ## Shibboleth IDP/SP session
-      @session_id     = rack_env('Shib-Session-ID')
+      @session_id     = rack_env['Shib-Session-ID']
       
       ## The SPs application context
-      @application    = rack_env('Shib-Application-ID') || 'default'
+      @application    = rack_env['Shib-Application-ID'] || 'default'
       
       ## Time the user authenticated at the IDP, stored as string
-      @auth_instant   = rack_env('Shib-Authentication-Instant')
+      @auth_instant   = rack_env['Shib-Authentication-Instant']
       
       ## Method the user used to authenticate, cropped to last (significant) element
-      @auth_method    = rack_env('Shib-Authentication-Method')
+      @auth_method    = rack_env['Shib-Authentication-Method']
       
       ## Authentication class, cropped to last (significant) element
-      @auth_class     = rack_env('Shib-AuthnContext-Class')
+      @auth_class     = rack_env['Shib-AuthnContext-Class']
       
       ## *Initial* IP address at login - we can check for changes using this
-      @ip_address     = rack_env('REMOTE_ADDR')
+      @ip_address     = rack_env['REMOTE_ADDR']
       
       ## Does the address look proxied?
-      @proxied =  rack_env('X-Forwarded-For') ? true : false
+      @proxied =  rack_env['X-Forwarded-For'] ? true : false
       
       ## Forwarded for IP address, if proxied.
-      @forwarded_for = rack_env('X-Forwarded-For').split(',')[0]
+      @forwarded_for = rack_env['X-Forwarded-For'].split(',')[0] if @proxied
       
       ## Proxies declared by the forwarded_for header (limited to 5)
-      @proxies       = rack_env('X-Forwarded-For').split(',')[1..5]
+      @proxies       = rack_env['X-Forwarded-For'].split(',')[1..5] if @proxied
     
       ## User profile from the IDP; derived from standard eduPerson and simplified
       @attrs     = ShibUser::BasicAttrs.new(rack_env)
@@ -166,81 +159,77 @@ module ShibUser
     
     def initialize(rack_env, options={})
       
-      
-      
-      
-      
       ## Unique ID for this idp + user + service
-      @targeted_id = data_from_sp('targeted_id', rack_env))
+      @targeted_id = data_from_sp('targeted_id', rack_env)
       
       ## Username at the organisation (not likely to be provided unless local integration required)
-      @org_username = data_from_sp(attribute, rack_env)'uid') || rack_env('cn') || nil
+      @org_username = data_from_sp('org_username', rack_env)
       
       ## LDAP DN of user at local organisation (not likely to be needed)
-      @dn = data_from_sp(attribute, rack_env)'dn')
+      @dn = data_from_sp('dn', rack_env)
       
       ## EduPersonPrincipalName - scoped federation-wide identifier using a local identifier
-      @eppn = data_from_sp(attribute, rack_env)'eppn')
+      @eppn = data_from_sp('eppn', rack_env)
       
       ## Personal name 
-      @given_name = data_from_sp(attribute, rack_env)'givenName')
+      @given_name = data_from_sp('given_name', rack_env)
       
       ## Surname
-      @family_name = data_from_sp(attribute, rack_env)'')
+      @family_name = data_from_sp('family_name', rack_env)
       
       ## Preferred display name for user
-      @display_name = data_from_sp(attribute, rack_env)'display_name') 
+      @display_name = data_from_sp('display_name', rack_env) 
       
       ## Name of organisation as provided by IDP
-      @organisation = data_from_sp(attribute, rack_env)
+      @organisation = data_from_sp('organisation', rack_env)
       
       ## Org units (ou)
-      @org_units = data_from_sp(attribute, rack_env)
+      @org_units = data_from_sp('org_units', rack_env)
       
       ## Entitlement uris
-      @entitlements = data_from_sp(attribute, rack_env)
+      @entitlements = data_from_sp('entitlements', rack_env)
       
       ## Affiliations
-      @affiliations = data_from_sp(attribute, rack_env)
+      @affiliations = data_from_sp('affiliations', rack_env)
       
       ## Affilations with scope, either explicit or calculated
-      @scoped_affiliations = data_from_sp(attribute, rack_env)
+      @scoped_affiliations = data_from_sp('scoped_affiliations', rack_env)
       
       ## Email address
-      @mail = data_from_sp(attribute, rack_env)
+      @mail = data_from_sp('mail', rack_env)
       
       ## Personal title (Mr, Mrs, Ms, etc)
-      @personal_title = data_from_sp(attribute, rack_env)
+      @personal_title = data_from_sp('personal_title', rack_env)
       
       ## Official title at the organisation
-      @org_title = data_from_sp(attribute, rack_env)
+      @org_title = data_from_sp('org_title', rack_env)
       
       ## URL of the user´(homepage, profile, etc)
-      @url = data_from_sp(attribute, rack_env)
+      @url = data_from_sp('url', rack_env)
       
       ## Official telephone number
-      @phone = data_from_sp(attribute, rack_env)
+      @phone = data_from_sp('phone', rack_env)
       
       ## Mobile phone (org or personal)
-      @mobile = data_from_sp(attribute, rack_env)
+      @mobile = data_from_sp('mobile', rack_env)
       
       ## Organisation postal address
-      @address = data_from_sp(attribute, rack_env)
+      @address = data_from_sp('address', rack_env)
       
       ## Postcode of user (for geolocation)
-      @postcode = data_from_sp(attribute, rack_env)
+      @postcode = data_from_sp('postcode', rack_env)
       
       ## Description text for user
-      @description = data_from_sp(attribute, rack_env)
+      @description = data_from_sp('description', rack_env)
       
       ## Embedded photo for user # TODO: Need to check possible size problems here
-      @photo_data = data_from_sp(attribute, rack_env)
+      @photo_data = data_from_sp('photo_data', rack_env)
       
       ## Photo URI (could be local (ref to data) or Internet)
-      @photo_url  = data_from_sp(attribute, rack_env)
+      @photo_url  = data_from_sp('photo_url', rack_env)
       
       ## Prefered Language (Defaults to en)
-      @language = data_from_sp(attribute, rack_env)      
+      @language = data_from_sp('language', rack_env)      
       
     end
 
