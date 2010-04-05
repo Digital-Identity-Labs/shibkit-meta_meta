@@ -1,4 +1,4 @@
-org_attributes:
+core_attribute_maps:
   default:
     targeted_id: targeted-id
     org_username: uid
@@ -24,7 +24,7 @@ org_attributes:
     photo_data: jpegPhoto
     photo_url: photoURL
     language: preferedLanguage
-custom_attributes:
+custom_attribute_maps:
   default:
     id_number: personalId
     
