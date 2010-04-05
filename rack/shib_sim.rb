@@ -224,7 +224,7 @@ module Rack
       env['Shib-Assertion-Count'] = "%02d" % assertion_header_info(session_id, user_details).size
     
       ## Is targeted ID set to be automatic?
-      # ...
+      env['REMOTE_USER'] = '' # TODO
     
     end
   
@@ -276,9 +276,7 @@ module Rack
   
     ## 
     def set_session(env, user_details)
-      
-      puts user_details.inspect
-      
+   
       ## Create rack based session for our data (existence indicates shibsim session is active)
       env['rack.session']['shibkit-sp_simulator'] ||= Hash.new
       
