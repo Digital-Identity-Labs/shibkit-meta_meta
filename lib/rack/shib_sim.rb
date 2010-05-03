@@ -19,8 +19,17 @@ module Rack
     DEFAULT_FILTER = "#{::File.dirname(__FILE__)}/shib_sim/default_config/record_filter.rb"
     
     ## These are the default locations of user-edited versions of the above files (Rails only at the moment)
-    APP_CONFIG = RAILS_ROOT ? "#{RAILS_ROOT}/config/shibsim_config.yml" : DEFAULT_CONFIG
-    APP_FILTER = RAILS_ROOT ? "#{RAILS_ROOT}/config/record_filter.rb"  : DEFAULT_FILTER
+    if const_defined?(:Rails)
+      
+      APP_CONFIG = "#{Rails.root}/config/shibsim_config.yml"
+      APP_FILTER = "#{Rails.root}/config/record_filter.rb"
+    
+    else
+      
+      APP_CONFIG = DEFAULT_CONFIG
+      APP_FILTER = DEFAULT_FILTER
+      
+    end
     
     ## Middleware application components and behaviour
     CONTENT_TYPE   = { "Content-Type" => "text/html; charset=utf-8" }

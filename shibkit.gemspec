@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Pete Birkinshaw"]
-  s.date = %q{2010-04-05}
+  s.date = %q{2010-05-03}
   s.description = %q{Rack and Rails libraries for using Shibboleth SP authentication and authorisation data}
   s.email = %q{pete@binary-ape.org}
   s.extra_rdoc_files = [
@@ -40,6 +40,8 @@ Gem::Specification.new do |s|
      "lib/rack/shib_sim/views/user_chooser.haml",
      "lib/shib_user.rb",
      "lib/shibkit.rb",
+     "lib/shibkit/rails/core_controller_mixin.rb",
+     "lib/shibkit/rails/shib_session_filter.rb",
      "shibkit.gemspec",
      "spec/shibkit_spec.rb",
      "spec/spec.opts",
@@ -48,7 +50,7 @@ Gem::Specification.new do |s|
   s.homepage = %q{http://github.com/binaryape/shibkit}
   s.rdoc_options = ["--charset=UTF-8"]
   s.require_paths = ["lib"]
-  s.rubygems_version = %q{1.3.5}
+  s.rubygems_version = %q{1.3.6}
   s.summary = %q{Shibboleth data toolkit}
   s.test_files = [
     "spec/shibkit_spec.rb",
