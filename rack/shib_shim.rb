@@ -192,9 +192,7 @@ class Rack::ShibShim
     
       header = 'default'
       attribute = attribute.to_s
-      
-      puts "#{attribute} for #{idp}"
-      
+
       ## Change to use the IDP one if it exists
       if maps[idp] and maps[idp][attribute] then
          
@@ -208,9 +206,7 @@ class Rack::ShibShim
           maps['default'][attribute]
          
       end
-   
-      puts "  ... Found #{header}"
-   
+
       return header
       
     end
