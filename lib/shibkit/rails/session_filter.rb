@@ -57,7 +57,7 @@ module Shibkit
           controller.session[:first_access_at] = Time.new
           
           ## Set first expiry time for session (forces update from SP or reauth)
-          controller.session[:expires_at] = controller.session[:first_access_at] + 5.mins
+          controller.session[:expires_at] = controller.session[:first_access_at] + 5.minutes
           
           ## Make sure various things are wiped clear
           controller.session[:sp_user] = nil
@@ -70,7 +70,7 @@ module Shibkit
           reset = false
           
           ## If session has expired, destroy it so it will be rebuilt
-          reset = true if controller.session[:expires_at] < Time.new
+          reset = true if (controller.session[:expires_at] < Time.new)
           
           ## If session has changed IP addresses destroy it, unless it has been proxied.
           #reset = true if controller.session[:ip_address]
@@ -79,7 +79,7 @@ module Shibkit
         end
         
         ## Do nothing if we already have a valid session
-        def valid_session(controller)
+        def valid_session?(controller)
           
           valid = true
           
@@ -126,6 +126,7 @@ module Shibkit
           ## Do we have an SP user assertion object?
           # ...
           
+          
           ## Fail with an error if we are at the gateway action
           
           ## Redirect to the login page if we are in gateway mode
@@ -152,11 +153,43 @@ module Shibkit
         ## Load details into application database
         def update_user_details(controller)
           
+          puts "OK, now updating user details"
+          
           ## Try to get the user details
+          sp_assertion = controller.session[:sp_user]
+          user = nil
           
-          ## If user exists then upate information
+          begin
+            
+            ## Try to get an existing record
+            user = User.where({ :targeted_id => sp_assertion.attrs.targeted_id }).first
           
-          ## Or create new user details.
+          rescue ActiveRecord::RecordNotFound
+            
+            ## Create a new user
+            user = User.new
+            
+          end
+          
+          ## Upate information (rely on IDP to make sure this is the same user)
+          user.targeted_id  = sp_assertion.attrs.targeted_id
+          user.display_name = sp_assertion.attrs.display_name
+          user.org_scope    = "unknown"
+          user.last_login   = controller.session[:first_access_at]
+          user.email        = sp_assertion.attrs.mail
+          user.id_url       = sp_assertion.attrs.url
+          user.language     = sp_assertion.attrs.language
+          user.org_id       = sp_assertion.attrs.org_id
+                 
+          ## Store or create full information 
+          #user.idp_assertion_id  = sp_assertion.attrs_targeted_id
+          #user.public_profile_id = sp_assertion.attrs_targeted_id
+          
+          ## Store user at this point...
+          user.save!
+          
+          ## Store ID number of user object in session for normal things
+          controller.session[:user_id] = user.id
           
           return true
 
@@ -180,7 +213,7 @@ module Shibkit
           return true
 
         end      
-
+      end
     end
   end
 end

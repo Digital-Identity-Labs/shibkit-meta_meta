@@ -5,6 +5,7 @@ module Rack
   
   class ShibSim
   
+    require 'uuid'
     require 'haml'
     require 'haml/template'
     require 'yaml'
@@ -233,7 +234,7 @@ module Rack
       env['Shib-Assertion-Count'] = "%02d" % assertion_header_info(session_id, user_details).size
     
       ## Is targeted ID set to be automatic?
-      env['REMOTE_USER'] = '' # TODO
+      env['REMOTE_USER'] = Shibkit::DataTools.persistent_id(user_details[:id])
     
     end
   
@@ -272,7 +273,7 @@ module Rack
         header = 'Shib-Assertion-' + "%02d" % assertion_part
       
         ## Building up a mock URL
-        value  = @config['default_session']['assbase'] + '?key=' + session_id + '&ID=' + xsid_generator
+        value  = @config['default_session']['assbase'] + '?key=' + session_id + '&ID=' + Shibkit::DataTools.xsid
     
         ## Collect it
         info[header] = value
@@ -293,7 +294,7 @@ module Rack
       env['rack.session']['shibkit-sp_simulator'][:userid] ||= user_details['id']
       
       ## Contruct a session ID is if we don't have one
-      env['rack.session']['shibkit-sp_simulator'][:sessionid] ||= xsid_generator
+      env['rack.session']['shibkit-sp_simulator'][:sessionid] ||= Shibkit::DataTools.xsid
     
       ## Store login time as a string in xs:DateTime format (with no timezone for some reason)
       env['rack.session']['shibkit-sp_simulator'][:logintime] ||= Time.new.xmlschema.gsub(/(\+.*)/, 'Z')
@@ -384,18 +385,7 @@ module Rack
       return [@users, @orgtree]
     
     end
-  
-    ## Unique identifiers for user Shibboleth SP session, etcs
-    def xsid_generator
-    
-      ## Reset seed of random sequence using current time
-      srand
-    
-      ## Like an MD5sum of nothing in particular
-      return '_' + rand(0xffffffffffffffffffffffffffffffff).to_s(16)
-    
-    end
-    
+      
     ## Load and cache the user config file specified when middleware loaded
     def load_config_file(specified_file)
       

@@ -1,1 +1,20 @@
-""
+"Example University"
+  id: 1
+  name: Example University
+  scope: example.ac.uk
+  idp_type: shib2
+  country: gb
+  federation: 1
+  support:
+    name: IT Support
+    email: it-support@example.ac.uk
+"Miskatonic University"
+  id: 2
+  name: Miskatonic University
+  scope: miskatonic.edu
+  idp_type: shib2
+  country: us
+  federation: 1
+  support:
+    name: Support Entity
+    email: support@miskatonic.edu
