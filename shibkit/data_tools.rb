@@ -2,6 +2,7 @@ module Shibkit
   
   require 'digest/md5'
   require 'digest/sha1'
+  require 'base64'
   
   
   class DataTools
@@ -29,7 +30,7 @@ module Shibkit
       ## Create the string
       case type
       when :computed        
-        tid = Digest::SHA1.hexdigest(user_id + sp_id + salt).downcase
+        tid = Base64.encode64(Digest::SHA1.digest([source_id,sp_id ,salt].join('!'))).chomp
       when :random
         tid = UUID.new.generate # <- This will not persist here... get from user record!
       else
@@ -44,9 +45,9 @@ module Shibkit
     def DataTools.persistent_id(source_id, sp_id, idp_id, salt=nil, type=:computed)
       
       ## Generate a base user id
-      user_id = DataTools.eptid_user_id(source_id, sp_id, salt, type)
+      user_id = Shibkit::DataTools.eptid_user_id(source_id, sp_id, salt, type)
 
-      return return [idp_id,sp_id,user_id].join('!')
+      return [idp_id,sp_id,user_id].join('!')
       
     end
     
@@ -59,7 +60,6 @@ module Shibkit
       return [user_id,idp_id].join('@')
       
     end
-  
   
   end
 end

@@ -157,6 +157,7 @@ module Shibkit
           
           ## Try to get the user details
           sp_assertion = controller.session[:sp_user]
+          raise "Missing user data!" unless sp_assertion
           user = nil
           
           begin
