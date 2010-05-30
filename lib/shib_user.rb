@@ -47,6 +47,7 @@ module ShibUser
     
      PACCS = [
       :targeted_id,
+      :persistent_id,
       :org_username,
       :dn,
       :eppn,

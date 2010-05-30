@@ -196,7 +196,10 @@ module Rack
   
     ## Add attribute information to the headers passed to application
     def inject_attribute_headers(env, user_details)
-    
+      
+      ## The ID of this simulated SP # TODO: needs to be defined in config
+      sp_id = 'https://shib.example.ac.uk/shibboleth' # TODO: Not DRY either! BAD
+      
       ## Convert to proper format that matches the live SP (also add new ones)
       prepared_data = process_attribute_data(user_details)
     
@@ -206,12 +209,21 @@ module Rack
         env[header] = value
       
       end
-    
+      
+      ## Inject the rather important eptid varieties
+      env['targeted-id']   = prepared_data['targeted_id']   || 
+        Shibkit::DataTools.targeted_id(user_details[:id], sp_id, user_details['idp_scope'], user_details['idp_salt'], type=:computed)
+      env['persistent-id'] = prepared_data['persistent_id'] ||
+        Shibkit::DataTools.persistent_id(user_details[:id], sp_id, user_details['idp_id'], user_details['idp_salt'], type=:computed)
+ 
     end
 
     ## Add attribute information to the headers passed to application
     def inject_session_headers(env, user_details)
-    
+      
+      ## The ID of this simulated SP # TODO: needs to be defined in config
+      sp_id = 'https://sp.example.ac.uk/shibboleth'
+      
       ## Application ID
       env['Shib-Application-ID'] = 'default'
     
@@ -220,7 +232,7 @@ module Rack
       env['Shib-Session-ID'] = session_id
     
       ## Identity Provider ID
-      env['Shib-Identity-Provider'] = 'https://shib.example.ac.uk/shibboleth'
+      env['Shib-Identity-Provider'] = sp_id
     
       ## Time authentication occured
       env['Shib-Authentication-Instant'] = env['rack.session']['shibkit-sp_simulator'][:logintime]
@@ -234,7 +246,8 @@ module Rack
       env['Shib-Assertion-Count'] = "%02d" % assertion_header_info(session_id, user_details).size
     
       ## Is targeted ID set to be automatic?
-      env['REMOTE_USER'] = Shibkit::DataTools.persistent_id(user_details[:id])
+      env['REMOTE_USER'] = user_details['persistent_id'] ||
+        Shibkit::DataTools.persistent_id(user_details[:id], sp_id, user_details['idp_id'], user_details['idp_salt'], type=:computed)
     
     end
   
@@ -372,7 +385,10 @@ module Rack
           record['shibsim_label'] = label.to_s.strip
           rid  = record['id'].to_s
           rorg = record['organisation'].to_s.strip
-
+          
+          ## Salt to use is based on org name
+          record['idp_salt'] = Digest::SHA1.digest(rorg) # TODO: make configurable
+          
           @users[rid]    =   record        
           @orgtree[rorg] ||= Array.new
         

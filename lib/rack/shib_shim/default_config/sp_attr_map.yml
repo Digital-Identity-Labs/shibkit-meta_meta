@@ -1,6 +1,7 @@
 core_attribute_maps:
   default:
-    targeted_id: targeted-id
+    targeted_id:   targeted-id
+    persistent_id: persistent-id
     org_username: uid
     dn: dn
     eppn: eppn

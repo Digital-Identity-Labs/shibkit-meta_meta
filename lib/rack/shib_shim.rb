@@ -90,9 +90,10 @@ class Rack::ShibShim
     ## Object that wraps up access to the headers, per-IDP, with defaults, etc. 
     sp_headers = Rack::ShibShim::SPAttributeHeaders.new('core_attribute_maps', rack_env)
     
-    ## Extract each header
+    ## Extract each header # <- Not DRY? This list is elsewhere too?
     [    
-      :targeted_id, ## Unique ID for this idp + user + service
+      :targeted_id, ## Unique ID for this idp + user + service (old style)
+      :persistent_id, ## Unique ID for this idp + user + service (new style)
       :org_username, ## Username at the organisation (not likely to be provided unless local integration required)
       :dn,## LDAP DN of user at local organisation (not likely to be needed)
       :eppn,  ## EduPersonPrincipalName - scoped federation-wide identifier using a local identifier
