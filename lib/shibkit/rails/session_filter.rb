@@ -15,30 +15,30 @@ module Shibkit
         
         ## Filter method called by the controller (entry point)
         def filter(controller)
-          
+
           ## First request? Initialize a few things to get the ball rolling
           initialize_session(controller) unless controller.session[:first_access_at]
-          
+
           ## Check session consistency (basic paranoia)
-          return unless session_integrity_checks(controller) 
+          session_integrity_checks(controller) 
           
-          ## Do nothing if we already have a valid session
+          ## Do not authenticate if we already have a valid authenticated session
           unless valid_session?(controller)
-          
-            ## Check that basic conditions are OK
-            return unless preauthentication_checks(controller)
+            
+            ## Check that basic conditions are OK before we start to authenticate
+            preauthentication_checks(controller)
           
             ## Authentication: Make sure we have a shib_user object
-            return unless sp_authentication(controller)
+            sp_authentication(controller)
           
             ## Is user allowed to access this application?
-            return unless site_authorisation(controller)
+            site_authorisation(controller)
           
             ## Load details into application database
-            return unless update_user_details(controller)
+            update_user_details(controller)
           
             ## Application authorisation setup
-            return unless application_authorisation_setup(controller)
+            application_authorisation_setup(controller)
             
           end
           
@@ -49,6 +49,11 @@ module Shibkit
     
         ## First login? Initialize a few things to get the ball rolling
         def initialize_session(controller)
+          
+          ::Rails.logger.info "Initializing session..."
+          
+          ## Record the originating IP address to help prevent hijacking
+          controller.session[:ip_address] = controller.request.remote_ip
           
           ## We'll record login attempts
           controller.session[:failed_logins] = 0
@@ -62,19 +67,45 @@ module Shibkit
           ## Make sure various things are wiped clear
           controller.session[:sp_user] = nil
           
+          ## Remember original destination URL
+          controller.session[:original_destination] = controller.request.url
+          
+          ::Rails.logger.info "New session from #{controller.session[:ip_address]} at #{controller.session[:first_access_at]} "
+          
         end
 
-        ## Check session consistency (paranoia: destroy if strange)
+        ## Check basic session consistency (paranoia: destroy if strange)
         def session_integrity_checks(controller)
           
           reset = false
-          
+
           ## If session has expired, destroy it so it will be rebuilt
           reset = true if (controller.session[:expires_at] < Time.new)
           
-          ## If session has changed IP addresses destroy it, unless it has been proxied.
-          #reset = true if controller.session[:ip_address]
+          ## If session has changed IP addresses destroy it, unless it has been proxied. # TODO: fix proxy compat.
+          reset = true if controller.session[:ip_address] != controller.request.remote_ip
           
+          ## The actual reset bit. # <- should I handle with an exceptiona and halt?
+          if reset
+            
+            ## Keep track, in case this is repeatedly happening
+            session_error_count = controller.session[:session_errors] || 0
+            
+            ## Wipe all session data
+            ::Rails.logger.info "Resetting session"
+            controller.reset_session
+            
+            ## Keep track of this...
+            controller.flash[:warning] = "Your session has been reset"
+            controller.session[:session_errors] ||= session_error_count
+            controller.session[:session_errors] += 1
+            
+            ## Redirect to start again
+            controller.redirect_to controller.session[:original_destination] || '/'
+            
+            return
+            
+          end
           
         end
         
@@ -87,24 +118,33 @@ module Shibkit
           valid = false unless controller.session[:sp_user] and 
             controller.session[:sp_user].kind_of?(ShibUser::Assertion)
           
-          ## SP object *must* match the user model core ID if it is present (to prevent SP reauth not being in sync with application)
-          # ...
+          ## We must have a user_id in session - if not then auth is not complete
+          valid = false unless controller.session[:user_id] and controller.session[:user_id].to_i > 0 
           
-          # ...
+          ## Only lookup user unless things still OK, and we actually have an ID for a user
+          if valid and controller.session[:user_id] > 0
           
+            ## SP object *must* match the user model core ID if it is present (to prevent SP reauth not being in sync with application)
+            valid = false unless User.find(controller.session[:user_id]).persistent_id == controller.session[:sp_user].persistent_id
+          
+          end
+          
+          ## If session isn't valid we do a few things then return false
           unless valid 
             
             ## Record failed login
+            controller.session[:failed_logins] ||= 0
             controller.session[:failed_logins] += 1
             
-            ## Redirect to login area
-            # ...
+            ::Rails.logger.info "No valid authenticated session exists (count: #{controller.session[:failed_logins]})"
             
             return false
     
           end
           
-          ## All clear
+          ::Rails.logger.info "Valid existing authenticated session has been found" 
+          
+          ## All clear, so return true
           return true
           
         end
@@ -115,21 +155,25 @@ module Shibkit
           ## Check for simultaneous logins from different addresses with time period.
           # ... this involves using the logs, so TODO later.
           
-          
-          return true
+
+          #return true
           
         end
         
-        ## Authentication: Make sure we have a shib_user object
+        ## Authentication: Make sure we have an sp_user, maybe trigger gateway redirect
         def sp_authentication(controller)
           
           ## Do we have an SP user assertion object?
+          sp_user = controller.session[:sp_user]
+          #raise unless sp_user.kind_of?(ShibUser::Assertion)        
+          
+          ## TODO... lots.
+          
+          ## Fail with an error if we are at the gateway action (only if gatewayed)
           # ...
-          
-          
-          ## Fail with an error if we are at the gateway action
-          
-          ## Redirect to the login page if we are in gateway mode
+                    
+          ## Redirect to the login page if we are in gateway mode and not at gateway
+          # ...
           
           return true
 
@@ -153,19 +197,24 @@ module Shibkit
         ## Load details into application database
         def update_user_details(controller)
           
-          puts "OK, now updating user details"
-          
           ## Try to get the user details
           sp_assertion = controller.session[:sp_user]
-          raise "Missing user data!" unless sp_assertion
+          
+          puts sp_assertion.to_yaml
+          
+          raise "Missing user data! XX" unless sp_assertion
           user = nil
           
           begin
             
             ## Try to get an existing record
-            user = User.where({ :targeted_id => sp_assertion.attrs.targeted_id }).first
-          
+            user = User.find_or_create_by_persistent_id(sp_assertion.persistent_id)
+            
+            ::Rails.logger.info  "Found existing user with id #{sp_assertion.persistent_id}"
+            
           rescue ActiveRecord::RecordNotFound
+            
+            ## <- Not needed? Change to error handler? 
             
             ## Create a new user
             user = User.new
@@ -173,14 +222,15 @@ module Shibkit
           end
           
           ## Upate information (rely on IDP to make sure this is the same user)
-          user.targeted_id  = sp_assertion.attrs.targeted_id
-          user.display_name = sp_assertion.attrs.display_name
-          user.org_scope    = "unknown"
-          user.last_login   = controller.session[:first_access_at]
-          user.email        = sp_assertion.attrs.mail
-          user.id_url       = sp_assertion.attrs.url
-          user.language     = sp_assertion.attrs.language
-          user.org_id       = sp_assertion.attrs.org_id
+          user.persistent_id  = sp_assertion.persistent_id
+          user.name_id        = sp_assertion.persistent_id.split('!')[2] # TODO: needs to be moved into model? FIXed anyway. This is crap.
+          user.display_name   = sp_assertion.attrs.display_name
+          user.org_scope      = "unknown"
+          user.last_login     = controller.session[:first_access_at]
+          user.email          = sp_assertion.attrs.mail
+          user.id_url         = sp_assertion.attrs.url
+          user.language       = sp_assertion.attrs.language
+          user.org_id         = 0 # sp_assertion.attrs.org_id <- TODO: Need IDP/Org database
                  
           ## Store or create full information 
           #user.idp_assertion_id  = sp_assertion.attrs_targeted_id
@@ -191,6 +241,8 @@ module Shibkit
           
           ## Store ID number of user object in session for normal things
           controller.session[:user_id] = user.id
+          
+          ::Rails.logger.info  "User ID #{user.id}/#{user.name_id} updated"
           
           return true
 
@@ -209,7 +261,8 @@ module Shibkit
         ## Tidy up session, simple updates
         def complete_session_update(controller)
           
-          ## 
+          ## Have we reached the intended destination? (at least as far as this filter is concerned)
+          
           
           return true
 

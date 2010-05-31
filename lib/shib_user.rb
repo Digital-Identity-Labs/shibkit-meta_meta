@@ -38,6 +38,38 @@ module ShibUser
           
     end
     
+    ## Returns the asserted persistent-id value or upgrades from botched/targeted-id
+    def persistent_id
+      
+      ## If we have an literal persistent_id attribute then return that
+      return attrs.persistent_id unless attrs.persistent_id.empty?
+      
+      ## TODO: Need to check that the format is correct - effectively normalise?
+      # ...
+      
+      ## Reformat the older 'botched' format if we have it...
+      unless attrs.targeted_id.empty?
+     
+        ## Use the user ID
+        user_id, user_scope = attrs.targeted_id.split('@')
+        
+        ## The SP's ID # TODO: This is hardcoded! BAD! *Must* get from config!
+        sp_id = 'https://sp.example.ac.uk/shibboleth'  
+     
+        return [idp_uri, sp_id, user_id].join('!')
+     
+      end
+      
+      ## Check the format of remote user, log a grumble, then use it
+      # ...
+      
+      ## Nothing we can use! # TODO: need to catch this with a special halt, since caused by unconfigured SP
+      raise "No persistent ID is present!"
+      
+      ## TODO: this method just isn't production quality yet.
+      
+    end
+    
     private
     
   end

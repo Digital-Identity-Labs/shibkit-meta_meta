@@ -76,7 +76,7 @@ module Rack
         reset_session(env) if req.params['shibsim_reset']
   
         ## Already set? Then re-inject the headers (they are outside session)
-        if env["rack.session"]['shibkit-sp_simulator'] and
+        if env["rack.session"] and env["rack.session"]['shibkit-sp_simulator'] and
           env["rack.session"]['shibkit-sp_simulator'][:userid]
         
           ## The user id
@@ -198,7 +198,7 @@ module Rack
     def inject_attribute_headers(env, user_details)
       
       ## The ID of this simulated SP # TODO: needs to be defined in config
-      sp_id = 'https://shib.example.ac.uk/shibboleth' # TODO: Not DRY either! BAD
+      sp_id = 'https://sp.example.ac.uk/shibboleth' # TODO: Not DRY either! BAD
       
       ## Convert to proper format that matches the live SP (also add new ones)
       prepared_data = process_attribute_data(user_details)

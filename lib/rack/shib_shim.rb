@@ -17,8 +17,8 @@ class Rack::ShibShim
     sp_assertion = process_sp_session(env)
     shib_user = ShibUser::Assertion.new(sp_assertion)
       
-    ## Store in session
-    env['rack.session'][:shib_user] = shib_user  
+    ## Store in session # TODO: Make this configurable
+    env['rack.session'][:sp_user] = shib_user  
     
     return @app.call(env)
     
