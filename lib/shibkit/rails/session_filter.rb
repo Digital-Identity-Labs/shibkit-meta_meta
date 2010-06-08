@@ -15,7 +15,9 @@ module Shibkit
         
         ## Filter method called by the controller (entry point)
         def filter(controller)
-
+          
+          puts "Running the Filter..."
+          
           ## First request? Initialize a few things to get the ball rolling
           initialize_session(controller) unless controller.session[:first_access_at]
 
@@ -200,6 +202,7 @@ module Shibkit
           ## Try to get the user details
           sp_assertion = controller.session[:sp_user]
           
+          puts "User assertion"
           puts sp_assertion.to_yaml
           
           raise "Missing user data! XX" unless sp_assertion
