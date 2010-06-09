@@ -70,8 +70,6 @@ module Rack
     ## Selecting an action and returning to the Rack stack 
     def call(env)
       
-      puts "starting ShibSim"
-        
       ## Peek at user input, they might be talking to us
       request = Rack::Request.new(env)
       
@@ -207,7 +205,7 @@ module Rack
          
         end
   
-      rescue => oops
+      rescue Rack::ShibSim::RuntimeError => oops
       
         return fatal_error_action(env, oops)
     
@@ -581,7 +579,10 @@ module Rack
     
     end
 
+    ## Exception class used here to limit rescued errors to this middleware only
+    class Rack::ShibSim::RuntimeError < RuntimeError 
     
+    end
     
   end
 

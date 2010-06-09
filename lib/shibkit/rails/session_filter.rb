@@ -66,9 +66,6 @@ module Shibkit
           ## Set first expiry time for session (forces update from SP or reauth)
           controller.session[:expires_at] = controller.session[:first_access_at] + 5.minutes
           
-          ## Make sure various things are wiped clear
-          controller.session[:sp_user] = nil
-          
           ## Remember original destination URL
           controller.session[:original_destination] = controller.request.url
           
@@ -199,8 +196,12 @@ module Shibkit
         ## Load details into application database
         def update_user_details(controller)
           
+          puts "Ok, this is the session as this part of the filter has it..."
+          puts controller.session.to_yaml
+          puts controller.session.inspect
+          
           ## Try to get the user details
-          sp_assertion = controller.session[:sp_user]
+          sp_assertion = controller.session['sp_user']
           
           puts "User assertion"
           puts sp_assertion.to_yaml
