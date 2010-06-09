@@ -206,7 +206,7 @@ module Shibkit
           puts "User assertion"
           puts sp_assertion.to_yaml
           
-          raise "Missing user data! XX" unless sp_assertion
+          raise "Missing user data!" unless sp_assertion
           user = nil
           
           begin

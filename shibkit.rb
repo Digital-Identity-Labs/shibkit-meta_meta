@@ -5,5 +5,5 @@ require 'deep_merge'
 require 'shibkit/data_tools'
 
 ## These need to be moved into Shibkit namespace?
-require "rack/shib_sim"
-require "rack/shib_shim"
+require "shibkit/rack/shib_sim"
+require "shibkit/rack/shib_shim"
