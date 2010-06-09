@@ -1,8 +1,8 @@
 
-module ShibUser
+module Shibkit
   
   ## General session information, container for attribute sets, basic user information
-  class Assertion
+  class SPAssertion
     
     PACCS = [
       :login_time,
@@ -30,8 +30,8 @@ module ShibUser
       PACCS.each { |pacc| eval("@#{pacc} = data[pacc]") }
         
       ## Upgrade SP attrs from hashes to objects
-      @attrs  = ShibUser::BasicAttrs.new(@attrs)
-      @xattrs = ShibUser::CustomAttrs.new(@xattrs)
+      @attrs  = BasicAttrs.new(@attrs)
+      @xattrs = CustomAttrs.new(@xattrs)
       
       ## Check everything is valid; if not, we complain
       # ...

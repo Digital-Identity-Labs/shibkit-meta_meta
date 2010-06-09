@@ -4,6 +4,9 @@ require 'deep_merge'
 ## Shibkit utility classes
 require 'shibkit/data_tools'
 
-## These need to be moved into Shibkit namespace?
+## Essential 
+require 'shibkit/sp_assertion'
+
+## Rack it up
 require "shibkit/rack/shib_sim"
 require "shibkit/rack/shib_shim"

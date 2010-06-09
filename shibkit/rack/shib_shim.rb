@@ -2,7 +2,7 @@ class Shibkit::Rack::ShibShim
 
   require 'deep_merge'
 
-  require 'shib_user'
+  require 'shibkit/sp_assertion'
 
   def initialize(app)
     
@@ -15,7 +15,7 @@ class Shibkit::Rack::ShibShim
     
     ## Extract information from SP headers and pass to user assertion object
     sp_assertion = process_sp_session(env)
-    shib_user = ShibUser::Assertion.new(sp_assertion)
+    shib_user = Shibkit::SPAssertion.new(sp_assertion)
     
     ## Store in session # TODO: Make this configurable
     env['rack.session'][:sp_user] = shib_user  
