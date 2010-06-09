@@ -13,13 +13,10 @@ class Rack::ShibShim
   ## Middleware entry point: Extract info from SP headers, encapsulate in user object, continue
   def call(env)
     
-    puts "dumping state from Shibshim..."
-    puts env.to_yaml
-    
     ## Extract information from SP headers and pass to user assertion object
     sp_assertion = process_sp_session(env)
     shib_user = ShibUser::Assertion.new(sp_assertion)
-      
+    
     ## Store in session # TODO: Make this configurable
     env['rack.session'][:sp_user] = shib_user  
     
