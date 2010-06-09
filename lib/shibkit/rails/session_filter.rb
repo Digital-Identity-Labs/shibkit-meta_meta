@@ -1,4 +1,4 @@
-
+require 'shibkit/sp_assertion'
 
 module Shibkit
   module Rails
@@ -115,7 +115,7 @@ module Shibkit
           
           ## We must have an SP object
           valid = false unless controller.session[:sp_user] and 
-            controller.session[:sp_user].kind_of?(ShibUser::Assertion)
+            controller.session[:sp_user].kind_of?(Shibkit::SPAssertion)
           
           ## We must have a user_id in session - if not then auth is not complete
           valid = false unless controller.session[:user_id] and controller.session[:user_id].to_i > 0 
@@ -164,7 +164,7 @@ module Shibkit
           
           ## Do we have an SP user assertion object?
           sp_user = controller.session[:sp_user]
-          #raise unless sp_user.kind_of?(ShibUser::Assertion)        
+          #raise unless sp_user.kind_of?(Shibkit::SPAssertion)        
           
           ## TODO... lots.
           
