@@ -48,7 +48,7 @@ module Shibkit
         @users    = nil
         @orgtree  = nil 
       
-        @sso = true
+        @sso = false
         
         ## Load and cache the config file
         load_config_file(config_file_location)
@@ -318,9 +318,12 @@ module Shibkit
       
         ## Inject the rather important eptid varieties
         env['targeted-id']   = prepared_data['targeted_id']   || 
-          Shibkit::DataTools.targeted_id(user_details[:id], sp_id, user_details['idp_scope'], user_details['idp_salt'], type=:computed)
+          Shibkit::DataTools.targeted_id(user_details['id'], sp_id, user_details['idp_scope'], user_details['idp_salt'], type=:computed)
         env['persistent-id'] = prepared_data['persistent_id'] ||
-          Shibkit::DataTools.persistent_id(user_details[:id], sp_id, user_details['idp_id'], user_details['idp_salt'], type=:computed)
+          Shibkit::DataTools.persistent_id(user_details['id'], sp_id, user_details['idp_id'], user_details['idp_salt'], type=:computed)
+        
+        ## Cache the persistent ID for this user
+        user_details['persistent_id'] = env['persistent-id']
  
       end
 
@@ -353,7 +356,7 @@ module Shibkit
     
         ## Is targeted ID set to be automatic?
         env['REMOTE_USER'] = user_details['persistent_id'] ||
-          Shibkit::DataTools.persistent_id(user_details[:id], sp_id, user_details['idp_id'], user_details['idp_salt'], type=:computed)
+          Shibkit::DataTools.persistent_id(user_details['id'], sp_id, user_details['idp_id'], user_details['idp_salt'], type=:computed)
      
       end
   

@@ -30,7 +30,7 @@ module Shibkit
       ## Create the string
       case type
       when :computed        
-        tid = Base64.encode64(Digest::SHA1.digest([source_id,sp_id ,salt].join('!'))).chomp
+        tid = Base64.encode64(Digest::SHA1.digest([source_id, sp_id ,salt].join('!'))).chomp
       when :random
         tid = UUID.new.generate # <- This will not persist here... get from user record!
       else
