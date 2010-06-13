@@ -16,13 +16,11 @@ module Shibkit
         ## Filter method called by the controller (entry point)
         def filter(controller)
           
-          puts "Running the Filter..."
-          
           ## First request? Initialize a few things to get the ball rolling
           initialize_session(controller) unless controller.session[:first_access_at]
-
+                   
           ## Check session consistency (basic paranoia)
-          session_integrity_checks(controller) 
+          return unless session_integrity_checks(controller) 
           
           ## Do not authenticate if we already have a valid authenticated session
           unless valid_session?(controller)
@@ -52,7 +50,7 @@ module Shibkit
         ## First login? Initialize a few things to get the ball rolling
         def initialize_session(controller)
           
-          ::Rails.logger.info "Initializing session..."
+          ::Rails.logger.info "Session Filter: Session Filter: Initializing session..."
           
           ## Record the originating IP address to help prevent hijacking
           controller.session[:ip_address] = controller.request.remote_ip
@@ -69,7 +67,7 @@ module Shibkit
           ## Remember original destination URL
           controller.session[:original_destination] = controller.request.url
           
-          ::Rails.logger.info "New session from #{controller.session[:ip_address]} at #{controller.session[:first_access_at]} "
+          ::Rails.logger.info "Session Filter: New session from #{controller.session[:ip_address]} at #{controller.session[:first_access_at]} "
           
         end
 
@@ -84,6 +82,8 @@ module Shibkit
           ## If session has changed IP addresses destroy it, unless it has been proxied. # TODO: fix proxy compat.
           reset = true if controller.session[:ip_address] != controller.request.remote_ip
           
+          ## 
+          
           ## The actual reset bit. # <- should I handle with an exceptiona and halt?
           if reset
             
@@ -91,7 +91,7 @@ module Shibkit
             session_error_count = controller.session[:session_errors] || 0
             
             ## Wipe all session data
-            ::Rails.logger.info "Resetting session"
+            ::Rails.logger.info "Session Filter: Resetting session because it was inconsistent"
             controller.reset_session
             
             ## Keep track of this...
@@ -102,9 +102,11 @@ module Shibkit
             ## Redirect to start again
             controller.redirect_to controller.session[:original_destination] || '/'
             
-            return
+            return false
             
           end
+          
+          return true
           
         end
         
@@ -135,13 +137,13 @@ module Shibkit
             controller.session[:failed_logins] ||= 0
             controller.session[:failed_logins] += 1
             
-            ::Rails.logger.info "No valid authenticated session exists (count: #{controller.session[:failed_logins]})"
+            ::Rails.logger.info "Session Filter: No valid authenticated session exists (count: #{controller.session[:failed_logins]})"
             
             return false
     
           end
           
-          ::Rails.logger.info "Valid existing authenticated session has been found" 
+          ::Rails.logger.info "Session Filter: Valid existing authenticated session has been found" 
           
           ## All clear, so return true
           return true
@@ -196,17 +198,12 @@ module Shibkit
         ## Load details into application database
         def update_user_details(controller)
           
-          puts "Ok, this is the session as this part of the filter has it..."
-          puts controller.session.to_yaml
-          puts controller.session.inspect
-          
+          ::Rails.logger.info  "Session Filter: Preparing to update current user details"
+
           ## Try to get the user details
-          sp_assertion = controller.session['sp_user']
-          
-          puts "User assertion"
-          puts sp_assertion.to_yaml
-          
-          raise "Missing user data!" unless sp_assertion
+          sp_assertion = controller.session[:sp_user]
+
+          raise "Session Filter: Missing user data! Can't find SP assertion object" unless sp_assertion
           user = nil
           
           begin
@@ -214,7 +211,7 @@ module Shibkit
             ## Try to get an existing record
             user = User.find_or_create_by_persistent_id(sp_assertion.persistent_id)
             
-            ::Rails.logger.info  "Found existing user with id #{sp_assertion.persistent_id}"
+            ::Rails.logger.info  "Session Filter: Found existing user with id #{sp_assertion.persistent_id}"
             
           rescue ActiveRecord::RecordNotFound
             
@@ -270,7 +267,8 @@ module Shibkit
           
           return true
 
-        end      
+        end
+        
       end
     end
   end

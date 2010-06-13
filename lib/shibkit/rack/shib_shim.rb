@@ -17,6 +17,9 @@ class Shibkit::Rack::ShibShim
     sp_assertion = process_sp_session(env)
     shib_user = Shibkit::SPAssertion.new(sp_assertion)
     
+    ## Check that user is consistent with SP status, to cope with changes:
+    #
+    
     ## Store in session # TODO: Make this configurable
     env['rack.session'][:sp_user] = shib_user  
     
