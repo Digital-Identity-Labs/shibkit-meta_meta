@@ -12,7 +12,7 @@ module Shibkit
       
       ## Just class methods from here on
       class << self
-        
+          
         ## Filter method called by the controller (entry point)
         def filter(controller)
           
@@ -41,6 +41,9 @@ module Shibkit
             application_authorisation_setup(controller)
             
           end
+          
+          ## Sentient User support
+          inform_user_aware_models(controller)
           
           ## Tidy up session, simple updates
           complete_session_update(controller)
@@ -116,17 +119,17 @@ module Shibkit
           valid = true
           
           ## We must have an SP object
-          valid = false unless controller.session[:sp_user] and 
-            controller.session[:sp_user].kind_of?(Shibkit::SPAssertion)
+          valid = false unless controller.session[:sp_session] and 
+            controller.session[:sp_session].kind_of?(Shibkit::SPAssertion)
           
           ## We must have a user_id in session - if not then auth is not complete
           valid = false unless controller.session[:user_id] and controller.session[:user_id].to_i > 0 
           
           ## Only lookup user unless things still OK, and we actually have an ID for a user
-          if valid and controller.session[:user_id] > 0
+          if valid and controller.session[:user_id].to_i > 0
           
             ## SP object *must* match the user model core ID if it is present (to prevent SP reauth not being in sync with application)
-            valid = false unless User.find(controller.session[:user_id]).persistent_id == controller.session[:sp_user].persistent_id
+            valid = false unless User.find(controller.session[:user_id]).persistent_id == controller.session[:sp_session].persistent_id
           
           end
           
@@ -161,12 +164,12 @@ module Shibkit
           
         end
         
-        ## Authentication: Make sure we have an sp_user, maybe trigger gateway redirect
+        ## Authentication: Make sure we have an sp_session, maybe trigger gateway redirect
         def sp_authentication(controller)
           
           ## Do we have an SP user assertion object?
-          sp_user = controller.session[:sp_user]
-          #raise unless sp_user.kind_of?(Shibkit::SPAssertion)        
+          sp_session = controller.session[:sp_session]
+          #raise unless sp_session.kind_of?(Shibkit::SPAssertion)        
           
           ## TODO... lots.
           
@@ -201,7 +204,7 @@ module Shibkit
           ::Rails.logger.info  "Session Filter: Preparing to update current user details"
 
           ## Try to get the user details
-          sp_assertion = controller.session[:sp_user]
+          sp_assertion = controller.session[:sp_session]
 
           raise "Session Filter: Missing user data! Can't find SP assertion object" unless sp_assertion
           user = nil
@@ -209,11 +212,11 @@ module Shibkit
           begin
             
             ## Try to get an existing record
-            user = User.find_or_create_by_persistent_id(sp_assertion.persistent_id)
+            user = User.find_by_persistent_id(sp_assertion.persistent_id)
             
             ::Rails.logger.info  "Session Filter: Found existing user with id #{sp_assertion.persistent_id}"
             
-          rescue ActiveRecord::RecordNotFound
+          rescue Mongoid::Errors::DocumentNotFound
             
             ## <- Not needed? Change to error handler? 
             
@@ -223,6 +226,7 @@ module Shibkit
           end
           
           ## Upate information (rely on IDP to make sure this is the same user)
+          user.sp_session_id  = sp_assertion.session_id
           user.persistent_id  = sp_assertion.persistent_id
           user.name_id        = sp_assertion.persistent_id.split('!')[2] # TODO: needs to be moved into model? FIXed anyway. This is crap.
           user.display_name   = sp_assertion.attrs.display_name
@@ -238,7 +242,7 @@ module Shibkit
           #user.public_profile_id = sp_assertion.attrs_targeted_id
           
           ## Store user at this point...
-          user.save!
+          user.save
           
           ## Store ID number of user object in session for normal things
           controller.session[:user_id] = user.id
@@ -256,6 +260,13 @@ module Shibkit
           # ...
           
           return true
+
+        end
+ 
+        ## Set the User class to be aware of current user if supported       
+        def inform_user_aware_models(controller)
+          
+          User.current = controller.send(:current_user) if User.respond_to?(:current)
 
         end
         

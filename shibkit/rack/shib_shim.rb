@@ -14,14 +14,14 @@ class Shibkit::Rack::ShibShim
   def call(env)
     
     ## Extract information from SP headers and pass to user assertion object
-    sp_assertion = process_sp_session(env)
-    shib_user = Shibkit::SPAssertion.new(sp_assertion)
+    sp_assertion_data = process_sp_session(env)
+    shib_session = Shibkit::SPAssertion.new(sp_assertion_data)
     
     ## Check that user is consistent with SP status, to cope with changes:
     #
     
     ## Store in session # TODO: Make this configurable
-    env['rack.session'][:sp_user] = shib_user  
+    env['rack.session'][:sp_session] = shib_session  
     
     return @app.call(env)
     
