@@ -13,3 +13,4 @@ require "shibkit/rack/shib_shim"
 
 ## Rails libraries
 require  "shibkit/rails/core_controller_mixin"
+require  "shibkit/rails/seed_data_mixin"

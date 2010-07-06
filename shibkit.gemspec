@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Pete Birkinshaw"]
-  s.date = %q{2010-06-29}
+  s.date = %q{2010-07-06}
   s.description = %q{Rack and Rails libraries for using Shibboleth SP authentication and authorisation data}
   s.email = %q{pete@binary-ape.org}
   s.extra_rdoc_files = [
@@ -41,6 +41,7 @@ Gem::Specification.new do |s|
      "lib/shibkit/rails/application_controller.rb",
      "lib/shibkit/rails/core_controller_mixin.rb",
      "lib/shibkit/rails/core_user_mixin.rb",
+     "lib/shibkit/rails/seed_data_mixin.rb",
      "lib/shibkit/rails/session_filter.rb",
      "lib/shibkit/sp_assertion.rb",
      "shibkit.gemspec",
