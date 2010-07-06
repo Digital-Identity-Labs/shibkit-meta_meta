@@ -212,7 +212,7 @@ module Shibkit
           begin
             
             ## Try to get an existing record
-            user = User.find_by_persistent_id(sp_assertion.persistent_id)
+            user = User.find_or_initialize_by(:persistent_id => sp_assertion.persistent_id)
             
             ::Rails.logger.info  "Session Filter: Found existing user with id #{sp_assertion.persistent_id}"
             
