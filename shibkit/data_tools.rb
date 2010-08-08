@@ -23,14 +23,14 @@ module Shibkit
       
       ## We just want to create the user id part
       tid = ""
-      
+    
       ## We really need a salt to be consistent, so make one up if not provided
       salt ||= Digest::SHA1.hexdigest(idp_id)
       
       ## Create the string
       case type
       when :computed        
-        tid = Base64.encode64(Digest::SHA1.digest([source_id, sp_id ,salt].join('!'))).chomp
+        tid = Base64.encode64(Digest::SHA1.digest([sp_id, source_id, salt].join('!'))).chomp
       when :random
         tid = UUID.new.generate # <- This will not persist here... get from user record!
       else
