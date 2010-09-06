@@ -1,8 +1,10 @@
-= Shibkit
+Shibkit
+=======
 
 Shibkit is a set of basic tools to help with Shibboleth SP web application development. It supports web applications based on Rack, Sinatra or Rails, although most features are focused on Rails. Rails 3.0 or higher is required.
 
-== Quick'n'Dirty setup notes that really need to be replaced by something coherent
+Quick'n'Dirty setup notes that really need to be replaced by something coherent
+-------------------------------------------------------------------------------
 
 Load all the major Shibkit libraries by adding this to your application's Gemfile:
 
@@ -16,7 +18,7 @@ or to deploy directly from Github, you can use
 
     gem "shibkit", :require => 'shibkit', :git => "git://github.com/binaryape/shibkit.git"
 
-=== Shibsim
+### Shibsim
 
 Shibsim injects fake headers into your session, mimicking the output of an SP.
 A real IDP and the WAYF/discovery process are replaced by a simple account chooser.
@@ -30,7 +32,7 @@ Enable Shibsim by adding the following to your Rails application.rb:
 
 Shibsim should work with its own built-in defaults. It isn't easily customisable yet, but this is due soon.
 
-=== Shibshim
+### Shibshim
 
 Shibshim, named almost identically to its sister library to make your life slightly more confusing, aims to provide a consistent interface between your application and the Shibboleth SP software used to authenticate.
 
@@ -44,7 +46,7 @@ Add this line to your application.rb (or rackup.ru) after Shibsim:
 
 That will provide you with a user object in your session, with lots of nice accessor methods to provide information about the user, their IDP, organisation, etc.
 
-=== Rails Extras
+### Rails Extras
 
 A few Rails extensions are provided to handle sessions, authentication, etc.
 
@@ -64,13 +66,13 @@ You will need to provide a suitable User class. The one used by DIL at present i
 
 The session filter has lots of stages ordered as an authnz workflow. These are basic: the intention is that applications will subclass this filter and replace various stages with their own improved functionality. Dilkit contains filters like this.
 
-=== Mongoid Userstamps
+### Mongoid Userstamps
 
 Due to go into its own project at some point. This adds automatic owned_by, created_by, updated_by fields to Mongoid objects. Just put this into your model:
 
     include Mongoid::Userstamps
 
-=== Data Tools
+### Data Tools
 
 Various utils for creating cargo-culted SP "data". 
 
@@ -80,13 +82,14 @@ Various utils for creating cargo-culted SP "data".
 
     ...
 
-=== MetaMeta
+### MetaMeta
 
 Library for reading a federation metadata XML file into in-memory objects. Doesn't completely work at present but considering the low LOC I'm suprised it works at all. Needs work.
 
 
 
-== Note on Patches/Pull Requests
+Note on Patches/Pull Requests
+=============================
  
 * Fork the project.
 * Make your feature addition or bug fix.
@@ -96,6 +99,6 @@ Library for reading a federation metadata XML file into in-memory objects. Doesn
   (if you want to have your own version, that is fine but bump version in a commit by itself I can ignore when I pull)
 * Send me a pull request. Bonus points for topic branches.
 
-== Copyright
-
+Copyright
+=========
 Copyright (c) 2010 Pete Birkinshaw. See LICENSE for details.
