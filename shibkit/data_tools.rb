@@ -7,7 +7,7 @@ module Shibkit
   
   class DataTools
   
-    ## Unique identifiers for user Shibboleth SP session, etcs
+    ## Unique identifiers for user Shibboleth SP session, etc
     def DataTools.xsid
     
       ## Reset seed of random sequence using current time
@@ -25,7 +25,7 @@ module Shibkit
       tid = ""
     
       ## We really need a salt to be consistent, so make one up if not provided
-      salt ||= Digest::SHA1.hexdigest(idp_id)
+      salt ||= Digest::SHA1.hexdigest("oijadsljadfliasudo84hk9hb9weufhwe89sd")
       
       ## Create the string
       case type
