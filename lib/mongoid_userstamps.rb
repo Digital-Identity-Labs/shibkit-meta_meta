@@ -6,9 +6,11 @@ module Mongoid #:nodoc:
     
     included do
       
-      field :created_by, :type => String, :accessible => false
-      field :updated_by, :type => String, :accessible => false
-      field :owned_by,   :type => String, :accessible => false
+      field :created_by, :type => String
+      field :updated_by, :type => String
+      field :owned_by,   :type => String
+      
+      attr_protected :created_by, :updated_by, :owned_by
       
       set_callback :create, :before, :set_created_by
       set_callback :save,   :before, :set_updated_by

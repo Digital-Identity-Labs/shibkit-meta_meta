@@ -123,10 +123,10 @@ module Shibkit
             controller.session[:sp_session].kind_of?(Shibkit::SPAssertion)
           
           ## We must have a user_id in session - if not then auth is not complete
-          valid = false unless controller.session[:user_id] and controller.session[:user_id].to_i > 0 
+          valid = false unless controller.session[:user_id] and controller.session[:user_id] 
           
           ## Only lookup user unless things still OK, and we actually have an ID for a user
-          if valid and controller.session[:user_id].to_i > 0
+          if valid
           
             ## SP object *must* match the user model core ID if it is present (to prevent SP reauth not being in sync with application)
             valid = false unless User.find(controller.session[:user_id]).persistent_id == controller.session[:sp_session].persistent_id
