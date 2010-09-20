@@ -8,7 +8,6 @@ module Shibkit
   
       require 'uuid'
       require 'haml'
-      #require 'haml/template'
       require 'yaml'
       require 'time'
       require 'rack/logger'
@@ -33,7 +32,8 @@ module Shibkit
         @users    = nil
         @orgtree  = nil 
       
-        @sso = false
+        ## Can Chooser IDPs have Single Sign On? # TODO needs per-IDP settings too
+        @sso = config.sim_chooser_idp_sso
         
         ## Add the record processing mixin if it's present
         load_filter_mixin
@@ -153,11 +153,13 @@ module Shibkit
 
             ## Has user already authenticated with the SP? If so we can simulate SP header injection
             if existing_sp_session? env
-
+              
+              ## TODO: SP sessions should expire
+              
               log_info("(SP)  Already authenticated with IDP and SP so injecting headers and calling application")
             
               ## Get our user information using the param
-              sp_user_id = env['rack.session']['shibkit-sp_simulator'][:sp_user_id]
+              sp_user_id = env['rack.session']['shibkit-simulator']['sp'][:user_id]
               user_details = users[sp_user_id.to_s]
             
               ## Inject headers
@@ -170,13 +172,15 @@ module Shibkit
             
             ## If the user has IDP session but not SP, we need to authenticate them at SP # TODO: possibly make this DRYer, or leave clearer?
             if existing_idp_session? env
-            
+              
+              ## TODO: IDP sessions should expire
+              
               log_info("(SP)  Already authenticated with IDP but not SP, so authenticating with SP now.")
             
               ## Mark this user as authenticated with SP, so we can detect changed users, etc
-              idp_user_id = env['rack.session']['shibkit-sp_simulator'][:idp_user_id]
+              idp_user_id = env['rack.session']['shibkit-simulator']['idp'][:user_id]
               sp_user_id = idp_user_id
-              env['rack.session']['shibkit-sp_simulator'][:sp_user_id] = sp_user_id
+              env['rack.session']['shibkit-simulator']['sp'][:user_id] = sp_user_id
               
               ## Get user details
               user_details = users[sp_user_id.to_s]
@@ -228,9 +232,10 @@ module Shibkit
       ## Wipe clean the Rack session info for this middleware
       def reset_session(env)
 
-       if env['rack.session']['shibkit-sp_simulator']
+       if env['rack.session']['shibkit-simulator'] and 
+          env['rack.session']['shibkit-simulator']['sp']
 
-         env['rack.session']['shibkit-sp_simulator'] = Hash.new
+         env['rack.session']['shibkit-simulator']['sp'] = Hash.new
 
        end
 
@@ -286,7 +291,7 @@ module Shibkit
       def inject_attribute_headers(env, user_details)
       
         ## The ID of this simulated SP # TODO: needs to be defined in config
-        sp_id = 'https://sp.example.ac.uk/shibboleth' # TODO: Not DRY either! BAD
+        sp_id = config.sim_sp_entity_id
       
         ## Convert to proper format that matches the live SP (also add new ones)
         prepared_data = process_attribute_data(user_details)
@@ -313,20 +318,20 @@ module Shibkit
       def inject_session_headers(env, user_details)
       
         ## The ID of this simulated SP # TODO: needs to be defined in config
-        sp_id = 'https://sp.example.ac.uk/shibboleth'
+        sp_id = config.sim_sp_entity_id
       
         ## Application ID
         env['Shib-Application-ID'] = 'default'
     
         ## Persistent Session ID
-        session_id = env['rack.session']['shibkit-sp_simulator'][:sessionid]
+        session_id = env['rack.session']['shibkit-simulator']['sp'][:sessionid]
         env['Shib-Session-ID'] = session_id
     
         ## Identity Provider ID
         env['Shib-Identity-Provider'] = sp_id
     
         ## Time authentication occured
-        env['Shib-Authentication-Instant'] = env['rack.session']['shibkit-sp_simulator'][:logintime]
+        env['Shib-Authentication-Instant'] = env['rack.session']['shibkit-simulator']['sp'][:logintime]
     
         ## Keep login method rather vague
         env['Shib-Authentication-Method'] = 'urn:oasis:names:tc:SAML:1.0:am:unspecified'
@@ -388,20 +393,24 @@ module Shibkit
   
       end
   
-      ## Create the IDP basic session
+      ## Create the SP/IDP basic session
       def set_session(env, user_details)
-   
+        
+        ## TODO: refactor to make creating and accessing the hashes easier
+        
         ## Create rack based session for our data (existence indicates shibsim session is active)
-        env['rack.session']['shibkit-sp_simulator'] ||= Hash.new
+        env['rack.session']['shibkit-simulator']  ||= Hash.new
+        env['rack.session']['shibkit-simulator']['idp'] ||= Hash.new
+        env['rack.session']['shibkit-simulator']['sp'] ||= Hash.new
       
         ## Keep the user ID so we can reapply attributes in the future
-        env['rack.session']['shibkit-sp_simulator'][:idp_user_id] = user_details['id']
+        env['rack.session']['shibkit-simulator']['idp'][:user_id] = user_details['id']
       
         ## Contruct a session ID is if we don't have one
-        env['rack.session']['shibkit-sp_simulator'][:sessionid] = Shibkit::DataTools.xsid
+        env['rack.session']['shibkit-simulator']['sp'][:sessionid] = Shibkit::DataTools.xsid
     
         ## Store login time as a string in xs:DateTime format (with no timezone for some reason)
-        env['rack.session']['shibkit-sp_simulator'][:logintime] = Time.new.xmlschema.gsub(/(\+.*)/, 'Z')
+        env['rack.session']['shibkit-simulator']['sp'][:logintime] = Time.new.xmlschema.gsub(/(\+.*)/, 'Z')
 
     
       end
@@ -526,9 +535,10 @@ module Shibkit
       
         ## Look for evidence of existing session: Has the fake IDP 'authenticated'?
         return true if env["rack.session"] and
-          env["rack.session"]['shibkit-sp_simulator'] and
-          env["rack.session"]['shibkit-sp_simulator'][:idp_user_id] and 
-          env["rack.session"]['shibkit-sp_simulator'][:idp_user_id].to_i > 0
+          env["rack.session"]['shibkit-simulator'] and
+          env["rack.session"]['shibkit-simulator']['idp'] and
+          env["rack.session"]['shibkit-simulator']['idp'][:user_id] and 
+          env["rack.session"]['shibkit-simulator']['idp'][:user_id].to_i > 0
         
         
         
@@ -543,15 +553,16 @@ module Shibkit
     
         ## Has the fake IDP 'authenticated'?
         return false unless env["rack.session"] and
-          env["rack.session"]['shibkit-sp_simulator'] and
-          env["rack.session"]['shibkit-sp_simulator'][:idp_user_id] and 
-          env["rack.session"]['shibkit-sp_simulator'][:idp_user_id].to_i > 0
+          env["rack.session"]['shibkit-simulator'] and
+          env["rack.session"]['shibkit-simulator']['sp'] and
+          env["rack.session"]['shibkit-simulator']['sp'][:user_id] and 
+          env["rack.session"]['shibkit-simulator']['sp'][:user_id].to_i > 0
         
         # ...
         
         ## Check that the *same* user has already authenticated with the fake SP too.
-        return true if env["rack.session"]['shibkit-sp_simulator'][:idp_user_id].to_i == 
-          env['rack.session']['shibkit-sp_simulator'][:sp_user_id].to_i
+        return true if env["rack.session"]['shibkit-simulator']['idp'][:user_id].to_i == 
+          env['rack.session']['shibkit-simulator']['sp'][:user_id].to_i
         
         return false
       
