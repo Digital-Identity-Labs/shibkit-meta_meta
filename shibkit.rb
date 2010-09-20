@@ -16,8 +16,8 @@ require 'shibkit/sp_assertion'
 ## Rack it up
 if defined?(Rack)
 
-  require "shibkit/rack/shib_sim"
-  require "shibkit/rack/shib_shim"
+  require "shibkit/rack/simulator"
+  require "shibkit/rack/shim"
 
 end
 

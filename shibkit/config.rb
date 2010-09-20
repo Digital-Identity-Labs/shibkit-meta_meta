@@ -18,7 +18,7 @@ module Shibkit
       :gateway_path                   => "/",
       :sim_application                => 'default',
       :sim_assertion_base             => "http://localhost/Shibboleth.sso/GetAssertion", 
-      :sim_record_filter_module       => "Shibkit::Rack::ShibSim::RecordFilter",
+      :sim_record_filter_module       => "Shibkit::Rack::Simulator::RecordFilter",
       :sim_sp_entity_id               => 'https://sp.example.ac.uk/shibboleth',
       :sim_remote_user                => %w"eppn persistent-id targeted-id",
       :sim_chooser_type               => :simple,

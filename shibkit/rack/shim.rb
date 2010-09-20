@@ -1,4 +1,4 @@
-class Shibkit::Rack::ShibShim
+class Shibkit::Rack::Shim
 
   require 'deep_merge'
 
@@ -100,7 +100,7 @@ class Shibkit::Rack::ShibShim
     sp_core.default = nil
     
     ## Object that wraps up access to the headers, per-IDP, with defaults, etc. 
-    sp_headers = Shibkit::Rack::ShibShim::SPAttributeHeaders.new('core_attribute_maps', rack_env)
+    sp_headers = Shibkit::Rack::Shim::SPAttributeHeaders.new('core_attribute_maps', rack_env)
     
     ## Extract each header # <- Not DRY? This list is elsewhere too?
     [    
@@ -142,7 +142,7 @@ class Shibkit::Rack::ShibShim
     sp_ext.default = nil
     
     ## Object that wraps up access to the headers, per-IDP, with defaults, etc. 
-    sp_headers = Shibkit::Rack::ShibShim::SPAttributeHeaders.new('custom_attribute_maps', rack_env)
+    sp_headers = Shibkit::Rack::Shim::SPAttributeHeaders.new('custom_attribute_maps', rack_env)
     
     ## We get our headers from the defaults keys
     sp_headers.attributes.each { |attrib| sp_ext[attrib] = sp_headers.get(attrib) }
