@@ -5,10 +5,16 @@ module Shibkit
     module SessionFilter
       
       ## Redirect users to login here
-      GATEWAY_URL=nil
+      GATEWAY_URL=Shibkit.config.gateway_path
       
       ## Redirect failed logins here
-      EXIT_URL=nil
+      EXIT_URL=Shibkit.config.exit_path
+      
+      ## Key used to store the SP assertion object from Shim
+      ASSERTION_NAME = Shibkit.config.shim_sp_assertion_name
+      
+      ## Key used to store user ID in session
+      USER_ID_NAME   = Shibkit.config.shim_user_id_name
       
       ## Just class methods from here on
       class << self
@@ -119,17 +125,17 @@ module Shibkit
           valid = true
           
           ## We must have an SP object
-          valid = false unless controller.session[:sp_session] and 
-            controller.session[:sp_session].kind_of?(Shibkit::SPAssertion)
+          valid = false unless controller.session[ASSERTION_NAME] and 
+            controller.session[ASSERTION_NAME].kind_of?(Shibkit::SPAssertion)
           
           ## We must have a user_id in session - if not then auth is not complete
-          valid = false unless controller.session[:user_id] and controller.session[:user_id] 
+          valid = false unless controller.session[USER_ID_NAME] and controller.session[USER_ID_NAME] 
           
           ## Only lookup user unless things still OK, and we actually have an ID for a user
           if valid
           
             ## SP object *must* match the user model core ID if it is present (to prevent SP reauth not being in sync with application)
-            valid = false unless User.find(controller.session[:user_id]).persistent_id == controller.session[:sp_session].persistent_id
+            valid = false unless User.find(controller.session[USER_ID_NAME]).persistent_id == controller.session[ASSERTION_NAME].persistent_id
           
           end
           
@@ -168,7 +174,7 @@ module Shibkit
         def sp_authentication(controller)
           
           ## Do we have an SP user assertion object?
-          sp_session = controller.session[:sp_session]
+          sp_session = controller.session[ASSERTION_NAME]
           #raise unless sp_session.kind_of?(Shibkit::SPAssertion)        
           
           ## TODO... lots.
@@ -204,7 +210,7 @@ module Shibkit
           ::Rails.logger.info  "Session Filter: Preparing to update current user details"
 
           ## Try to get the user details
-          sp_assertion = controller.session[:sp_session]
+          sp_assertion = controller.session[ASSERTION_NAME]
 
           raise "Session Filter: Missing user data! Can't find SP assertion object" unless sp_assertion
           user = nil
@@ -245,7 +251,7 @@ module Shibkit
           user.save
           
           ## Store ID number of user object in session for normal things
-          controller.session[:user_id] = user.id
+          controller.session[USER_ID_NAME] = user.id
           
           ::Rails.logger.info  "User ID #{user.id}/#{user.name_id} updated"
           
@@ -278,6 +284,15 @@ module Shibkit
           
           return true
 
+        end
+        
+        private 
+        
+        ## Lookup the SP assertion object that Shim should have created 
+        def assertion
+        
+        return controller.session[ASSERTION_NAME]
+        
         end
         
       end

@@ -3,10 +3,19 @@ class Shibkit::Rack::ShibShim
   require 'deep_merge'
 
   require 'shibkit/sp_assertion'
-
+  
+      
+  ## Easy access to Shibkit's configuration settings
+  include Shibkit::Configured
+  
+  
   def initialize(app)
     
     @app = app
+    
+    ## Cache a couple of options (config should be frozen anyway)
+    @user_id_name   = config.shim_user_id_name
+    @assertion_name = config.shim_sp_assertion_name
     
   end
   
@@ -21,7 +30,7 @@ class Shibkit::Rack::ShibShim
     #
     
     ## Store in session # TODO: Make this configurable
-    env['rack.session'][:sp_session] = shib_session  
+    env['rack.session'][@assertion_name] = shib_session  
     
     return @app.call(env)
     
@@ -222,7 +231,7 @@ class Shibkit::Rack::ShibShim
       # ...
 
       ## Load the map SP->Attribute map # TODO: Allow option to override this
-      default_file = "#{::File.dirname(__FILE__)}/shib_shim/default_config/sp_attr_map.yml"
+      default_file = "#{::File.dirname(__FILE__)}/../data/sp_attr_map.yml"
 
       ## Load the default file first into default attribute maps store
       @@default_attr_maps = YAML.load_file(default_file)
