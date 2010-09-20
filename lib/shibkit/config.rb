@@ -16,6 +16,7 @@ module Shibkit
       :home_path                      => "/",
       :exit_path                      => "/",
       :gateway_path                   => "/",
+      :sim_debug                      => true,
       :sim_application                => 'default',
       :sim_chooser_idp_sso            => false,
       :sim_assertion_base             => "http://localhost/Shibboleth.sso/GetAssertion", 
