@@ -2,7 +2,7 @@
 
 module Shibkit
   module Rack
-    class ShibSim
+    class Simulator
       module RecordFilter
     
         ## Process a user's record to make resemble Shibboleth SP attributes 
