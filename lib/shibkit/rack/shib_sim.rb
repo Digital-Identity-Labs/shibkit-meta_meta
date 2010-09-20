@@ -12,33 +12,18 @@ module Shibkit
       require 'yaml'
       require 'time'
       require 'rack/logger'
-    
-      ##
-      ## Setup views, default data, etc
-      ##
       
-      ## If no user created/edited files are present, use these from the gem
-      DEFAULT_CONFIG = "#{::File.dirname(__FILE__)}/shib_sim/default_config/config.yml"
-      DEFAULT_FILTER = "#{::File.dirname(__FILE__)}/shib_sim/default_config/record_filter.rb"
-    
-      ## These are the default locations of user-edited versions of the above files (Rails only at the moment)
-      if const_defined?(:Rails)
+      ## Default record filter mixin code
+      require 'shibkit/rack/shib_sim/record_filter'
       
-        APP_CONFIG = "#{Rails.root}/config/shibsim_config.yml"
-        APP_FILTER = "#{Rails.root}/config/record_filter.rb"
-    
-ass      else
-      
-        APP_CONFIG = DEFAULT_CONFIG
-        APP_FILTER = DEFAULT_FILTER
-      
-      end
+      ## Easy access to Shibkit's configuration settings
+      include Shibkit::Configured
     
       ## Middleware application components and behaviour
       CONTENT_TYPE   = { "Content-Type" => "text/html; charset=utf-8" }
       VIEWS          = [:user_chooser, :fatal_error]
   
-      def initialize(app, config_file_location=nil)
+      def initialize(app)
       
         ## Rack app
         @app = app
@@ -50,16 +35,13 @@ ass      else
       
         @sso = false
         
-        ## Load and cache the config file
-        load_config_file(config_file_location)
-      
         ## Add the record processing mixin if it's present
         load_filter_mixin
       
         ## Load and cache the data sources for users and chooser organisations
         user_data
       
-        ## Load the Federation and IDP data
+        ## Load the Federation and org/IDP data
         # ...
       
         ## Check that everything is OK
@@ -395,7 +377,7 @@ ass      else
           header = 'Shib-Assertion-' + "%02d" % assertion_part
       
           ## Building up a mock URL
-          value  = @config['default_session']['assbase'] + '?key=' + session_id + '&ID=' + Shibkit::DataTools.xsid
+          value  = config.sim_assertion_base + '?key=' + session_id + '&ID=' + Shibkit::DataTools.xsid
     
           ## Collect it
           info[header] = value
@@ -494,7 +476,7 @@ ass      else
       
           user_fixture_file_location = "#{::File.dirname(__FILE__)}/shib_sim/default_data/users.yml"
 
-          fixture_data = YAML.load_file(user_fixture_file_location)
+          fixture_data = YAML.load_file(config.sim_users_file )
 
           fixture_data.each_pair do |label, record| 
  
@@ -517,36 +499,11 @@ ass      else
         return [@users, @orgtree]
     
       end
-      
-      ## Load and cache the user config file specified when middleware loaded
-      def load_config_file(specified_file)
-      
-        ## If file was specified when the middleware was loaded, use that.
-        file_location = specified_file if specified_file
-      
-        ## Otherwise try the config-by-convention location if file exists
-        file_location ||= APP_CONFIG if ::File.exists? APP_CONFIG
-      
-        ## If nothing set so far, fall back to the built-in default
-        file_location ||= DEFAULT_CONFIG
-      
-        ## Load and parse the YAML config file
-        @config = YAML.load_file(file_location)
-      
-      end
     
       ## Add the filter mixin if it exists
       def load_filter_mixin
       
-        ## Try the config-by-convention location if file exists
-        file_location ||= APP_FILTER if ::File.exists? APP_FILTER
-      
-        ## If nothing set so far, fall back to the built-in default
-        file_location ||= DEFAULT_FILTER
-      
-        ## Mixin the filter Mixin
-        require file_location
-        extend Shibkit::Rack::ShibSim::RecordFilter
+        eval "extend #{config.sim_record_filter_module}"
       
       end
     
