@@ -1,0 +1,43 @@
+"Pete Birkinshaw":
+  id: 1
+  username: petebirkinshaw
+  id_number: "23748922"
+  name: Pete Birkinshaw
+  given_name: Peter
+  family_name: Birkinshaw
+  roles: staff
+  email: pete.birkinshaw@example.ac.uk
+  job_title: Deputy Assistant Backup Courier
+  organisation: Example University
+  idp_scope: example.ac.uk
+  idp_id: https://shib.example.ac.uk/shibboleth
+  federation: Example Access Management Federation
+"Willie Ekerslyke":
+  id: 2
+  username: willieekerslyke
+  id_number: "23748948"
+  name: Willie Ekerslyke
+  given_name: William
+  family_name: Ekerslyke
+  roles: staff
+  email: bill.ekerslyke@example.ac.uk
+  job_title: Professor of Whatnots
+  organisation: Example University
+  idp_scope: example.ac.uk
+  idp_id: https://shib.example.ac.uk/shibboleth
+  federation: Example Access Management Federation
+"Frank H. Pabodie":
+  id: 3
+  username: pabodiefh2
+  id_number: 236120838B
+  name: Frank H. Pabodie
+  given_name: Frank
+  family_name: Pabodie
+  roles: faculty, staff
+  email: fh.pabodie@miskatonic.edu
+  job_title: Professor of Engineering 
+  organisation: Miskatonic University
+  idp_scope: miskatonic.edu
+  idp_id: https://idp.miskatonic.edu/yogsothoth
+  federation: Esoteric Federation of Dagon 
+

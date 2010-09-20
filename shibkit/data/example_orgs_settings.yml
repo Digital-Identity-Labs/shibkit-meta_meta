@@ -1,0 +1,11 @@
+default:
+  anonymous_reqs: 
+  guest_reqs:      
+  subscriber_reqs: 
+  org_admin_entitlement: http://digitalidentity.org/entitlements/org_admin 
+  subscription_level: 0
+  subscription_expires:
+  subscription_contact_name:
+  subscription_contact_email:
+"example.ac.uk":
+      

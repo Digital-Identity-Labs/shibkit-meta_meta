@@ -1,0 +1,20 @@
+##
+##
+##
+
+default_session:
+  assbase:          http://localhost/Shibboleth.sso/GetAssertion  
+preprocess:
+  filter_path: 
+postprocess:
+  org_from:         attribute
+  org_attr:         organisation
+sources:
+  users:
+  idps:
+  federations:
+    
+
+
+
+
