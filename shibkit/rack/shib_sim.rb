@@ -8,7 +8,7 @@ module Shibkit
   
       require 'uuid'
       require 'haml'
-      require 'haml/template'
+      #require 'haml/template'
       require 'yaml'
       require 'time'
       require 'rack/logger'
@@ -27,7 +27,7 @@ module Shibkit
         APP_CONFIG = "#{Rails.root}/config/shibsim_config.yml"
         APP_FILTER = "#{Rails.root}/config/record_filter.rb"
     
-      else
+ass      else
       
         APP_CONFIG = DEFAULT_CONFIG
         APP_FILTER = DEFAULT_FILTER
@@ -639,7 +639,7 @@ module Shibkit
       end
 
       ## Exception class used here to limit rescued errors to this middleware only
-      class Rack::ShibSim::RuntimeError < RuntimeError 
+      class Rack::ShibSim::RuntimeError < Shibkit::RackMiddlewareError 
     
       end
     
