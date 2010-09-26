@@ -1,0 +1,28 @@
+!!!
+%html{ :xmlns => "http://www.w3.org/1999/xhtml", :lang => "en", "xml:lang" => "en"}
+  %head
+    %title Session Summary
+    %meta{"http-equiv" => "Content-Type", :content => "text/html; charset=utf-8"}
+  %body
+   %pre
+    %u Miscellaneous
+    %strong Client Address: <
+    = ip_address
+		%strong Identity Provider: <
+		= idp_entity_uri
+		%strong SSO Protocol: <
+		= sso_protocol
+		%strong Authentication Time: <
+		= authentication_time
+		%strong Authentication Context Class: <
+		= authentication_context_class
+		%strong Authentication Context Decl: <
+		= authentication_context_decl
+		%strong Session Expiration (barring inactivity): <
+		= minutes_remaining
+
+		%u>Attributes</u>
+		- attributes_stats.each_pair do |attr, total| 
+		%strong=attr :
+		 = total < value(s)
+	
