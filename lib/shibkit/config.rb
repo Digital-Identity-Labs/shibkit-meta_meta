@@ -15,10 +15,14 @@ module Shibkit
       :federation_metadata            => ["#{::File.dirname(__FILE__)}/data/example_federation_metadata.xml"],
       :home_path                      => "/",
       :exit_path                      => "/",
+      :gateway                        => false,
       :gateway_path                   => "/",
+      :gateway_passthrough            => false,
       :sim_debug                      => true,
       :sim_application                => 'default',
       :sim_chooser_idp_sso            => false,
+      :sim_sp_session_path            => "/Shibboleth.sso/Session",
+      :sim_sp_logout_path             => "/Shibboleth.sso/Logout",
       :sim_assertion_base             => "http://localhost/Shibboleth.sso/GetAssertion", 
       :sim_record_filter_module       => "Shibkit::Rack::Simulator::RecordFilter",
       :sim_sp_entity_id               => 'https://sp.example.ac.uk/shibboleth',
@@ -28,8 +32,10 @@ module Shibkit
       :sim_idp_session_expiry         => 300,
       :sim_sp_session_expiry          => 300,
       :sim_sp_session_idle            => 300,
-      :sim_idp_base_path              => "/shibsim_idp/",
-      :sim_wayf_base_path             => "/shibsim_wayf/",
+      :sim_idp_path                   => "/shibsim_idp/",
+      :sim_idp_old_status_path        => "/idp/profile/Status",
+      :sim_idp_new_status_path        => "/idp/status",
+      :sim_wayf_path                  => "/shibsim_wayf/",
       :sim_users_file                 => "#{::File.dirname(__FILE__)}/data/example_users.yml",
       :sim_users_file_format          => :fixture,
       :sim_orgs_file                  => "#{::File.dirname(__FILE__)}/data/example_orgs.yml",
@@ -178,7 +184,7 @@ module Shibkit
       
       
        ## Check URL paths are valid
-      [:home_path, :exit_path, :gateway_path, :sim_idp_base_path, :sim_wayf_base_path].each do |m|
+      [:home_path, :exit_path, :gateway_path, :sim_idp_path, :sim_wayf_path].each do |m|
         
         path     = self.send(m)
         test_url = "http://localhost" + path

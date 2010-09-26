@@ -28,7 +28,7 @@ used for development, maybe testing. It is not a real authentication provider!
 
 Enable Shibsim by adding the following to your Rails application.rb:
 
-    config.middleware.use 'Shibkit::Rack::ShibSim' if Rails.env == 'development'
+    config.middleware.use 'Shibkit::Rack::Simulator' if Rails.env == 'development'
 
 Shibsim should work with its own built-in defaults. It isn't easily customisable yet, but this is due soon.
 
@@ -42,7 +42,7 @@ Enabling Shibshim involves setting up both a Rack middleware and a (optional) Ra
 
 Add this line to your application.rb (or rackup.ru) after Shibsim:
 
-    config.middleware.use 'Shibkit::Rack::ShibShim'
+    config.middleware.use 'Shibkit::Rack::Shim'
 
 That will provide you with a user object in your session, with lots of nice accessor methods to provide information about the user, their IDP, organisation, etc.
 
