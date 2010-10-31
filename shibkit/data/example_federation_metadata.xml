@@ -1,7 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <EntitiesDescriptor
+  xmlns="urn:oasis:names:tc:SAML:2.0:metadata"
+  xmlns:ds="http://www.w3.org/2000/09/xmldsig#"
+  xmlns:elab="http://eduserv.org.uk/labels"
+  xmlns:idpdisc="urn:oasis:names:tc:SAML:profiles:SSO:idp-discovery-protocol"
+  xmlns:shibmd="urn:mace:shibboleth:metadata:1.0"
+  xmlns:shibmeta="urn:mace:shibboleth:metadata:1.0"
+  xmlns:ukfedlabel="http://ukfederation.org.uk/2006/11/label"
+  xmlns:wayf="http://sdss.ac.uk/2006/06/WAYF"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="urn:oasis:names:tc:SAML:2.0:metadata sstc-saml-schema-metadata-2.0.xsd   urn:mace:shibboleth:metadata:1.0 shibboleth-metadata-1.0.xsd   http://www.w3.org/2001/04/xmlenc# xenc-schema.xsd   http://www.w3.org/2000/09/xmldsig# xmldsig-core-schema.xsd"
+	ID="ef20101029T160501Z"
   Name="http://examplefederation.org"
   validUntil="2010-11-12T16:05:01Z">
-  
+
 	<EntityDescriptor ID="ef00001" entityID="https://shib.example.ac.uk/shibboleth">
 		
 		<Extensions>
@@ -105,7 +117,7 @@
 	<EntityDescriptor ID="ef00003" entityID="https://login.example.com/shibboleth">
 		
 		<Extensions>
-			<shibmd:Scope regexp="false">example.ac.uk</shibmd:Scope>
+			<shibmd:Scope regexp="false">example.com</shibmd:Scope>
 			<ukfedlabel:UKFederationMember/>
 			<ukfedlabel:AccountableUsers/>
 		</Extensions>
@@ -135,19 +147,19 @@
 		</AttributeAuthorityDescriptor>
 		
 		<Organization>
-	  	<OrganizationName xml:lang="en">Example Secondary School</OrganizationName>
-			<OrganizationDisplayName xml:lang="en">Example Secondary School</OrganizationDisplayName>
-			<OrganizationURL xml:lang="en">http://www.example.exampleshire.sch.uk/</OrganizationURL>
+	  	<OrganizationName xml:lang="en">Example Online</OrganizationName>
+			<OrganizationDisplayName xml:lang="en">Example Online</OrganizationDisplayName>
+			<OrganizationURL xml:lang="en">http://example.com</OrganizationURL>
 		</Organization>
 		
 		<ContactPerson contactType="support">
 		  <GivenName>IT Service Desk</GivenName>
-			<EmailAddress>mailto:support@example.exampleshire.sch.uk</EmailAddress>
+			<EmailAddress>mailto:help@example.com</EmailAddress>
 		</ContactPerson>
 		<ContactPerson contactType="technical">
 		  <GivenName>A</GivenName>
 			<SurName>Person</SurName>
-			<EmailAddress>mailto:sysadmin@example.exampleshire.sch.uk</EmailAddress>
+			<EmailAddress>mailto:guru@example.com</EmailAddress>
 		</ContactPerson>
 
   </EntityDescriptor>

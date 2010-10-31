@@ -1,6 +1,8 @@
 require 'rubygems'
+require 'open-uri'
 require 'nokogiri'
 require 'yaml'
+
 
 module Shibkit
   class MetaMeta
