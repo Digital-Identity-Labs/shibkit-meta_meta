@@ -1,27 +1,92 @@
+## This file is part of Shibkit
+##
+## Author::    Pete Birkinshaw  (mailto:pete@binary-ape.org)
+## Copyright:: Copyright (c) 2010 Pete Birkinshaw & Digital Identity Ltd
+## License::   MIT (Please read the LICENSE file shipped with this code)
+
 require 'rubygems'
 require 'nokogiri'
 require 'yaml'
 
 module Shibkit
+  
+  ## Simple library to parse Shibboleth metadata files into Ruby objects
   class MetaMeta
     
+    ## Class to represent a Shibboleth Federation or collection of local metadata
+    ## 
     class Federation
       
-      attr_accessor :name, :metadata_id, :federation_uri, :valid_until, :entities  
+      ## The human-readable display name of the Federation or collection of metadata
+      attr_accessor :display_name
       
-    end
-
-    class Organisation
+      ## The unique ID of the federation document (probably time/version based)
+      attr_accessor :metadata_id
       
-      attr_accessor :name, :display_name, :url
+      ## The URI name of the federation (may be missing for local collections)
+      attr_accessor :federation_uri
+      
+      ## Expiry date of the published metadata file
+      attr_accessor :valid_until
+      
+      ## Array of entities within the federation or metadata collection
+      attr_accessor :entities  
       
     end
     
+    ## Class to represent the metadata of the organisation owning a Shibboleth entity
+    class Organisation
+      
+      ## The name identifier for the organisation
+      attr_accessor :name
+      
+      ## The human-readable display name for the organisation
+      attr_accessor :display_name
+      
+      ## The homepage URL for the organisation
+      attr_accessor :url
+      
+    end
+    
+    ## Class to represent the metadata of a Shibboleth IDP or SP 
     class Entity
       
-      attr_accessor :federation_uri, :metadata_id, :entity_uri, :accountable, :ukfm,
-                    :athens, :scopes, :organisation, :extensions,
-                    :accountable, :support_contact, :technical_contact, :idp, :sp
+      ## The URI of the entity's parent federation
+      attr_accessor :federation_uri
+      
+      ## The ID of the entity with the metadata file (not globally unique)
+      attr_accessor :metadata_id
+      
+      ## The URI of the entity
+      attr_accessor :entity_uri
+      
+      ## Is the entity accountable?
+      attr_accessor :accountable
+      
+      ## Is the entity part of the UK Access Management Federation?
+      attr_accessor :ukfm
+      
+      ## Is the entity using Athens?
+      attr_accessor :athens
+      
+      ## Scopes used by the entity (if an IDP)
+      attr_accessor :scopes
+      
+      ## Organisation object for the owner of the entity 
+      attr_accessor :organisation
+      
+      ## Contact object containing user support contact details
+      attr_accessor :support_contact
+      
+      ## Contact object containing technical contact details
+      attr_accessor :technical_contact
+      
+      ## Is the entity an IDP?
+      attr_accessor :idp
+      
+      ## Is the entity an SP?
+      attr_accessor :sp
+                    
                     
       alias :entity_id :entity_uri
       alias :idp? :idp 
@@ -32,11 +97,23 @@ module Shibkit
       alias :organization :organisation
       
     end
-
+    
+    ## Class to represent technical or suppor contact details for an entity
     class Contact
       
-      attr_accessor :givenname, :surname, :email_url, :category   
+      ## The given name of the contact (often the entire name is here)
+      attr_accessor :givenname
       
+      ## The surname of the contact
+      attr_accessor :surname
+      
+      ## The email address of the contact formatted as a mailto: URL
+      attr_accessor :email_url
+      
+      ## The category of the contact (support or technical)
+      attr_accessor :category   
+      
+      ## Usually both the surname and givenname of the contact
       def display_name
       
         return [givenname, surname].join(' ')
@@ -44,7 +121,8 @@ module Shibkit
       end
       
     end
-
+    
+    ## Parses the specified metadata xml file and returns a federation object
     def MetaMeta.parse_metadata_file(federation_name, metadata_filename)
       
       metadata_text = IO.read(metadata_filename)
@@ -52,7 +130,8 @@ module Shibkit
       return MetaMeta.parse_metadata(federation_name, metadata_text)
       
     end
-
+    
+    ## Parses a string containing metadata XML and returns a federation object
     def MetaMeta.parse_metadata(federation_name, metadata_text)
       
       ## Parse the entire file as an XML document
@@ -69,7 +148,7 @@ module Shibkit
       fx.add_namespace_definition('elab','http://eduserv.org.uk/labels')
       
       ## Extract basic 'federation' information 
-      federation.name           = federation_name
+      federation.display_name   = federation_name
       federation.metadata_id    = fx['ID']
       federation.federation_uri = fx['Name']
       federation.valid_until    = fx['validUntil']
