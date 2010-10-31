@@ -1,0 +1,363 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta name="Content-Type" content="text/html; charset=utf-8" />
+<title>Class: Shibkit::SPAssertion</title>
+<link rel="stylesheet" href="../css/style.css" type="text/css" media="screen" charset="utf-8" />
+<link rel="stylesheet" href="../css/common.css" type="text/css" media="screen" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  relpath = '..';
+  if (relpath != '') relpath += '/';
+</script>
+<script type="text/javascript" charset="utf-8" src="../js/jquery.js"></script>
+<script type="text/javascript" charset="utf-8" src="../js/app.js"></script>
+
+  </head>
+  <body>
+    <script type="text/javascript" charset="utf-8">
+      if (window.top.frames.main) document.body.className = 'frames';
+    </script>
+    
+    <div id="header">
+      <div id="menu">
+  
+    <a href="../_index.html">Index (S)</a> &raquo; 
+    <span class='title'><span class='object_link'><a href="../Shibkit.html" title="Shibkit (module)">Shibkit</a></span></span>
+     &raquo; 
+    <span class="title">SPAssertion</span>
+  
+  
+  <div class="noframes"><span class="title">(</span><a href="." target="_top">no frames</a><span class="title">)</span></div>
+</div>
+
+      <div id="search">
+  <a id="class_list_link" href="#">Class List</a>
+  <a id="method_list_link" href="#">Method List</a>
+  <a id ="file_list_link" href="#">File List</a>
+</div>
+
+      <div class="clear"></div>
+    </div>
+    
+    <iframe id="search_frame"></iframe>
+    
+    <div id="content"><h1>Class: Shibkit::SPAssertion
+  
+  
+  
+</h1>
+
+<dl class="box">
+  
+    <dt class="r1">Inherits:</dt>
+    <dd class="r1">
+      <span class="inheritName">Object</span>
+      
+        <ul class="fullTree">
+          <li>Object</li>
+          
+            <li class="next">Shibkit::SPAssertion</li>
+          
+        </ul>
+        <a href="#" class="inheritanceTree">show all</a>
+      
+      </dd>
+    
+  
+  
+    
+  
+    
+  
+  
+  
+    <dt class="r2 last">Defined in:</dt>
+    <dd class="r2 last">lib/shibkit/sp_assertion.rb</dd>
+  
+</dl>
+<div class="clear"></div>
+
+<h2>Overview</h2><div class="docstring">
+  <div class="discussion">
+    <p>
+General session information, container for attribute sets, basic user
+information
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+</div>
+  <h2>Constant Summary</h2>
+  
+    <dl class="constants">
+      
+        <dt id="PACCS-constant" class="">PACCS =
+          
+        </dt>
+        <dd><pre class="code"><span class='lbrack token'>[</span>
+  <span class='symbol val'>:login_time</span><span class='comma token'>,</span>
+  <span class='symbol val'>:remote_user</span><span class='comma token'>,</span>
+  <span class='symbol val'>:session_id</span><span class='comma token'>,</span>
+  <span class='symbol val'>:application</span><span class='comma token'>,</span>
+  <span class='symbol val'>:auth_instant</span><span class='comma token'>,</span>
+  <span class='symbol val'>:auth_method</span><span class='comma token'>,</span>
+  <span class='symbol val'>:auth_class</span><span class='comma token'>,</span>
+  <span class='symbol val'>:ip_address</span><span class='comma token'>,</span>
+  <span class='symbol val'>:proxied</span><span class='comma token'>,</span>
+  <span class='symbol val'>:forwarded_for</span><span class='comma token'>,</span>
+  <span class='symbol val'>:proxies</span><span class='comma token'>,</span>
+  <span class='symbol val'>:idp_uri</span><span class='comma token'>,</span>
+  <span class='symbol val'>:attrs</span><span class='comma token'>,</span>
+  <span class='symbol val'>:xattrs</span>
+<span class='rbrack token'>]</span><span class='dot token'>.</span><span class='freeze identifier id'>freeze</span>
+</pre></dd>
+      
+    </dl>
+  
+
+
+
+  
+    <h2>
+      Instance Method Summary
+      <small>(<a href="#" class="summary_toggle">collapse</a>)</small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#initialize-instance_method" title="#initialize (instance method)">- (SPAssertion) <strong>initialize</strong>(data = {}, options = {}) </a>
+    
+
+    
+  </span>
+  
+    <span class="note title constructor">constructor</span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+A new instance of SPAssertion.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#persistent_id-instance_method" title="#persistent_id (instance method)">- (Object) <strong>persistent_id</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Returns the asserted persistent-id value or upgrades from
+botched/targeted-id.
+</p>
+</div></span>
+  
+</li>
+
+      
+    </ul>
+  
+
+<div id="constructor_details" class="method_details_list">
+  <h2>Constructor Details</h2>
+  
+    <div class="method_details first">
+  <p class="signature first" id="initialize-instance_method">
+  
+    - (<tt><span class='object_link'><a href="" title="Shibkit::SPAssertion (class)">SPAssertion</a></span></tt>) <strong>initialize</strong>(data = {}, options = {}) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+A new instance of SPAssertion
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/shibkit/sp_assertion.rb', line 27</span>
+
+<span class='def def kw'>def</span> <span class='initialize identifier id'>initialize</span><span class='lparen token'>(</span><span class='data identifier id'>data</span><span class='assign token'>=</span><span class='lbrace token'>{</span><span class='rbrace token'>}</span><span class='comma token'>,</span> <span class='options identifier id'>options</span><span class='assign token'>=</span><span class='lbrace token'>{</span><span class='rbrace token'>}</span><span class='rparen token'>)</span> 
+  
+  <span class='comment val'>## Directly set instance variables with data hash # TODO: optimise?</span>
+  <span class='PACCS constant id'>PACCS</span><span class='dot token'>.</span><span class='each identifier id'>each</span> <span class='lbrace token'>{</span> <span class='bitor op'>|</span><span class='pacc identifier id'>pacc</span><span class='bitor op'>|</span> <span class='eval identifier id'>eval</span><span class='lparen token'>(</span><span class='dstring node'>&quot;@#{pacc} = data[pacc]&quot;</span><span class='rparen token'>)</span> <span class='rbrace token'>}</span>
+    
+  <span class='comment val'>## Upgrade SP attrs from hashes to objects</span>
+  <span class='@attrs ivar id'>@attrs</span>  <span class='assign token'>=</span> <span class='BasicAttrs constant id'>BasicAttrs</span><span class='dot token'>.</span><span class='new identifier id'>new</span><span class='lparen token'>(</span><span class='@attrs ivar id'>@attrs</span><span class='rparen token'>)</span>
+  <span class='@xattrs ivar id'>@xattrs</span> <span class='assign token'>=</span> <span class='CustomAttrs constant id'>CustomAttrs</span><span class='dot token'>.</span><span class='new identifier id'>new</span><span class='lparen token'>(</span><span class='@xattrs ivar id'>@xattrs</span><span class='rparen token'>)</span>
+  
+  <span class='comment val'>## Check everything is valid; if not, we complain</span>
+  <span class='comment val'># ...</span>
+      
+<span class='end end kw'>end</span>
+</pre>
+    </td>
+  </tr>
+</table>
+</div>
+  
+</div>
+
+
+  <div id="instance_method_details" class="method_details_list">
+    <h2>Instance Method Details</h2>
+    
+    
+      <div class="method_details first">
+  <p class="signature first" id="persistent_id-instance_method">
+  
+    - (<tt>Object</tt>) <strong>persistent_id</strong> 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Returns the asserted persistent-id value or upgrades from
+botched/targeted-id
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/shibkit/sp_assertion.rb', line 42</span>
+
+<span class='def def kw'>def</span> <span class='persistent_id identifier id'>persistent_id</span>
+  
+  <span class='comment val'>## If we have an literal persistent_id attribute then return that</span>
+  <span class='return return kw'>return</span> <span class='attrs identifier id'>attrs</span><span class='dot token'>.</span><span class='persistent_id identifier id'>persistent_id</span> <span class='unless unless_mod kw'>unless</span> <span class='attrs identifier id'>attrs</span><span class='dot token'>.</span><span class='persistent_id identifier id'>persistent_id</span><span class='dot token'>.</span><span class='empty? fid id'>empty?</span>
+  
+  <span class='comment val'>## TODO: Need to check that the format is correct - effectively normalise?</span>
+  <span class='comment val'># ...</span>
+  
+  <span class='comment val'>## Reformat the older 'botched' format if we have it...</span>
+  <span class='unless unless kw'>unless</span> <span class='attrs identifier id'>attrs</span><span class='dot token'>.</span><span class='targeted_id identifier id'>targeted_id</span><span class='dot token'>.</span><span class='empty? fid id'>empty?</span>
+ 
+    <span class='comment val'>## Use the user ID</span>
+    <span class='user_id identifier id'>user_id</span><span class='comma token'>,</span> <span class='user_scope identifier id'>user_scope</span> <span class='assign token'>=</span> <span class='attrs identifier id'>attrs</span><span class='dot token'>.</span><span class='targeted_id identifier id'>targeted_id</span><span class='dot token'>.</span><span class='split identifier id'>split</span><span class='lparen token'>(</span><span class='string val'>'@'</span><span class='rparen token'>)</span>
+    
+    <span class='comment val'>## The SP's ID # TODO: This is hardcoded! BAD! *Must* get from config!</span>
+    <span class='sp_id identifier id'>sp_id</span> <span class='assign token'>=</span> <span class='string val'>'https://sp.example.ac.uk/shibboleth'</span>  
+ 
+    <span class='return return kw'>return</span> <span class='lbrack token'>[</span><span class='idp_uri identifier id'>idp_uri</span><span class='comma token'>,</span> <span class='sp_id identifier id'>sp_id</span><span class='comma token'>,</span> <span class='user_id identifier id'>user_id</span><span class='rbrack token'>]</span><span class='dot token'>.</span><span class='join identifier id'>join</span><span class='lparen token'>(</span><span class='string val'>'!'</span><span class='rparen token'>)</span>
+ 
+  <span class='end end kw'>end</span>
+  
+  <span class='comment val'>## Check the format of remote user, log a grumble, then use it</span>
+  <span class='comment val'># ...</span>
+  
+  <span class='comment val'>## Nothing we can use! # TODO: need to catch this with a special halt, since caused by unconfigured SP</span>
+  <span class='raise identifier id'>raise</span> <span class='string val'>&quot;No persistent ID is present!&quot;</span>
+  
+  <span class='comment val'>## TODO: this method just isn't production quality yet.</span>
+  
+<span class='end end kw'>end</span>
+</pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+</div>
+    
+    <div id="footer">
+  Generated on Sun Oct 31 22:31:53 2010 by 
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.6.1 (ruby-1.8.7).
+</div>
+
+  </body>
+</html>

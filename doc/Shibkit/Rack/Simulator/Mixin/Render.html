@@ -1,0 +1,274 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta name="Content-Type" content="text/html; charset=utf-8" />
+<title>Module: Shibkit::Rack::Simulator::Mixin::Render</title>
+<link rel="stylesheet" href="../../../../css/style.css" type="text/css" media="screen" charset="utf-8" />
+<link rel="stylesheet" href="../../../../css/common.css" type="text/css" media="screen" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  relpath = '../../../..';
+  if (relpath != '') relpath += '/';
+</script>
+<script type="text/javascript" charset="utf-8" src="../../../../js/jquery.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../../../js/app.js"></script>
+
+  </head>
+  <body>
+    <script type="text/javascript" charset="utf-8">
+      if (window.top.frames.main) document.body.className = 'frames';
+    </script>
+    
+    <div id="header">
+      <div id="menu">
+  
+    <a href="../../../../_index.html">Index (R)</a> &raquo; 
+    <span class='title'><span class='object_link'><a href="../../../../Shibkit.html" title="Shibkit (module)">Shibkit</a></span></span> &raquo; <span class='title'><span class='object_link'><a href="../../../Rack.html" title="Shibkit::Rack (module)">Rack</a></span></span> &raquo; <span class='title'><span class='object_link'><a href="../../Simulator.html" title="Shibkit::Rack::Simulator (class)">Simulator</a></span></span> &raquo; <span class='title'><span class='object_link'><a href="../Mixin.html" title="Shibkit::Rack::Simulator::Mixin (module)">Mixin</a></span></span>
+     &raquo; 
+    <span class="title">Render</span>
+  
+  
+  <div class="noframes"><span class="title">(</span><a href="." target="_top">no frames</a><span class="title">)</span></div>
+</div>
+
+      <div id="search">
+  <a id="class_list_link" href="#">Class List</a>
+  <a id="method_list_link" href="#">Method List</a>
+  <a id ="file_list_link" href="#">File List</a>
+</div>
+
+      <div class="clear"></div>
+    </div>
+    
+    <iframe id="search_frame"></iframe>
+    
+    <div id="content"><h1>Module: Shibkit::Rack::Simulator::Mixin::Render
+  
+  
+  
+</h1>
+
+<dl class="box">
+  
+  
+    
+  
+    
+  
+  
+    <dt class="r1">Included in:</dt>
+    <dd class="r1"><span class='object_link'><a href="../../Simulator.html" title="Shibkit::Rack::Simulator (class)">Shibkit::Rack::Simulator</a></span></dd>
+    
+  
+  
+    <dt class="r2 last">Defined in:</dt>
+    <dd class="r2 last">lib/shibkit/rack/simulator/mixins/render.rb</dd>
+  
+</dl>
+<div class="clear"></div>
+
+
+
+
+  
+    <h2>
+      Instance Method Summary
+      <small>(<a href="#" class="summary_toggle">collapse</a>)</small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#render_page-instance_method" title="#render_page (instance method)">- (Object) <strong>render_page</strong>(view, locals = {}) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Display a chooser page.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#views-instance_method" title="#views (instance method)">- (Object) <strong>views</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Load and prepare HAML views.
+</p>
+</div></span>
+  
+</li>
+
+      
+    </ul>
+  
+
+
+
+  <div id="instance_method_details" class="method_details_list">
+    <h2>Instance Method Details</h2>
+    
+    
+      <div class="method_details first">
+  <p class="signature first" id="render_page-instance_method">
+  
+    - (<tt>Object</tt>) <strong>render_page</strong>(view, locals = {}) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Display a chooser page
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/shibkit/rack/simulator/mixins/render.rb', line 28</span>
+
+<span class='def def kw'>def</span> <span class='render_page identifier id'>render_page</span><span class='lparen token'>(</span><span class='view identifier id'>view</span><span class='comma token'>,</span> <span class='locals identifier id'>locals</span><span class='assign token'>=</span><span class='lbrace token'>{</span><span class='rbrace token'>}</span><span class='rparen token'>)</span>
+
+  <span class='comment val'>## HAML rendering options</span>
+  <span class='Haml constant id'>Haml</span><span class='colon2 op'>::</span><span class='Template constant id'>Template</span><span class='dot token'>.</span><span class='options identifier id'>options</span><span class='lbrack token'>[</span><span class='symbol val'>:format</span><span class='rbrack token'>]</span> <span class='assign token'>=</span> <span class='symbol val'>:html5</span>
+
+  <span class='comment val'>## Render and return the page</span>
+  <span class='haml identifier id'>haml</span> <span class='assign token'>=</span> <span class='Haml constant id'>Haml</span><span class='colon2 op'>::</span><span class='Engine constant id'>Engine</span><span class='dot token'>.</span><span class='new identifier id'>new</span><span class='lparen token'>(</span><span class='views identifier id'>views</span><span class='lbrack token'>[</span><span class='view identifier id'>view</span><span class='rbrack token'>]</span><span class='rparen token'>)</span>
+  <span class='return return kw'>return</span> <span class='haml identifier id'>haml</span><span class='dot token'>.</span><span class='render identifier id'>render</span><span class='lparen token'>(</span><span class='Object constant id'>Object</span><span class='dot token'>.</span><span class='new identifier id'>new</span><span class='comma token'>,</span> <span class='locals identifier id'>locals</span><span class='rparen token'>)</span>
+
+<span class='end end kw'>end</span>
+</pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="views-instance_method">
+  
+    - (<tt>Object</tt>) <strong>views</strong> 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Load and prepare HAML views
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/shibkit/rack/simulator/mixins/render.rb', line 8</span>
+
+<span class='def def kw'>def</span> <span class='views identifier id'>views</span>
+
+  <span class='unless unless kw'>unless</span> <span class='@views ivar id'>@views</span>
+
+    <span class='@views ivar id'>@views</span> <span class='assign token'>=</span> <span class='Hash constant id'>Hash</span><span class='dot token'>.</span><span class='new identifier id'>new</span>
+
+    <span class='VIEWS constant id'>VIEWS</span><span class='dot token'>.</span><span class='each identifier id'>each</span> <span class='do do kw'>do</span> <span class='bitor op'>|</span><span class='view identifier id'>view</span><span class='bitor op'>|</span> 
+
+      <span class='view_file_location identifier id'>view_file_location</span> <span class='assign token'>=</span> <span class='dstring node'>&quot;#{::File.dirname(__FILE__)}/simulator/views/#{view.to_s}.haml&quot;</span>
+      <span class='@views ivar id'>@views</span><span class='lbrack token'>[</span><span class='view identifier id'>view</span><span class='rbrack token'>]</span> <span class='assign token'>=</span> <span class='IO constant id'>IO</span><span class='dot token'>.</span><span class='read identifier id'>read</span><span class='lparen token'>(</span><span class='view_file_location identifier id'>view_file_location</span><span class='rparen token'>)</span>
+
+    <span class='end end kw'>end</span>
+
+  <span class='end end kw'>end</span>
+
+  <span class='return return kw'>return</span> <span class='@views ivar id'>@views</span>
+
+<span class='end end kw'>end</span>
+</pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+</div>
+    
+    <div id="footer">
+  Generated on Sun Oct 31 22:31:50 2010 by 
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.6.1 (ruby-1.8.7).
+</div>
+
+  </body>
+</html>

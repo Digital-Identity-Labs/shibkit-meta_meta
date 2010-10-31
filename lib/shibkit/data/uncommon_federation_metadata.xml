@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EntitiesDescriptor
+  Name="http://uncommonfed.org"
+  validUntil="2010-11-12T16:05:01Z">
+  
+	<EntityDescriptor ID="uf00001" entityID="https://shibboleth.example.edu/shibboleth">
+		
+		<Extensions>
+			<shibmd:Scope regexp="false">example.edu</shibmd:Scope>
+			<ukfedlabel:UKFederationMember/>
+			<ukfedlabel:AccountableUsers/>
+		</Extensions>
+		
+		<IDPSSODescriptor protocolSupportEnumeration="urn:mace:shibboleth:1.0 urn:oasis:names:tc:SAML:1.1:protocol urn:oasis:names:tc:SAML:2.0:protocol">
+			<Extensions>
+				<shibmd:Scope regexp="false">example.edu</shibmd:Scope>
+			</Extensions>
+			<ArtifactResolutionService Binding="urn:oasis:names:tc:SAML:1.0:bindings:SOAP-binding" Location="https://shibboleth.example.edu:8443/idp/profile/SAML1/SOAP/ArtifactResolution" index="1"/>
+			<ArtifactResolutionService Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP" Location="https://shibboleth.example.edu:8443/idp/profile/SAML2/SOAP/ArtifactResolution" index="2"/>
+			<NameIDFormat>urn:mace:shibboleth:1.0:nameIdentifier</NameIDFormat>
+			<NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:transient</NameIDFormat>
+			<SingleSignOnService Binding="urn:mace:shibboleth:1.0:profiles:AuthnRequest" Location="https://shibboleth.example.edu/idp/profile/Shibboleth/SSO"/>
+			<SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://shibboleth.example.edu/idp/profile/SAML2/POST/SSO"/>
+			<SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST-SimpleSign" Location="https://shibboleth.example.edu/idp/profile/SAML2/POST-SimpleSign/SSO"/>
+			<SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://shibboleth.example.edu/idp/profile/SAML2/Redirect/SSO"/>
+		</IDPSSODescriptor>
+		
+		<AttributeAuthorityDescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:1.1:protocol urn:oasis:names:tc:SAML:2.0:protocol">
+	  	<Extensions>
+				<shibmd:Scope regexp="false">example.edu</shibmd:Scope>
+			</Extensions>
+			<AttributeService Binding="urn:oasis:names:tc:SAML:1.0:bindings:SOAP-binding" Location="https://shibboleth.example.edu:8443/idp/profile/SAML1/SOAP/AttributeQuery"/>
+			<AttributeService Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP" Location="https://shibboleth.example.edu:8443/idp/profile/SAML2/SOAP/AttributeQuery"/>
+			<NameIDFormat>urn:mace:shibboleth:1.0:nameIdentifier</NameIDFormat>
+			<NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:transient</NameIDFormat>
+		</AttributeAuthorityDescriptor>
+		
+		<Organization>
+	  	<OrganizationName xml:lang="en">The University of Example</OrganizationName>
+			<OrganizationDisplayName xml:lang="en">University of Example</OrganizationDisplayName>
+			<OrganizationURL xml:lang="en">http://www.example.edu/</OrganizationURL>
+		</Organization>
+		
+		<ContactPerson contactType="support">
+		  <GivenName>IT Service Desk</GivenName>
+			<EmailAddress>mailto:IT-Servicedesk@example.edu</EmailAddress>
+		</ContactPerson>
+		<ContactPerson contactType="technical">
+		  <GivenName>A</GivenName>
+			<SurName>Person</SurName>
+			<EmailAddress>mailto:a.person@example.edu</EmailAddress>
+		</ContactPerson>
+
+  </EntityDescriptor>
+
+	<EntityDescriptor ID="uf00002" entityID="https://login.example.com/shibboleth">
+		
+		<Extensions>
+			<shibmd:Scope regexp="false">example.com</shibmd:Scope>
+		</Extensions>
+		
+		<IDPSSODescriptor protocolSupportEnumeration="urn:mace:shibboleth:1.0 urn:oasis:names:tc:SAML:1.1:protocol urn:oasis:names:tc:SAML:2.0:protocol">
+			<Extensions>
+				<shibmd:Scope regexp="false">example.com</shibmd:Scope>
+			</Extensions>
+			<ArtifactResolutionService Binding="urn:oasis:names:tc:SAML:1.0:bindings:SOAP-binding" Location="https://login.example.com:8443/idp/profile/SAML1/SOAP/ArtifactResolution" index="1"/>
+			<ArtifactResolutionService Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP" Location="https://login.example.com:8443/idp/profile/SAML2/SOAP/ArtifactResolution" index="2"/>
+			<NameIDFormat>urn:mace:shibboleth:1.0:nameIdentifier</NameIDFormat>
+			<NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:transient</NameIDFormat>
+			<SingleSignOnService Binding="urn:mace:shibboleth:1.0:profiles:AuthnRequest" Location="https://login.example.com/idp/profile/Shibboleth/SSO"/>
+			<SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://login.example.com/idp/profile/SAML2/POST/SSO"/>
+			<SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST-SimpleSign" Location="https://login.example.com/idp/profile/SAML2/POST-SimpleSign/SSO"/>
+			<SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://login.example.com/idp/profile/SAML2/Redirect/SSO"/>
+		</IDPSSODescriptor>
+		
+		<AttributeAuthorityDescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:1.1:protocol urn:oasis:names:tc:SAML:2.0:protocol">
+	  	<Extensions>
+				<shibmd:Scope regexp="false">example.com</shibmd:Scope>
+			</Extensions>
+			<AttributeService Binding="urn:oasis:names:tc:SAML:1.0:bindings:SOAP-binding" Location="https://login.example.com:8443/idp/profile/SAML1/SOAP/AttributeQuery"/>
+			<AttributeService Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP" Location="https://login.example.com:8443/idp/profile/SAML2/SOAP/AttributeQuery"/>
+			<NameIDFormat>urn:mace:shibboleth:1.0:nameIdentifier</NameIDFormat>
+			<NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:transient</NameIDFormat>
+		</AttributeAuthorityDescriptor>
+		
+		<Organization>
+	  	<OrganizationName xml:lang="en">Example Online</OrganizationName>
+			<OrganizationDisplayName xml:lang="en">Example Online</OrganizationDisplayName>
+			<OrganizationURL xml:lang="en">http://example.com</OrganizationURL>
+		</Organization>
+		
+		<ContactPerson contactType="support">
+		  <GivenName>IT Service Desk</GivenName>
+			<EmailAddress>mailto:help@example.com</EmailAddress>
+		</ContactPerson>
+		<ContactPerson contactType="technical">
+		  <GivenName>A</GivenName>
+			<SurName>Person</SurName>
+			<EmailAddress>mailto:guru@example.com</EmailAddress>
+		</ContactPerson>
+
+  </EntityDescriptor>
+
+</EntitiesDescriptor>

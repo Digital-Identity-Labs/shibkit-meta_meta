@@ -1,0 +1,1086 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta name="Content-Type" content="text/html; charset=utf-8" />
+<title>Module: Shibkit::Rack::Simulator::Mixin::Actions</title>
+<link rel="stylesheet" href="../../../../css/style.css" type="text/css" media="screen" charset="utf-8" />
+<link rel="stylesheet" href="../../../../css/common.css" type="text/css" media="screen" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  relpath = '../../../..';
+  if (relpath != '') relpath += '/';
+</script>
+<script type="text/javascript" charset="utf-8" src="../../../../js/jquery.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../../../js/app.js"></script>
+
+  </head>
+  <body>
+    <script type="text/javascript" charset="utf-8">
+      if (window.top.frames.main) document.body.className = 'frames';
+    </script>
+    
+    <div id="header">
+      <div id="menu">
+  
+    <a href="../../../../_index.html">Index (A)</a> &raquo; 
+    <span class='title'><span class='object_link'><a href="../../../../Shibkit.html" title="Shibkit (module)">Shibkit</a></span></span> &raquo; <span class='title'><span class='object_link'><a href="../../../Rack.html" title="Shibkit::Rack (module)">Rack</a></span></span> &raquo; <span class='title'><span class='object_link'><a href="../../Simulator.html" title="Shibkit::Rack::Simulator (class)">Simulator</a></span></span> &raquo; <span class='title'><span class='object_link'><a href="../Mixin.html" title="Shibkit::Rack::Simulator::Mixin (module)">Mixin</a></span></span>
+     &raquo; 
+    <span class="title">Actions</span>
+  
+  
+  <div class="noframes"><span class="title">(</span><a href="." target="_top">no frames</a><span class="title">)</span></div>
+</div>
+
+      <div id="search">
+  <a id="class_list_link" href="#">Class List</a>
+  <a id="method_list_link" href="#">Method List</a>
+  <a id ="file_list_link" href="#">File List</a>
+</div>
+
+      <div class="clear"></div>
+    </div>
+    
+    <iframe id="search_frame"></iframe>
+    
+    <div id="content"><h1>Module: Shibkit::Rack::Simulator::Mixin::Actions
+  
+  
+  
+</h1>
+
+<dl class="box">
+  
+  
+    
+  
+    
+  
+  
+    <dt class="r1">Included in:</dt>
+    <dd class="r1"><span class='object_link'><a href="../../Simulator.html" title="Shibkit::Rack::Simulator (class)">Shibkit::Rack::Simulator</a></span></dd>
+    
+  
+  
+    <dt class="r2 last">Defined in:</dt>
+    <dd class="r2 last">lib/shibkit/rack/simulator/mixins/actions.rb</dd>
+  
+</dl>
+<div class="clear"></div>
+
+
+
+
+  
+    <h2>
+      Instance Method Summary
+      <small>(<a href="#" class="summary_toggle">collapse</a>)</small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#fatal_error_action-instance_method" title="#fatal_error_action (instance method)">- (Object) <strong>fatal_error_action</strong>(env, oops) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Error page for unrecoverable situations.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#idp_login_action-instance_method" title="#idp_login_action (instance method)">- (Object) <strong>idp_login_action</strong>(env, options = {}) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Controller for.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#idp_logout_action-instance_method" title="#idp_logout_action (instance method)">- (Object) <strong>idp_logout_action</strong>(env, options = {}) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Controller for.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#idp_session_action-instance_method" title="#idp_session_action (instance method)">- (Object) <strong>idp_session_action</strong>(env, options = {}) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Controller for.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#idp_simple_chooser_action-instance_method" title="#idp_simple_chooser_action (instance method)">- (Object) <strong>idp_simple_chooser_action</strong>(env, options = {}) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Controller for user presentation page.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#idp_sso_action-instance_method" title="#idp_sso_action (instance method)">- (Object) <strong>idp_sso_action</strong>(env, options = {}) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Controller for.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#idp_status_action-instance_method" title="#idp_status_action (instance method)">- (Object) <strong>idp_status_action</strong>(env, options = {}) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Controller for.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#sp_login_action-instance_method" title="#sp_login_action (instance method)">- (Object) <strong>sp_login_action</strong>(env, options = {}) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Controller for.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#sp_protected_page_action-instance_method" title="#sp_protected_page_action (instance method)">- (Object) <strong>sp_protected_page_action</strong>(env, options = {}) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Controller for.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#sp_session_action-instance_method" title="#sp_session_action (instance method)">- (Object) <strong>sp_session_action</strong>(env, options = {}) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Controller for showing SP session status.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#wayf_action-instance_method" title="#wayf_action (instance method)">- (Object) <strong>wayf_action</strong>(env, options = {}) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Controller for.
+</p>
+</div></span>
+  
+</li>
+
+      
+    </ul>
+  
+
+
+
+  <div id="instance_method_details" class="method_details_list">
+    <h2>Instance Method Details</h2>
+    
+    
+      <div class="method_details first">
+  <p class="signature first" id="fatal_error_action-instance_method">
+  
+    - (<tt>Object</tt>) <strong>fatal_error_action</strong>(env, oops) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Error page for unrecoverable situations
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/shibkit/rack/simulator/mixins/actions.rb', line 189</span>
+
+<span class='def def kw'>def</span> <span class='fatal_error_action identifier id'>fatal_error_action</span><span class='lparen token'>(</span><span class='env identifier id'>env</span><span class='comma token'>,</span> <span class='oops identifier id'>oops</span><span class='rparen token'>)</span>
+
+  <span class='log_debug identifier id'>log_debug</span><span class='lparen token'>(</span><span class='dstring node'>&quot;****  Fatal error: #{oops}&quot;</span><span class='rparen token'>)</span>
+
+  <span class='unless unless kw'>unless</span> <span class='ENV constant id'>ENV</span><span class='lbrack token'>[</span><span class='string val'>'RACK_ENV'</span><span class='rbrack token'>]</span> <span class='eq op'>==</span> <span class='symbol val'>:production</span> <span class='or or kw'>or</span> <span class='ENV constant id'>ENV</span><span class='lbrack token'>[</span><span class='string val'>'RAILS_ENV'</span><span class='rbrack token'>]</span> <span class='eq op'>==</span> <span class='symbol val'>:production</span>
+
+    <span class='puts identifier id'>puts</span> <span class='dstring node'>&quot;\nBacktrace is:\n#{oops.backtrace.to_yaml}\n&quot;</span>
+
+  <span class='end end kw'>end</span>
+
+  <span class='render_locals identifier id'>render_locals</span> <span class='assign token'>=</span> <span class='lbrace token'>{</span> <span class='symbol val'>:message</span> <span class='assign token'>=</span><span class='gt op'>&gt;</span> <span class='oops identifier id'>oops</span><span class='dot token'>.</span><span class='to_s identifier id'>to_s</span> <span class='rbrace token'>}</span>
+  <span class='page_body identifier id'>page_body</span> <span class='assign token'>=</span> <span class='render_page identifier id'>render_page</span><span class='lparen token'>(</span><span class='symbol val'>:fatal_error</span><span class='comma token'>,</span> <span class='render_locals identifier id'>render_locals</span><span class='rparen token'>)</span>
+
+  <span class='return return kw'>return</span> <span class='integer val'>500</span><span class='comma token'>,</span> <span class='CONTENT_TYPE constant id'>CONTENT_TYPE</span><span class='comma token'>,</span> <span class='lbrack token'>[</span><span class='page_body identifier id'>page_body</span><span class='dot token'>.</span><span class='to_s identifier id'>to_s</span><span class='rbrack token'>]</span>
+
+<span class='end end kw'>end</span>
+</pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="idp_login_action-instance_method">
+  
+    - (<tt>Object</tt>) <strong>idp_login_action</strong>(env, options = {}) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Controller for
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/shibkit/rack/simulator/mixins/actions.rb', line 42</span>
+
+<span class='def def kw'>def</span> <span class='idp_login_action identifier id'>idp_login_action</span><span class='lparen token'>(</span><span class='env identifier id'>env</span><span class='comma token'>,</span> <span class='options identifier id'>options</span><span class='assign token'>=</span><span class='lbrace token'>{</span><span class='rbrace token'>}</span><span class='rparen token'>)</span>
+  
+  
+  
+  
+  <span class='message identifier id'>message</span> <span class='assign token'>=</span> <span class='options identifier id'>options</span><span class='lbrack token'>[</span><span class='symbol val'>:message</span><span class='rbrack token'>]</span>
+  <span class='code identifier id'>code</span> <span class='assign token'>=</span> <span class='options identifier id'>options</span><span class='lbrack token'>[</span><span class='symbol val'>:code</span><span class='rbrack token'>]</span><span class='dot token'>.</span><span class='to_i identifier id'>to_i</span> <span class='orop op'>||</span> <span class='integer val'>200</span>
+  
+  <span class='render_locals identifier id'>render_locals</span> <span class='assign token'>=</span> <span class='lbrace token'>{</span><span class='rbrace token'>}</span>
+  
+  <span class='page_body identifier id'>page_body</span> <span class='assign token'>=</span> <span class='render_page identifier id'>render_page</span><span class='lparen token'>(</span><span class='symbol val'>:x</span><span class='comma token'>,</span> <span class='render_locals identifier id'>render_locals</span><span class='rparen token'>)</span>
+ 
+  <span class='return return kw'>return</span> <span class='code identifier id'>code</span><span class='comma token'>,</span> <span class='CONTENT_TYPE constant id'>CONTENT_TYPE</span><span class='comma token'>,</span> <span class='lbrack token'>[</span><span class='page_body identifier id'>page_body</span><span class='dot token'>.</span><span class='to_s identifier id'>to_s</span><span class='rbrack token'>]</span>
+  
+<span class='end end kw'>end</span>
+</pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="idp_logout_action-instance_method">
+  
+    - (<tt>Object</tt>) <strong>idp_logout_action</strong>(env, options = {}) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Controller for
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/shibkit/rack/simulator/mixins/actions.rb', line 90</span>
+
+<span class='def def kw'>def</span> <span class='idp_logout_action identifier id'>idp_logout_action</span><span class='lparen token'>(</span><span class='env identifier id'>env</span><span class='comma token'>,</span> <span class='options identifier id'>options</span><span class='assign token'>=</span><span class='lbrace token'>{</span><span class='rbrace token'>}</span><span class='rparen token'>)</span>
+  
+  
+  
+  
+  <span class='message identifier id'>message</span> <span class='assign token'>=</span> <span class='options identifier id'>options</span><span class='lbrack token'>[</span><span class='symbol val'>:message</span><span class='rbrack token'>]</span>
+  <span class='code identifier id'>code</span> <span class='assign token'>=</span> <span class='options identifier id'>options</span><span class='lbrack token'>[</span><span class='symbol val'>:code</span><span class='rbrack token'>]</span><span class='dot token'>.</span><span class='to_i identifier id'>to_i</span> <span class='orop op'>||</span> <span class='integer val'>200</span>
+  
+  <span class='render_locals identifier id'>render_locals</span> <span class='assign token'>=</span> <span class='lbrace token'>{</span><span class='rbrace token'>}</span>
+  
+  <span class='page_body identifier id'>page_body</span> <span class='assign token'>=</span> <span class='render_page identifier id'>render_page</span><span class='lparen token'>(</span><span class='symbol val'>:x</span><span class='comma token'>,</span> <span class='render_locals identifier id'>render_locals</span><span class='rparen token'>)</span>
+ 
+  <span class='return return kw'>return</span> <span class='code identifier id'>code</span><span class='comma token'>,</span> <span class='CONTENT_TYPE constant id'>CONTENT_TYPE</span><span class='comma token'>,</span> <span class='lbrack token'>[</span><span class='page_body identifier id'>page_body</span><span class='dot token'>.</span><span class='to_s identifier id'>to_s</span><span class='rbrack token'>]</span>
+  
+<span class='end end kw'>end</span>
+</pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="idp_session_action-instance_method">
+  
+    - (<tt>Object</tt>) <strong>idp_session_action</strong>(env, options = {}) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Controller for
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/shibkit/rack/simulator/mixins/actions.rb', line 25</span>
+
+<span class='def def kw'>def</span> <span class='idp_session_action identifier id'>idp_session_action</span><span class='lparen token'>(</span><span class='env identifier id'>env</span><span class='comma token'>,</span> <span class='options identifier id'>options</span><span class='assign token'>=</span><span class='lbrace token'>{</span><span class='rbrace token'>}</span><span class='rparen token'>)</span>
+  
+  
+  
+  
+  <span class='message identifier id'>message</span> <span class='assign token'>=</span> <span class='options identifier id'>options</span><span class='lbrack token'>[</span><span class='symbol val'>:message</span><span class='rbrack token'>]</span>
+  <span class='code identifier id'>code</span> <span class='assign token'>=</span> <span class='options identifier id'>options</span><span class='lbrack token'>[</span><span class='symbol val'>:code</span><span class='rbrack token'>]</span><span class='dot token'>.</span><span class='to_i identifier id'>to_i</span> <span class='orop op'>||</span> <span class='integer val'>200</span>
+  
+  <span class='render_locals identifier id'>render_locals</span> <span class='assign token'>=</span> <span class='lbrace token'>{</span><span class='rbrace token'>}</span>
+  
+  <span class='page_body identifier id'>page_body</span> <span class='assign token'>=</span> <span class='render_page identifier id'>render_page</span><span class='lparen token'>(</span><span class='symbol val'>:x</span><span class='comma token'>,</span> <span class='render_locals identifier id'>render_locals</span><span class='rparen token'>)</span>
+ 
+  <span class='return return kw'>return</span> <span class='code identifier id'>code</span><span class='comma token'>,</span> <span class='CONTENT_TYPE constant id'>CONTENT_TYPE</span><span class='comma token'>,</span> <span class='lbrack token'>[</span><span class='page_body identifier id'>page_body</span><span class='dot token'>.</span><span class='to_s identifier id'>to_s</span><span class='rbrack token'>]</span>
+  
+<span class='end end kw'>end</span>
+</pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="idp_simple_chooser_action-instance_method">
+  
+    - (<tt>Object</tt>) <strong>idp_simple_chooser_action</strong>(env, options = {}) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Controller for user presentation page
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/shibkit/rack/simulator/mixins/actions.rb', line 76</span>
+
+<span class='def def kw'>def</span> <span class='idp_simple_chooser_action identifier id'>idp_simple_chooser_action</span><span class='lparen token'>(</span><span class='env identifier id'>env</span><span class='comma token'>,</span> <span class='options identifier id'>options</span><span class='assign token'>=</span><span class='lbrace token'>{</span><span class='rbrace token'>}</span><span class='rparen token'>)</span> 
+
+  <span class='message identifier id'>message</span> <span class='assign token'>=</span> <span class='options identifier id'>options</span><span class='lbrack token'>[</span><span class='symbol val'>:message</span><span class='rbrack token'>]</span> 
+  <span class='code identifier id'>code</span>    <span class='assign token'>=</span> <span class='options identifier id'>options</span><span class='lbrack token'>[</span><span class='symbol val'>:code</span><span class='rbrack token'>]</span><span class='dot token'>.</span><span class='to_i identifier id'>to_i</span> <span class='orop op'>||</span> <span class='integer val'>200</span>
+
+  <span class='render_locals identifier id'>render_locals</span> <span class='assign token'>=</span> <span class='lbrace token'>{</span> <span class='symbol val'>:organisations</span> <span class='assign token'>=</span><span class='gt op'>&gt;</span> <span class='organisations identifier id'>organisations</span><span class='comma token'>,</span> <span class='symbol val'>:users</span> <span class='assign token'>=</span><span class='gt op'>&gt;</span> <span class='users identifier id'>users</span><span class='comma token'>,</span>
+                      <span class='symbol val'>:message</span> <span class='assign token'>=</span><span class='gt op'>&gt;</span> <span class='message identifier id'>message</span><span class='comma token'>,</span> <span class='symbol val'>:idp_path</span> <span class='assign token'>=</span><span class='gt op'>&gt;</span> <span class='sim_idp_login_path identifier id'>sim_idp_login_path</span> <span class='rbrace token'>}</span>
+  <span class='page_body identifier id'>page_body</span> <span class='assign token'>=</span> <span class='render_page identifier id'>render_page</span><span class='lparen token'>(</span><span class='symbol val'>:user_chooser</span><span class='comma token'>,</span> <span class='render_locals identifier id'>render_locals</span><span class='rparen token'>)</span>
+
+  <span class='return return kw'>return</span> <span class='code identifier id'>code</span><span class='comma token'>,</span> <span class='CONTENT_TYPE constant id'>CONTENT_TYPE</span><span class='comma token'>,</span> <span class='lbrack token'>[</span><span class='page_body identifier id'>page_body</span><span class='dot token'>.</span><span class='to_s identifier id'>to_s</span><span class='rbrack token'>]</span>
+
+<span class='end end kw'>end</span>
+</pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="idp_sso_action-instance_method">
+  
+    - (<tt>Object</tt>) <strong>idp_sso_action</strong>(env, options = {}) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Controller for
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/shibkit/rack/simulator/mixins/actions.rb', line 59</span>
+
+<span class='def def kw'>def</span> <span class='idp_sso_action identifier id'>idp_sso_action</span><span class='lparen token'>(</span><span class='env identifier id'>env</span><span class='comma token'>,</span> <span class='options identifier id'>options</span><span class='assign token'>=</span><span class='lbrace token'>{</span><span class='rbrace token'>}</span><span class='rparen token'>)</span>
+  
+  
+  
+  
+  <span class='message identifier id'>message</span> <span class='assign token'>=</span> <span class='options identifier id'>options</span><span class='lbrack token'>[</span><span class='symbol val'>:message</span><span class='rbrack token'>]</span>
+  <span class='code identifier id'>code</span> <span class='assign token'>=</span> <span class='options identifier id'>options</span><span class='lbrack token'>[</span><span class='symbol val'>:code</span><span class='rbrack token'>]</span><span class='dot token'>.</span><span class='to_i identifier id'>to_i</span> <span class='orop op'>||</span> <span class='integer val'>200</span>
+  
+  <span class='render_locals identifier id'>render_locals</span> <span class='assign token'>=</span> <span class='lbrace token'>{</span><span class='rbrace token'>}</span>
+  
+  <span class='page_body identifier id'>page_body</span> <span class='assign token'>=</span> <span class='render_page identifier id'>render_page</span><span class='lparen token'>(</span><span class='symbol val'>:x</span><span class='comma token'>,</span> <span class='render_locals identifier id'>render_locals</span><span class='rparen token'>)</span>
+ 
+  <span class='return return kw'>return</span> <span class='code identifier id'>code</span><span class='comma token'>,</span> <span class='CONTENT_TYPE constant id'>CONTENT_TYPE</span><span class='comma token'>,</span> <span class='lbrack token'>[</span><span class='page_body identifier id'>page_body</span><span class='dot token'>.</span><span class='to_s identifier id'>to_s</span><span class='rbrack token'>]</span>
+  
+<span class='end end kw'>end</span>
+</pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="idp_status_action-instance_method">
+  
+    - (<tt>Object</tt>) <strong>idp_status_action</strong>(env, options = {}) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Controller for
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/shibkit/rack/simulator/mixins/actions.rb', line 8</span>
+
+<span class='def def kw'>def</span> <span class='idp_status_action identifier id'>idp_status_action</span><span class='lparen token'>(</span><span class='env identifier id'>env</span><span class='comma token'>,</span> <span class='options identifier id'>options</span><span class='assign token'>=</span><span class='lbrace token'>{</span><span class='rbrace token'>}</span><span class='rparen token'>)</span>
+  
+  
+  
+  
+  <span class='message identifier id'>message</span> <span class='assign token'>=</span> <span class='options identifier id'>options</span><span class='lbrack token'>[</span><span class='symbol val'>:message</span><span class='rbrack token'>]</span>
+  <span class='code identifier id'>code</span> <span class='assign token'>=</span> <span class='options identifier id'>options</span><span class='lbrack token'>[</span><span class='symbol val'>:code</span><span class='rbrack token'>]</span><span class='dot token'>.</span><span class='to_i identifier id'>to_i</span> <span class='orop op'>||</span> <span class='integer val'>200</span>
+  
+  <span class='render_locals identifier id'>render_locals</span> <span class='assign token'>=</span> <span class='lbrace token'>{</span><span class='rbrace token'>}</span>
+  
+  <span class='page_body identifier id'>page_body</span> <span class='assign token'>=</span> <span class='render_page identifier id'>render_page</span><span class='lparen token'>(</span><span class='symbol val'>:x</span><span class='comma token'>,</span> <span class='render_locals identifier id'>render_locals</span><span class='rparen token'>)</span>
+ 
+  <span class='return return kw'>return</span> <span class='code identifier id'>code</span><span class='comma token'>,</span> <span class='CONTENT_TYPE constant id'>CONTENT_TYPE</span><span class='comma token'>,</span> <span class='lbrack token'>[</span><span class='page_body identifier id'>page_body</span><span class='dot token'>.</span><span class='to_s identifier id'>to_s</span><span class='rbrack token'>]</span>
+  
+<span class='end end kw'>end</span>
+</pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="sp_login_action-instance_method">
+  
+    - (<tt>Object</tt>) <strong>sp_login_action</strong>(env, options = {}) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Controller for
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/shibkit/rack/simulator/mixins/actions.rb', line 171</span>
+
+<span class='def def kw'>def</span> <span class='sp_login_action identifier id'>sp_login_action</span><span class='lparen token'>(</span><span class='env identifier id'>env</span><span class='comma token'>,</span> <span class='options identifier id'>options</span><span class='assign token'>=</span><span class='lbrace token'>{</span><span class='rbrace token'>}</span><span class='rparen token'>)</span>
+  
+  
+  
+  
+  <span class='message identifier id'>message</span> <span class='assign token'>=</span> <span class='options identifier id'>options</span><span class='lbrack token'>[</span><span class='symbol val'>:message</span><span class='rbrack token'>]</span>
+  <span class='code identifier id'>code</span> <span class='assign token'>=</span> <span class='options identifier id'>options</span><span class='lbrack token'>[</span><span class='symbol val'>:code</span><span class='rbrack token'>]</span><span class='dot token'>.</span><span class='to_i identifier id'>to_i</span> <span class='orop op'>||</span> <span class='integer val'>200</span>
+  
+  <span class='render_locals identifier id'>render_locals</span> <span class='assign token'>=</span> <span class='lbrace token'>{</span><span class='rbrace token'>}</span>
+  
+  <span class='page_body identifier id'>page_body</span> <span class='assign token'>=</span> <span class='render_page identifier id'>render_page</span><span class='lparen token'>(</span><span class='symbol val'>:x</span><span class='comma token'>,</span> <span class='render_locals identifier id'>render_locals</span><span class='rparen token'>)</span>
+ 
+  <span class='return return kw'>return</span> <span class='code identifier id'>code</span><span class='comma token'>,</span> <span class='CONTENT_TYPE constant id'>CONTENT_TYPE</span><span class='comma token'>,</span> <span class='lbrack token'>[</span><span class='page_body identifier id'>page_body</span><span class='dot token'>.</span><span class='to_s identifier id'>to_s</span><span class='rbrack token'>]</span>
+  
+<span class='end end kw'>end</span>
+</pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="sp_protected_page_action-instance_method">
+  
+    - (<tt>Object</tt>) <strong>sp_protected_page_action</strong>(env, options = {}) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Controller for
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/shibkit/rack/simulator/mixins/actions.rb', line 153</span>
+
+<span class='def def kw'>def</span> <span class='sp_protected_page_action identifier id'>sp_protected_page_action</span><span class='lparen token'>(</span><span class='env identifier id'>env</span><span class='comma token'>,</span> <span class='options identifier id'>options</span><span class='assign token'>=</span><span class='lbrace token'>{</span><span class='rbrace token'>}</span><span class='rparen token'>)</span>
+  
+  
+  
+  
+  <span class='message identifier id'>message</span> <span class='assign token'>=</span> <span class='options identifier id'>options</span><span class='lbrack token'>[</span><span class='symbol val'>:message</span><span class='rbrack token'>]</span>
+  <span class='code identifier id'>code</span> <span class='assign token'>=</span> <span class='options identifier id'>options</span><span class='lbrack token'>[</span><span class='symbol val'>:code</span><span class='rbrack token'>]</span><span class='dot token'>.</span><span class='to_i identifier id'>to_i</span> <span class='orop op'>||</span> <span class='integer val'>200</span>
+  
+  <span class='render_locals identifier id'>render_locals</span> <span class='assign token'>=</span> <span class='lbrace token'>{</span><span class='rbrace token'>}</span>
+  
+  <span class='page_body identifier id'>page_body</span> <span class='assign token'>=</span> <span class='render_page identifier id'>render_page</span><span class='lparen token'>(</span><span class='symbol val'>:x</span><span class='comma token'>,</span> <span class='render_locals identifier id'>render_locals</span><span class='rparen token'>)</span>
+ 
+  <span class='return return kw'>return</span> <span class='code identifier id'>code</span><span class='comma token'>,</span> <span class='CONTENT_TYPE constant id'>CONTENT_TYPE</span><span class='comma token'>,</span> <span class='lbrack token'>[</span><span class='page_body identifier id'>page_body</span><span class='dot token'>.</span><span class='to_s identifier id'>to_s</span><span class='rbrack token'>]</span>
+  
+<span class='end end kw'>end</span>
+</pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="sp_session_action-instance_method">
+  
+    - (<tt>Object</tt>) <strong>sp_session_action</strong>(env, options = {}) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Controller for showing SP session status
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/shibkit/rack/simulator/mixins/actions.rb', line 124</span>
+
+<span class='def def kw'>def</span> <span class='sp_session_action identifier id'>sp_session_action</span><span class='lparen token'>(</span><span class='env identifier id'>env</span><span class='comma token'>,</span> <span class='options identifier id'>options</span><span class='assign token'>=</span><span class='lbrace token'>{</span><span class='rbrace token'>}</span><span class='rparen token'>)</span> 
+
+  <span class='code identifier id'>code</span> <span class='assign token'>=</span> <span class='options identifier id'>options</span><span class='lbrack token'>[</span><span class='symbol val'>:code</span><span class='rbrack token'>]</span><span class='dot token'>.</span><span class='to_i identifier id'>to_i</span> <span class='orop op'>||</span> <span class='integer val'>200</span>
+  
+  <span class='string val'>&quot;A valid session was not found.&quot;</span>
+  
+  <span class='comment val'>## Assemble various stats for the page</span>
+  <span class='stats identifier id'>stats</span> <span class='assign token'>=</span> <span class='lbrace token'>{</span>
+    <span class='symbol val'>:ip_address</span>                   <span class='assign token'>=</span><span class='gt op'>&gt;</span> <span class='env identifier id'>env</span><span class='lbrack token'>[</span><span class='string val'>'REMOTE_ADDR'</span><span class='rbrack token'>]</span><span class='comma token'>,</span> <span class='comment val'># TODO store in session and read...</span>
+    <span class='symbol val'>:idp_entity_uri</span>               <span class='assign token'>=</span><span class='gt op'>&gt;</span> <span class='string val'>&quot;TODO&quot;</span><span class='comma token'>,</span>
+    <span class='symbol val'>:sso_protocol</span>                 <span class='assign token'>=</span><span class='gt op'>&gt;</span> <span class='string val'>&quot;TODO&quot;</span><span class='comma token'>,</span>
+    <span class='symbol val'>:authentication_time</span>          <span class='assign token'>=</span><span class='gt op'>&gt;</span> <span class='sim_sp_session identifier id'>sim_sp_session</span><span class='lparen token'>(</span><span class='env identifier id'>env</span><span class='rparen token'>)</span><span class='lbrack token'>[</span><span class='symbol val'>:logintime</span><span class='rbrack token'>]</span><span class='comma token'>,</span>
+    <span class='symbol val'>:authentication_context_class</span> <span class='assign token'>=</span><span class='gt op'>&gt;</span> <span class='string val'>&quot;TODO&quot;</span><span class='comma token'>,</span>
+    <span class='symbol val'>:authentication_context_decl</span>  <span class='assign token'>=</span><span class='gt op'>&gt;</span> <span class='string val'>&quot;TODO&quot;</span><span class='comma token'>,</span>
+    <span class='symbol val'>:minutes_remaining</span>            <span class='assign token'>=</span><span class='gt op'>&gt;</span> <span class='string val'>&quot;TODO&quot;</span><span class='comma token'>,</span>
+    <span class='symbol val'>:attributes_stats</span> <span class='assign token'>=</span> <span class='lbrace token'>{</span>
+      <span class='string val'>'todo'</span> <span class='assign token'>=</span><span class='gt op'>&gt;</span> <span class='string val'>'todo'</span>
+    <span class='rbrace token'>}</span>
+  <span class='rbrace token'>}</span>  
+
+  <span class='page_body identifier id'>page_body</span> <span class='assign token'>=</span> <span class='render_page identifier id'>render_page</span><span class='lparen token'>(</span><span class='symbol val'>:user_chooser</span><span class='comma token'>,</span> <span class='render_locals identifier id'>render_locals</span><span class='rparen token'>)</span>
+ 
+  <span class='return return kw'>return</span> <span class='code identifier id'>code</span><span class='comma token'>,</span> <span class='CONTENT_TYPE constant id'>CONTENT_TYPE</span><span class='comma token'>,</span> <span class='lbrack token'>[</span><span class='page_body identifier id'>page_body</span><span class='dot token'>.</span><span class='to_s identifier id'>to_s</span><span class='rbrack token'>]</span>
+
+<span class='end end kw'>end</span>
+</pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="wayf_action-instance_method">
+  
+    - (<tt>Object</tt>) <strong>wayf_action</strong>(env, options = {}) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Controller for
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/shibkit/rack/simulator/mixins/actions.rb', line 107</span>
+
+<span class='def def kw'>def</span> <span class='wayf_action identifier id'>wayf_action</span><span class='lparen token'>(</span><span class='env identifier id'>env</span><span class='comma token'>,</span> <span class='options identifier id'>options</span><span class='assign token'>=</span><span class='lbrace token'>{</span><span class='rbrace token'>}</span><span class='rparen token'>)</span>
+  
+  
+  
+  
+  <span class='message identifier id'>message</span> <span class='assign token'>=</span> <span class='options identifier id'>options</span><span class='lbrack token'>[</span><span class='symbol val'>:message</span><span class='rbrack token'>]</span>
+  <span class='code identifier id'>code</span> <span class='assign token'>=</span> <span class='options identifier id'>options</span><span class='lbrack token'>[</span><span class='symbol val'>:code</span><span class='rbrack token'>]</span><span class='dot token'>.</span><span class='to_i identifier id'>to_i</span> <span class='orop op'>||</span> <span class='integer val'>200</span>
+  
+  <span class='render_locals identifier id'>render_locals</span> <span class='assign token'>=</span> <span class='lbrace token'>{</span><span class='rbrace token'>}</span>
+  
+  <span class='page_body identifier id'>page_body</span> <span class='assign token'>=</span> <span class='render_page identifier id'>render_page</span><span class='lparen token'>(</span><span class='symbol val'>:x</span><span class='comma token'>,</span> <span class='render_locals identifier id'>render_locals</span><span class='rparen token'>)</span>
+ 
+  <span class='return return kw'>return</span> <span class='code identifier id'>code</span><span class='comma token'>,</span> <span class='CONTENT_TYPE constant id'>CONTENT_TYPE</span><span class='comma token'>,</span> <span class='lbrack token'>[</span><span class='page_body identifier id'>page_body</span><span class='dot token'>.</span><span class='to_s identifier id'>to_s</span><span class='rbrack token'>]</span>
+  
+<span class='end end kw'>end</span>
+</pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+</div>
+    
+    <div id="footer">
+  Generated on Sun Oct 31 22:31:51 2010 by 
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.6.1 (ruby-1.8.7).
+</div>
+
+  </body>
+</html>

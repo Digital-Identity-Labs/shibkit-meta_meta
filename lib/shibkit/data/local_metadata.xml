@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EntitiesDescriptor>
+  
+	<EntityDescriptor ID="miskatonic.edu" entityID="https://yogsothoth.miskatonic.edu/shibboleth">
+		
+		<Extensions>
+			<shibmd:Scope regexp="false">miskatonic.edu</shibmd:Scope>
+			<ukfedlabel:UKFederationMember/>
+			<ukfedlabel:AccountableUsers/>
+		</Extensions>
+		
+		<IDPSSODescriptor protocolSupportEnumeration="urn:mace:shibboleth:1.0 urn:oasis:names:tc:SAML:1.1:protocol urn:oasis:names:tc:SAML:2.0:protocol">
+			<Extensions>
+				<shibmd:Scope regexp="false">miskatonic.edu</shibmd:Scope>
+			</Extensions>
+			<ArtifactResolutionService Binding="urn:oasis:names:tc:SAML:1.0:bindings:SOAP-binding" Location="https://yogsothoth.miskatonic.edu:8443/idp/profile/SAML1/SOAP/ArtifactResolution" index="1"/>
+			<ArtifactResolutionService Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP" Location="https://yogsothoth.miskatonic.edu:8443/idp/profile/SAML2/SOAP/ArtifactResolution" index="2"/>
+			<NameIDFormat>urn:mace:shibboleth:1.0:nameIdentifier</NameIDFormat>
+			<NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:transient</NameIDFormat>
+			<SingleSignOnService Binding="urn:mace:shibboleth:1.0:profiles:AuthnRequest" Location="https://yogsothoth.miskatonic.edu/idp/profile/Shibboleth/SSO"/>
+			<SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://yogsothoth.miskatonic.edu/idp/profile/SAML2/POST/SSO"/>
+			<SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST-SimpleSign" Location="https://yogsothoth.miskatonic.edu/idp/profile/SAML2/POST-SimpleSign/SSO"/>
+			<SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://yogsothoth.miskatonic.edu/idp/profile/SAML2/Redirect/SSO"/>
+		</IDPSSODescriptor>
+		
+		<AttributeAuthorityDescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:1.1:protocol urn:oasis:names:tc:SAML:2.0:protocol">
+	  	<Extensions>
+				<shibmd:Scope regexp="false">miskatonic.edu</shibmd:Scope>
+			</Extensions>
+			<AttributeService Binding="urn:oasis:names:tc:SAML:1.0:bindings:SOAP-binding" Location="https://yogsothoth.miskatonic.edu:8443/idp/profile/SAML1/SOAP/AttributeQuery"/>
+			<AttributeService Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP" Location="https://yogsothoth.miskatonic.edu:8443/idp/profile/SAML2/SOAP/AttributeQuery"/>
+			<NameIDFormat>urn:mace:shibboleth:1.0:nameIdentifier</NameIDFormat>
+			<NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:transient</NameIDFormat>
+		</AttributeAuthorityDescriptor>
+		
+		<Organization>
+	  	<OrganizationName xml:lang="en">Miskatonic University</OrganizationName>
+			<OrganizationDisplayName xml:lang="en">Miskatonic University</OrganizationDisplayName>
+			<OrganizationURL xml:lang="en">http://www.miskatonic.edu/</OrganizationURL>
+		</Organization>
+		
+		<ContactPerson contactType="support">
+		  <GivenName>IT Service Desk</GivenName>
+			<EmailAddress>mailto:library@miskatonic.edu</EmailAddress>
+		</ContactPerson>
+		<ContactPerson contactType="technical">
+		  <GivenName>A</GivenName>
+			<SurName>Person</SurName>
+			<EmailAddress>mailto:w.whately@miskatonic.edu</EmailAddress>
+		</ContactPerson>
+
+  </EntityDescriptor>
+
+</EntitiesDescriptor>

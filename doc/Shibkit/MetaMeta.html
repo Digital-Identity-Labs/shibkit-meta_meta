@@ -1,0 +1,337 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta name="Content-Type" content="text/html; charset=utf-8" />
+<title>Class: Shibkit::MetaMeta</title>
+<link rel="stylesheet" href="../css/style.css" type="text/css" media="screen" charset="utf-8" />
+<link rel="stylesheet" href="../css/common.css" type="text/css" media="screen" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  relpath = '..';
+  if (relpath != '') relpath += '/';
+</script>
+<script type="text/javascript" charset="utf-8" src="../js/jquery.js"></script>
+<script type="text/javascript" charset="utf-8" src="../js/app.js"></script>
+
+  </head>
+  <body>
+    <script type="text/javascript" charset="utf-8">
+      if (window.top.frames.main) document.body.className = 'frames';
+    </script>
+    
+    <div id="header">
+      <div id="menu">
+  
+    <a href="../_index.html">Index (M)</a> &raquo; 
+    <span class='title'><span class='object_link'><a href="../Shibkit.html" title="Shibkit (module)">Shibkit</a></span></span>
+     &raquo; 
+    <span class="title">MetaMeta</span>
+  
+  
+  <div class="noframes"><span class="title">(</span><a href="." target="_top">no frames</a><span class="title">)</span></div>
+</div>
+
+      <div id="search">
+  <a id="class_list_link" href="#">Class List</a>
+  <a id="method_list_link" href="#">Method List</a>
+  <a id ="file_list_link" href="#">File List</a>
+</div>
+
+      <div class="clear"></div>
+    </div>
+    
+    <iframe id="search_frame"></iframe>
+    
+    <div id="content"><h1>Class: Shibkit::MetaMeta
+  
+  
+  
+</h1>
+
+<dl class="box">
+  
+    <dt class="r1">Inherits:</dt>
+    <dd class="r1">
+      <span class="inheritName">Object</span>
+      
+        <ul class="fullTree">
+          <li>Object</li>
+          
+            <li class="next">Shibkit::MetaMeta</li>
+          
+        </ul>
+        <a href="#" class="inheritanceTree">show all</a>
+      
+      </dd>
+    
+  
+  
+    
+  
+    
+  
+  
+  
+    <dt class="r2 last">Defined in:</dt>
+    <dd class="r2 last">lib/shibkit/metameta.rb<span class="defines">,<br />
+  lib/shibkit/metameta2.rb</span>
+</dd>
+  
+</dl>
+<div class="clear"></div>
+
+<h2>Defined Under Namespace</h2>
+<p class="children">
+   
+    
+   
+    
+      <strong class="classes">Classes:</strong> <span class='object_link'><a href="MetaMeta/Contact.html" title="Shibkit::MetaMeta::Contact (class)">Contact</a></span>, <span class='object_link'><a href="MetaMeta/Entity.html" title="Shibkit::MetaMeta::Entity (class)">Entity</a></span>, <span class='object_link'><a href="MetaMeta/Federation.html" title="Shibkit::MetaMeta::Federation (class)">Federation</a></span>, <span class='object_link'><a href="MetaMeta/Organisation.html" title="Shibkit::MetaMeta::Organisation (class)">Organisation</a></span>
+    
+  
+</p>
+
+
+
+  
+    <h2>
+      Class Method Summary
+      <small>(<a href="#" class="summary_toggle">collapse</a>)</small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#parse_metadata-class_method" title="parse_metadata (class method)">+ (Object) <strong>parse_metadata</strong>(federation_name, metadata_text) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#parse_metadata_file-class_method" title="parse_metadata_file (class method)">+ (Object) <strong>parse_metadata_file</strong>(federation_name, metadata_filename) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+    </ul>
+  
+
+
+
+  <div id="class_method_details" class="method_details_list">
+    <h2>Class Method Details</h2>
+    
+    
+      <div class="method_details first">
+  <p class="signature first" id="parse_metadata-class_method">
+  
+    + (<tt>Object</tt>) <strong>parse_metadata</strong>(federation_name, metadata_text) 
+  
+
+  
+</p><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/shibkit/metameta.rb', line 56</span>
+
+<span class='def def kw'>def</span> <span class='MetaMeta constant id'>MetaMeta</span><span class='dot token'>.</span><span class='parse_metadata identifier id'>parse_metadata</span><span class='lparen token'>(</span><span class='federation_name identifier id'>federation_name</span><span class='comma token'>,</span> <span class='metadata_text identifier id'>metadata_text</span><span class='rparen token'>)</span>
+  
+  <span class='comment val'>## Parse the entire file as an XML document</span>
+  <span class='doc identifier id'>doc</span> <span class='assign token'>=</span> <span class='Nokogiri constant id'>Nokogiri</span><span class='colon2 op'>::</span><span class='XML constant id'>XML</span><span class='dot token'>.</span><span class='parse identifier id'>parse</span><span class='lparen token'>(</span><span class='metadata_text identifier id'>metadata_text</span><span class='rparen token'>)</span> <span class='do do kw'>do</span> <span class='bitor op'>|</span><span class='config identifier id'>config</span><span class='bitor op'>|</span>
+    <span class='config identifier id'>config</span><span class='dot token'>.</span><span class='strict identifier id'>strict</span><span class='dot token'>.</span><span class='noent identifier id'>noent</span><span class='dot token'>.</span><span class='dtdvalid identifier id'>dtdvalid</span>
+  <span class='end end kw'>end</span>
+  
+  <span class='comment val'>## Find the Federation level metadata xml, if present</span>
+  <span class='federation identifier id'>federation</span> <span class='assign token'>=</span> <span class='Federation constant id'>Federation</span><span class='dot token'>.</span><span class='new identifier id'>new</span>
+  <span class='fx identifier id'>fx</span>  <span class='assign token'>=</span> <span class='doc identifier id'>doc</span><span class='dot token'>.</span><span class='root identifier id'>root</span>
+  
+  <span class='comment val'>## Add exotic namespaces to make sure we can deal with all metadata # TODO</span>
+  <span class='fx identifier id'>fx</span><span class='dot token'>.</span><span class='add_namespace_definition identifier id'>add_namespace_definition</span><span class='lparen token'>(</span><span class='string val'>'ukfedlabel'</span><span class='comma token'>,</span><span class='string val'>'http://ukfederation.org.uk/2006/11/label'</span><span class='rparen token'>)</span>
+  <span class='fx identifier id'>fx</span><span class='dot token'>.</span><span class='add_namespace_definition identifier id'>add_namespace_definition</span><span class='lparen token'>(</span><span class='string val'>'elab'</span><span class='comma token'>,</span><span class='string val'>'http://eduserv.org.uk/labels'</span><span class='rparen token'>)</span>
+  
+  <span class='comment val'>## Extract basic 'federation' information </span>
+  <span class='federation identifier id'>federation</span><span class='dot token'>.</span><span class='name identifier id'>name</span>           <span class='assign token'>=</span> <span class='federation_name identifier id'>federation_name</span>
+  <span class='federation identifier id'>federation</span><span class='dot token'>.</span><span class='metadata_id identifier id'>metadata_id</span>    <span class='assign token'>=</span> <span class='fx identifier id'>fx</span><span class='lbrack token'>[</span><span class='string val'>'ID'</span><span class='rbrack token'>]</span>
+  <span class='federation identifier id'>federation</span><span class='dot token'>.</span><span class='federation_uri identifier id'>federation_uri</span> <span class='assign token'>=</span> <span class='fx identifier id'>fx</span><span class='lbrack token'>[</span><span class='string val'>'Name'</span><span class='rbrack token'>]</span>
+  <span class='federation identifier id'>federation</span><span class='dot token'>.</span><span class='valid_until identifier id'>valid_until</span>    <span class='assign token'>=</span> <span class='fx identifier id'>fx</span><span class='lbrack token'>[</span><span class='string val'>'validUntil'</span><span class='rbrack token'>]</span>
+  <span class='federation identifier id'>federation</span><span class='dot token'>.</span><span class='entities identifier id'>entities</span>       <span class='assign token'>=</span> <span class='Array constant id'>Array</span><span class='dot token'>.</span><span class='new identifier id'>new</span>
+  
+  <span class='comment val'>## Process XML chunk for each entity in turn</span>
+  <span class='fx identifier id'>fx</span><span class='dot token'>.</span><span class='xpath identifier id'>xpath</span><span class='lparen token'>(</span><span class='string val'>&quot;//xmlns:EntityDescriptor&quot;</span><span class='rparen token'>)</span><span class='dot token'>.</span><span class='each identifier id'>each</span> <span class='do do kw'>do</span> <span class='bitor op'>|</span><span class='ex identifier id'>ex</span><span class='bitor op'>|</span>
+    
+    <span class='entity identifier id'>entity</span> <span class='assign token'>=</span> <span class='Entity constant id'>Entity</span><span class='dot token'>.</span><span class='new identifier id'>new</span>
+    <span class='entity identifier id'>entity</span><span class='dot token'>.</span><span class='federation_uri identifier id'>federation_uri</span> <span class='assign token'>=</span> <span class='federation identifier id'>federation</span><span class='dot token'>.</span><span class='federation_uri identifier id'>federation_uri</span>
+    <span class='entity identifier id'>entity</span><span class='dot token'>.</span><span class='entity_uri identifier id'>entity_uri</span>     <span class='assign token'>=</span> <span class='ex identifier id'>ex</span><span class='lbrack token'>[</span><span class='string val'>'entityID'</span><span class='rbrack token'>]</span>
+    <span class='entity identifier id'>entity</span><span class='dot token'>.</span><span class='metadata_id identifier id'>metadata_id</span>    <span class='assign token'>=</span> <span class='ex identifier id'>ex</span><span class='lbrack token'>[</span><span class='string val'>'ID'</span><span class='rbrack token'>]</span>
+  
+    <span class='entity identifier id'>entity</span><span class='dot token'>.</span><span class='accountable identifier id'>accountable</span> <span class='assign token'>=</span> <span class='ex identifier id'>ex</span><span class='dot token'>.</span><span class='xpath identifier id'>xpath</span><span class='lparen token'>(</span><span class='string val'>'xmlns:Extensions/ukfedlabel:AccountableUsers'</span><span class='rparen token'>)</span><span class='dot token'>.</span><span class='size identifier id'>size</span>   <span class='gt op'>&gt;</span> <span class='integer val'>0</span> <span class='question op'>?</span> <span class='true true kw'>true</span> <span class='colon op'>:</span> <span class='false false kw'>false</span>
+    <span class='entity identifier id'>entity</span><span class='dot token'>.</span><span class='ukfm identifier id'>ukfm</span>        <span class='assign token'>=</span> <span class='ex identifier id'>ex</span><span class='dot token'>.</span><span class='xpath identifier id'>xpath</span><span class='lparen token'>(</span><span class='string val'>'xmlns:Extensions/ukfedlabel:UKFederationMember'</span><span class='rparen token'>)</span><span class='dot token'>.</span><span class='size identifier id'>size</span> <span class='gt op'>&gt;</span> <span class='integer val'>0</span> <span class='question op'>?</span> <span class='true true kw'>true</span> <span class='colon op'>:</span> <span class='false false kw'>false</span>
+    <span class='entity identifier id'>entity</span><span class='dot token'>.</span><span class='athens identifier id'>athens</span>      <span class='assign token'>=</span> <span class='ex identifier id'>ex</span><span class='dot token'>.</span><span class='xpath identifier id'>xpath</span><span class='lparen token'>(</span><span class='string val'>'xmlns:Extensions/elab:AthensPUIDAuthority'</span><span class='rparen token'>)</span><span class='dot token'>.</span><span class='size identifier id'>size</span>      <span class='gt op'>&gt;</span> <span class='integer val'>0</span> <span class='question op'>?</span> <span class='true true kw'>true</span> <span class='colon op'>:</span> <span class='false false kw'>false</span>
+    <span class='entity identifier id'>entity</span><span class='dot token'>.</span><span class='scopes identifier id'>scopes</span>      <span class='assign token'>=</span> <span class='ex identifier id'>ex</span><span class='dot token'>.</span><span class='xpath identifier id'>xpath</span><span class='lparen token'>(</span><span class='string val'>'xmlns:IDPSSODescriptor/xmlns:Extensions/shibmd:Scope'</span><span class='rparen token'>)</span><span class='dot token'>.</span><span class='collect identifier id'>collect</span> <span class='lbrace token'>{</span> <span class='bitor op'>|</span><span class='x identifier id'>x</span><span class='bitor op'>|</span> <span class='x identifier id'>x</span><span class='dot token'>.</span><span class='text identifier id'>text</span> <span class='rbrace token'>}</span>
+    <span class='entity identifier id'>entity</span><span class='dot token'>.</span><span class='idp identifier id'>idp</span>         <span class='assign token'>=</span> <span class='ex identifier id'>ex</span><span class='dot token'>.</span><span class='xpath identifier id'>xpath</span><span class='lparen token'>(</span><span class='string val'>'xmlns:IDPSSODescriptor'</span><span class='rparen token'>)</span> <span class='question op'>?</span> <span class='true true kw'>true</span> <span class='colon op'>:</span> <span class='false false kw'>false</span>
+    <span class='entity identifier id'>entity</span><span class='dot token'>.</span><span class='sp identifier id'>sp</span>          <span class='assign token'>=</span> <span class='ex identifier id'>ex</span><span class='dot token'>.</span><span class='xpath identifier id'>xpath</span><span class='lparen token'>(</span><span class='string val'>'xmlns:SPSSODescriptor'</span><span class='rparen token'>)</span>  <span class='question op'>?</span> <span class='true true kw'>true</span> <span class='colon op'>:</span> <span class='false false kw'>false</span>
+    
+    <span class='entity identifier id'>entity</span><span class='dot token'>.</span><span class='support_contact identifier id'>support_contact</span>   <span class='assign token'>=</span> <span class='extract_contact identifier id'>extract_contact</span><span class='lparen token'>(</span><span class='ex identifier id'>ex</span><span class='comma token'>,</span> <span class='string val'>'support'</span><span class='rparen token'>)</span> 
+    <span class='entity identifier id'>entity</span><span class='dot token'>.</span><span class='technical_contact identifier id'>technical_contact</span> <span class='assign token'>=</span> <span class='extract_contact identifier id'>extract_contact</span><span class='lparen token'>(</span><span class='ex identifier id'>ex</span><span class='comma token'>,</span> <span class='string val'>'technical'</span><span class='rparen token'>)</span>
+    
+    <span class='ox identifier id'>ox</span> <span class='assign token'>=</span> <span class='ex identifier id'>ex</span><span class='dot token'>.</span><span class='xpath identifier id'>xpath</span><span class='lparen token'>(</span><span class='string val'>'xmlns:Organization[1]'</span><span class='rparen token'>)</span>
+    <span class='org identifier id'>org</span> <span class='assign token'>=</span> <span class='Organisation constant id'>Organisation</span><span class='dot token'>.</span><span class='new identifier id'>new</span>
+    <span class='org identifier id'>org</span><span class='dot token'>.</span><span class='name identifier id'>name</span>         <span class='assign token'>=</span> <span class='ox identifier id'>ox</span><span class='dot token'>.</span><span class='xpath identifier id'>xpath</span><span class='lparen token'>(</span><span class='string val'>'xmlns:OrganizationName[1]'</span><span class='rparen token'>)</span><span class='lbrack token'>[</span><span class='integer val'>0</span><span class='rbrack token'>]</span><span class='dot token'>.</span><span class='content identifier id'>content</span>
+    <span class='org identifier id'>org</span><span class='dot token'>.</span><span class='display_name identifier id'>display_name</span> <span class='assign token'>=</span> <span class='ox identifier id'>ox</span><span class='dot token'>.</span><span class='xpath identifier id'>xpath</span><span class='lparen token'>(</span><span class='string val'>'xmlns:OrganizationDisplayName[1]'</span><span class='rparen token'>)</span><span class='lbrack token'>[</span><span class='integer val'>0</span><span class='rbrack token'>]</span><span class='dot token'>.</span><span class='content identifier id'>content</span>
+    <span class='org identifier id'>org</span><span class='dot token'>.</span><span class='url identifier id'>url</span>          <span class='assign token'>=</span> <span class='ox identifier id'>ox</span><span class='dot token'>.</span><span class='xpath identifier id'>xpath</span><span class='lparen token'>(</span><span class='string val'>'xmlns:OrganizationURL[1]'</span><span class='rparen token'>)</span><span class='lbrack token'>[</span><span class='integer val'>0</span><span class='rbrack token'>]</span><span class='dot token'>.</span><span class='content identifier id'>content</span>
+    
+    <span class='entity identifier id'>entity</span><span class='dot token'>.</span><span class='organisation identifier id'>organisation</span> <span class='assign token'>=</span> <span class='org identifier id'>org</span>
+
+    <span class='federation identifier id'>federation</span><span class='dot token'>.</span><span class='entities identifier id'>entities</span> <span class='lshft op'>&lt;&lt;</span> <span class='entity identifier id'>entity</span>
+    
+  <span class='end end kw'>end</span>
+   
+  <span class='return return kw'>return</span> <span class='federation identifier id'>federation</span>
+  
+<span class='end end kw'>end</span>
+</pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="parse_metadata_file-class_method">
+  
+    + (<tt>Object</tt>) <strong>parse_metadata_file</strong>(federation_name, metadata_filename) 
+  
+
+  
+</p><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+48
+49
+50
+51
+52
+53
+54</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/shibkit/metameta.rb', line 48</span>
+
+<span class='def def kw'>def</span> <span class='MetaMeta constant id'>MetaMeta</span><span class='dot token'>.</span><span class='parse_metadata_file identifier id'>parse_metadata_file</span><span class='lparen token'>(</span><span class='federation_name identifier id'>federation_name</span><span class='comma token'>,</span> <span class='metadata_filename identifier id'>metadata_filename</span><span class='rparen token'>)</span>
+  
+  <span class='metadata_text identifier id'>metadata_text</span> <span class='assign token'>=</span> <span class='IO constant id'>IO</span><span class='dot token'>.</span><span class='read identifier id'>read</span><span class='lparen token'>(</span><span class='metadata_filename identifier id'>metadata_filename</span><span class='rparen token'>)</span>
+  
+  <span class='return return kw'>return</span> <span class='MetaMeta constant id'>MetaMeta</span><span class='dot token'>.</span><span class='parse_metadata identifier id'>parse_metadata</span><span class='lparen token'>(</span><span class='federation_name identifier id'>federation_name</span><span class='comma token'>,</span> <span class='metadata_text identifier id'>metadata_text</span><span class='rparen token'>)</span>
+  
+<span class='end end kw'>end</span>
+</pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+</div>
+    
+    <div id="footer">
+  Generated on Sun Oct 31 22:31:53 2010 by 
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.6.1 (ruby-1.8.7).
+</div>
+
+  </body>
+</html>

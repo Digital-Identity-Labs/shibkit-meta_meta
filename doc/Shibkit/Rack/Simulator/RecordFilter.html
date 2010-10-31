@@ -1,0 +1,204 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta name="Content-Type" content="text/html; charset=utf-8" />
+<title>Module: Shibkit::Rack::Simulator::RecordFilter</title>
+<link rel="stylesheet" href="../../../css/style.css" type="text/css" media="screen" charset="utf-8" />
+<link rel="stylesheet" href="../../../css/common.css" type="text/css" media="screen" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  relpath = '../../..';
+  if (relpath != '') relpath += '/';
+</script>
+<script type="text/javascript" charset="utf-8" src="../../../js/jquery.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../../js/app.js"></script>
+
+  </head>
+  <body>
+    <script type="text/javascript" charset="utf-8">
+      if (window.top.frames.main) document.body.className = 'frames';
+    </script>
+    
+    <div id="header">
+      <div id="menu">
+  
+    <a href="../../../_index.html">Index (R)</a> &raquo; 
+    <span class='title'><span class='object_link'><a href="../../../Shibkit.html" title="Shibkit (module)">Shibkit</a></span></span> &raquo; <span class='title'><span class='object_link'><a href="../../Rack.html" title="Shibkit::Rack (module)">Rack</a></span></span> &raquo; <span class='title'><span class='object_link'><a href="../Simulator.html" title="Shibkit::Rack::Simulator (class)">Simulator</a></span></span>
+     &raquo; 
+    <span class="title">RecordFilter</span>
+  
+  
+  <div class="noframes"><span class="title">(</span><a href="." target="_top">no frames</a><span class="title">)</span></div>
+</div>
+
+      <div id="search">
+  <a id="class_list_link" href="#">Class List</a>
+  <a id="method_list_link" href="#">Method List</a>
+  <a id ="file_list_link" href="#">File List</a>
+</div>
+
+      <div class="clear"></div>
+    </div>
+    
+    <iframe id="search_frame"></iframe>
+    
+    <div id="content"><h1>Module: Shibkit::Rack::Simulator::RecordFilter
+  
+  
+  
+</h1>
+
+<dl class="box">
+  
+  
+    
+  
+    
+  
+  
+  
+    <dt class="r1 last">Defined in:</dt>
+    <dd class="r1 last">lib/shibkit/rack/simulator/record_filter.rb</dd>
+  
+</dl>
+<div class="clear"></div>
+
+
+
+
+  
+    <h2>
+      Instance Method Summary
+      <small>(<a href="#" class="summary_toggle">collapse</a>)</small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#user_record_filter-instance_method" title="#user_record_filter (instance method)">- (Object) <strong>user_record_filter</strong>(user_record) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Process a user&#8217;s record to make resemble Shibboleth SP attributes.
+</p>
+</div></span>
+  
+</li>
+
+      
+    </ul>
+  
+
+
+
+  <div id="instance_method_details" class="method_details_list">
+    <h2>Instance Method Details</h2>
+    
+    
+      <div class="method_details first">
+  <p class="signature first" id="user_record_filter-instance_method">
+  
+    - (<tt>Object</tt>) <strong>user_record_filter</strong>(user_record) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Process a user&#8217;s record to make resemble Shibboleth SP attributes
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/shibkit/rack/simulator/record_filter.rb', line 9</span>
+
+<span class='def def kw'>def</span> <span class='user_record_filter identifier id'>user_record_filter</span><span class='lparen token'>(</span><span class='user_record identifier id'>user_record</span><span class='rparen token'>)</span>
+      
+  <span class='sp_key_map identifier id'>sp_key_map</span> <span class='assign token'>=</span> <span class='lbrace token'>{</span>
+    <span class='string val'>'username'</span>  <span class='assign token'>=</span><span class='gt op'>&gt;</span> <span class='string val'>'uid'</span><span class='comma token'>,</span>
+    <span class='string val'>'email'</span>     <span class='assign token'>=</span><span class='gt op'>&gt;</span> <span class='string val'>'mail'</span><span class='comma token'>,</span>
+    <span class='string val'>'name'</span>      <span class='assign token'>=</span><span class='gt op'>&gt;</span> <span class='string val'>'display_name'</span><span class='comma token'>,</span>
+    <span class='string val'>'roles'</span>     <span class='assign token'>=</span><span class='gt op'>&gt;</span> <span class='string val'>'affiliation'</span><span class='comma token'>,</span>
+    <span class='string val'>'id_number'</span> <span class='assign token'>=</span><span class='gt op'>&gt;</span> <span class='string val'>'personalID'</span><span class='comma token'>,</span>
+    <span class='string val'>'job_title'</span> <span class='assign token'>=</span><span class='gt op'>&gt;</span> <span class='string val'>'title'</span><span class='comma token'>,</span>
+    <span class='string val'>'organisation'</span> <span class='assign token'>=</span><span class='gt op'>&gt;</span> <span class='string val'>'o'</span><span class='comma token'>,</span>
+    <span class='string val'>'given_name'</span> <span class='assign token'>=</span><span class='gt op'>&gt;</span> <span class='string val'>'givenName'</span><span class='comma token'>,</span>
+    <span class='string val'>'family_name'</span> <span class='assign token'>=</span><span class='gt op'>&gt;</span> <span class='string val'>'sn'</span>
+  <span class='rbrace token'>}</span>
+
+  <span class='comment val'>## Replace key names with LDAP/Shibboleth style equivalents</span>
+  <span class='sp_key_map identifier id'>sp_key_map</span><span class='dot token'>.</span><span class='each_pair identifier id'>each_pair</span> <span class='lbrace token'>{</span><span class='bitor op'>|</span><span class='old_key identifier id'>old_key</span><span class='comma token'>,</span> <span class='new_key identifier id'>new_key</span><span class='bitor op'>|</span> <span class='user_record identifier id'>user_record</span><span class='lbrack token'>[</span><span class='new_key identifier id'>new_key</span><span class='rbrack token'>]</span> <span class='assign token'>=</span> <span class='user_record identifier id'>user_record</span><span class='lbrack token'>[</span><span class='old_key identifier id'>old_key</span><span class='rbrack token'>]</span> <span class='if if_mod kw'>if</span> <span class='user_record identifier id'>user_record</span><span class='dot token'>.</span><span class='has_key? fid id'>has_key?</span><span class='lparen token'>(</span><span class='old_key identifier id'>old_key</span><span class='rparen token'>)</span> <span class='rbrace token'>}</span>
+
+  <span class='comment val'>## Delete any data that isn't on the sp key list</span>
+  <span class='sp_keys identifier id'>sp_keys</span> <span class='assign token'>=</span> <span class='sp_key_map identifier id'>sp_key_map</span><span class='dot token'>.</span><span class='invert identifier id'>invert</span>
+  <span class='user_record identifier id'>user_record</span><span class='dot token'>.</span><span class='delete_if identifier id'>delete_if</span> <span class='lbrace token'>{</span> <span class='bitor op'>|</span><span class='key identifier id'>key</span><span class='comma token'>,</span> <span class='value identifier id'>value</span><span class='bitor op'>|</span> <span class='sp_keys identifier id'>sp_keys</span><span class='dot token'>.</span><span class='has_key? fid id'>has_key?</span><span class='lparen token'>(</span><span class='key identifier id'>key</span><span class='rparen token'>)</span> <span class='question op'>?</span> <span class='false false kw'>false</span> <span class='colon op'>:</span> <span class='true true kw'>true</span> <span class='rbrace token'>}</span>
+
+  <span class='return return kw'>return</span> <span class='user_record identifier id'>user_record</span>
+
+<span class='end end kw'>end</span>
+</pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+</div>
+    
+    <div id="footer">
+  Generated on Sun Oct 31 22:31:50 2010 by 
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.6.1 (ruby-1.8.7).
+</div>
+
+  </body>
+</html>

@@ -12,7 +12,9 @@ module Shibkit
     ## Default configuration values, attributes and accessors defined here
     CONFIG_DEFAULTS = {
       :path_auth_masks                => ["/"],
-      :federation_metadata            => ["#{::File.dirname(__FILE__)}/data/example_federation_metadata.xml"],
+      :federation_metadata            => ["#{::File.dirname(__FILE__)}/data/example_federation_metadata.xml",
+                                          "#{::File.dirname(__FILE__)}/data/uncommon_federation_metadata.xml",
+                                          "#{::File.dirname(__FILE__)}/data/local_metadata.xml"],
       :home_path                      => "/",
       :exit_path                      => "/",
       :gateway                        => false,
