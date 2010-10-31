@@ -2,7 +2,7 @@ module Shibkit
   module Rack
     class Simulator
       module Model
-        module IDPSession
+        class IDPSession
 
           ## Easy access to Shibkit's configuration settings
           include Shibkit::Configured

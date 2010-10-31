@@ -2,7 +2,7 @@ module Shibkit
   module Rack
     class Simulator
       module Model
-        module SPSession
+        class SPSession
           
           ## Easy access to Shibkit's configuration settings
           include Shibkit::Configured 
@@ -149,6 +149,20 @@ module Shibkit
           def idp_assertion
             
             return sp_session[:idp_assertion]
+            
+          end
+          
+          ## Remember destination
+          def remember_destination(destination)
+            
+            sp_session[:destination] = destination
+            
+          end
+          
+          ## Where is the user trying to go to?
+          def destination
+            
+            return sp_session[:destination] || request.path || config.home_path
             
           end
           
