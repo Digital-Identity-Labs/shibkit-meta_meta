@@ -1,8 +1,25 @@
 require 'singleton'
 require 'ftools'
 
+class String
+  
+  def to_absolute_path
+     
+     full_relative_path = ::File.join(::File.dirname(__FILE__), self)
+
+      return ::File.expand_path(full_relative_path)
+    
+  end
+  
+end
+
 module Shibkit
+  
+
+  
   class Config
+    
+
 
     include Singleton
     
@@ -12,9 +29,9 @@ module Shibkit
     ## Default configuration values, attributes and accessors defined here
     CONFIG_DEFAULTS = {
       :path_auth_masks                => ["/"],
-      :federation_metadata            => ["#{::File.dirname(__FILE__)}/data/example_federation_metadata.xml",
-                                          "#{::File.dirname(__FILE__)}/data/uncommon_federation_metadata.xml",
-                                          "#{::File.dirname(__FILE__)}/data/local_metadata.xml"],
+      :federation_metadata            => {"Example Federation"  => "/data/example_federation_metadata.xml".to_absolute_path,
+                                          "UnCommon"            => "/data/uncommon_federation_metadata.xml".to_absolute_path,
+                                          "Other Organisations" => "/data/local_metadata.xml".to_absolute_path},
       :home_path                      => "/",
       :exit_path                      => "/",
       :gateway                        => false,
@@ -30,7 +47,7 @@ module Shibkit
       :sim_sp_entity_id               => 'https://sp.example.ac.uk/shibboleth',
       :sim_remote_user                => %w"eppn persistent-id targeted-id",
       :sim_chooser_type               => :simple,
-      :sim_chooser_css                => "#{::File.dirname(__FILE__)}/data/sp_sim.css",
+      :sim_chooser_css                => "/data/sp_sim.css".to_absolute_path,
       :sim_idp_session_expiry         => 300,
       :sim_sp_session_expiry          => 300,
       :sim_sp_session_idle            => 300,
@@ -38,15 +55,16 @@ module Shibkit
       :sim_idp_old_status_path        => "/idp/profile/Status",
       :sim_idp_new_status_path        => "/idp/status",
       :sim_wayf_path                  => "/shibsim_wayf/",
-      :sim_users_file                 => "#{::File.dirname(__FILE__)}/data/example_users.yml",
+      :sim_users_file                 => "/data/example_users.yml".to_absolute_path,
       :sim_users_file_format          => :fixture,
-      :sim_orgs_file                  => "#{::File.dirname(__FILE__)}/data/example_orgs.yml",
+      :sim_orgs_file                  => "/data/example_orgs.yml".to_absolute_path,
+      :sim_metadata_cache_file        => "/data/metadata_cache.yml".to_absolute_path,
       :sim_saml_authentication_method => 'urn:oasis:names:tc:SAML:1.0:am:unspecified',
-      :shim_attribute_map             => "#{::File.dirname(__FILE__)}/data/sp_attr_map.yml",
+      :shim_attribute_map             => "/data/sp_attr_map.yml".to_absolute_path,
       :shim_user_id_name              => :user_id,
       :shim_sp_assertion_name         => :sp_session,
-      :shim_org_settings_file         => "#{::File.dirname(__FILE__)}/data/example_orgs_settings.yml",
-      :shim_org_access_file           => "#{::File.dirname(__FILE__)}/data/example_orgs_access.yml" 
+      :shim_org_settings_file         => "/data/example_orgs_settings.yml".to_absolute_path,
+      :shim_org_access_file           => "/data/example_orgs_access.yml".to_absolute_path 
     }
     
     ## Create accessors
@@ -128,6 +146,15 @@ module Shibkit
     
     private
     
+    ## Create absolute filepath from path relative to this file
+    def absolute_path(relative_path)
+      
+      full_relative_path = ::File.join(::File.dirname(__FILE__), relative_path)
+            
+      return ::File.expand_path(full_relative_path)
+      
+    end
+    
     ## Basic sanity check of settings (There are better ways of doing this...)
     def sane_configuration?
       
@@ -166,7 +193,7 @@ module Shibkit
       
       ## Check file paths are valid and accessible - gather all our filenames
       gathered_filenames = Array.new
-      [:sim_chooser_css, :sim_users_file, :federation_metadata,
+      [:sim_chooser_css, :sim_users_file, 
          :sim_chooser_css, :sim_orgs_file, :sim_orgs_file, :shim_attribute_map,
          :shim_org_settings_file, :shim_org_access_file].each do |m|
         
@@ -183,7 +210,11 @@ module Shibkit
       
       end
       
-      
+      ## Check metadata by feeding it to MetaMeta
+      #federation_metadata.each_pair do |name, source|
+      #  MetaMeta::Source.new
+      #
+      #
       
        ## Check URL paths are valid
       [:home_path, :exit_path, :gateway_path, :sim_idp_path, :sim_wayf_path].each do |m|
