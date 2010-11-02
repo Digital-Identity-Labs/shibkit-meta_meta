@@ -7,12 +7,50 @@
 require 'rubygems'
 require 'nokogiri'
 require 'yaml'
+require 'open-uri'
+#require 'typhoeus'
+
+require 'shibkit'
 
 module Shibkit
   
   ## Simple library to parse Shibboleth metadata files into Ruby objects
   class MetaMeta
     
+    class Source
+      
+      attr_accessor :name
+      attr_accessor :file
+      attr_accessor :refresh
+      attr_accessor :cache
+      
+      ## New default object
+      def initialize(&block)
+      
+        @name    = "Unknown"
+        @file    = nil
+        @refresh = 0
+        @cache   = true
+      
+        self.instance_eval(&block) if block
+      
+      end
+      
+      ## Return raw source string from the file
+      def content
+        
+        
+        
+      end
+      
+      ## Source is reachable, valid filename/URI, etc. Does not check content
+      def ok?
+        
+        
+      end
+      
+    end
+        
     ## Class to represent a Shibboleth Federation or collection of local metadata
     ## 
     class Federation
@@ -31,6 +69,9 @@ module Shibkit
       
       ## Array of entities within the federation or metadata collection
       attr_accessor :entities  
+      
+      ## Time the Federation metadata was parsed
+      attr_accessor :read_at
       
     end
     
@@ -122,6 +163,74 @@ module Shibkit
       
     end
     
+    ##
+    ## The MetaMeta object itself
+    ##
+    
+    ## Easy access to Shibkit's configuration settings
+    include Shibkit::Configured
+    
+    attr_accessor :sources
+    attr_accessor :federations
+        
+    ## New default object
+    def initialize(&block)
+    
+      @sources     = Array.new
+      @federations = Array.new
+      
+      self.instance_eval(&block) if block
+    
+    end
+    
+    ## Convenience method to add a source
+    def add_source(name, file, refresh=360, cache=true)
+    
+      self.sources << Source.new do |s|
+        
+        s.name    = name
+        s.file    = file
+        s.refresh = refresh
+        s.cache   = cache
+        
+      end
+    
+    end
+    
+    ## Downloads and reprocesses metadata files  
+    def refresh(force=false)
+      
+      @sources.each do |source|
+      
+        @federations << MetaMeta.parse_metadata_file(source.name, source.file)
+      
+      end
+      
+    end 
+    
+    ## Loads federation metadata contents 
+    def load_cache_file(file_or_url)
+        
+        @federations = YAML::load(File.open(file_or_url))
+        
+    end
+    
+    ## Save entity data into a YAML file. 
+    def save_cache_file(file)
+        
+        ## Will *not* overwrite the example/default file in gem! TODO: this code is awful.
+        gem_data_path = "#{::File.dirname(__FILE__)}/data"
+        if file.include? gem_data_path 
+          raise "Attempt to overwrite gem's default metadata cache! Please specify your own file to save cache in"
+        end
+        
+        ## Write the YAML to disk
+        File.open(file, 'w') do |out|
+           YAML.dump(@federations, out)
+         end
+        
+    end    
+    
     ## Parses the specified metadata xml file and returns a federation object
     def MetaMeta.parse_metadata_file(federation_name, metadata_filename)
       
@@ -157,11 +266,13 @@ module Shibkit
       ## Process XML chunk for each entity in turn
       fx.xpath("//xmlns:EntityDescriptor").each do |ex|
         
+        ## Basics for the entity
         entity = Entity.new
         entity.federation_uri = federation.federation_uri
         entity.entity_uri     = ex['entityID']
         entity.metadata_id    = ex['ID']
       
+        ## Then boolean flags for common/useful info 
         entity.accountable = ex.xpath('xmlns:Extensions/ukfedlabel:AccountableUsers').size   > 0 ? true : false
         entity.ukfm        = ex.xpath('xmlns:Extensions/ukfedlabel:UKFederationMember').size > 0 ? true : false
         entity.athens      = ex.xpath('xmlns:Extensions/elab:AthensPUIDAuthority').size      > 0 ? true : false
@@ -169,17 +280,21 @@ module Shibkit
         entity.idp         = ex.xpath('xmlns:IDPSSODescriptor') ? true : false
         entity.sp          = ex.xpath('xmlns:SPSSODescriptor')  ? true : false
         
+        ## Include Contact objects
         entity.support_contact   = extract_contact(ex, 'support') 
         entity.technical_contact = extract_contact(ex, 'technical')
         
+        ## Include an organisation object
         ox = ex.xpath('xmlns:Organization[1]')
         org = Organisation.new
-        org.name         = ox.xpath('xmlns:OrganizationName[1]')[0].content
-        org.display_name = ox.xpath('xmlns:OrganizationDisplayName[1]')[0].content
-        org.url          = ox.xpath('xmlns:OrganizationURL[1]')[0].content
-        
+        if ox
+          org.name         = ox.xpath('xmlns:OrganizationName[1]')[0].content
+          org.display_name = ox.xpath('xmlns:OrganizationDisplayName[1]')[0].content
+          org.url          = ox.xpath('xmlns:OrganizationURL[1]')[0].content
+        end
         entity.organisation = org
     
+        ## Collect this entity in the federation object
         federation.entities << entity
         
       end
@@ -190,6 +305,7 @@ module Shibkit
     
     private
     
+    ## DRY up the process of extracting Contact information
     def MetaMeta.extract_contact(entity_xml, type)
     
       sx = entity_xml.xpath("xmlns:ContactPerson[@contactType='#{type.to_s}'][1]")[0]

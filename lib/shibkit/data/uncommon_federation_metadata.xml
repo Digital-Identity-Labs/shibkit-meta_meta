@@ -1,8 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <EntitiesDescriptor
+  xmlns="urn:oasis:names:tc:SAML:2.0:metadata"
+  xmlns:ds="http://www.w3.org/2000/09/xmldsig#"
+  xmlns:elab="http://eduserv.org.uk/labels"
+  xmlns:idpdisc="urn:oasis:names:tc:SAML:profiles:SSO:idp-discovery-protocol"
+  xmlns:shibmd="urn:mace:shibboleth:metadata:1.0"
+  xmlns:shibmeta="urn:mace:shibboleth:metadata:1.0"
+  xmlns:ukfedlabel="http://ukfederation.org.uk/2006/11/label"
+  xmlns:wayf="http://sdss.ac.uk/2006/06/WAYF"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="urn:oasis:names:tc:SAML:2.0:metadata sstc-saml-schema-metadata-2.0.xsd   urn:mace:shibboleth:metadata:1.0 shibboleth-metadata-1.0.xsd   http://www.w3.org/2001/04/xmlenc# xenc-schema.xsd   http://www.w3.org/2000/09/xmldsig# xmldsig-core-schema.xsd"
+	ID="ef20101029T160501Z"
   Name="http://uncommonfed.org"
   validUntil="2010-11-12T16:05:01Z">
-  
+
 	<EntityDescriptor ID="uf00001" entityID="https://shibboleth.example.edu/shibboleth">
 		
 		<Extensions>
