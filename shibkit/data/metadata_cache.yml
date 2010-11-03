@@ -1,0 +1,166 @@
+--- 
+- !ruby/object:Shibkit::MetaMeta::Federation 
+  display_name: Other Organisations
+  entities: 
+  - !ruby/object:Shibkit::MetaMeta::Entity 
+    accountable: true
+    athens: false
+    entity_uri: https://yogsothoth.miskatonic.edu/shibboleth
+    federation_uri: http://example.org
+    idp: true
+    metadata_id: miskatonic.edu
+    organisation: !ruby/object:Shibkit::MetaMeta::Organisation 
+      display_name: Miskatonic University
+      name: Miskatonic University
+      url: http://www.miskatonic.edu/
+    scopes: 
+    - miskatonic.edu
+    sp: true
+    support_contact: !ruby/object:Shibkit::MetaMeta::Contact 
+      category: support
+      email_url: mailto:library@miskatonic.edu
+      givenname: IT Service Desk
+    technical_contact: !ruby/object:Shibkit::MetaMeta::Contact 
+      category: technical
+      email_url: mailto:w.whately@miskatonic.edu
+      givenname: A
+      surname: Person
+    ukfm: true
+  federation_uri: http://example.org
+  metadata_id: ef20101029T160501Z
+  read_at: 2010-11-03 21:35:56.840712 +00:00
+  valid_until: "2010-11-12T16:05:01Z"
+- !ruby/object:Shibkit::MetaMeta::Federation 
+  display_name: Example Federation
+  entities: 
+  - !ruby/object:Shibkit::MetaMeta::Entity 
+    accountable: true
+    athens: false
+    entity_uri: https://shib.example.ac.uk/shibboleth
+    federation_uri: http://examplefederation.org
+    idp: true
+    metadata_id: ef00001
+    organisation: !ruby/object:Shibkit::MetaMeta::Organisation 
+      display_name: University of Example
+      name: The University of Example
+      url: http://www.example.ac.uk/
+    scopes: 
+    - example.ac.uk
+    sp: true
+    support_contact: !ruby/object:Shibkit::MetaMeta::Contact 
+      category: support
+      email_url: mailto:IT-Servicedesk@example.ac.uk
+      givenname: IT Service Desk
+    technical_contact: !ruby/object:Shibkit::MetaMeta::Contact 
+      category: technical
+      email_url: mailto:a.person@example.ac.uk
+      givenname: A
+      surname: Person
+    ukfm: true
+  - !ruby/object:Shibkit::MetaMeta::Entity 
+    accountable: true
+    athens: false
+    entity_uri: https://idp.example.exampleshire.sch.uk/shibboleth
+    federation_uri: http://examplefederation.org
+    idp: true
+    metadata_id: ef00002
+    organisation: !ruby/object:Shibkit::MetaMeta::Organisation 
+      display_name: Example Secondary School
+      name: Example Secondary School
+      url: http://www.example.exampleshire.sch.uk/
+    scopes: 
+    - example.exampleshire.sch.uk
+    sp: true
+    support_contact: !ruby/object:Shibkit::MetaMeta::Contact 
+      category: support
+      email_url: mailto:support@example.exampleshire.sch.uk
+      givenname: IT Service Desk
+    technical_contact: !ruby/object:Shibkit::MetaMeta::Contact 
+      category: technical
+      email_url: mailto:sysadmin@example.exampleshire.sch.uk
+      givenname: A
+      surname: Person
+    ukfm: true
+  - !ruby/object:Shibkit::MetaMeta::Entity 
+    accountable: true
+    athens: false
+    entity_uri: https://login.example.com/shibboleth
+    federation_uri: http://examplefederation.org
+    idp: true
+    metadata_id: ef00003
+    organisation: !ruby/object:Shibkit::MetaMeta::Organisation 
+      display_name: Example Online
+      name: Example Online
+      url: http://example.com
+    scopes: 
+    - example.com
+    sp: true
+    support_contact: !ruby/object:Shibkit::MetaMeta::Contact 
+      category: support
+      email_url: mailto:help@example.com
+      givenname: IT Service Desk
+    technical_contact: !ruby/object:Shibkit::MetaMeta::Contact 
+      category: technical
+      email_url: mailto:guru@example.com
+      givenname: A
+      surname: Person
+    ukfm: true
+  federation_uri: http://examplefederation.org
+  metadata_id: ef20101029T160501Z
+  read_at: 2010-11-03 21:35:56.872815 +00:00
+  valid_until: "2010-11-12T16:05:01Z"
+- !ruby/object:Shibkit::MetaMeta::Federation 
+  display_name: UnCommon
+  entities: 
+  - !ruby/object:Shibkit::MetaMeta::Entity 
+    accountable: true
+    athens: false
+    entity_uri: https://shibboleth.example.edu/shibboleth
+    federation_uri: http://uncommonfed.org
+    idp: true
+    metadata_id: uf00001
+    organisation: !ruby/object:Shibkit::MetaMeta::Organisation 
+      display_name: University of Example
+      name: The University of Example
+      url: http://www.example.edu/
+    scopes: 
+    - example.edu
+    sp: true
+    support_contact: !ruby/object:Shibkit::MetaMeta::Contact 
+      category: support
+      email_url: mailto:IT-Servicedesk@example.edu
+      givenname: IT Service Desk
+    technical_contact: !ruby/object:Shibkit::MetaMeta::Contact 
+      category: technical
+      email_url: mailto:a.person@example.edu
+      givenname: A
+      surname: Person
+    ukfm: true
+  - !ruby/object:Shibkit::MetaMeta::Entity 
+    accountable: false
+    athens: false
+    entity_uri: https://login.example.com/shibboleth
+    federation_uri: http://uncommonfed.org
+    idp: true
+    metadata_id: uf00002
+    organisation: !ruby/object:Shibkit::MetaMeta::Organisation 
+      display_name: Example Online
+      name: Example Online
+      url: http://example.com
+    scopes: 
+    - example.com
+    sp: true
+    support_contact: !ruby/object:Shibkit::MetaMeta::Contact 
+      category: support
+      email_url: mailto:help@example.com
+      givenname: IT Service Desk
+    technical_contact: !ruby/object:Shibkit::MetaMeta::Contact 
+      category: technical
+      email_url: mailto:guru@example.com
+      givenname: A
+      surname: Person
+    ukfm: false
+  federation_uri: http://uncommonfed.org
+  metadata_id: ef20101029T160501Z
+  read_at: 2010-11-03 21:35:56.879264 +00:00
+  valid_until: "2010-11-12T16:05:01Z"
