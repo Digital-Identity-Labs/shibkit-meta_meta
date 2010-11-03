@@ -7,166 +7,19 @@
 require 'rubygems'
 require 'nokogiri'
 require 'yaml'
-require 'open-uri'
-#require 'typhoeus'
 
 require 'shibkit'
+require 'shibkit/metameta/contact'
+require 'shibkit/metameta/source'
+require 'shibkit/metameta/entity'
+require 'shibkit/metameta/federation'
+require 'shibkit/metameta/organisation'
 
 module Shibkit
   
   ## Simple library to parse Shibboleth metadata files into Ruby objects
   class MetaMeta
-    
-    class Source
-      
-      attr_accessor :name
-      attr_accessor :file
-      attr_accessor :refresh
-      attr_accessor :cache
-      
-      ## New default object
-      def initialize(&block)
-      
-        @name    = "Unknown"
-        @file    = nil
-        @refresh = 0
-        @cache   = true
-      
-        self.instance_eval(&block) if block
-      
-      end
-      
-      ## Return raw source string from the file
-      def content
         
-        
-        
-      end
-      
-      ## Source is reachable, valid filename/URI, etc. Does not check content
-      def ok?
-        
-        
-      end
-      
-    end
-        
-    ## Class to represent a Shibboleth Federation or collection of local metadata
-    ## 
-    class Federation
-      
-      ## The human-readable display name of the Federation or collection of metadata
-      attr_accessor :display_name
-      
-      ## The unique ID of the federation document (probably time/version based)
-      attr_accessor :metadata_id
-      
-      ## The URI name of the federation (may be missing for local collections)
-      attr_accessor :federation_uri
-      
-      ## Expiry date of the published metadata file
-      attr_accessor :valid_until
-      
-      ## Array of entities within the federation or metadata collection
-      attr_accessor :entities  
-      
-      ## Time the Federation metadata was parsed
-      attr_accessor :read_at
-      
-    end
-    
-    ## Class to represent the metadata of the organisation owning a Shibboleth entity
-    class Organisation
-      
-      ## The name identifier for the organisation
-      attr_accessor :name
-      
-      ## The human-readable display name for the organisation
-      attr_accessor :display_name
-      
-      ## The homepage URL for the organisation
-      attr_accessor :url
-      
-    end
-    
-    ## Class to represent the metadata of a Shibboleth IDP or SP 
-    class Entity
-      
-      ## The URI of the entity's parent federation
-      attr_accessor :federation_uri
-      
-      ## The ID of the entity with the metadata file (not globally unique)
-      attr_accessor :metadata_id
-      
-      ## The URI of the entity
-      attr_accessor :entity_uri
-      
-      ## Is the entity accountable?
-      attr_accessor :accountable
-      
-      ## Is the entity part of the UK Access Management Federation?
-      attr_accessor :ukfm
-      
-      ## Is the entity using Athens?
-      attr_accessor :athens
-      
-      ## Scopes used by the entity (if an IDP)
-      attr_accessor :scopes
-      
-      ## Organisation object for the owner of the entity 
-      attr_accessor :organisation
-      
-      ## Contact object containing user support contact details
-      attr_accessor :support_contact
-      
-      ## Contact object containing technical contact details
-      attr_accessor :technical_contact
-      
-      ## Is the entity an IDP?
-      attr_accessor :idp
-      
-      ## Is the entity an SP?
-      attr_accessor :sp
-                    
-                    
-      alias :entity_id :entity_uri
-      alias :idp? :idp 
-      alias :sp?  :sp
-      alias :ukfm? :ukfm
-      alias :accountable? :accountable
-      alias :athens? :athens
-      alias :organization :organisation
-      
-    end
-    
-    ## Class to represent technical or suppor contact details for an entity
-    class Contact
-      
-      ## The given name of the contact (often the entire name is here)
-      attr_accessor :givenname
-      
-      ## The surname of the contact
-      attr_accessor :surname
-      
-      ## The email address of the contact formatted as a mailto: URL
-      attr_accessor :email_url
-      
-      ## The category of the contact (support or technical)
-      attr_accessor :category   
-      
-      ## Usually both the surname and givenname of the contact
-      def display_name
-      
-        return [givenname, surname].join(' ')
-      
-      end
-      
-    end
-    
-    ##
-    ## The MetaMeta object itself
-    ##
-    
     ## Easy access to Shibkit's configuration settings
     include Shibkit::Configured
     
@@ -202,7 +55,7 @@ module Shibkit
       
       @sources.each do |source|
       
-        @federations << MetaMeta.parse_metadata_file(source.name, source.file)
+        @federations << MetaMeta.parse(source)
       
       end
       
@@ -231,20 +84,11 @@ module Shibkit
         
     end    
     
-    ## Parses the specified metadata xml file and returns a federation object
-    def MetaMeta.parse_metadata_file(federation_name, metadata_filename)
-      
-      metadata_text = IO.read(metadata_filename)
-      
-      return MetaMeta.parse_metadata(federation_name, metadata_text)
-      
-    end
-    
     ## Parses a string containing metadata XML and returns a federation object
-    def MetaMeta.parse_metadata(federation_name, metadata_text)
+    def MetaMeta.parse(source)
       
       ## Parse the entire file as an XML document
-      doc = Nokogiri::XML.parse(metadata_text) do |config|
+      doc = Nokogiri::XML.parse(source.content) do |config|
         config.strict.noent.dtdvalid
       end
       
@@ -257,7 +101,7 @@ module Shibkit
       fx.add_namespace_definition('elab','http://eduserv.org.uk/labels')
       
       ## Extract basic 'federation' information 
-      federation.display_name   = federation_name
+      federation.display_name   = source.name
       federation.metadata_id    = fx['ID']
       federation.federation_uri = fx['Name']
       federation.valid_until    = fx['validUntil']
