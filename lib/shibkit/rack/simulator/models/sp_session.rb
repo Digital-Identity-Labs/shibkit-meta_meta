@@ -8,7 +8,7 @@ module Shibkit
           include Shibkit::Configured 
           
           ## Add the record processing mixin if it's present
-          load_filter_mixin
+          #load_filter_mixin
           
           ## A new SPSession
           def initialize(env)
