@@ -1,10 +1,10 @@
-require 'supermodel'
+
 
 module Shibkit
   module Rack
     class Simulator
       module Model
-        class Directory
+        class Directory < Base
           
           ## Easy access to Shibkit's configuration settings
           include Shibkit::Configured
@@ -34,6 +34,7 @@ module Shibkit
           end
          
           private
+=begin
           
           ## Provide user data for chooser and header injection
           def Directory.load_user_data
@@ -105,7 +106,7 @@ module Shibkit
             raise "No organisation labels!" unless @orgtree.size > 0
 
           end
-          
+=end          
         end
       end
     end

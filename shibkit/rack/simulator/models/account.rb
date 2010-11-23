@@ -1,8 +1,10 @@
+require 'shibkit/rack/simulator/models/base'
+
 module Shibkit
   module Rack
     class Simulator
       module Model
-        class Account
+        class Account 
        
           ## Easy access to Shibkit's configuration settings
           include Shibkit::Configured

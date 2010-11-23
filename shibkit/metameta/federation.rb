@@ -17,6 +17,13 @@ module Shibkit
       ## Expiry date of the published metadata file
       attr_accessor :valid_until
       
+      ## Source file for this federation
+      attr_accessor :source_file
+      
+      ## Was it loaded from the 
+      attr_accessor :cached
+      alias :cached? :cached
+      
       ## Array of entities within the federation or metadata collection
       attr_accessor :entities  
       

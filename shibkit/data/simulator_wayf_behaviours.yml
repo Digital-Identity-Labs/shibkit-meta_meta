@@ -1,0 +1,7 @@
+---
+default:
+  remember:         4
+  session_ttl:      7
+  type:             :global
+  layout:           :default
+

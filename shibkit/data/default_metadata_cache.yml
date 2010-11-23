@@ -6,7 +6,7 @@
     accountable: true
     athens: false
     entity_uri: https://yogsothoth.miskatonic.edu/shibboleth
-    federation_uri: http://example.org
+    federation_uri: http://otherorganisations.org
     idp: true
     metadata_id: miskatonic.edu
     organisation: !ruby/object:Shibkit::MetaMeta::Organisation 
@@ -26,7 +26,7 @@
       givenname: A
       surname: Person
     ukfm: true
-  federation_uri: http://example.org
+  federation_uri: http://otherorgs.org
   metadata_id: ef20101029T160501Z
   read_at: 2010-11-03 21:35:56.840712 +00:00
   valid_until: "2010-11-12T16:05:01Z"

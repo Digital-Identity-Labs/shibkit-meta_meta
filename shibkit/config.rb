@@ -29,9 +29,9 @@ module Shibkit
     ## Default configuration values, attributes and accessors defined here
     CONFIG_DEFAULTS = {
       :path_auth_masks                => ["/"],
-      :federation_metadata            => {"Example Federation"  => "/data/example_federation_metadata.xml".to_absolute_path,
-                                          "UnCommon"            => "/data/uncommon_federation_metadata.xml".to_absolute_path,
-                                          "Other Organisations" => "/data/local_metadata.xml".to_absolute_path},
+      :federation_metadata            => {"Example Federation"  => "/data/default_metadata/example_federation_metadata.xml".to_absolute_path,
+                                          "UnCommon"            => "/data/default_metadata/uncommon_federation_metadata.xml".to_absolute_path,
+                                          "Other Organisations" => "/data/default_metadata/local_metadata.xml".to_absolute_path},
       :home_path                      => "/",
       :exit_path                      => "/",
       :gateway                        => false,
@@ -55,16 +55,15 @@ module Shibkit
       :sim_idp_old_status_path        => "/idp/profile/Status",
       :sim_idp_new_status_path        => "/idp/status",
       :sim_wayf_path                  => "/shibsim_wayf/",
-      :sim_users_file                 => "/data/example_users.yml".to_absolute_path,
+      :sim_users_file                 => "/data/simulator_user_directory.yml".to_absolute_path,
       :sim_users_file_format          => :fixture,
-      :sim_orgs_file                  => "/data/example_orgs.yml".to_absolute_path,
-      :sim_metadata_cache_file        => "/data/metadata_cache.yml".to_absolute_path,
+      :sim_metadata_cache_file        => "/data/default_metadata_cache.yml".to_absolute_path,
       :sim_saml_authentication_method => 'urn:oasis:names:tc:SAML:1.0:am:unspecified',
       :shim_attribute_map             => "/data/sp_attr_map.yml".to_absolute_path,
       :shim_user_id_name              => :user_id,
       :shim_sp_assertion_name         => :sp_session,
-      :shim_org_settings_file         => "/data/example_orgs_settings.yml".to_absolute_path,
-      :shim_org_access_file           => "/data/example_orgs_access.yml".to_absolute_path 
+      :shim_org_settings_file         => "/data/organisation_settings.yml".to_absolute_path,
+      :shim_org_access_file           => "/data/organisation_access_rules.yml".to_absolute_path 
     }
     
     ## Create accessors
@@ -194,7 +193,7 @@ module Shibkit
       ## Check file paths are valid and accessible - gather all our filenames
       gathered_filenames = Array.new
       [:sim_chooser_css, :sim_users_file, 
-         :sim_chooser_css, :sim_orgs_file, :sim_orgs_file, :shim_attribute_map,
+         :sim_chooser_css, :shim_attribute_map,
          :shim_org_settings_file, :shim_org_access_file].each do |m|
         
         filename = self.send(m)

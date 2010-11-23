@@ -16,6 +16,17 @@ require 'shibkit/rack/simulator/mixins/logging'
 ## Default record filter mixin code
 require 'shibkit/rack/simulator/record_filter'
 
+## Models to manage sessions and authnz behaviour
+require 'shibkit/rack/simulator/models/account'
+require 'shibkit/rack/simulator/models/directory'
+require 'shibkit/rack/simulator/models/federation'
+require 'shibkit/rack/simulator/models/idp_session'
+require 'shibkit/rack/simulator/models/idp_service'
+require 'shibkit/rack/simulator/models/sp_service'
+require 'shibkit/rack/simulator/models/sp_session'
+require 'shibkit/rack/simulator/models/wayf_service'
+require 'shibkit/rack/simulator/models/wayf_session'
+
 module Shibkit
   
   module Rack
@@ -39,7 +50,11 @@ module Shibkit
       
         ## Rack app
         @app = app
-  
+        
+        ## Load federations, and everything they contain
+        Shibkit::Rack::Simulator::Model::Federation.load_records
+        
+        
       end
   
       ## Selecting an action and returning to the Rack stack 
@@ -52,7 +67,7 @@ module Shibkit
         idp  = Shibkit::Rack::Simulator::Model::IDPSession.new(env)
         sp   = Shibkit::Rack::Simulator::Model::SPSession.new(env)
         wayf = Shibkit::Rack::Simulator::Model::WAYFSession.new(env)
-        dir  = Shibkit::Rack::Simulator::Model::IDP_Session.new(env)
+        dir  = Shibkit::Rack::Simulator::Model::Directory.new(env)
         
         models = {:idp => idp, :sp => sp, :wayf => wayf, :dir => dir}
         
@@ -90,6 +105,8 @@ module Shibkit
             
               return idp_simple_chooser_action(env, models)
               
+            end
+            
           ## IDP SLO request?     
           when idp.logout_path
               

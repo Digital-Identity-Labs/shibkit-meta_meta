@@ -31,6 +31,7 @@ module Shibkit
     
       @sources     = Array.new
       @federations = Array.new
+      @read_at     = nil
       
       self.instance_eval(&block) if block
     
@@ -56,7 +57,8 @@ module Shibkit
       @sources.each do |source|
       
         @federations << MetaMeta.parse(source)
-      
+        @read_at     = Time.new
+        
       end
       
     end 
@@ -66,21 +68,25 @@ module Shibkit
         
         @federations = YAML::load(File.open(file_or_url))
         
+        return true
+        
     end
     
     ## Save entity data into a YAML file. 
     def save_cache_file(file)
         
-        ## Will *not* overwrite the example/default file in gem! TODO: this code is awful.
-        gem_data_path = "#{::File.dirname(__FILE__)}/data"
-        if file.include? gem_data_path 
-          raise "Attempt to overwrite gem's default metadata cache! Please specify your own file to save cache in"
-        end
+      ## Will *not* overwrite the example/default file in gem! TODO: this code is awful.
+      gem_data_path = "#{::File.dirname(__FILE__)}/data"
+      if file.include? gem_data_path 
+        raise "Attempt to overwrite gem's default metadata cache! Please specify your own file to save cache in"
+      end
         
-        ## Write the YAML to disk
-        File.open(file, 'w') do |out|
-           YAML.dump(@federations, out)
-         end
+      ## Write the YAML to disk
+      File.open(file, 'w') do |out|
+        YAML.dump(@federations, out)
+      end
+        
+      return true
         
     end    
     

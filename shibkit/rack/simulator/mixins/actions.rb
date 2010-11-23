@@ -136,7 +136,7 @@ module Shibkit
               :authentication_context_class => "TODO",
               :authentication_context_decl  => "TODO",
               :minutes_remaining            => "TODO",
-              :attributes_stats = {
+              :attributes_stats             => {
                 'todo' => 'todo'
               }
             }  
