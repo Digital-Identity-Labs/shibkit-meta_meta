@@ -56,16 +56,16 @@ module Shibkit
               puts "GGGG"
               puts fed_metadata.inspect
               
-              federation = Shibkit::Rack::Simulator::Model::Federation.find_or_create_by_uri do |f|
+              Shibkit::Rack::Simulator::Model::Federation.find_or_create_by_uri!(fed_metadata.federation_uri) do |f|
                 
                   puts "VVVV"
                   puts f.inspect
                 
                 f.from_metadata(fed_metadata)
                 
-              
-                
               end
+              
+              federation = Shibkit::Rack::Simulator::Model::Federation.find_by_uri!(fed_metadata.federation_uri)
               
               puts "XXXXXX"
               puts federation.inspect
@@ -76,7 +76,7 @@ module Shibkit
                 puts "FFFF"
                 puts entity_metadata
                 
-                idp = Shibkit::Rack::Simulator::Model::IDPService.find_or_create_by_uri(entity_metadata.entity_uri) do |i|
+                idp = Shibkit::Rack::Simulator::Model::IDPService.find_or_create_by_uri!(entity_metadata.entity_uri) do |i|
                 
                   i.from_metadata(entity_metadata)
                 
