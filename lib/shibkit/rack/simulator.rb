@@ -54,6 +54,7 @@ module Shibkit
         ## Load federations, and everything they contain
         Shibkit::Rack::Simulator::Model::Federation.load_records
         
+        puts Shibkit::Rack::Simulator::Model::Federation.all.to_yaml
         
       end
   

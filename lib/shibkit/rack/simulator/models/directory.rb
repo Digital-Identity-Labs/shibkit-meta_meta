@@ -9,6 +9,24 @@ module Shibkit
           ## Easy access to Shibkit's configuration settings
           include Shibkit::Configured
           
+          setup_storage
+          
+          ## 
+          attr_accessor :display_name
+          attr_accessor :idp
+          attr_accessor :principal_attribute
+          attr_accessor :type
+                  
+          
+          def set_defaults
+            
+            @idp      = nil
+            @accounts = []
+            @type     = :ldap
+            @principal_attribute = 'uid'
+            
+          end
+
           ## Is the request user_id or username valid? Returns valid user_id or nil
           def authenticate(username, credential=nil)
 
@@ -17,96 +35,76 @@ module Shibkit
           end
 
           ## Returns details for user
-          def lookup_user(user_id)
+          def lookup_account(username)
+
+            return @accounts[username.downcase]
 
           end
           
-          ## Returns list of all users as list
-          def users
-          
-          end
-
-          ## Returns the directory's organisation
-          def organisation
-          
-          
-          
-          end
-         
-          private
-=begin
-          
-          ## Provide user data for chooser and header injection
-          def Directory.load_user_data
-
-            unless @users && @orgtree
-
-              @users   = Hash.new
-              @orgtree = Hash.new 
-
-              fixture_data = YAML.load_file(config.sim_users_file )
-
-              fixture_data.each_pair do |label, record| 
-
-                record['shibsim_label'] = label.to_s.strip
-                rid  = record['id'].to_s
-                rorg = record['organisation'].to_s.strip
-
-                ## Salt to use is based on org name
-                record['idp_salt'] = Digest::SHA1.digest(rorg).chomp # TODO: make configurable
-
-                @users[rid]    =   record        
-                @orgtree[rorg] ||= Array.new
-
-                @orgtree[rorg] <<  record 
+          def load_accounts(source_file = config.sim_users_file)
+  
+            raise "No IDP has been defined" unless self.idp and self.idp.uri
+            
+            raw_records = Directory.import_users_file(source_file, idp.uri)
+            
+            unless raw_records and raw_records.size > 0
+            
+              return
+            
+            end
+            
+            @accounts = Hash.new 
+            
+            indexed_records = Hash.new
+                       
+            raw_records.each do |raw|
+              
+              principal = raw[principal_attribute].to_s.downcase
+              raise "User is missing a principal/username: \n #{raw.to_yaml}" if principal.empty?
+              
+              ## Insert record into hash using its principal/username as key
+              indexed_records[principal] = raw
+              
+            end
+            
+            puts indexed_records.to_yaml
+            
+            indexed_records.each_pair do |principal, user_record|
+              
+              account = Account.create do |a|
+                
+                a.attributes = user_record
+                a.principal = user_record[principal.to_s]
 
               end
-
+              
+              @accounts[account.principal.to_s.downcase] == account
+              
             end
-
+         
           end
           
-          ## Is the requested user valid?
-          def user_details_ok?(user_details)
-
-            return true if user_details and user_details.kind_of?(Hash) and
-                user_details.size > 1 
-
-            return false
-
+          ## Cache loading of YAML data file so it can be re-used for each directory
+          def Directory.import_users_file(source_file, directory)
+            
+            ## Cache this as it will be re-used for each directory
+            @@imported_data ||= YAML::load( File.open(source_file) )
+            
+            ## Add a default list if one is missing
+            # ...
+            
+            ## Grab the list of accounts for a particular IDP/directory
+            raw_records = @@imported_data[directory] || @@imported_data[:default]
+            
+            
+            return raw_records
+            
           end
           
-          ## Load data
-          load_user_data
-          
-          ########## Hmmm line
-          
-          ## Munge the data in attributes to match Shib/SAML expectations
-          def process_attribute_data(user_details)
-
-            munged_data = user_details.dup
-
-            ## Call out to filter (this is monkey patched by shibsim_filter.rb)
-            munged_data = user_record_filter(munged_data)
-
-            return munged_data
-
-          end
-          
-          ## Add the filter mixin if it exists
-          def load_filter_mixin
-
-            eval "extend #{config.sim_record_filter_module}"
-
-          end
-
-          def check_state
-
-            raise "No user data!" unless @users.size > 0 
-            raise "No organisation labels!" unless @orgtree.size > 0
-
-          end
-=end          
+          private
+ 
+ 
+ 
         end
       end
     end
