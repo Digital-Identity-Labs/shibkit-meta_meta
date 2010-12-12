@@ -5,26 +5,51 @@ module Shibkit
         class IDPSession
 
           ## Easy access to Shibkit's configuration settings
-          include Shibkit::Configured
+          extend Shibkit::Configured
+          
+          attr_reader :idp_service
             
           ## A new IDP Session
-          def initialize(env)
+          def initialize(env, idp_id=nil)
   
             ## Store reference to the Rack session: all object data will be stored
             ## in here - this class is really just an interface to part of session
             ## and aspects of configuration 
             @env = env
-  
+            
+            ##
+            @idp_id = idp_id
+              
             ## Make sure we have a data structure
-            @env['rack.session']['shibkit-simulator']        ||= Hash.new
-            @env['rack.session']['shibkit-simulator']['idp'] ||= Hash.new
-  
+            @env['rack.session']['shibkit-simulator']                  ||= Hash.new
+            @env['rack.session']['shibkit-simulator'][:active_user]      = nil 
+            @env['rack.session']['shibkit-simulator']['idps']          ||= Hash.new
+            @env['rack.session']['shibkit-simulator']['idps'][@idp_id] ||= Hash.new
+            
+            ## Check for limit to number of IDP sessions to prevent session overflow
+            # ...
+            
+            ## Which IDP service are we represening  a session in?
+            begin
+              @idp_service = Shibkit::Rack::Simulator::Model::IDPService.find(@idp_id)
+            rescue
+              
+              ## TODO need to raise exception here to deal with bad IDP ID.
+              raise Rack::Simulator::ResourceNotFound, "Unable to find IDP '#{idp_id}'"
+              
+            end
+            
+            ## Check for old values and update them
+            # ...
+            
           end
-  
+          
+          
           ## Declare that the user has logged in to the SP
-          def login!(user_id)
+          def login!(user_id=active_user)
 
             idp_session[:user_id]     = idp_assertion.sim_user_id
+            idp_session[:idp_id]      = "" # TODO
             idp_session[:login_time]  = Time.new
             idp_session[:access_time] = idp_session[:login_time]
            
@@ -55,7 +80,7 @@ module Shibkit
           end
 
           ## Is the specified user logged in at the SP?
-         def logged_in?(user_id)
+         def logged_in?(user_id=active_user)
 
             return false if expired?
            
@@ -113,45 +138,7 @@ module Shibkit
            return Time.new - Time.login
 
          end
-
-         ## Location of the fake SP's session status page
-         def login_path
-        
-           return config.sim_idp_path + "/login"
-
-         end
-
-
-         ## Location of the fake SP's session status page
-         def logout_path
-
-           return config.sim_idp_path + "/logout"
-
-         end
-         
-         
-         ## Location of the fake SP's session status page
-         def new_status_path
-
-           return config.sim_idp_session_path
-
-         end
-         
-         ## Location of the fake SP's session status page
-         def old_status_path
-
-           return config.sim_idp_session_path
-
-         end
-              
-         ## Location of the fake SP's session status page
-         def session_path
-
-           return config.sim_idp_session_path
-
-         end
             
-         
          ## When did the user first login? 
          def login_time
            
@@ -196,15 +183,15 @@ module Shibkit
          ## The Shibboleth SP entity ID
          def entity_id
 
-          return config.sim_sp_entity_id
+          return IDPSession.config.sim_sp_entity_id
 
          end
        
          ## Does the IDP allow Single Sign On?
          def sso?
 
-           ## Can Chooser IDPs have Single Sign On? # TODO needs per-IDP settings too
-           return config.sim_chooser_idp_sso
+           ##  # TODO needs per-IDP settings too
+           return true
 
          end
 
@@ -214,13 +201,50 @@ module Shibkit
            return idp_session[:idp_assertion]
    
          end
+         
+         ## Location of the fake SP's session status page
+         def login_path
+        
+           return "/login"
 
+         end
+
+
+         ## Location of the fake SP's session status page
+         def logout_path
+
+           return "/logout"
+
+         end
+         
+         
+         ## Location of the fake SP's session status page
+         def new_status_path
+
+           return IDPSession.config.sim_idp_new_status_path
+
+         end
+         
+         ## Location of the fake SP's session status page
+         def old_status_path
+
+           return IDPSession.config.sim_idp_old_status_path
+
+         end
+              
+         ## Location of the fake SP's session status page
+         def session_path
+
+           return IDPSession.config.sim_idp_session_path
+
+         end
+         
          private
        
          ## Convenient accessor to this object's session data
          def idp_session
          
-           return @env['rack.session']['shibkit-simulator']['idp'] 
+           return @env['rack.session']['shibkit-simulator']['idps']
          
          end
 

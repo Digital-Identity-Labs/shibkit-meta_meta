@@ -35,15 +35,6 @@ module Shibkit
           
           end
           
-          ## Returns Directory for this organisation
-          def directory
-            
-            
-            
-          end
-          
-          
-          
         end
       end
     end

@@ -5,10 +5,10 @@ module Shibkit
         class WAYFSession
           
           ## Easy access to Shibkit's configuration settings
-          include Shibkit::Configured
+          extend Shibkit::Configured
           
           ## The optional WAYF path used in :wayf chooser mode  
-          def sim_wayf_path
+          def self.path
 
             return config.sim_wayf_path
 

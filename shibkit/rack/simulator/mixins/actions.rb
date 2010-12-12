@@ -3,13 +3,27 @@ module Shibkit
     class Simulator
       module Mixin
         module Actions
+          
+          ## Displayed if no IDP ID is provided, or if it cannot be found
+          def idp_404_action(env, sim_session, options={})
+          
+            message = options[:message]
+            code = options[:code].to_i || 404
+            
+            locals = get_locals(
+              :idps => [],
+              :page_title => "IDP Cannot Be Found"
+              ) 
+            
+            page_body = render_page(:idp_404, locals)
 
+            return code, CONTENT_TYPE, [page_body.to_s]
+          
+          end
+          
           ## Controller for
           def idp_status_action(env, options={})
-            
-            
-            
-            
+                   
             message = options[:message]
             code = options[:code].to_i || 200
             
@@ -203,7 +217,14 @@ module Shibkit
 
           end
 
-
+          def get_locals(*specified_locals)
+            
+            return {
+              :page_title => "Shibkit",
+              :code       => 200
+            }.merge *specified_locals
+            
+          end
 
         end
       end

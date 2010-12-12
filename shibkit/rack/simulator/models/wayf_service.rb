@@ -4,21 +4,28 @@ module Shibkit
   module Rack
     class Simulator
       module Model
-        class WAYFService < EntityService
-          
-          include SuperModel::RandomID
-          
+        class WAYFService < Base
           
           ## Easy access to Shibkit's configuration settings
-          include Shibkit::Configured
+          extend Shibkit::Configured
           
+          setup_storage
           
-          #validates_presence_of :name, :uri
-
-          ## Returns Directory for this organisation
-          def xdirectory
+          ## Return all federations that contain IDPs
+          def federations
             
+            return Federation.all.collect {|f| f if !f.idps.empty?}.compact
             
+          end
+          
+          ## Return all idps that contain users
+          def idps
+            
+            ## TODO: this bit if bugged and bodged 
+            return IDPService.all.collect {|i|
+               i if i and
+               i.directory and
+               !i.directory.accounts.empty?}.compact
             
           end
           

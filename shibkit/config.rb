@@ -51,9 +51,10 @@ module Shibkit
       :sim_idp_session_expiry         => 300,
       :sim_sp_session_expiry          => 300,
       :sim_sp_session_idle            => 300,
-      :sim_idp_path                   => "/shibsim_idp/",
+      :sim_idp_base_path              => "/sim_idp/",
       :sim_idp_old_status_path        => "/idp/profile/Status",
       :sim_idp_new_status_path        => "/idp/status",
+      :sim_idp_session_path           => "/idp/session", # This is incorrect - FIX
       :sim_wayf_path                  => "/shibsim_wayf/",
       :sim_users_file                 => "/data/simulator_user_directory.yml".to_absolute_path,
       :sim_users_file_format          => :fixture,
@@ -142,7 +143,7 @@ module Shibkit
       return dump
 
     end
-    
+      
     private
     
     ## Create absolute filepath from path relative to this file
@@ -216,7 +217,7 @@ module Shibkit
       #
       
        ## Check URL paths are valid
-      [:home_path, :exit_path, :gateway_path, :sim_idp_path, :sim_wayf_path].each do |m|
+      [:home_path, :exit_path, :gateway_path, :sim_idp_base_path, :sim_wayf_path].each do |m|
         
         path     = self.send(m)
         test_url = "http://localhost" + path

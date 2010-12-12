@@ -16,6 +16,7 @@ module Shibkit
           attr_accessor :idp
           attr_accessor :principal_attribute
           attr_accessor :type
+          attr_accessor :accounts
                   
           
           def set_defaults
@@ -40,6 +41,7 @@ module Shibkit
             return @accounts[username.downcase]
 
           end
+          
           
           def load_accounts(source_file = config.sim_users_file)
   
@@ -66,22 +68,20 @@ module Shibkit
               indexed_records[principal] = raw
               
             end
-            
-            puts indexed_records.to_yaml
-            
+
             indexed_records.each_pair do |principal, user_record|
               
               account = Account.create do |a|
                 
                 a.attributes = user_record
-                a.principal = user_record[principal.to_s]
+                a.principal  = principal
 
               end
               
-              @accounts[account.principal.to_s.downcase] == account
+              @accounts[principal] = account
               
             end
-         
+            
           end
           
           ## Cache loading of YAML data file so it can be re-used for each directory
