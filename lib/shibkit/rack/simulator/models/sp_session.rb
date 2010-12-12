@@ -21,6 +21,7 @@ module Shibkit
             ## Make sure we have a data structure
             @env['rack.session']['shibkit-simulator']       ||= Hash.new
             @env['rack.session']['shibkit-simulator']['sp'] ||= Hash.new
+             
             
           end
           
@@ -81,20 +82,6 @@ module Shibkit
             return false if Time.new < session_expires
             
           end
-
-          ## Location of the fake SP's session status page
-          def session_path
-
-            return config.sim_sp_session_path
-
-          end
-          
-          ## Location of the fake SP's logout page
-          def logout_path
-
-            return config.sim_sp_logout_path
-
-          end
           
           ## When did the user first login? 
           def login_time
@@ -130,21 +117,7 @@ module Shibkit
             return Time.new - Time.login
 
           end
-
-          ## The Shibboleth SP application label (defaults to default)
-          def application_id
-
-            return config.sim_application
-
-          end
-          
-          ## The Shibboleth SP entity ID
-          def entity_id
-
-            return config.sim_sp_entity_id
-
-          end
-          
+ 
           ## Details about the user passed by IDP
           def idp_assertion
             
@@ -266,6 +239,44 @@ module Shibkit
             attribute_headers.each_key { |header| @env[header.to_s] = nil }
           
           end
+          
+          
+          ## URL paths that are protected by Shibboleth
+          def masked_paths
+            
+            return config.path_auth_masks
+            
+          end
+          
+          ## Location of the fake SP's session status page
+          def session_path
+
+            return config.sim_sp_session_path
+
+          end
+          
+          ## Location of the fake SP's logout page
+          def logout_path
+
+            return config.sim_sp_logout_path
+
+          end
+          
+          
+          ## The Shibboleth SP application label (defaults to default)
+          def application_id
+
+            return config.sim_application
+
+          end
+          
+          ## The Shibboleth SP entity ID
+          def entity_id
+
+            return config.sim_sp_entity_id
+
+          end
+         
           
           private 
           

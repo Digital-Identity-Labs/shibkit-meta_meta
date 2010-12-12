@@ -15,6 +15,7 @@ require 'shibkit/rack/simulator/mixins/logging'
 
 ## Default record filter mixin code
 require 'shibkit/rack/simulator/record_filter'
+require 'shibkit/rack/simulator/exceptions'
 
 ## Models to manage sessions and authnz behaviour
 require 'shibkit/rack/simulator/models/account'
@@ -54,93 +55,135 @@ module Shibkit
         ## Load federations, and everything they contain
         Shibkit::Rack::Simulator::Model::Federation.load_records
         
-        puts Shibkit::Rack::Simulator::Model::Federation.all.to_yaml
-        
       end
-  
+      
       ## Selecting an action and returning to the Rack stack 
       def call(env)
       
         ## Peek at user input, they might be talking to us
         request = ::Rack::Request.new(env)
         
-        ## Models used to adjust session states
-        idp  = Shibkit::Rack::Simulator::Model::IDPSession.new(env)
-        sp   = Shibkit::Rack::Simulator::Model::SPSession.new(env)
-        wayf = Shibkit::Rack::Simulator::Model::WAYFSession.new(env)
-        dir  = Shibkit::Rack::Simulator::Model::Directory.new(env)
-        
-        models = {:idp => idp, :sp => sp, :wayf => wayf, :dir => dir}
-        
+        ## Model representing SP state (knows about IDPs, WAYF, etc)
+        sp_session = Model::SPSession.new(env)
+
         ## Catching exceptions in the workflow/routing
         begin
 
           ## Route to actions according to requested URLs
           case request.path
           
-          ## IDP status information
-          when idp.status_path
+          ## Does the path match the IDP regex?
+          when idp_base_path_regex
             
-            return idp_status_action(env, models)
-            
-          ## IDP session information
-          when idp.session_path
-            
-            return idp_session_action(env, models) 
-          
-          ## Request is for the fake IDP's login function
-          when idp.login_path
-          
-            ## Specified a user? (GET or POST) then try logging in
-            if request.params['user'] 
+            begin
               
-              return idp_login_action(env, models)
-            
-            ## Already logged in? With SSO log in again.
-            elsif idp.sso? and idp.logged_in?
+              ## Extract the IDP id
+              path = request.path.gsub(config.sim_idp_base_path, "")
+              bits = %r|/*(\d+)(.*)|.match(path)
               
-              return idp_sso_action(env, models)
-            
-            ## Show the chooser page to present login options  
-            else
-            
-              return idp_simple_chooser_action(env, models)
+              raise "Bad IDP path '#{path}'" unless bits
               
+              idp_id  =  bits[1]
+              idp_path = bits[2] || '/'
+              
+              puts bits.inspect
+              
+              ## Get the IDP session object
+              idp_session = Model::IDPSession.new(env, idp_id) 
+              
+              puts idp_session.inspect
+              
+              ## Missing IDP id? Show a 404 sort of thing
+              unless idp_id && idp_session and idp_session.idp_service
+                
+                puts "BOOOOOOOOOOO"
+                
+                raise Rack::Simulator::ResourceNotFound, "Unable to find IDP '#{idp_id}'"
+
+              end
+              
+            rescue Rack::Simulator::ResourceNotFound => oops
+              
+              puts "Triggering a 404! Woo!"
+              
+              return idp_404_action(env, idp_session, {})
+            
             end
+          
+            ## Check again
+            case idp_path
+          
+            ## IDP status information
+            when idp_session.new_status_path
             
-          ## IDP SLO request?     
-          when idp.logout_path
+              return idp_new_status_action(env, sp_session)
               
-            return idp_logout_action(env, models)
+            ## IDP status information
+            when idp_session.old_status_path
+
+              return idp_old_status_action(env, sp_session)
+
+            ## IDP session information
+            when idp_session.session_path
             
+              return idp_session_action(env, sp_session) 
+          
+            ## Request is for the fake IDP's login function
+            when '/', idp_session.login_path
+          
+              ## Specified a user? (GET or POST) then try logging in
+              if request.params['user'] 
+              
+                return idp_login_action(env, sp_session)
+            
+            
+              ## Already logged in? With SSO log in again.
+              elsif idp_session.sso? and idp_session.logged_in?
+              
+                return idp_sso_action(env, sp_session)
+            
+              ## Show the chooser page to present login options  
+              else
+            
+                return idp_simple_chooser_action(env, sp_session)
+              
+              end
+            
+            ## IDP SLO request?     
+            when idp_session.logout_path
+              
+              return idp_logout_action(env, sp_session)
+          
+            end
+          
           ## WAYF request?
-          when wayf.path
+          when Model::WAYFSession.path
               
-            return wayf_action(env, models)  
+            return wayf_action(env, sp_session)  
             
           ## SP session status page?
-          when sp.session_path
+          when sp_session.session_path
               
-            return sp_session_status_action(env, models)
+            return sp_session_status_action(env, sp_session)
           
           ## SP protected page?    
-          when sp.masked_path
+          when sp_session.masked_paths[0]
             
             ## Valid session in SP
-            if sp.logged_in?
+            if sp_session.logged_in?
               
-              return sp_protected_page_action(env, models)
+              return sp_protected_page_action(env, sp_session)
               
             else
               
-              return sp_login_action(env, models)
+              return sp_login_action(env, sp_session)
               
             end
             
           else
             
             ## Do nothing, pass on up to the application
-            return @app.call(env, models)
+            return @app.call(env)
             
         end
 
@@ -155,7 +198,14 @@ module Shibkit
       end
   
       private
-  
+      
+      def idp_base_path_regex
+
+        normalised_path = config.sim_idp_base_path.gsub(/\/$/, '')
+        return Regexp.new(normalised_path)
+
+      end
+      
       # ...
   
     end

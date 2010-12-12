@@ -5,37 +5,37 @@ module Shibkit
         module Render
 
           ## Load and prepare HAML views
-          def views
-
-            unless @views
-
-              @views = Hash.new
-
-              VIEWS.each do |view| 
-
-                view_file_location = "#{::File.dirname(__FILE__)}/simulator/views/#{view.to_s}.haml"
-                @views[view] = IO.read(view_file_location)
-
-              end
-
+          def view(view_name)
+            
+            @views ||= Hash.new
+            
+            unless @views[view_name]
+      
+              view_file_location = "#{::File.dirname(__FILE__)}/../views/#{view_name.to_s}.haml"
+              @views[view_name]  = IO.read(view_file_location)
+              
             end
 
-            return @views
+            return @views[view_name]
 
           end
 
           ## Display a chooser page
-          def render_page(view, locals={})
+          def render_page(view_name, locals={})
 
             ## HAML rendering options
             Haml::Template.options[:format] = :html5
-
-            ## Render and return the page
-            haml = Haml::Engine.new(views[view])
-            return haml.render(Object.new, locals)
-
-          end
-
+            
+            ## Render the content
+            content = Haml::Engine.new(view(view_name))
+            locals[:content_html] = content.render(Object.new, locals)
+            
+            ## Pass variables with rendered content into the page & render
+            page = Haml::Engine.new(view(:layout))
+            
+            return page.render(Object.new, locals)
+            
+          end  
 
         end
       end

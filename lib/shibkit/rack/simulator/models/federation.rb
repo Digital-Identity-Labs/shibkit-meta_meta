@@ -62,7 +62,7 @@ module Shibkit
               federation = Shibkit::Rack::Simulator::Model::Federation.create do |f|
                   
                  f.from_metadata(fed_metadata)
-
+                                                
                  ## Each IDP for this federation too
                  fed_metadata.entities.each do |entity_metadata|
 
@@ -75,10 +75,13 @@ module Shibkit
                    dir.display_name = entity_metadata.organisation.display_name + " User Directory"
                    dir.idp  = idp
                    dir.load_accounts(Federation.config.sim_users_file)
-                     
+                   dir.save
+                   
                    idp.directory = dir
+                   idp.save
                    
                    f.idps << idp
+                   f.save
 
                  end
                 
