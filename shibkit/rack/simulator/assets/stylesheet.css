@@ -1,0 +1,32 @@
+
+body {
+ background-color: #eee;	
+}
+
+#browser_error_message {
+	margin: 50px;
+	border: 1px solid #999;
+	color: black;
+	background-color: #fff;
+	padding-top: 10px;
+	padding-left: 80px;
+	padding-right: 50px;
+	padding-bottom: 50px;
+	background-image: url('images/alert');
+	background-repeat:no-repeat;
+	background-position: 15px 15px;
+	-moz-border-radius: 15px;
+	border-radius: 15px;
+}
+
+#browser_error_message h1 {
+	margin: 0px;
+	padding: 0px;
+  border-bottom: 1px solid #999;	
+}
+
+#footer {
+	text-align: center;
+}
+
+

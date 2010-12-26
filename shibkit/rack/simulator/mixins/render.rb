@@ -3,7 +3,23 @@ module Shibkit
     class Simulator
       module Mixin
         module Render
+          
+          ## Get static data
+          def asset(asset_name)
+            
+            @assets ||= Hash.new
+            
+            unless @assets[asset_name]
+      
+              asset_file_location = "#{::File.dirname(__FILE__)}/../assets/#{asset_name.to_s}"
+              @assets[asset_name]  = IO.read(asset_file_location)
+              
+            end
 
+            return @assets[asset_name]
+            
+          end
+          
           ## Load and prepare HAML views
           def view(view_name)
             
@@ -31,7 +47,7 @@ module Shibkit
             locals[:content_html] = content.render(Object.new, locals)
             
             ## Pass variables with rendered content into the page & render
-            page = Haml::Engine.new(view(:layout))
+            page = Haml::Engine.new(view(locals[:layout] || :layout ))
             
             return page.render(Object.new, locals)
             
