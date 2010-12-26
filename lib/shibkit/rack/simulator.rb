@@ -45,7 +45,6 @@ module Shibkit
     
       ## Middleware application components and behaviour
       CONTENT_TYPE   = { "Content-Type" => "text/html; charset=utf-8" }
-      VIEWS          = [:user_chooser, :fatal_error, :session_status]
   
       def initialize(app)
       
@@ -72,6 +71,21 @@ module Shibkit
           ## Route to actions according to requested URLs
           case request.path
           
+          ## Return the global stylesheet
+          when "/shibsim/stylesheet.css"
+          
+            return stylesheet_action(env, nil, {})
+          
+          ## Return image file
+          when /\/shibsim\/images\//
+            
+            matches = request.path.match /\/images\/(\w+)(\.*.*)/
+            specified = matches[1]
+            
+            return specified ?
+              image_action(env, nil, {:image => specified}) :
+              browser_404_action(env, nil, {})
+              
           ## Does the path match the IDP regex?
           when idp_base_path_regex
             
@@ -85,32 +99,24 @@ module Shibkit
               
               idp_id  =  bits[1]
               idp_path = bits[2] || '/'
-              
-              puts bits.inspect
-              
+
               ## Get the IDP session object
               idp_session = Model::IDPSession.new(env, idp_id) 
-              
-              puts idp_session.inspect
-              
+
               ## Missing IDP id? Show a 404 sort of thing
               unless idp_id && idp_session and idp_session.idp_service
-                
-                puts "BOOOOOOOOOOO"
-                
+ 
                 raise Rack::Simulator::ResourceNotFound, "Unable to find IDP '#{idp_id}'"
 
               end
               
             rescue Rack::Simulator::ResourceNotFound => oops
-              
-              puts "Triggering a 404! Woo!"
-              
-              return idp_404_action(env, idp_session, {})
+      
+              return browser_404_action(env, idp_session, {})
             
             end
           
-            ## Check again
+            ## Check again, focusing on the IDP's subpath
             case idp_path
           
             ## IDP status information
@@ -135,8 +141,7 @@ module Shibkit
               if request.params['user'] 
               
                 return idp_login_action(env, sp_session)
-            
-            
+                    
               ## Already logged in? With SSO log in again.
               elsif idp_session.sso? and idp_session.logged_in?
               

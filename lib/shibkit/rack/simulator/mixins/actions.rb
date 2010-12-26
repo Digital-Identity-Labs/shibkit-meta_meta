@@ -4,6 +4,52 @@ module Shibkit
       module Mixin
         module Actions
           
+          ## Return the global stylesheet
+          def stylesheet_action(env, nil_session, options={})
+              
+            code = 200
+            page_body = asset("stylesheet.css")
+
+            return code, {"Content-Type" => "text/css; charset=utf-8"}, [page_body.to_s]
+        
+          end
+          
+          ## Return the appropriate image for something from a path ending in /image/something
+          def image_action(env, nil_session, options={})
+            
+            ## TODO: Needs to be a bit fancier and less SVG-hardcoded (made into another lib?)
+      
+            specified = options[:specified] || "alert"
+            
+            page_body = asset(specified + ".svg")
+            
+            code = 200
+            
+            return code, {"Content-Type" => "image/svg+xml"}, [page_body.to_s]
+        
+          end
+          
+          ## Displayed if no IDP ID is provided, or if it cannot be found
+          def browser_404_action(env, sim_session, options={})
+          
+            message = options[:message]
+            
+            code = 404
+            
+            locals = get_locals(
+              :layout => :browser_layout,
+              :idps => [],
+              :code => code,
+              :requested => env['REQUEST_URI'],
+              :page_title => "Simulated Server Not Found"
+              ) 
+            
+            page_body = render_page(:browser_404, locals)
+
+            return code, CONTENT_TYPE, [page_body.to_s]
+          
+          end
+          
           ## Displayed if no IDP ID is provided, or if it cannot be found
           def idp_404_action(env, sim_session, options={})
           
@@ -17,7 +63,7 @@ module Shibkit
             
             page_body = render_page(:idp_404, locals)
 
-            return code, CONTENT_TYPE, [page_body.to_s]
+            return 404, CONTENT_TYPE, [page_body.to_s]
           
           end
           
@@ -220,8 +266,9 @@ module Shibkit
           def get_locals(*specified_locals)
             
             return {
-              :page_title => "Shibkit",
-              :code       => 200
+              :page_title   => "Shibkit",
+              :code         => 200,
+              :content_type => CONTENT_TYPE
             }.merge *specified_locals
             
           end
