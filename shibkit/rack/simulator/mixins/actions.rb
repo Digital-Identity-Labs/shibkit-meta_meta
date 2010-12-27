@@ -67,19 +67,50 @@ module Shibkit
           
           end
           
-          ## Controller for
-          def idp_status_action(env, options={})
+          ## Controller for new-style IDP status
+          def idp_new_status_action(env, idp_session, options={})
                    
             message = options[:message]
+            code = options[:code].to_i || 404
+            
+            locals = get_locals(
+              :idps => [],
+              :layout => :plain_layout,
+              :page_title => "IDP Status",
+              :start_time => START_TIME.utc.xmlschema,
+              :time_now   => Time.new.utc.xmlschema,
+              :entity_id  => idp_session.idp_service.uri
+              ) 
+            
+            page_body = render_page(:idp_new_system_status, locals)
+
+            return 404, {"Content-Type" => "text/plain; charset=utf-8"}, [page_body.to_s]
+            
+          end  
+               
+          ## Controller for old "OK" status page
+          def idp_old_status_action(env, idp_session, options={})
+                   
             code = options[:code].to_i || 200
             
-            render_locals = {}
+            render_locals = {:layout => :plain_layout}
             
-            page_body = render_page(:x, render_locals)
+            ## Very basic check to see if we have an IDP...
+            if idp_session.idp_service
+              
+              page_body = render_page(:idp_old_system_status, locals)
  
-            return code, CONTENT_TYPE, [page_body.to_s]
+              return code, {"Content-Type" => "text/plain; charset=utf-8"}, [page_body.to_s]
+   
+            else
+              
+              raise Rack::Simulator::ResourceNotHappy
+              
+            end
             
           end
+          
+
           
           ## Controller for
           def idp_session_action(env, options={})

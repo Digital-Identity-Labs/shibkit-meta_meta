@@ -45,7 +45,8 @@ module Shibkit
     
       ## Middleware application components and behaviour
       CONTENT_TYPE   = { "Content-Type" => "text/html; charset=utf-8" }
-  
+      START_TIME     = Time.new
+    
       def initialize(app)
       
         ## Rack app
@@ -99,13 +100,13 @@ module Shibkit
               
               idp_id  =  bits[1]
               idp_path = bits[2] || '/'
-
+              
               ## Get the IDP session object
               idp_session = Model::IDPSession.new(env, idp_id) 
 
               ## Missing IDP id? Show a 404 sort of thing
               unless idp_id && idp_session and idp_session.idp_service
- 
+                
                 raise Rack::Simulator::ResourceNotFound, "Unable to find IDP '#{idp_id}'"
 
               end
@@ -122,18 +123,13 @@ module Shibkit
             ## IDP status information
             when idp_session.new_status_path
             
-              return idp_new_status_action(env, sp_session)
+              return idp_new_status_action(env, idp_session)
               
             ## IDP status information
             when idp_session.old_status_path
 
-              return idp_old_status_action(env, sp_session)
+              return idp_old_status_action(env, idp_session)
 
-            ## IDP session information
-            when idp_session.session_path
-            
-              return idp_session_action(env, sp_session) 
-          
             ## Request is for the fake IDP's login function
             when '/', idp_session.login_path
           
