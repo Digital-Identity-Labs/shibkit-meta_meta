@@ -1,6 +1,7 @@
 Shibkit
 =======
 
+
 Shibkit is a set of basic tools to help with Shibboleth SP web application development. It supports web applications based on Rack, Sinatra or Rails, although most features are focused on Rails. Rails 3.0 or higher is required.
 
 Quick'n'Dirty setup notes that really need to be replaced by something coherent
