@@ -56,9 +56,9 @@ module Shibkit
           end
           
           ## Find a single record by id (no search! Use .collect)
-          def self.find(oid)
-            
-            return @saved_records[oid]
+          def self.find(object_id)
+
+            return @saved_records[object_id.to_s]
           
           end
           
@@ -66,6 +66,13 @@ module Shibkit
           def self.all
           
             return @saved_records.values
+          
+          end
+          
+          ## List all records
+          def self.all_indexed
+          
+            return @saved_records
           
           end
           
@@ -97,14 +104,14 @@ module Shibkit
           ## Save to class instance variable
           def self.store(item)
             
-            @saved_records[item.id] = item
+            @saved_records[item.id.to_s] = item
           
           end
           
           ## Save to class instance variable
           def self.unstore(item)
             
-            @saved_records[item.id].delete
+            @saved_records[item.id.to_s].delete
             
             
           end
@@ -122,7 +129,7 @@ module Shibkit
             
             ## Class object variable to store id-keyed hash of objects
             @saved_records = Hash.new
-            @nid   = 1
+            @nid   = 0
             
           end
           

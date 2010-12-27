@@ -11,8 +11,13 @@ module Shibkit
 
       end
   
-      ## For triggering 404s
+      ## For triggering fake browser 404s
       class ResourceNotFound < Shibkit::RackMiddlewareError 
+
+      end
+      
+      ## For triggering fake IDP 500s 
+      class ResourceNotHappy < Shibkit::RackMiddlewareError 
 
       end
       

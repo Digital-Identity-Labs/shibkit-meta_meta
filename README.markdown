@@ -87,6 +87,12 @@ Various utils for creating cargo-culted SP "data".
 Library for reading a federation metadata XML file into in-memory objects. Doesn't completely work at present but considering the low LOC I'm suprised it works at all. Needs work.
 
 
+### Credits
+
+Thanks to
+
+ - Tango Icon Theme 
+
 
 Note on Patches/Pull Requests
 =============================
