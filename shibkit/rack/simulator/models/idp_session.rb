@@ -8,7 +8,8 @@ module Shibkit
           extend Shibkit::Configured
           
           attr_reader :idp_service
-            
+          attr_reader :active_user
+          
           ## A new IDP Session
           def initialize(env, idp_id=nil)
   
@@ -43,8 +44,7 @@ module Shibkit
             # ...
             
           end
-          
-          
+               
           ## Declare that the user has logged in to the SP
           def login!(user_id=active_user)
 
@@ -86,12 +86,6 @@ module Shibkit
            
             ## Has the fake IDP 'authenticated'?
             return false unless idp_session[:user_id].to_i > 0
-
-            ## Check that the *same* user has already authenticated with the fake SP too.
-            #return true if env["rack.session"]['shibkit-simulator']['idp'][:user_id].to_i == 
-            #  sim_idp_session(env)[:user_id].to_i
-            #return false
-           
            
             return idp_session[:user_id] == user_id
 
@@ -100,21 +94,21 @@ module Shibkit
          ## Has the session expired?
          def expired?
            
-           return false if Time.new < session_expires
+           return false #if Time.new < session_expires
            
          end
 
          ## When did the user first login? 
          def login_time
            
-           return idp_session[:login_time]
+           return idp_session[:login_time] 
            
          end
          
          ## Time of most recent page view before this request
          def previous_access_time
           
-           return idp_session[:access_time]
+           return idp_session[:access_time] || 0
            
          end
          
@@ -125,32 +119,18 @@ module Shibkit
            
          end
          
-         ## Time when session expires
+         ## Time when session expires (fixed from first login time)
          def session_expires
-
-           return Time.new - idp_session[:login_time]
-
+            
+            return login_time + 3600
+             
          end
 
          ## How long has this session been idle? (in minutes)
          def session_idle
 
-           return Time.new - Time.login
+           return Time.new - previous_access_time
 
-         end
-            
-         ## When did the user first login? 
-         def login_time
-           
-           return idp_session[:login_time]
-           
-         end
-         
-         ## Time of most recent page view before this request
-         def previous_access_time
-           
-           return idp_session[:access_time]
-           
          end
          
          ## IP address of accessing client

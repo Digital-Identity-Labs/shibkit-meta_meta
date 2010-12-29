@@ -29,4 +29,42 @@ body {
 	text-align: center;
 }
 
+#content {
+	background-color: white;
+}
 
+#login_box {
+	border: 2px solid black;
+	width: 350px;
+	height: 300px;
+	float: right;
+	background-color: lightblue;
+	-moz-border-radius: 15px;
+	border-radius: 15px;
+}
+
+form#login {
+	padding: 10px;
+	margin: 5px;
+}
+
+form#login label {
+	clear: both;
+	align: left;
+	display: block;
+}
+
+form#login input {
+	clear: both;
+	align: left;
+	display: block;
+}
+
+form#login input#submit {
+	width: 100px;
+}
+
+#information_box {
+	float: left;
+	
+}
