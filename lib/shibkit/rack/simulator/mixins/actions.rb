@@ -4,6 +4,16 @@ module Shibkit
       module Mixin
         module Actions
           
+          
+          ## Redirect browser to a new Simulator URL
+          def redirect_to(path)
+            
+            url = path
+            
+            return 302, {'Location'=> url }, []
+            
+          end
+          
           ## Return the global stylesheet
           def stylesheet_action(env, nil_session, options={})
               
@@ -84,7 +94,7 @@ module Shibkit
             
             page_body = render_page(:idp_new_system_status, locals)
 
-            return 404, {"Content-Type" => "text/plain; charset=utf-8"}, [page_body.to_s]
+            return 200, {"Content-Type" => "text/plain; charset=utf-8"}, [page_body.to_s]
             
           end  
                
@@ -110,41 +120,70 @@ module Shibkit
             
           end
           
+          ## Display login page
+          def idp_form_action(env, idp_session, options={})
+          
+            message = options[:message]
+            
+            code = 200
+            
+            locals = get_locals(
+              :layout => :layout,
+              :idps => [],
+              :page_title => "Login at this lovely IDP",
+              :message => message
+              ) 
+            
+            page_body = render_page(:idp_form, locals)
 
+            return code, CONTENT_TYPE, [page_body.to_s]
+           
+          end
+          
           
           ## Controller for
-          def idp_session_action(env, options={})
-            
-            
-            
-            
+          def idp_login_action(env, idp_session, options={})
+          
             message = options[:message]
-            code = options[:code].to_i || 200
             
-            render_locals = {}
+            code = 200
             
-            page_body = render_page(:x, render_locals)
- 
-            return code, CONTENT_TYPE, [page_body.to_s]
+            ## Are we passed suitable info?
+            req = ::Rack::Request.new(env)
+            username = req.params['username']
+            password = req.params['password']
+            dest_raw = req.params['destination']
+             
+            ## Are we passed suitable info?
+            if username.empty? or password.empty?
+            
+              redirect_to "sim_idp/#{idp_session.id}/"
+            
+            end
+            
+            ## Authenticate the user?
+            if idp_session.login!(username)
+            
+               locals = get_locals(
+                 :layout => :layout,
+                 :idps => [],
+                 :page_title => "Forwarding you...",
+                 :destination => URI.unescape(dest_raw)
+                 ) 
+
+               page_body = render_page(:idp_form, locals)
+
+               return code, CONTENT_TYPE, [page_body.to_s]
+            
+            else
+              
+              ## User has not logged in. Probably doesn't exist!
+              return redirect_to "sim_idp/#{idp_session.id}/"
+              
+            end
             
           end
           
-          ## Controller for
-          def idp_login_action(env, options={})
-            
-            
-            
-            
-            message = options[:message]
-            code = options[:code].to_i || 200
-            
-            render_locals = {}
-            
-            page_body = render_page(:x, render_locals)
- 
-            return code, CONTENT_TYPE, [page_body.to_s]
-            
-          end
           
           ## Controller for
           def idp_sso_action(env, options={})

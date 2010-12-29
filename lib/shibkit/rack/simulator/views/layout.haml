@@ -4,11 +4,10 @@
     %title=page_title
     %meta{"http-equiv" => "Content-Type", :content => content_type}
     %link{"rel" => "stylesheet", "href" => "/shibsim/stylesheet.css", "type" => "text/css"}
-  %body
+  %body{:class => "idp"}
     #header
       %h1
         = page_title
-      %h2 An error has occurred 
     #content
       = content_html
     #footer

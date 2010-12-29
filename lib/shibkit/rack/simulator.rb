@@ -5,6 +5,7 @@ require 'uuid'
 require 'haml'
 require 'yaml'
 require 'time'
+require 'uri'
 require 'rack/logger'
 
 ## Require various mixins too
@@ -133,34 +134,34 @@ module Shibkit
             ## Request is for the fake IDP's login function
             when '/', idp_session.login_path
           
-              ## Specified a user? (GET or POST) then try logging in
-              if request.params['user'] 
+              ## Posting form data?
+              if request.request_method.downcase == "post" 
               
-                return idp_login_action(env, sp_session)
+                return idp_login_action(env, idp_session)
                     
-              ## Already logged in? With SSO log in again.
+              ## Already logged in? With SSO? Log in again.
               elsif idp_session.sso? and idp_session.logged_in?
               
-                return idp_sso_action(env, sp_session)
+                return idp_sso_action(env, idp_session)
             
-              ## Show the chooser page to present login options  
+              ## Show the login page  
               else
-            
-                return idp_simple_chooser_action(env, sp_session)
+                
+                return idp_form_action(env, idp_session)
               
               end
             
             ## IDP SLO request?     
             when idp_session.logout_path
               
-              return idp_logout_action(env, sp_session)
+              return idp_logout_action(env, idp_session)
           
             end
           
           ## WAYF request?
           when Model::WAYFSession.path
               
-            return wayf_action(env, sp_session)  
+            return wayf_action(env, wayf_session)  
             
           ## SP session status page?
           when sp_session.session_path
