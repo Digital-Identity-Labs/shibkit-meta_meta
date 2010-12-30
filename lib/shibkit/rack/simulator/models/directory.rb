@@ -27,11 +27,20 @@ module Shibkit
             @principal_attribute = 'uid'
             
           end
-
-          ## Is the request user_id or username valid? Returns valid user_id or nil
-          def authenticate(username, credential=nil)
-
           
+          ## Is the request user_id or username valid? Returns valid user_id or nil
+          def authenticate(username, credential) 
+            
+            puts @accounts.to_yaml
+              
+            ## Hardcoded to passwords at the moment...
+            return nil unless username.to_s.downcase == credential.to_s.downcase
+            
+            result = @accounts[username.downcase]
+            
+            return nil unless result
+
+            return result.id
 
           end
 
@@ -45,18 +54,44 @@ module Shibkit
           
           def load_accounts(source_file = config.sim_users_file)
   
-            raise "No IDP has been defined" unless self.idp and self.idp.uri
+            raise "No suitable IDP has been defined" unless self.idp and self.idp.uri
             
+            ## Try to get list of user details under the IDP's entity URI
             raw_records = Directory.import_users_file(source_file, idp.uri)
             
+            ## If that doesn't provide any data, try to use the default templates
             unless raw_records and raw_records.size > 0
-            
-              return
-            
+              
+              ## Load the default list instead
+              raw_records = Directory.import_users_file(source_file, "default")
+              
+              ## Process to substitute template values
+              raw_records.each do |record|
+
+                record.each_pair do |k,v|
+
+                  if v.respond_to?(:each) 
+
+                      v.each do |vv|
+
+                        vv.gsub!('$SCOPE', idp.scope)
+                        vv.gsub!('$ORG',   idp.display_name || "The Organisation")
+
+                        
+                      end
+                    
+                  else
+                
+                    v.gsub!('$SCOPE', idp.scope)
+                    v.gsub!('$ORG',   idp.display_name)
+
+                  end
+                
+                end
+              end         
             end
             
-            @accounts = Hash.new 
-            
+            @accounts = Hash.new       
             indexed_records = Hash.new
                        
             raw_records.each do |raw|
@@ -96,13 +131,12 @@ module Shibkit
             ## Grab the list of accounts for a particular IDP/directory
             raw_records = @@imported_data[directory] || @@imported_data[:default]
             
-            
-            return raw_records
+            ## Return a *copy*, leave the cache unchanged to prevent template overwrites
+            return Marshal.load(Marshal.dump(raw_records))
             
           end
           
           private
- 
  
  
         end

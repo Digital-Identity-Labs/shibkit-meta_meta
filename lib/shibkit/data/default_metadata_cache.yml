@@ -60,24 +60,24 @@
   - !ruby/object:Shibkit::MetaMeta::Entity 
     accountable: true
     athens: false
-    entity_uri: https://idp.example.exampleshire.sch.uk/shibboleth
+    entity_uri: https://idp.exampleacademy.exampleshire.sch.uk/shibboleth
     federation_uri: http://examplefederation.org
     idp: true
     metadata_id: ef00002
     organisation: !ruby/object:Shibkit::MetaMeta::Organisation 
       display_name: Example Secondary School
       name: Example Secondary School
-      url: http://www.example.exampleshire.sch.uk/
+      url: http://www.exampleacademy.exampleshire.sch.uk/
     scopes: 
-    - example.exampleshire.sch.uk
+    - exampleacademy.exampleshire.sch.uk
     sp: true
     support_contact: !ruby/object:Shibkit::MetaMeta::Contact 
       category: support
-      email_url: mailto:support@example.exampleshire.sch.uk
+      email_url: mailto:support@exampleacademy.exampleshire.sch.uk
       givenname: IT Service Desk
     technical_contact: !ruby/object:Shibkit::MetaMeta::Contact 
       category: technical
-      email_url: mailto:sysadmin@example.exampleshire.sch.uk
+      email_url: mailto:sysadmin@exampleacademy.exampleshire.sch.uk
       givenname: A
       surname: Person
     ukfm: true

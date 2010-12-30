@@ -9,6 +9,7 @@ module Shibkit
           setup_storage
           
           attr_accessor :scopes
+          attr_accessor :scope
           attr_accessor :auth_attribute
           attr_accessor :pid_attribute
           attr_accessor :auth_method_uri
@@ -25,6 +26,7 @@ module Shibkit
             @metadata_id   = entity.metadata_id
             @url           = entity.organisation.url
             @scopes        = entity.scopes
+            @scope         = entity.scopes[0]
             
           end
           

@@ -1,0 +1,19 @@
+
+#login_box
+  %form#login{:method => "post"}
+    %label{:for => "username"}Username
+    %input#username{:type => 'text', :name => "username"}
+    %label{:for => "password"}Password
+    %input#password{:type => 'password',  :name => "password"}
+    %input#submit{:type => 'submit', :value => "Login"}
+
+#information_box
+  %p
+    %a{:href => "directory_url_here"} Find people in the Directory
+  %p
+    Wondering where to go? Try the following sites using this IDP:
+    %ul
+      %li
+        %a{:href => "/"} Your SP
+
+

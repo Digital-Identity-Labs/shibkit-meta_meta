@@ -1,6 +1,31 @@
 ---
+default:
+ - uid: bjensen
+   cn:
+     - Barbara Jensen
+     - Barbara J Jensen
+     - Babs Jensen
+   displayName: Babs Jensen
+   givenName: Barbara
+   sn: Jensen
+   eduPersonAffiliation:
+     - staff
+     - member
+   eduPersonScopedAffiliation:
+     - staff@$SCOPE
+     - member@$SCOPE
+   mail: barbara.jensen@$SCOPE
+   job_title: Product Development Manager
+   o: $ORG
+   ou: Dept of Examples
+   employeeType: staff
+   eduPersonEntitlement:
+     - http://$SCOPE/entitlements/example
+   telephoneNumber: +1 408 555 1212
+   personalTitle: Ms
+   description: A big sailing fan.
 "https://shib.example.ac.uk/shibboleth":
- - uid: petebirkinshaw
+ - uid: pete
    cn: Peter Birkinshaw
    displayName: Pete Birkinshaw
    givenName: Peter

@@ -69,9 +69,8 @@ module Shibkit
                    idp = Shibkit::Rack::Simulator::Model::IDPService.create
                    idp.from_metadata(entity_metadata)
                    
- 
-                   dir = Shibkit::Rack::Simulator::Model::Directory.create
-                     
+                  
+                   dir = Shibkit::Rack::Simulator::Model::Directory.create                   
                    dir.display_name = entity_metadata.organisation.display_name + " User Directory"
                    dir.idp  = idp
                    dir.load_accounts(Federation.config.sim_users_file)
