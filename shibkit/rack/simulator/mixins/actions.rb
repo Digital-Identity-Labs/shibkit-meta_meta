@@ -120,7 +120,7 @@ module Shibkit
             
           end
           
-          ## Display login page
+          ## Controller to display login page
           def idp_form_action(env, idp_session, options={})
           
             message = options[:message]
@@ -141,7 +141,7 @@ module Shibkit
           end
           
           
-          ## Controller for
+          ## Controller for logging in to IDP
           def idp_login_action(env, idp_session, options={})
           
             message = options[:message]
@@ -161,6 +161,21 @@ module Shibkit
             
             end
             
+            ## Authenticate using the IDP's directory service
+            user_id = idp_session.idp_service.directory.authenticate(username, password)
+              
+            ## Check that actually worked...
+            unless user_id
+              
+              ## Explain to user what has happened
+              # ...
+              
+              ## User has not logged in. Probably doesn't exist!
+              return redirect_to "sim_idp/#{idp_session.id}/"
+              
+            end
+              
+            
             ## Authenticate the user?
             if idp_session.login!(username)
             
@@ -171,13 +186,14 @@ module Shibkit
                  :destination => URI.unescape(dest_raw)
                  ) 
 
-               page_body = render_page(:idp_form, locals)
+               page_body = render_page(:idp_redirect, locals)
 
                return code, CONTENT_TYPE, [page_body.to_s]
             
             else
               
-              ## User has not logged in. Probably doesn't exist!
+              ## This is odd TODO Raise an error here
+              raise "EH? User #{user_id} has failed to login to IDP, but is in directory"
               return redirect_to "sim_idp/#{idp_session.id}/"
               
             end

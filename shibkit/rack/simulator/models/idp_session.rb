@@ -3,7 +3,7 @@ module Shibkit
     class Simulator
       module Model
         class IDPSession
-
+          
           ## Easy access to Shibkit's configuration settings
           extend Shibkit::Configured
           
@@ -23,9 +23,9 @@ module Shibkit
               
             ## Make sure we have a data structure
             @env['rack.session']['shibkit-simulator']                  ||= Hash.new
-            @env['rack.session']['shibkit-simulator'][:active_user]      = nil 
             @env['rack.session']['shibkit-simulator']['idps']          ||= Hash.new
             @env['rack.session']['shibkit-simulator']['idps'][@idp_id] ||= Hash.new
+            @env['rack.session']['shibkit-simulator']['idps'][@idp_id][:idp_id] = @idp_id
             
             ## Check for limit to number of IDP sessions to prevent session overflow
             # ...
@@ -44,12 +44,13 @@ module Shibkit
             # ...
             
           end
-               
+              
           ## Declare that the user has logged in to the SP
-          def login!(user_id=active_user)
-
-            idp_session[:user_id]     = idp_assertion.sim_user_id
-            idp_session[:idp_id]      = "" # TODO
+          def login!(user_id)
+            
+            user_details = assertion
+            
+            idp_session[:user_id]     = assertion.sim_user_id
             idp_session[:login_time]  = Time.new
             idp_session[:access_time] = idp_session[:login_time]
            
@@ -80,7 +81,7 @@ module Shibkit
           end
 
           ## Is the specified user logged in at the SP?
-         def logged_in?(user_id=active_user)
+          def logged_in?(user_id=active_user)
 
             return false if expired?
            
@@ -89,145 +90,143 @@ module Shibkit
            
             return idp_session[:user_id] == user_id
 
-         end
+          end
 
-         ## Has the session expired?
-         def expired?
+          ## Has the session expired?
+          def expired?
            
-           return false #if Time.new < session_expires
+            return false #if Time.new < session_expires
            
-         end
+          end
 
-         ## When did the user first login? 
-         def login_time
+          ## When did the user first login? 
+          def login_time
            
-           return idp_session[:login_time] 
+            return idp_session[:login_time] 
            
-         end
+          end
          
-         ## Time of most recent page view before this request
-         def previous_access_time
+          ## Time of most recent page view before this request
+          def previous_access_time
           
            return idp_session[:access_time] || 0
            
-         end
+          end
          
-         ## SP session ID
-         def session_id
+          ## SP session ID
+          def session_id
            
-           return idp_session[:session_id]
+            return idp_session[:session_id]
            
-         end
+          end
          
-         ## Time when session expires (fixed from first login time)
-         def session_expires
+          ## Time when session expires (fixed from first login time)
+          def session_expires
             
-            return login_time + 3600
+           return login_time + 3600
              
-         end
+          end
 
-         ## How long has this session been idle? (in minutes)
-         def session_idle
+          ## How long has this session been idle? (in minutes)
+          def session_idle
 
-           return Time.new - previous_access_time
+            return Time.new - previous_access_time
 
-         end
+          end
          
-         ## IP address of accessing client
-         def ip_address
+          ## IP address of accessing client
+          def ip_address
            
-         end
+          end
          
-         ## Default authentication method
-         def authentication_method
+          ## Default authentication method
+          def authentication_method
            
            
-         end
+          end
          
-         ## Default authentication class
-         def authentication_class
+          ## Default authentication class
+          def authentication_class
            
            
-         end
+          end
          
-         ## Session expires at...
-         def session_expires
+          ## Session expires at...
+          def session_expires
            
-         end
+          end
          
-         ## IDP session identifier
-         def session_id
+          ## IDP session identifier
+          def session_id
 
-         end
+          end
 
-         ## The Shibboleth SP entity ID
-         def entity_id
+          ## The Shibboleth SP entity ID
+          def entity_id
 
-          return IDPSession.config.sim_sp_entity_id
+            return IDPSession.config.sim_sp_entity_id
 
-         end
+          end
        
-         ## Does the IDP allow Single Sign On?
-         def sso?
+          ## Does the IDP allow Single Sign On?
+          def sso?
 
-           ##  # TODO needs per-IDP settings too
-           return true
+            ##  # TODO needs per-IDP settings too
+            return true
 
-         end
+          end
 
-         ## Fetch information from directory and hand over
-         def assertion
+          ## Fetch information from directory and hand over
+          def assertion
    
-           return idp_session[:idp_assertion]
+            return idp_session[:idp_assertion]
    
-         end
+          end
          
-         ## Location of the fake SP's session status page
-         def login_path
+          ## Location of the fake SP's session status page
+          def login_path
         
-           return "/login"
+            return "/login"
 
-         end
+          end
 
+          ## Location of the fake SP's session status page
+          def logout_path
 
-         ## Location of the fake SP's session status page
-         def logout_path
+            return "/logout"
 
-           return "/logout"
-
-         end
+          end
          
+          ## Location of the fake SP's session status page
+          def new_status_path
+
+            return IDPSession.config.sim_idp_new_status_path
+
+          end
          
-         ## Location of the fake SP's session status page
-         def new_status_path
+          ## Location of the fake SP's session status page
+          def old_status_path
 
-           return IDPSession.config.sim_idp_new_status_path
+            return IDPSession.config.sim_idp_old_status_path
 
-         end
-         
-         ## Location of the fake SP's session status page
-         def old_status_path
-
-           return IDPSession.config.sim_idp_old_status_path
-
-         end
+          end
               
-         ## Location of the fake SP's session status page
-         def session_path
+          ## Location of the fake SP's session status page
+          def session_path
 
-           return IDPSession.config.sim_idp_session_path
+            return IDPSession.config.sim_idp_session_path
 
-         end
+          end
          
-         private
+          private
        
-         ## Convenient accessor to this object's session data
-         def idp_session
+          ## Convenient accessor to this object's session data
+          def idp_session
          
-           return @env['rack.session']['shibkit-simulator']['idps']
+            return @env['rack.session']['shibkit-simulator']['idps']
          
-         end
-
+          end
+         
        end
      end
    end
