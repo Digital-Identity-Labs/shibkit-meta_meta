@@ -3,7 +3,7 @@
   %head
     %title=page_title
     %meta{"http-equiv" => "Content-Type", :content => content_type}
-    %link{"rel" => "stylesheet", "href" => "/shibsim/stylesheet.css", "type" => "text/css"}
+    %link{"rel" => "stylesheet", "href" => "#{assets_base}/stylesheet.css", "type" => "text/css"}
   %body{:class => "idp"}
     #header
       %h1
@@ -12,3 +12,6 @@
       = content_html
     #footer
       %p
+    %script{"language" => "javascript", "type" => "text/javascript", "src" => "#{assets_base}/scripts/jquery.js"}
+    %script{"language" => "javascript", "type" => "text/javascript", "src" => "#{assets_base}/scripts/jquery-ui.js"}
+

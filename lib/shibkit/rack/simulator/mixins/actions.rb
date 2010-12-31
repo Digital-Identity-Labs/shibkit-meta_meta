@@ -25,6 +25,21 @@ module Shibkit
           end
           
           ## Return the appropriate image for something from a path ending in /image/something
+          def javascript_action(env, nil_session, options={})
+            
+            ## TODO: Needs to be a bit fancier and less SVG-hardcoded (made into another lib?)
+      
+            specified = options[:specified] || "alert"
+            
+            page_body = asset(specified + ".js")
+            
+            code = 200
+            
+            return code, {"Content-Type" => "text/javascript"}, [page_body.to_s]
+        
+          end
+          
+          ## Return the appropriate image for something from a path ending in /image/something
           def image_action(env, nil_session, options={})
             
             ## TODO: Needs to be a bit fancier and less SVG-hardcoded (made into another lib?)
@@ -171,7 +186,7 @@ module Shibkit
               # ...
               
               ## User has not logged in. Probably doesn't exist!
-              return redirect_to "sim_idp/#{idp_session.id}/"
+              return redirect_to "/sim_idp/#{idp_session.id}/"
               
             end
               
@@ -194,7 +209,7 @@ module Shibkit
               
               ## This is odd TODO Raise an error here
               raise "EH? User #{user_id} has failed to login to IDP, but is in directory"
-              return redirect_to "sim_idp/#{idp_session.id}/"
+              return redirect_to "/sim_idp/#{idp_session.id}/"
               
             end
             
@@ -354,6 +369,7 @@ module Shibkit
             return {
               :page_title   => "Shibkit",
               :code         => 200,
+              :assets_base  => config.sim_asset_base_path,
               :content_type => CONTENT_TYPE
             }.merge *specified_locals
             
