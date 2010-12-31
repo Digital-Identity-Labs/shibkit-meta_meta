@@ -143,10 +143,13 @@ module Shibkit
             code = 200
             
             locals = get_locals(
-              :layout => :layout,
-              :idps => [],
-              :page_title => "Login at this lovely IDP",
-              :message => message
+              :layout     => :layout,
+              :idp        => idp_session.idp_service,
+              :sp_home    => config.home_path,
+              :sp_name    => config.app_name,
+              :directory  => idp_session.idp_service.directory,
+              :page_title => "#{idp_session.idp_service.display_name} IDP",
+              :message    => message
               ) 
             
             page_body = render_page(:idp_form, locals)
@@ -198,7 +201,6 @@ module Shibkit
             
                locals = get_locals(
                  :layout => :layout,
-                 :idps => [],
                  :page_title => "Forwarding you...",
                  :destination => URI.unescape(dest_raw)
                  ) 

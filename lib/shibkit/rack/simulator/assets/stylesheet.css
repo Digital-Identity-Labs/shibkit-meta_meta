@@ -70,6 +70,14 @@ form#login input#submit {
 	
 }
 
+#user_message {
+	border: 2px solid yellow;
+	background-color: lightyellow;
+	width: 400px;
+	height: 100px;
+	color: green;
+}
+
 /* ============================ */
 
 /*

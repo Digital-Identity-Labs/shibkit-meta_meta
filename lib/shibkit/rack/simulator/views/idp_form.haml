@@ -1,7 +1,9 @@
 - if message
-  %p= message
+  #user_message
+    %p= message
 
 #login_box
+  %h3 Please Log In
   %form#login{:method => "post"}
     %label{:for => "username"}Username
     %input#username{:type => 'text', :name => "username"}
@@ -11,11 +13,14 @@
 
 #information_box
   %p
-    %a{:href => "directory_url_here"} Find people in the Directory
+    Find people in
+    %a{:href => "directory_url_here"} #{directory.display_name}
   %p
-    Wondering where to go? Try the following sites using this IDP:
+    Wondering where to go?
+  %p
+    Try the following sites that use this IDP:
     %ul
       %li
-        %a{:href => "/"} Your SP
+        %a{:href => sp_home} #{sp_name}
 
 

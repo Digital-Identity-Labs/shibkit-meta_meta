@@ -52,37 +52,28 @@ module Shibkit
           
           ## Login path
           def login_path
-            
-            puts "A"
-            
+
             return "/logout"
           
           end
           
           ## SLO path
           def logout_path
-            
-            puts "B"
-            
+
             return "/logout"
           
           end
           
           ## Shibboleth1-style "OK" page
           def old_status_path
-                   
-            puts "C"
-             
+   
             return "/idp/profile/Status"
                     
           end
           
           ## Shibboleth 2 style text
           def new_status_path
-            
-            
-            puts "D"
-            
+
             return "/idp/status"
           
           end
