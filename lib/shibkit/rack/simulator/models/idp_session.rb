@@ -9,6 +9,7 @@ module Shibkit
           
           attr_reader :idp_service
           attr_reader :active_user
+          attr_reader :idp_id
           
           ## A new IDP Session
           def initialize(env, idp_id=nil)
@@ -182,42 +183,74 @@ module Shibkit
             return idp_session[:idp_assertion]
    
           end
-         
+          
+          ## Shibsim base location of the IDP
+          def service_base_path
+            
+            puts "a"
+            
+            return IDPSession.config.sim_idp_base_path + idp_id
+
+          end
+          
+          ## Shib sim location of this IDP, but with trailing /
+          def service_root_path
+            
+            return service_base_path + '/'
+
+          end
+          
           ## Location of the fake SP's session status page
           def login_path
-        
-            return "/login"
+            
+            puts "b"
+            
+            return service_base_path + idp_service.login_path
 
           end
 
           ## Location of the fake SP's session status page
           def logout_path
 
-            return "/logout"
+            puts "c"
+
+            return service_base_path + idp_service.logout_path
 
           end
          
           ## Location of the fake SP's session status page
           def new_status_path
 
-            return IDPSession.config.sim_idp_new_status_path
+            puts "d"
+
+            return service_base_path + idp_service.new_status_path
 
           end
          
           ## Location of the fake SP's session status page
           def old_status_path
-
-            return IDPSession.config.sim_idp_old_status_path
-
-          end
-              
-          ## Location of the fake SP's session status page
-          def session_path
-
-            return IDPSession.config.sim_idp_session_path
+            
+            puts "e"
+            
+            return service_base_path + idp_service.old_status_path
 
           end
-         
+          
+          def set_message(message)
+            
+            idp_session[:message] = message
+            
+          end
+          
+          def get_message
+            
+            message = idp_session[:message] || nil
+            idp_session.delete(:message) if idp_session[:message]
+            
+            return message
+            
+          end
+          
           private
        
           ## Convenient accessor to this object's session data

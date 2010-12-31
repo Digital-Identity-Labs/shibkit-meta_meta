@@ -101,19 +101,27 @@ module Shibkit
           ## Does the path match the IDP regex?
           when idp_base_path_regex
             
+            puts 1
+            
             begin
               
               ## Extract the IDP id
               path = request.path.gsub(config.sim_idp_base_path, "")
               bits = %r|/*(\d+)(.*)|.match(path)
               
+              puts 2
+              
               raise "Bad IDP path '#{path}'" unless bits
+              
+              puts 3
               
               idp_id  =  bits[1]
               idp_path = bits[2] || '/'
               
               ## Get the IDP session object
               idp_session = Model::IDPSession.new(env, idp_id) 
+
+              puts 4
 
               ## Missing IDP id? Show a 404 sort of thing
               unless idp_id && idp_session and idp_session.idp_service
@@ -127,13 +135,20 @@ module Shibkit
               return browser_404_action(env, idp_session, {})
             
             end
-          
+            
+                        puts 5
+            
+            puts idp_session.new_status_path
+            puts idp_session.old_status_path
+            puts idp_session.login_path
+            puts idp_session.logout_path
+            
             ## Check again, focusing on the IDP's subpath
-            case idp_path
-          
+            case request.path
+                  
             ## IDP status information
             when idp_session.new_status_path
-            
+              
               return idp_new_status_action(env, idp_session)
               
             ## IDP status information
@@ -142,20 +157,32 @@ module Shibkit
               return idp_old_status_action(env, idp_session)
 
             ## Request is for the fake IDP's login function
-            when '/', idp_session.login_path
-          
+            when idp_session.service_base_path,
+                 idp_session.service_root_path,
+                 idp_session.login_path
+              
+              puts idp_session.login_path
+              
+              puts 6
+              
               ## Posting form data?
               if request.request_method.downcase == "post" 
-              
+                
+                puts 7
+                
                 return idp_login_action(env, idp_session)
                     
               ## Already logged in? With SSO? Log in again.
               elsif idp_session.sso? and idp_session.logged_in?
-              
+                
+                puts 8
+                
                 return idp_sso_action(env, idp_session)
             
               ## Show the login page  
               else
+                
+                puts 9
                 
                 return idp_form_action(env, idp_session)
               

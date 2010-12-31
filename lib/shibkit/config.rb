@@ -55,8 +55,7 @@ module Shibkit
       :sim_idp_base_path              => "/sim_idp/",
       :sim_idp_old_status_path        => "/idp/profile/Status",
       :sim_idp_new_status_path        => "/idp/status",
-      :sim_idp_session_path           => "/idp/session", # This is incorrect - FIX
-      :sim_wayf_path                  => "/shibsim_wayf/",
+      :sim_wayf_path                  => "/sim_wayf/",
       :sim_users_file                 => "/data/simulator_user_directory.yml".to_absolute_path,
       :sim_users_file_format          => :fixture,
       :sim_metadata_cache_file        => "/data/default_metadata_cache.yml".to_absolute_path,

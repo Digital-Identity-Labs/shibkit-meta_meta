@@ -138,7 +138,7 @@ module Shibkit
           ## Controller to display login page
           def idp_form_action(env, idp_session, options={})
           
-            message = options[:message]
+            message = options[:message] || idp_session.get_message
             
             code = 200
             
@@ -168,11 +168,13 @@ module Shibkit
             username = req.params['username']
             password = req.params['password']
             dest_raw = req.params['destination']
-             
+
             ## Are we passed suitable info?
             if username.empty? or password.empty?
-            
-              redirect_to "sim_idp/#{idp_session.id}/"
+              
+              idp_session.set_message("Please enter your username and password")
+              
+              return redirect_to idp_session.login_path
             
             end
             
@@ -183,10 +185,10 @@ module Shibkit
             unless user_id
               
               ## Explain to user what has happened
-              # ...
+              idp_session.set_message("Failed to login. Password or username is incorrect.")
               
               ## User has not logged in. Probably doesn't exist!
-              return redirect_to "/sim_idp/#{idp_session.id}/"
+              return redirect_to idp_session.login_path
               
             end
               
@@ -209,7 +211,7 @@ module Shibkit
               
               ## This is odd TODO Raise an error here
               raise "EH? User #{user_id} has failed to login to IDP, but is in directory"
-              return redirect_to "/sim_idp/#{idp_session.id}/"
+              return redirect_to idp_session.login_path
               
             end
             
@@ -363,7 +365,7 @@ module Shibkit
             return 500, CONTENT_TYPE, [page_body.to_s]
 
           end
-
+          
           def get_locals(*specified_locals)
             
             return {
