@@ -14,7 +14,6 @@ module Shibkit
           attr_accessor :pid_attribute
           attr_accessor :auth_method_uri
           attr_accessor :auth_class_uri
-          attr_accessor :idp_type
           attr_accessor :add_tid
           attr_accessor :directory
           
@@ -34,6 +33,57 @@ module Shibkit
           def from_defaults(default_list)
           
             
+          
+          end
+          
+          ## What sort of IDP software is this meant to be?
+          def idp_type
+            
+            return :shibboleth2
+            
+          end
+          
+          ## Default landing page, login, and / redirection
+          def default_path
+            
+            return "/"
+          
+          end
+          
+          ## Login path
+          def login_path
+            
+            puts "A"
+            
+            return "/logout"
+          
+          end
+          
+          ## SLO path
+          def logout_path
+            
+            puts "B"
+            
+            return "/logout"
+          
+          end
+          
+          ## Shibboleth1-style "OK" page
+          def old_status_path
+                   
+            puts "C"
+             
+            return "/idp/profile/Status"
+                    
+          end
+          
+          ## Shibboleth 2 style text
+          def new_status_path
+            
+            
+            puts "D"
+            
+            return "/idp/status"
           
           end
           
