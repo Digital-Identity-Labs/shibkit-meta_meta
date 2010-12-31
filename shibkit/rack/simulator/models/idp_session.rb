@@ -186,9 +186,7 @@ module Shibkit
           
           ## Shibsim base location of the IDP
           def service_base_path
-            
-            puts "a"
-            
+           
             return IDPSession.config.sim_idp_base_path + idp_id
 
           end
@@ -202,17 +200,13 @@ module Shibkit
           
           ## Location of the fake SP's session status page
           def login_path
-            
-            puts "b"
-            
+       
             return service_base_path + idp_service.login_path
 
           end
 
           ## Location of the fake SP's session status page
           def logout_path
-
-            puts "c"
 
             return service_base_path + idp_service.logout_path
 
@@ -221,19 +215,22 @@ module Shibkit
           ## Location of the fake SP's session status page
           def new_status_path
 
-            puts "d"
-
             return service_base_path + idp_service.new_status_path
 
           end
          
           ## Location of the fake SP's session status page
           def old_status_path
-            
-            puts "e"
-            
+
             return service_base_path + idp_service.old_status_path
 
+          end
+          
+          ## Produce a feeble, inaccurate but functionally equivalent WAYFless URL for this IDP and your SP
+          def wayfless_url
+            
+            return "wayfless URL will go here"
+            
           end
           
           def set_message(message)

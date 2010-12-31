@@ -28,6 +28,7 @@ module Shibkit
     
     ## Default configuration values, attributes and accessors defined here
     CONFIG_DEFAULTS = {
+      :app_name                       => "Your New Project",    
       :path_auth_masks                => ["/"],
       :federation_metadata            => {"Example Federation"  => "/data/default_metadata/example_federation_metadata.xml".to_absolute_path,
                                           "UnCommon"            => "/data/default_metadata/uncommon_federation_metadata.xml".to_absolute_path,
