@@ -51,6 +51,7 @@ module Shibkit
       :sim_idp_session_expiry         => 300,
       :sim_sp_session_expiry          => 300,
       :sim_sp_session_idle            => 300,
+      :sim_asset_base_path            => "/sim_assets/",
       :sim_idp_base_path              => "/sim_idp/",
       :sim_idp_old_status_path        => "/idp/profile/Status",
       :sim_idp_new_status_path        => "/idp/status",

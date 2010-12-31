@@ -74,18 +74,28 @@ module Shibkit
           case request.path
           
           ## Return the global stylesheet
-          when "/shibsim/stylesheet.css"
+          when "#{config.sim_asset_base_path}/stylesheet.css"
           
             return stylesheet_action(env, nil, {})
-          
+
+          ## Return a Javascript file
+          when /#{Regexp.escape(config.sim_asset_base_path)}\/scripts\//
+
+            matches = request.path.match /\/scripts\/(\w+)(\.*.*)/
+            specified = matches[1]
+
+            return specified ?
+              javascript_action(env, nil, {:specified => specified}) :
+              browser_404_action(env, nil, {})
+
           ## Return image file
-          when /\/shibsim\/images\//
+          when /#{Regexp.escape(config.sim_asset_base_path)}\/images\//
             
             matches = request.path.match /\/images\/(\w+)(\.*.*)/
             specified = matches[1]
             
             return specified ?
-              image_action(env, nil, {:image => specified}) :
+              image_action(env, nil, {:specified => specified}) :
               browser_404_action(env, nil, {})
               
           ## Does the path match the IDP regex?

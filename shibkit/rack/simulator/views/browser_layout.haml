@@ -3,8 +3,8 @@
   %head
     %title=page_title
     %meta{"http-equiv" => "Content-Type", :content => content_type}
-    %link{"rel" => "stylesheet", "href" => "/shibsim/stylesheet.css", "type" => "text/css"}
-  %body
+    %link{"rel" => "stylesheet", "href" => "#{assets_base}/stylesheet.css", "type" => "text/css"}
+  %body{:class => "browser"}
     #browser_error_message
       #header
         %h1
