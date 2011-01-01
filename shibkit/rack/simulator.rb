@@ -100,7 +100,7 @@ module Shibkit
             specified = matches[1]
             
             return specified ?
-              image_action(env, nil, {:specified => specified}) :
+              image_action(env, nil, {:specified => specified}) :                         
               browser_404_action(env, nil, {})
           
           ####################################################################
@@ -230,9 +230,14 @@ module Shibkit
           ##
           when base_path_regex(config.sim_lib_base_path)
             
-            puts "!"
-            
             return library_action(env) 
+          
+          ####################################################################
+          ## Search Routing 
+          ##
+          when base_path_regex(config.sim_ggl_base_path)
+
+            return search_action(env, sp_session, {})
           
           ####################################################################
           ## WAYF Routing
@@ -242,13 +247,11 @@ module Shibkit
           when Model::WAYFSession.path
               
             return wayf_action(env, wayf_session)  
-
-          
+     
           ####################################################################
           ## SP Routing
           ##
-
-            
+     
           ## SP session status page?
           when sp_session.session_path
               

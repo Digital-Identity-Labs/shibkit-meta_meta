@@ -41,16 +41,33 @@ module Shibkit
           
           ## Return the appropriate image for something from a path ending in /image/something
           def image_action(env, nil_session, options={})
+          
+            specified = options[:specified] || "placeholder"
             
-            ## TODO: Needs to be a bit fancier and less SVG-hardcoded (made into another lib?)
-      
-            specified = options[:specified] || "alert"
+            extension    = ".svg"
+            content_type = "image/svg+xml"
+            page_body    = ""
             
-            page_body = asset(specified + ".svg")
+            formats = [
+              [".svg", "image/svg+xml"],
+              [".png", "image/png"]
+            ]
             
-            code = 200
+            ## Try each format in order (an ordered hash in 1.8 would have been nice)
+            formats.each do |ext_and_mime|
+              
+              ext, mime = ext_and_mime
+              
+              page_body    = asset(specified + ext)
+              content_type = mime
+              
+              break unless page_body.to_s.empty? 
+              
+            end
             
-            return code, {"Content-Type" => "image/svg+xml"}, [page_body.to_s]
+            return browser_404_action(env, nil, {}) unless page_body
+            
+            return 200, {"Content-Type" => content_type}, [page_body.to_s]
         
           end
           
@@ -157,8 +174,7 @@ module Shibkit
             return code, CONTENT_TYPE, [page_body.to_s]
            
           end
-          
-          
+                   
           ## Controller for logging in to IDP
           def idp_login_action(env, idp_session, options={})
           
@@ -194,8 +210,7 @@ module Shibkit
               return redirect_to idp_session.login_path
               
             end
-              
-            
+                         
             ## Authenticate the user?
             if idp_session.login!(username)
             
@@ -219,12 +234,8 @@ module Shibkit
             
           end
           
-          
           ## Controller for
           def idp_sso_action(env, options={})
-            
-            
-            
             
             message = options[:message]
             code = options[:code].to_i || 200
@@ -239,9 +250,6 @@ module Shibkit
           
           ## Controller for
           def idp_logout_action(env, options={})
-            
-            
-            
             
             message = options[:message]
             code = options[:code].to_i || 200
@@ -305,10 +313,7 @@ module Shibkit
               ## Extract the IDs
               path = request.path.gsub(config.sim_lib_base_path, "")
               idp_id = path.split('/')[0] || nil
-              
-              puts path
-              puts idp_id
-              
+
               ## Clean things up a bit.
               idp_id  = idp_id.to_i.to_s
               
@@ -342,11 +347,25 @@ module Shibkit
                       
           end
           
+          ## Controller for mockup of search engine (OK, WHY? For direct links to home and subpages) 
+          def search_action(env)
+                    
+            code = 200
+
+            locals = get_locals(
+              :layout     => :plain,
+              :idp        => idp,
+              :page_title => "Online Resources at #{idp.display_name} Library"
+              ) 
+
+            page_body = render_page(:library, locals)
+
+            return code, CONTENT_TYPE, [page_body.to_s]
+                      
+          end
+          
           ## Controller for
           def wayf_action(env, options={})
-            
-            
-            
             
             message = options[:message]
             code = options[:code].to_i || 200
@@ -386,13 +405,8 @@ module Shibkit
 
           end
           
-          
-          
           ## Controller for
           def sp_protected_page_action(env, options={})
-            
-            
-            
             
             message = options[:message]
             code = options[:code].to_i || 200
@@ -404,14 +418,10 @@ module Shibkit
             return code, CONTENT_TYPE, [page_body.to_s]
             
           end
-          
           
           ## Controller for
           def sp_login_action(env, options={})
             
-            
-            
-            
             message = options[:message]
             code = options[:code].to_i || 200
             
@@ -422,7 +432,6 @@ module Shibkit
             return code, CONTENT_TYPE, [page_body.to_s]
             
           end
-
 
           ## Error page for unrecoverable situations
           def fatal_error_action(env, oops)

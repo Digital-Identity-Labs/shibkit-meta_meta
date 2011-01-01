@@ -10,9 +10,18 @@ module Shibkit
             @assets ||= Hash.new
             
             unless @assets[asset_name]
-      
+              
               asset_file_location = "#{::File.dirname(__FILE__)}/../assets/#{asset_name.to_s}"
-              @assets[asset_name]  = IO.read(asset_file_location)
+              
+              begin
+                @assets[asset_name]  = IO.read(asset_file_location)
+              
+              ## Catch missing files. We'll just return nothing. Catch higher up.
+              rescue Errno::ENOENT => oops
+                
+                @assets[asset_name]  = nil
+              
+              end
               
             end
 
