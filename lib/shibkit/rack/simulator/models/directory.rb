@@ -52,6 +52,36 @@ module Shibkit
           end
           
           
+          ## Shibsim base location of the Directory
+          def service_base_path
+           
+            return config.sim_dir_base_path + idp.id.to_s
+
+          end
+          
+          ## Shib sim location of this directory, but with trailing /
+          def service_root_path
+            
+            return service_base_path + '/'
+
+          end
+          
+          ## Location of a user record
+          def user_record_path(user)
+            
+            url_id = nil
+            
+            case user.class
+            when Shibkit::Rack::Simulator::Model::Account
+              url_id = user.id.to_s
+            else 
+              url_id = user.to_i.to_s  
+            end
+            
+            return service_root_path + "user/" + url_id
+
+          end
+          
           def load_accounts(source_file = config.sim_users_file)
   
             raise "No suitable IDP has been defined" unless self.idp and self.idp.uri

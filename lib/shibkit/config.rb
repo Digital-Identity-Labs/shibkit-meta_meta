@@ -54,9 +54,11 @@ module Shibkit
       :sim_sp_session_idle            => 300,
       :sim_asset_base_path            => "/sim_assets/",
       :sim_idp_base_path              => "/sim_idp/",
+      :sim_lib_base_path              => "/sim_lib/",
+      :sim_dir_base_path              => "/sim_dir/",
+      :sim_wayf_base_path             => "/sim_wayf/",
       :sim_idp_old_status_path        => "/idp/profile/Status",
       :sim_idp_new_status_path        => "/idp/status",
-      :sim_wayf_path                  => "/sim_wayf/",
       :sim_users_file                 => "/data/simulator_user_directory.yml".to_absolute_path,
       :sim_users_file_format          => :fixture,
       :sim_metadata_cache_file        => "/data/default_metadata_cache.yml".to_absolute_path,
@@ -218,7 +220,7 @@ module Shibkit
       #
       
        ## Check URL paths are valid
-      [:home_path, :exit_path, :gateway_path, :sim_idp_base_path, :sim_wayf_path].each do |m|
+      [:home_path, :exit_path, :gateway_path, :sim_idp_base_path, :sim_wayf_base_path].each do |m|
         
         path     = self.send(m)
         test_url = "http://localhost" + path
