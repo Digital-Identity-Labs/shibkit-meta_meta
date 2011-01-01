@@ -67,11 +67,16 @@ module Shibkit
         ## Model representing SP state (knows about IDPs, WAYF, etc)
         sp_session = Model::SPSession.new(env)
 
-        ## Catching exceptions in the workflow/routing
+        ## Catching top-level exceptional exceptions in the workflow/routing
+        ## (404s etc will be handled inside this, hopefully)
         begin
 
           ## Route to actions according to requested URLs
           case request.path
+          
+          ####################################################################
+          ## Asset Routing
+          ##
           
           ## Return the global stylesheet
           when "#{config.sim_asset_base_path}/stylesheet.css"
@@ -97,9 +102,13 @@ module Shibkit
             return specified ?
               image_action(env, nil, {:specified => specified}) :
               browser_404_action(env, nil, {})
-              
-          ## Does the path match the IDP regex?
-          when idp_base_path_regex
+          
+          ####################################################################
+          ## IDP Routing
+          ##
+             
+          ## Does the path match the Directory regex?
+          when base_path_regex(config.sim_idp_base_path)
             
             begin
               
@@ -107,7 +116,7 @@ module Shibkit
               path = request.path.gsub(config.sim_idp_base_path, "")
               bits = %r|/*(\d+)(.*)|.match(path)
               
-              raise "Bad IDP path '#{path}'" unless bits
+              raise "Bad Directory path '#{path}'" unless bits
               
               idp_id  =  bits[1]
               idp_path = bits[2] || '/'
@@ -169,11 +178,76 @@ module Shibkit
               return idp_logout_action(env, idp_session)
           
             end
+
+            
+          ####################################################################
+          ## Directory Routing
+          ##
+                    
+          ## Does the path match the Directory base regex?
+          when base_path_regex(config.sim_dir_base_path)
+
+            begin
+              
+              ## Extract the IDs
+              path = request.path.gsub(config.sim_dir_base_path, "")
+              dir_id, blah, user_id = path.split('/')
+              
+              ## Clean things up a bit.
+              dir_id  = dir_id.to_i.to_s
+              user_id = user_id.to_i.to_s
+
+              ## Get the IDP session object
+              directory = Model::Directory.find(dir_id) 
+
+              ## Missing Dir id? Show a 404 sort of thing
+              unless dir_id and directory
+
+                raise Rack::Simulator::ResourceNotFound, "Unable to find Directory '#{dir_id}'"
+
+              end
+              
+              ## Should we show user details?
+              if user_id and user_id.to_i > 0
+              
+                return directory_item_action(env, directory, {:account => user_id})
+              
+              else
+                
+                ## Just show the index instead
+                return directory_list_action(env, directory)
+                
+              end
+              
+            rescue Rack::Simulator::ResourceNotFound => oops
+
+              return browser_404_action(env, idp_session, {})
+
+            end
           
+          ####################################################################
+          ## Library Routing (done slightly differenly as an experiment TODO: hmm.)
+          ##
+          when base_path_regex(config.sim_lib_base_path)
+            
+            puts "!"
+            
+            return library_action(env) 
+          
+          ####################################################################
+          ## WAYF Routing
+          ##
+    
           ## WAYF request?
           when Model::WAYFSession.path
               
             return wayf_action(env, wayf_session)  
+
+          
+          ####################################################################
+          ## SP Routing
+          ##
+
             
           ## SP session status page?
           when sp_session.session_path
@@ -210,17 +284,16 @@ module Shibkit
         end
 
       end
-  
+      
       private
       
-      def idp_base_path_regex
+      ## Reformat the base path for IDP URLs to capture info in URL
+      def base_path_regex(base_path)
 
-        normalised_path = config.sim_idp_base_path.gsub(/\/$/, '')
+        normalised_path = base_path.gsub(/\/$/, '')
         return Regexp.new(normalised_path)
 
       end
-      
-      # ...
   
     end
 

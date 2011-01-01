@@ -10,7 +10,7 @@ module Shibkit
           ## The optional WAYF path used in :wayf chooser mode  
           def self.path
 
-            return config.sim_wayf_path
+            return config.sim_wayf_base_path
 
           end
           
