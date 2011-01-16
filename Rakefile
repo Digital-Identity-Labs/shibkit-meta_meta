@@ -10,8 +10,19 @@ begin
     gem.email = "pete@binary-ape.org"
     gem.homepage = "http://github.com/binaryape/shibkit"
     gem.authors = ["Pete Birkinshaw"]
+
     gem.add_development_dependency "rspec", ">= 1.2.9"
     gem.add_development_dependency "cucumber", ">= 0"
+    gem.add_development_dependency 'jscruggs-metric_fu', '1.1.5'
+    gem.add_development_dependency "rspec-rails", "~> 2.0.0.beta.1"
+
+    gem.add_dependency "json_pure", ">= 1.4.5"
+    gem.add_dependency 'SystemTimer'
+    gem.add_dependency 'haml', "~> 2.2.22"
+    gem.add_dependency 'uuid'
+    gem.add_dependency 'deep_merge'
+    gem.add_dependency "nokogiri"
+
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
   Jeweler::GemcutterTasks.new
