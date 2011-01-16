@@ -12,6 +12,11 @@
       = content_html
     #footer
       %p
-    %script{"language" => "javascript", "type" => "text/javascript", "src" => "#{assets_base}/scripts/jquery.js"}
-    %script{"language" => "javascript", "type" => "text/javascript", "src" => "#{assets_base}/scripts/jquery-ui.js"}
+    
+		
+- if javascript
+  %script{"language" => "javascript", "type" => "text/javascript", "src" => "#{assets_base}/scripts/jquery"}
+  %script{"language" => "javascript", "type" => "text/javascript", "src" => "#{assets_base}/scripts/jquery_ui"}
+  %script{"language" => "javascript", "type" => "text/javascript", "src" => "#{assets_base}/scripts/extras"}
+  %script{"language" => "javascript", "type" => "text/javascript", "src" => "#{assets_base}/scripts/#{javascript}"}	
 

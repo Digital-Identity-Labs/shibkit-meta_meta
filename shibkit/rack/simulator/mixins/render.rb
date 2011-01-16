@@ -14,12 +14,12 @@ module Shibkit
               asset_file_location = "#{::File.dirname(__FILE__)}/../assets/#{asset_name.to_s}"
               
               begin
-                @assets[asset_name]  = IO.read(asset_file_location)
+                @assets[asset_name.to_s]  = IO.read(asset_file_location)
               
               ## Catch missing files. We'll just return nothing. Catch higher up.
               rescue Errno::ENOENT => oops
                 
-                @assets[asset_name]  = nil
+                @assets[asset_name.to_s]  = nil
               
               end
               
