@@ -7,6 +7,7 @@ require 'yaml'
 require 'time'
 require 'uri'
 require 'rack/logger'
+require 'json'
 
 ## Require various mixins too
 require 'shibkit/rack/simulator/mixins/render'
@@ -246,7 +247,7 @@ module Shibkit
           ## WAYF request?
           when Model::WAYFSession.path
               
-            return wayf_action(env, wayf_session)  
+            return wayf_action(env, nil)  
      
           ####################################################################
           ## SP Routing

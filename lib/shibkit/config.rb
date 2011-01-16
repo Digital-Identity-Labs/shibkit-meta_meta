@@ -57,7 +57,7 @@ module Shibkit
       :sim_lib_base_path              => "/sim_lib/",
       :sim_dir_base_path              => "/sim_dir/",
       :sim_ggl_base_path              => "/sim_ggl/",
-      :sim_wayf_base_path             => "/sim_wayf/",
+      :sim_wayf_base_path             => "/sim_wayf",
       :sim_idp_old_status_path        => "/idp/profile/Status",
       :sim_idp_new_status_path        => "/idp/status",
       :sim_users_file                 => "/data/simulator_user_directory.yml".to_absolute_path,

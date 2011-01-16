@@ -47,8 +47,8 @@
 		</AttributeAuthorityDescriptor>
 		
 		<Organization>
-	  	<OrganizationName xml:lang="en">The University of Example</OrganizationName>
-			<OrganizationDisplayName xml:lang="en">University of Example</OrganizationDisplayName>
+	  	<OrganizationName xml:lang="en">Example Institute of Technology</OrganizationName>
+			<OrganizationDisplayName xml:lang="en">Example Institute of Technology</OrganizationDisplayName>
 			<OrganizationURL xml:lang="en">http://www.example.edu/</OrganizationURL>
 		</Organization>
 		
