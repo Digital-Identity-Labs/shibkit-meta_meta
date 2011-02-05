@@ -5,22 +5,23 @@
 
 Gem::Specification.new do |s|
   s.name = %q{shibkit}
-  s.version = "0.2.4"
+  s.version = "0.0.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Pete Birkinshaw"]
-  s.date = %q{2010-08-09}
+  s.date = %q{2011-02-05}
   s.description = %q{Rack and Rails libraries for using Shibboleth SP authentication and authorisation data}
   s.email = %q{pete@binary-ape.org}
   s.extra_rdoc_files = [
     "LICENSE",
-     "README.rdoc"
+     "README.markdown"
   ]
   s.files = [
     ".document",
      ".gitignore",
+     "Icon.png",
      "LICENSE",
-     "README.rdoc",
+     "README.markdown",
      "Rakefile",
      "VERSION",
      "features/shibkit.feature",
@@ -28,24 +29,100 @@ Gem::Specification.new do |s|
      "features/support/env.rb",
      "lib/mongoid_userstamps.rb",
      "lib/shibkit.rb",
+     "lib/shibkit/config.rb",
+     "lib/shibkit/data/default_metadata/example_federation_metadata.xml",
+     "lib/shibkit/data/default_metadata/local_metadata.xml",
+     "lib/shibkit/data/default_metadata/uncommon_federation_metadata.xml",
+     "lib/shibkit/data/default_metadata_cache.yml",
+     "lib/shibkit/data/organisation_access_rules.yml",
+     "lib/shibkit/data/organisation_settings.yml",
+     "lib/shibkit/data/simulator_directory_attr_mappings.yml",
+     "lib/shibkit/data/simulator_idp_attr_mapping.yml",
+     "lib/shibkit/data/simulator_idp_behaviours.yml",
+     "lib/shibkit/data/simulator_sp_attr_mapping.yml",
+     "lib/shibkit/data/simulator_user_directory.yml",
+     "lib/shibkit/data/simulator_wayf_behaviours.yml",
+     "lib/shibkit/data/sp_attr_map.yml",
+     "lib/shibkit/data/sp_sim.css",
      "lib/shibkit/data_tools.rb",
+     "lib/shibkit/exceptions.rb",
+     "lib/shibkit/extensions.rb",
      "lib/shibkit/metameta.rb",
-     "lib/shibkit/rack/shib_shim.rb",
-     "lib/shibkit/rack/shib_shim/default_config/sp_attr_map.yml",
-     "lib/shibkit/rack/shib_sim.rb",
-     "lib/shibkit/rack/shib_sim/default_config/config.yml",
-     "lib/shibkit/rack/shib_sim/default_config/record_filter.rb",
-     "lib/shibkit/rack/shib_sim/default_data/users.yml",
-     "lib/shibkit/rack/shib_sim/views/fatal_error.haml",
-     "lib/shibkit/rack/shib_sim/views/user_chooser.haml",
+     "lib/shibkit/metameta/contact.rb",
+     "lib/shibkit/metameta/entity.rb",
+     "lib/shibkit/metameta/federation.rb",
+     "lib/shibkit/metameta/organisation.rb",
+     "lib/shibkit/metameta/source.rb",
+     "lib/shibkit/rack/debug.rb",
+     "lib/shibkit/rack/demo.rb",
+     "lib/shibkit/rack/shim.rb",
+     "lib/shibkit/rack/simulator.rb",
+     "lib/shibkit/rack/simulator/assets/alert.svg",
+     "lib/shibkit/rack/simulator/assets/extras.js",
+     "lib/shibkit/rack/simulator/assets/ggl.js",
+     "lib/shibkit/rack/simulator/assets/jquery.js",
+     "lib/shibkit/rack/simulator/assets/jquery_ui.js",
+     "lib/shibkit/rack/simulator/assets/misc.coffee",
+     "lib/shibkit/rack/simulator/assets/misc.js",
+     "lib/shibkit/rack/simulator/assets/search_logo.png",
+     "lib/shibkit/rack/simulator/assets/stylesheet.css",
+     "lib/shibkit/rack/simulator/assets/wayf.js",
+     "lib/shibkit/rack/simulator/exceptions.rb",
+     "lib/shibkit/rack/simulator/mixins/actions.rb",
+     "lib/shibkit/rack/simulator/mixins/injection.rb",
+     "lib/shibkit/rack/simulator/mixins/logging.rb",
+     "lib/shibkit/rack/simulator/mixins/render.rb",
+     "lib/shibkit/rack/simulator/models/account.rb",
+     "lib/shibkit/rack/simulator/models/base.rb",
+     "lib/shibkit/rack/simulator/models/directory.rb",
+     "lib/shibkit/rack/simulator/models/entity_service.rb",
+     "lib/shibkit/rack/simulator/models/federation.rb",
+     "lib/shibkit/rack/simulator/models/idp_service.rb",
+     "lib/shibkit/rack/simulator/models/idp_session.rb",
+     "lib/shibkit/rack/simulator/models/sp_service.rb",
+     "lib/shibkit/rack/simulator/models/sp_session.rb",
+     "lib/shibkit/rack/simulator/models/wayf_service.rb",
+     "lib/shibkit/rack/simulator/models/wayf_session.rb",
+     "lib/shibkit/rack/simulator/record_filter.rb",
+     "lib/shibkit/rack/simulator/sim_scraps.rb",
+     "lib/shibkit/rack/simulator/views/browser_404.haml",
+     "lib/shibkit/rack/simulator/views/browser_layout.haml",
+     "lib/shibkit/rack/simulator/views/directory_item.haml",
+     "lib/shibkit/rack/simulator/views/directory_list.haml",
+     "lib/shibkit/rack/simulator/views/fatal_error.haml",
+     "lib/shibkit/rack/simulator/views/ggl.haml",
+     "lib/shibkit/rack/simulator/views/idp_404.haml",
+     "lib/shibkit/rack/simulator/views/idp_form.haml",
+     "lib/shibkit/rack/simulator/views/idp_new_system_status.haml",
+     "lib/shibkit/rack/simulator/views/idp_old_system_status.haml",
+     "lib/shibkit/rack/simulator/views/idp_redirect.haml",
+     "lib/shibkit/rack/simulator/views/layout.haml",
+     "lib/shibkit/rack/simulator/views/library.haml",
+     "lib/shibkit/rack/simulator/views/plain_layout.haml",
+     "lib/shibkit/rack/simulator/views/sp_session_status.haml",
+     "lib/shibkit/rack/simulator/views/user_chooser.haml",
+     "lib/shibkit/rack/simulator/views/wayf_federations.haml",
+     "lib/shibkit/rack/simulator/views/wayf_organisations.haml",
+     "lib/shibkit/rack/simulator/views/wayf_smart.haml",
      "lib/shibkit/rails/application_controller.rb",
      "lib/shibkit/rails/core_controller_mixin.rb",
      "lib/shibkit/rails/core_user_mixin.rb",
      "lib/shibkit/rails/seed_data_mixin.rb",
      "lib/shibkit/rails/session_filter.rb",
      "lib/shibkit/sp_assertion.rb",
+     "lib/test.rb",
      "shibkit.gemspec",
+     "spec/config_spec.rb",
+     "spec/data_tools_spec.rb",
+     "spec/exceptions_spec.rb",
+     "spec/metameta_spec.rb",
+     "spec/shib_shim_spec.rb",
+     "spec/shib_sim_spec.rb",
      "spec/shibkit_spec.rb",
+     "spec/simulator_directory_spec.rb",
+     "spec/simulator_federation_spec.rb",
+     "spec/simulator_organisation_spec.rb",
+     "spec/sp_assertion_spec.rb",
      "spec/spec.opts",
      "spec/spec_helper.rb"
   ]
@@ -55,7 +132,17 @@ Gem::Specification.new do |s|
   s.rubygems_version = %q{1.3.7}
   s.summary = %q{Shibboleth data toolkit}
   s.test_files = [
-    "spec/shibkit_spec.rb",
+    "spec/config_spec.rb",
+     "spec/data_tools_spec.rb",
+     "spec/exceptions_spec.rb",
+     "spec/metameta_spec.rb",
+     "spec/shib_shim_spec.rb",
+     "spec/shib_sim_spec.rb",
+     "spec/shibkit_spec.rb",
+     "spec/simulator_directory_spec.rb",
+     "spec/simulator_federation_spec.rb",
+     "spec/simulator_organisation_spec.rb",
+     "spec/sp_assertion_spec.rb",
      "spec/spec_helper.rb"
   ]
 
@@ -64,15 +151,39 @@ Gem::Specification.new do |s|
     s.specification_version = 3
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
-      s.add_development_dependency(%q<rspec>, [">= 1.2.9"])
-      s.add_development_dependency(%q<cucumber>, [">= 0"])
+      s.add_development_dependency(%q<rspec>, ["~> 2.0.0"])
+      s.add_development_dependency(%q<cucumber>, [">= 0.10"])
+      s.add_development_dependency(%q<jscruggs-metric_fu>, ["= 1.1.5"])
+      s.add_development_dependency(%q<rspec-rails>, ["~> 2.0.0.beta.1"])
+      s.add_runtime_dependency(%q<json_pure>, [">= 1.4.5"])
+      s.add_runtime_dependency(%q<SystemTimer>, [">= 0"])
+      s.add_runtime_dependency(%q<haml>, ["~> 2.2.22"])
+      s.add_runtime_dependency(%q<uuid>, [">= 0"])
+      s.add_runtime_dependency(%q<deep_merge>, [">= 0"])
+      s.add_runtime_dependency(%q<nokogiri>, [">= 0"])
     else
-      s.add_dependency(%q<rspec>, [">= 1.2.9"])
-      s.add_dependency(%q<cucumber>, [">= 0"])
+      s.add_dependency(%q<rspec>, ["~> 2.0.0"])
+      s.add_dependency(%q<cucumber>, [">= 0.10"])
+      s.add_dependency(%q<jscruggs-metric_fu>, ["= 1.1.5"])
+      s.add_dependency(%q<rspec-rails>, ["~> 2.0.0.beta.1"])
+      s.add_dependency(%q<json_pure>, [">= 1.4.5"])
+      s.add_dependency(%q<SystemTimer>, [">= 0"])
+      s.add_dependency(%q<haml>, ["~> 2.2.22"])
+      s.add_dependency(%q<uuid>, [">= 0"])
+      s.add_dependency(%q<deep_merge>, [">= 0"])
+      s.add_dependency(%q<nokogiri>, [">= 0"])
     end
   else
-    s.add_dependency(%q<rspec>, [">= 1.2.9"])
-    s.add_dependency(%q<cucumber>, [">= 0"])
+    s.add_dependency(%q<rspec>, ["~> 2.0.0"])
+    s.add_dependency(%q<cucumber>, [">= 0.10"])
+    s.add_dependency(%q<jscruggs-metric_fu>, ["= 1.1.5"])
+    s.add_dependency(%q<rspec-rails>, ["~> 2.0.0.beta.1"])
+    s.add_dependency(%q<json_pure>, [">= 1.4.5"])
+    s.add_dependency(%q<SystemTimer>, [">= 0"])
+    s.add_dependency(%q<haml>, ["~> 2.2.22"])
+    s.add_dependency(%q<uuid>, [">= 0"])
+    s.add_dependency(%q<deep_merge>, [">= 0"])
+    s.add_dependency(%q<nokogiri>, [">= 0"])
   end
 end
 

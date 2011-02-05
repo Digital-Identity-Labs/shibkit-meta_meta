@@ -11,8 +11,8 @@ begin
     gem.homepage = "http://github.com/binaryape/shibkit"
     gem.authors = ["Pete Birkinshaw"]
 
-    gem.add_development_dependency "rspec", ">= 1.2.9"
-    gem.add_development_dependency "cucumber", ">= 0"
+    gem.add_development_dependency "rspec", "~> 2.0.0"
+    gem.add_development_dependency "cucumber", ">= 0.10"
     gem.add_development_dependency 'jscruggs-metric_fu', '1.1.5'
     gem.add_development_dependency "rspec-rails", "~> 2.0.0.beta.1"
 
