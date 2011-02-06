@@ -252,30 +252,41 @@ module Shibkit
           ####################################################################
           ## SP Routing
           ##
-     
-          ## SP session status page?
+          
+          ## SP session page?
           when sp_session.session_path
               
-            return sp_session_status_action(env, sp_session)
+            return sp_session_action(env, sp_session)
+          
+          ## SP status page?
+          when sp_session.status_path
+            
+            return sp_status_action(env, sp_session)
+          
+          ## SP Login session initiator action
+          when sp_session.login_path
+          
+            return sp_login_action(env, sp_session)
           
           ## SP protected page?    
-          when sp_session.masked_paths[0]
+          when sp_session.protected_paths[0]
             
             ## Valid session in SP
-            if sp_session.logged_in?
+            if sp_session.required? && sp_session.logged_in?
               
-              return sp_protected_page_action(env, sp_session)
+              return sp_active_action(env, sp_session)
               
-            else
+            elsif sp_session.required?
               
               return sp_login_action(env, sp_session)
-              
+             
             end
-            
+          
           else
             
-            ## Do nothing, pass on up to the application
-            return @app.call(env)
+            ## Insert data if it exists, pass control to application (or next Rack middleware)
+            return sp_passive_action(env, sp_session)
+            #return @app.call(env)
             
         end
 

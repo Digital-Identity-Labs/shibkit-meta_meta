@@ -29,20 +29,27 @@ module Shibkit
     ## Default configuration values, attributes and accessors defined here
     CONFIG_DEFAULTS = {
       :app_name                       => "Your New Project",    
-      :path_auth_masks                => ["/"],
+      :protected_paths                => ["/"],
       :federation_metadata            => {"Example Federation"  => "/data/default_metadata/example_federation_metadata.xml".to_absolute_path,
                                           "UnCommon"            => "/data/default_metadata/uncommon_federation_metadata.xml".to_absolute_path,
                                           "Other Organisations" => "/data/default_metadata/local_metadata.xml".to_absolute_path},
       :home_path                      => "/",
       :exit_path                      => "/",
+      #:required                       => true, Turn into methods protection, required? and lazy? authenticated? in sp_session 
+      :content_protection             => :active, # or :passive
       :gateway                        => false,
       :gateway_path                   => "/",
       :gateway_passthrough            => false,
       :sim_debug                      => true,
       :sim_application                => 'default',
       :sim_chooser_idp_sso            => false,
-      :sim_sp_session_path            => "/Shibboleth.sso/Session",
-      :sim_sp_logout_path             => "/Shibboleth.sso/Logout",
+      :handler_path                   => "/Shibboleth.sso/",
+      :sim_sp_status_path             => "Status", # TODO: these are useful for Shim too, so rename?
+      :sim_sp_session_path            => "Session",
+      :sim_sp_login_path              => "Login",
+      :sim_sp_logout_path             => "Logout",
+      :sim_sp_df_path                 => "DiscoveryFeed",
+      :sim_sp_ds_path                 => "DS",
       :sim_assertion_base             => "http://localhost/Shibboleth.sso/GetAssertion", 
       :sim_record_filter_module       => "Shibkit::Rack::Simulator::RecordFilter",
       :sim_sp_entity_id               => 'https://sp.example.ac.uk/shibboleth',

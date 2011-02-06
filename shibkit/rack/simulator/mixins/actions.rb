@@ -5,6 +5,10 @@ module Shibkit
         module Actions
           
           
+          ####################################################################
+          ## Misc Actions
+          ##
+              
           ## Redirect browser to a new Simulator URL
           def redirect_to(path)
             
@@ -12,7 +16,11 @@ module Shibkit
             
             return 302, {'Location'=> url }, []
             
-          end
+          end          
+          
+          ####################################################################
+          ## Resource Actions
+          ##
           
           ## Return the global stylesheet
           def stylesheet_action(env, nil_session, options={})
@@ -71,6 +79,10 @@ module Shibkit
         
           end
           
+          ####################################################################
+          ## 'Browser' Actions
+          ##
+          
           ## Displayed if no IDP ID is provided, or if it cannot be found
           def browser_404_action(env, sim_session, options={})
           
@@ -91,6 +103,10 @@ module Shibkit
             return code, CONTENT_TYPE, [page_body.to_s]
           
           end
+          
+          ####################################################################
+          ## IDP Actions
+          ##
           
           ## Displayed if no IDP ID is provided, or if it cannot be found
           def idp_404_action(env, sim_session, options={})
@@ -262,6 +278,11 @@ module Shibkit
             
           end
           
+          
+          ####################################################################
+          ## Directory Actions
+          ##
+          
           ## Controller for directory Search/List 
           def directory_list_action(env, directory, options={})
             
@@ -302,6 +323,10 @@ module Shibkit
              return code, CONTENT_TYPE, [page_body.to_s]
                 
           end
+          
+          ####################################################################
+          ## Library Actions
+          ##
           
           ## Controller for simple Library page (done differently. TODO: Change?)
           def library_action(env)
@@ -347,6 +372,10 @@ module Shibkit
                       
           end
           
+          ####################################################################
+          ## Search Actions
+          ##
+          
           ## Controller for mockup of search engine (OK, WHY? For direct links to home and subpages) 
           def search_action(env, sp_session, options={})
                     
@@ -364,6 +393,10 @@ module Shibkit
             return code, CONTENT_TYPE, [page_body.to_s]
                       
           end
+          
+          ####################################################################
+          ## WAYF Actions
+          ##
           
           ## Controller for
           def wayf_action(env, wayf_session, options={})
@@ -418,8 +451,24 @@ module Shibkit
                 
           end
           
+          ####################################################################
+          ## SP Actions
+          ##
+          
           ## Controller for showing SP session status
-          def sp_session_action(env, options={}) 
+          def sp_status_action(env, sp_session, options={}) 
+
+            code = options[:code].to_i || 200
+  
+            "A valid session was not found."
+
+            page_body = render_page(:sp_status, render_locals)
+ 
+            return code, CONTENT_TYPE, [page_body.to_s]
+
+          end          
+          ## Controller for showing SP session status
+          def sp_session_action(env, sp_session, options={}) 
 
             code = options[:code].to_i || 200
   
@@ -439,14 +488,33 @@ module Shibkit
               }
             }  
 
-            page_body = render_page(:user_chooser, render_locals)
+            page_body = render_page(:sp_session, render_locals)
  
             return code, CONTENT_TYPE, [page_body.to_s]
 
           end
           
+          ## Controller for handling protected pages with active session
+          def sp_active_action(env, sp_session, options={})
+            
+
+  
+ 
+            return @app.call(env)
+            
+          end
+ 
+          ## Controller for handling protected pages with passive (lazy) session
+          def sp_passive_action(env, sp_session, options={})
+            
+
+            
+            return @app.call(env)
+            
+          end
+          
           ## Controller for
-          def sp_protected_page_action(env, options={})
+          def sp_login_action(env, sp_session, options={})
             
             message = options[:message]
             code = options[:code].to_i || 200
@@ -459,20 +527,10 @@ module Shibkit
             
           end
           
-          ## Controller for
-          def sp_login_action(env, options={})
-            
-            message = options[:message]
-            code = options[:code].to_i || 200
-            
-            render_locals = {}
-            
-            page_body = render_page(:x, render_locals)
- 
-            return code, CONTENT_TYPE, [page_body.to_s]
-            
-          end
-
+          ####################################################################
+          ## Halt/Error Actions
+          ##
+          
           ## Error page for unrecoverable situations
           def fatal_error_action(env, oops)
 
@@ -490,6 +548,8 @@ module Shibkit
             return 500, CONTENT_TYPE, [page_body.to_s]
 
           end
+          
+          ###########################
           
           def get_locals(*specified_locals)
             
