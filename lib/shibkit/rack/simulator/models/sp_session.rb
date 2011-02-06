@@ -242,16 +242,30 @@ module Shibkit
           
           
           ## URL paths that are protected by Shibboleth
-          def masked_paths
+          def protected_paths
             
-            return config.path_auth_masks
+            return config.protected_paths
             
           end
           
+          ## Location of the fake SP's general status page
+          def status_path
+
+            return config.sim_sp_session_path
+
+          end
+                   
           ## Location of the fake SP's session status page
           def session_path
 
             return config.sim_sp_session_path
+
+          end
+          
+          ## Location of the fake SP's login path / SessionInitiator URL
+          def login_path
+
+            return config.sim_sp_login_path
 
           end
           
@@ -261,7 +275,6 @@ module Shibkit
             return config.sim_sp_logout_path
 
           end
-          
           
           ## The Shibboleth SP application label (defaults to default)
           def application_id
@@ -275,8 +288,7 @@ module Shibkit
 
             return config.sim_sp_entity_id
 
-          end
-         
+          end      
           
           private 
           
