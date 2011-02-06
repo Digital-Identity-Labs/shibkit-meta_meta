@@ -65,9 +65,10 @@ module Shibkit
         ## Peek at user input, they might be talking to us
         request = ::Rack::Request.new(env)
         
-        ## Model representing SP state (knows about IDPs, WAYF, etc)
+        ## Models representing SP state (knows about IDPs, WAYF, etc)
         sp_session = Model::SPSession.new(env)
-
+        sp_service = sp_session.sp_service
+        
         ## Catching top-level exceptional exceptions in the workflow/routing
         ## (404s etc will be handled inside this, hopefully)
         begin
@@ -254,22 +255,22 @@ module Shibkit
           ##
           
           ## SP session page?
-          when sp_session.session_path
+          when sp_service.session_path
               
             return sp_session_action(env, sp_session)
           
           ## SP status page?
-          when sp_session.status_path
+          when sp_service.status_path
             
             return sp_status_action(env, sp_session)
           
           ## SP Login session initiator action
-          when sp_session.login_path
+          when sp_service.login_path
           
             return sp_login_action(env, sp_session)
           
           ## SP protected page?    
-          when sp_session.protected_paths[0]
+          when sp_service.protected_paths[0]
             
             ## Valid session in SP
             if sp_session.required? && sp_session.logged_in?
