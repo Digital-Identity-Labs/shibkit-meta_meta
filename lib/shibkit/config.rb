@@ -71,6 +71,7 @@ module Shibkit
       :shim_org_settings_file         => "/data/organisation_settings.yml".to_absolute_path,
       :shim_org_access_file           => "/data/organisation_access_rules.yml".to_absolute_path,
       :debug_path                     => "/shibkit/debug",
+      :demo_path                      => "/shibkit/demo",
       
       :sim_chooser_idp_sso            => false
     }
