@@ -10,10 +10,14 @@ require 'rack/logger'
 require 'json'
 
 ## Require various mixins too
-require 'shibkit/rack/simulator/mixins/render'
-require 'shibkit/rack/simulator/mixins/actions'
+require 'shibkit/rack/simulator/mixins/browser_actions'
+require 'shibkit/rack/simulator/mixins/dir_actions'
+require 'shibkit/rack/simulator/mixins/ds_actions'
+require 'shibkit/rack/simulator/mixins/idp_actions'
+require 'shibkit/rack/simulator/mixins/lib_actions'
+require 'shibkit/rack/simulator/mixins/search_actions'
+require 'shibkit/rack/simulator/mixins/sp_actions'
 require 'shibkit/rack/simulator/mixins/injection'
-require 'shibkit/rack/simulator/mixins/logging'
 
 ## Default record filter mixin code
 require 'shibkit/rack/simulator/record_filter'
@@ -34,17 +38,17 @@ module Shibkit
   
   module Rack
   
-    class Simulator
+    class Simulator < Shibkit::Rack::Base
       
       ## Methods have been split up into mixins to make things more manageable
       include Shibkit::Rack::Simulator::Mixin::Injection
-      include Shibkit::Rack::Simulator::Mixin::Render
-      include Shibkit::Rack::Simulator::Mixin::Actions
-      include Shibkit::Rack::Simulator::Mixin::Logging
+      include Shibkit::Rack::Simulator::Mixin::BrowserActions
+      include Shibkit::Rack::Simulator::Mixin::DirActions
+      include Shibkit::Rack::Simulator::Mixin::DSActions
+      include Shibkit::Rack::Simulator::Mixin::IDPActions
+      include Shibkit::Rack::Simulator::Mixin::LibActions
+      include Shibkit::Rack::Simulator::Mixin::SPActions
       
-      ## Easy access to Shibkit's configuration settings
-      include Shibkit::Configured
-    
       ## Middleware application components and behaviour
       CONTENT_TYPE   = { "Content-Type" => "text/html; charset=utf-8" }
       START_TIME     = Time.new
@@ -302,14 +306,7 @@ module Shibkit
       end
       
       private
-      
-      ## Reformat the base path for IDP URLs to capture info in URL
-      def base_path_regex(base_path)
 
-        normalised_path = base_path.gsub(/\/$/, '')
-        return Regexp.new(normalised_path)
-
-      end
   
     end
 
