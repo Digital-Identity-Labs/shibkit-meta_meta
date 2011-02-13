@@ -1,24 +1,14 @@
 ##
 ##
 
-require 'haml'
-require 'yaml'
-require 'time'
-require 'uri'
-require 'rack/logger'
-require 'json'
-
 ## Require various mixins too
-require 'shibkit/rack/demo/mixins/render'
 require 'shibkit/rack/demo/mixins/actions'
-require 'shibkit/rack/demo/mixins/logging'
-
 
 module Shibkit
   
   module Rack
   
-    class Demo
+    class Demo < Shibkit::Rack::Base
       
       ## Easy access to Shibkit's configuration settings
       include Shibkit::Configured
