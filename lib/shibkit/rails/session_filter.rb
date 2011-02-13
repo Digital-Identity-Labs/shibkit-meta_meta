@@ -5,7 +5,7 @@ module Shibkit
     module SessionFilter
       
       ## Redirect users to login here
-      GATEWAY_URL=Shibkit.config.gateway_path
+      #GATEWAY_URL=Shibkit.config.gateway_path
       
       ## Redirect failed logins here
       EXIT_URL=Shibkit.config.exit_path

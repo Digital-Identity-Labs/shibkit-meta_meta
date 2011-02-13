@@ -1,14 +1,6 @@
-class Shibkit::Rack::Debug
+class Shibkit::Rack::Debug  < Shibkit::Rack::Base
 
-  require 'deep_merge'
 
-  require 'shibkit/sp_assertion'
-  
-      
-  ## Easy access to Shibkit's configuration settings
-  include Shibkit::Configured
-  
-  
   def initialize(app)
     
     #@app = app

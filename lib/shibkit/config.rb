@@ -15,15 +15,10 @@ end
 
 module Shibkit
   
-
-  
   class Config
     
-
-
     include Singleton
     
-    CHOOSER_FORMATS  = [:simple, :ldap, :wayf]
     USERFILE_FORMATS = [:fixture]
     
     ## Default configuration values, attributes and accessors defined here
@@ -47,7 +42,7 @@ module Shibkit
       :df_path                        => "DiscoveryFeed",
       :ds_path                        => "DS",
       :sim_assertion_base             => "http://localhost/Shibboleth.sso/GetAssertion", 
-      :sim_record_filter_module       => "Shibkit::Rack::Simulator::RecordFilter",
+#      :sim_record_filter_module       => "Shibkit::Rack::Simulator::RecordFilter",
       :sim_remote_user                => %w"eppn persistent-id targeted-id",
       :sim_idp_session_expiry         => 300,
       :sim_sp_session_expiry          => 300,
@@ -175,7 +170,7 @@ module Shibkit
       ##
       
       ## Check that URI settings are proper URIs
-      [:sim_sp_entity_id, :sim_saml_authentication_method].each do |m|
+      [:entity_id, :sim_saml_authentication_method].each do |m|
 
         begin
           URI.parse(self.send(m))
@@ -186,7 +181,7 @@ module Shibkit
       end
       
       ## Check that symbol settings are symbols  
-      [:shim_user_id_name, :shim_sp_assertion_name, :sim_chooser_type,
+      [:shim_user_id_name, :shim_sp_assertion_name,
        :sim_users_file_format].each do |m|
          
          raise Shibkit::ConfigurationError, "#{m} is not a symbol! (Maybe change to :#{self.send(m)}?)" unless
@@ -195,15 +190,13 @@ module Shibkit
       end
        
       ## Check that limited options values are correct
-      raise Shibkit::ConfigurationError, "Unknown chooser type!"    unless
-        CHOOSER_FORMATS.include?(sim_chooser_type)
       raise Shibkit::ConfigurationError, "Unknown user file format!" unless
         USERFILE_FORMATS.include?(sim_users_file_format)
       
       ## Check file paths are valid and accessible - gather all our filenames
       gathered_filenames = Array.new
-      [:sim_chooser_css, :sim_users_file, 
-         :sim_chooser_css, :shim_attribute_map,
+      [:sim_users_file, 
+       :shim_attribute_map,
          :shim_org_settings_file, :shim_org_access_file].each do |m|
         
         filename = self.send(m)
@@ -226,7 +219,7 @@ module Shibkit
       #
       
        ## Check URL paths are valid
-      [:home_path, :exit_path, :gateway_path, :sim_idp_base_path, :sim_wayf_base_path].each do |m|
+      [:home_path, :exit_path, :sim_idp_base_path, :sim_wayf_base_path].each do |m|
         
         path     = self.send(m)
         test_url = "http://localhost" + path

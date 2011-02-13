@@ -90,7 +90,7 @@ module Shibkit
             
             rescue => oops
               
-              puts "Error loading metadata into Shibkit::Simulator!"
+              puts "Error loading metadata into Shibkit::Rack::Simulator!"
               puts oops
               puts oops.inspect
               
