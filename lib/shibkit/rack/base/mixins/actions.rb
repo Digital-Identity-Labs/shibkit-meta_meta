@@ -1,10 +1,9 @@
 module Shibkit
   module Rack
-    class Simulator
+    class Base
       module Mixin
         module Actions
-          
-          
+                  
           ####################################################################
           ## Misc Actions
           ##

@@ -1,15 +1,15 @@
 module Shibkit
   module Rack
-    class Simulator
+    class Base
       module Mixin
         module Logging
 
           ## Simple and switchable logger (to stdout by default)
           def log_debug(message)
   
-            return unless config.sim_debug
+            return unless config.debug
   
-            puts [Time.new, "Shibkit-Simulator:", message].join(' ')
+            puts [Time.new, "#{self.class.name}: ", message].join(' ')
 
           end
           

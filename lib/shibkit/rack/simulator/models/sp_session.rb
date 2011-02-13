@@ -33,7 +33,7 @@ module Shibkit
               rescue
 
                 ## TODO need to raise exception here to deal with bad IDP ID.
-                raise Rack::Simulator::ResourceNotFound, "Unable to find SP '#{config.entity_id}' in metadata"
+                raise Shibkit::Rack::ResourceNotFound, "Unable to find SP '#{config.entity_id}' in metadata"
 
               end 
             end
@@ -163,7 +163,7 @@ module Shibkit
 
             headers = Hash.new
             
-            #raise Rack::Simulator::RuntimeError, "Missing user details when trying to add SP headers" unless user_details
+            #raise Shibkit::Rack::RuntimeError, "Missing user details when trying to add SP headers" unless user_details
             
             ## Convert to proper format that matches the live SP (also add new ones)
             prepared_data = process_attribute_data(idp_assertion.something) # TODO

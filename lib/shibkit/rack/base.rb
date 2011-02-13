@@ -1,19 +1,8 @@
 ##
 ##
 
-require 'uuid'
-require 'haml'
-require 'yaml'
-require 'time'
-require 'uri'
-require 'rack/logger'
-require 'json'
 
-## Require various mixins too
-require 'shibkit/rack/base/mixins/render'
-require 'shibkit/rack/base/mixins/actions'
-require 'shibkit/rack/base/mixins/logging'
-require 'shibkit/rack/exceptions'
+
 
 
 module Shibkit
@@ -21,6 +10,23 @@ module Shibkit
   module Rack
   
     class Base
+      
+     
+      
+      require 'uuid'
+      require 'haml'
+      require 'yaml'
+      require 'time'
+      require 'uri'
+      require 'rack/logger'
+      require 'json'
+      
+      ## Require various mixins too
+      require 'shibkit/rack/base/mixins/render'
+      require 'shibkit/rack/base/mixins/actions'
+      require 'shibkit/rack/base/mixins/logging'
+      require 'shibkit/rack/exceptions'
+      
       
       ## Methods have been split up into mixins to make things more manageable
       include Shibkit::Rack::Base::Mixin::Render
@@ -38,6 +44,8 @@ module Shibkit
       
         ## Rack app
         @app = app
+        
+         log_debug("Hello")
         
       end
       

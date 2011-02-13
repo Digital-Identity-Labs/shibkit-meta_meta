@@ -9,36 +9,39 @@ require 'uri'
 require 'rack/logger'
 require 'json'
 
-## Require various mixins too
-require 'shibkit/rack/simulator/mixins/browser_actions'
-require 'shibkit/rack/simulator/mixins/dir_actions'
-require 'shibkit/rack/simulator/mixins/ds_actions'
-require 'shibkit/rack/simulator/mixins/idp_actions'
-require 'shibkit/rack/simulator/mixins/lib_actions'
-require 'shibkit/rack/simulator/mixins/search_actions'
-require 'shibkit/rack/simulator/mixins/sp_actions'
-require 'shibkit/rack/simulator/mixins/injection'
 
-## Default record filter mixin code
-require 'shibkit/rack/simulator/record_filter'
-require 'shibkit/rack/simulator/exceptions'
-
-## Models to manage sessions and authnz behaviour
-require 'shibkit/rack/simulator/models/account'
-require 'shibkit/rack/simulator/models/directory'
-require 'shibkit/rack/simulator/models/federation'
-require 'shibkit/rack/simulator/models/idp_session'
-require 'shibkit/rack/simulator/models/idp_service'
-require 'shibkit/rack/simulator/models/sp_service'
-require 'shibkit/rack/simulator/models/sp_session'
-require 'shibkit/rack/simulator/models/wayf_service'
-require 'shibkit/rack/simulator/models/wayf_session'
+## 
+require 'shibkit/rack/base'
 
 module Shibkit
   
   module Rack
   
     class Simulator < Shibkit::Rack::Base
+      
+       
+      
+      ## Require various mixins too
+      require 'shibkit/rack/simulator/mixins/browser_actions'
+      require 'shibkit/rack/simulator/mixins/dir_actions'
+      require 'shibkit/rack/simulator/mixins/ds_actions'
+      require 'shibkit/rack/simulator/mixins/idp_actions'
+      require 'shibkit/rack/simulator/mixins/lib_actions'
+      require 'shibkit/rack/simulator/mixins/search_actions'
+      require 'shibkit/rack/simulator/mixins/sp_actions'
+      require 'shibkit/rack/simulator/mixins/injection'
+
+      ## Models to manage sessions and authnz behaviour
+      require 'shibkit/rack/simulator/models/account'
+      require 'shibkit/rack/simulator/models/directory'
+      require 'shibkit/rack/simulator/models/federation'
+      require 'shibkit/rack/simulator/models/idp_session'
+      require 'shibkit/rack/simulator/models/idp_service'
+      require 'shibkit/rack/simulator/models/sp_service'
+      require 'shibkit/rack/simulator/models/sp_session'
+      require 'shibkit/rack/simulator/models/wayf_service'
+      require 'shibkit/rack/simulator/models/wayf_session'
+
       
       ## Methods have been split up into mixins to make things more manageable
       include Shibkit::Rack::Simulator::Mixin::Injection
@@ -60,6 +63,8 @@ module Shibkit
         
         ## Load federations, and everything they contain
         Shibkit::Rack::Simulator::Model::Federation.load_records
+        
+        log_debug("Panda")
         
       end
       
