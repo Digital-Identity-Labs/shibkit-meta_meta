@@ -21,7 +21,22 @@ module Shibkit
             ## Make sure we have a data structure
             @env['rack.session']['shibkit-simulator']       ||= Hash.new
             @env['rack.session']['shibkit-simulator']['sp'] ||= Hash.new
-             
+            
+            ## A default SP service that uses the config for values
+            @sp_service = Shibkit::Rack::Simulator::Model::SPService.new
+            
+            ## Replace it with one configured from real metadata?
+            if config.sim_sp_use_metadata
+              
+              begin
+               @sp_service = Shibkit::Rack::Simulator::Model::SPService.find_by_entity(config.entity_id)
+              rescue
+
+                ## TODO need to raise exception here to deal with bad IDP ID.
+                raise Rack::Simulator::ResourceNotFound, "Unable to find SP '#{config.entity_id}' in metadata"
+
+              end 
+            end
             
           end
           
@@ -75,13 +90,10 @@ module Shibkit
             return sp_session[:user_id] == user_id
 
           end
+          
+          alias :authenticated? :logged_in?
+          
 
-          ## Has the session expired?
-          def expired?
-            
-            return false if Time.new < session_expires
-            
-          end
           
           ## When did the user first login? 
           def login_time
@@ -116,8 +128,15 @@ module Shibkit
 
             return Time.new - Time.login
 
+          end      
+          
+          ## Has the session expired?
+          def expired?
+            
+            return false if Time.new < session_expires
+            
           end
- 
+          
           ## Details about the user passed by IDP
           def idp_assertion
             
@@ -240,55 +259,26 @@ module Shibkit
           
           end
           
-          
-          ## URL paths that are protected by Shibboleth
-          def protected_paths
+          ## The SP service
+          def sp_service
             
-            return config.protected_paths
+            return @sp_service
             
           end
           
-          ## Location of the fake SP's general status page
-          def status_path
-
-            return config.sim_sp_session_path
-
-          end
-                   
-          ## Location of the fake SP's session status page
-          def session_path
-
-            return config.sim_sp_session_path
-
+          def required?
+            
+            return sp_service.required_session?
+            
           end
           
-          ## Location of the fake SP's login path / SessionInitiator URL
-          def login_path
-
-            return config.sim_sp_login_path
-
+          def lazy?
+            
+            return sp_service.lazy_session?
+            
           end
           
-          ## Location of the fake SP's logout page
-          def logout_path
-
-            return config.sim_sp_logout_path
-
-          end
-          
-          ## The Shibboleth SP application label (defaults to default)
-          def application_id
-
-            return config.sim_application
-
-          end
-          
-          ## The Shibboleth SP entity ID
-          def entity_id
-
-            return config.sim_sp_entity_id
-
-          end      
+          ## 
           
           private 
           
