@@ -28,11 +28,11 @@ module Shibkit
               ## Missing Dir id? Show a 404 sort of thing
               unless idp_id and idp
 
-                raise Rack::Simulator::ResourceNotFound, "Unable to find Library with suitable Shibboleth IDP (#{idp_id})"
+                raise Shibkit::Rack::ResourceNotFound, "Unable to find Library with suitable Shibboleth IDP (#{idp_id})"
 
               end
 
-            rescue Rack::Simulator::ResourceNotFound => oops
+            rescue Shibkit::Rack::ResourceNotFound => oops
 
                 return browser_404_action(env, nil, {})
 

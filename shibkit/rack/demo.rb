@@ -9,9 +9,6 @@ module Shibkit
   module Rack
   
     class Demo < Shibkit::Rack::Base
-      
-      ## Easy access to Shibkit's configuration settings
-      include Shibkit::Configured
     
       ## Middleware application components and behaviour
       CONTENT_TYPE   = { "Content-Type" => "text/html; charset=utf-8" }
