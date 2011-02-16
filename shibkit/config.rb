@@ -18,9 +18,7 @@ module Shibkit
   class Config
     
     include Singleton
-    
-    USERFILE_FORMATS = [:fixture]
-    
+
     ## Default configuration values, attributes and accessors defined here
     CONFIG_DEFAULTS = {
       :app_name                       => "Your New Project",    
@@ -35,16 +33,14 @@ module Shibkit
       :application                    => 'default',
       :entity_id                      => 'https://sp.example.ac.uk/shibboleth',
       :handler_path                   => "/Shibboleth.sso/",
-      :status_path                    => "Status",
-      :session_path                   => "Session",
-      :login_path                     => "Login",
-      :logout_path                    => "Logout",
-      :df_path                        => "DiscoveryFeed",
-      :ds_path                        => "DS",
-      :sim_assertion_base             => "http://localhost/Shibboleth.sso/GetAssertion", 
-#      :sim_record_filter_module       => "Shibkit::Rack::Simulator::RecordFilter",
+      :status_handler                 => "Status",
+      :session_handler                => "Session",
+      :login_handler                  => "Login",
+      :logout_handler                 => "Logout",
+      :df_handler                     => "DiscoveryFeed",
+      :ds_handler                     => "DS",
+      :assertion_handler              => "GetAssertion", 
       :sim_remote_user                => %w"eppn persistent-id targeted-id",
-      :sim_idp_session_expiry         => 300,
       :sim_sp_session_expiry          => 300,
       :sim_sp_session_idle            => 300,
       :sim_sp_use_metadata            => false,
@@ -54,21 +50,19 @@ module Shibkit
       :sim_dir_base_path              => "/sim_dir/",
       :sim_ggl_base_path              => "/sim_ggl/",
       :sim_wayf_base_path             => "/sim_wayf",
-      :sim_idp_old_status_path        => "/idp/profile/Status", # TODO: Set per-simulated IDP, by metadata?
-      :sim_idp_new_status_path        => "/idp/status",         # TODO: Set per-simulated IDP, by metadata?
       :sim_users_file                 => "/data/simulator_user_directory.yml".to_absolute_path,
-      :sim_users_file_format          => :fixture,
-      :sim_metadata_cache_file        => "/data/default_metadata_cache.yml".to_absolute_path,
-      :sim_saml_authentication_method => 'urn:oasis:names:tc:SAML:1.0:am:unspecified', # Move to individual IDPs 
-      :shim_attribute_map             => "/data/sp_attr_map.yml".to_absolute_path,
+      :sim_metadata_cache_file        => "/data/default_metadata_cache.yml".to_absolute_path, 
+      :shim_attribute_map_file        => "/data/sp_attr_map.yml".to_absolute_path,
       :shim_user_id_name              => :user_id,
       :shim_sp_assertion_name         => :sp_session,
       :shim_org_settings_file         => "/data/organisation_settings.yml".to_absolute_path,
       :shim_org_access_file           => "/data/organisation_access_rules.yml".to_absolute_path,
       :debug_path                     => "/shibkit/debug",
-      :demo_path                      => "/shibkit/demo",
-      
-      :sim_chooser_idp_sso            => false
+      :demo_path                      => "/shibkit/demo"
+    }
+    
+    PERMITTED_VALUES = {
+      :content_protection             => [:active, :passive]
     }
     
     ## Create accessors
@@ -165,6 +159,53 @@ module Shibkit
       ## Is the config sane? (Totally bad gets an exception instead of false)
       correct = true
       
+      
+      ## Check each configuration option in turn, infering correct content from defaults
+      CONFIG_DEFAULTS.each_pair do |setting, default_value|
+        
+        ## What is being used?
+        current_value = self.send(m) 
+        
+        ## Use the default value to decide how to check the current value
+        case default_value
+        when /.yml$/
+          validate_file(current_value)
+          validate_yaml(current_value)
+        when kind_of?(TrueClass), kind_of?(FalseClass)
+          validate_boolean(current_value)
+        when /uri/
+          validate_uri(current_value)
+        when /path/
+          validate_path(current_value)
+        when /symbol/
+          validate_symbol(current_value)
+        when /number/
+          validate_seconds(current_value)
+        end
+        
+        ## Use the setting name to check content
+        case setting
+        when /path/
+          validate_path
+        when /handler/
+            
+        
+        ## Check for permitted values if they are defined
+        if permitted_values = PERMITTED_VALUES[setting]
+          
+          validate_permitted_value(current_value, permitted_values)
+          
+        end
+        
+        
+        
+      end
+      
+      
+      
+      
+      ######## OLD #######3
+      
       ##
       ## First check for exceptional situations
       ##
@@ -172,11 +213,7 @@ module Shibkit
       ## Check that URI settings are proper URIs
       [:entity_id, :sim_saml_authentication_method].each do |m|
 
-        begin
-          URI.parse(self.send(m))
-        rescue
-          raise Shibkit::ConfigurationError, "#{m} is not a parsable URI"
-        end
+        
         
       end
       
@@ -188,11 +225,7 @@ module Shibkit
            self.send(m).kind_of?(Symbol)
          
       end
-       
-      ## Check that limited options values are correct
-      raise Shibkit::ConfigurationError, "Unknown user file format!" unless
-        USERFILE_FORMATS.include?(sim_users_file_format)
-      
+
       ## Check file paths are valid and accessible - gather all our filenames
       gathered_filenames = Array.new
       [:sim_users_file, 
@@ -207,8 +240,7 @@ module Shibkit
       ## Try each filename in turn
       gathered_filenames.flatten.each do |filename| 
       
-        raise Shibkit::ConfigurationError, "Can't access file #{filename}" unless
-          File.exists?(filename)
+      
       
       end
       
@@ -224,12 +256,6 @@ module Shibkit
         path     = self.send(m)
         test_url = "http://localhost" + path
         
-        begin
-          URI.parse(test_url)
-        rescue
-          raise Shibkit::ConfigurationError, "#{path} is not path (try something like '/mysite/page')"
-        end
-      
       end
       
       ##
@@ -241,6 +267,60 @@ module Shibkit
       return correct
       
     end
+    
+    private
+    
+    ##
+    def validate_uri(value)
+      
+      begin
+        URI.parse(self.send(m))
+      rescue
+        raise Shibkit::ConfigurationError, "#{m} is not a parsable URI"
+      end
+      
+    end
+    
+    ## 
+    def validate_file(value)
+      
+        raise Shibkit::ConfigurationError, "Can't access file #{filename}" unless
+          File.exists?(filename)
+      
+    end
+    
+    def validate_path(value)
+      
+      begin
+        URI.parse(test_url)
+      rescue
+        raise Shibkit::ConfigurationError, "#{path} is not path (try something like '/mysite/page')"
+      end
+      
+    end
+    
+    def validate_name(value)
+      
+      
+    end
+    
+    def validate_boolean(value)
+      
+      
+    end
+    
+    def validate_seconds(value)
+      
+      
+    end
+    
+    def validate_symbol(value)
+      
+      
+      
+    end
+    
+    def validate_permitted_values(current_value, permitted_values)
     
   end
   

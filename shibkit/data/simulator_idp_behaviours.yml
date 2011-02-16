@@ -7,6 +7,9 @@ default:
   auth_class_uri:   'urn:oasis:names:tc:SAML:1.0:am:unspecified'
   idp_type:         shibboleth2
   add_tid:          true
+  session_expiry:   300
+  sim_idp_old_status_path: "/idp/profile/Status"
+  sim_idp_new_status_path: "/idp/status"
 "https://shib.example.ac.uk/shibboleth":
   sso:              true
   auth_attribute:   uid
