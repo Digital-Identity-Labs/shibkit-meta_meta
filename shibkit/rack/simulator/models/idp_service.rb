@@ -12,11 +12,20 @@ module Shibkit
           attr_accessor :scope
           attr_accessor :auth_attribute
           attr_accessor :pid_attribute
-          attr_accessor :auth_method_uri
-          attr_accessor :auth_class_uri
+          attr_accessor :auth_method
+          attr_accessor :auth_class
           attr_accessor :add_tid
           attr_accessor :directory
-          
+          attr_accessor :sso            
+          attr_accessor :auth_attribute 
+          attr_accessor :pid_attribute  
+          attr_accessor :auth_method_uri
+          attr_accessor :auth_class_uri 
+          attr_accessor :idp_type       
+          attr_accessor :add_tid        
+          attr_accessor :session_expiry 
+          attr_accessor :idp_base_path       
+
           ## Copy data from a suitable MetaMeta object
           def from_metadata(entity)
           
@@ -30,10 +39,22 @@ module Shibkit
           end
           
           ## Set properties from a list of defaults
-          def from_defaults(default_list)
-          
+          def from_defaults(default_list, entity_id=uri)
             
-          
+            defaults = default_list[entity_id] || default_list["default"]
+            
+            @sso             = defaults['sso']             || true
+            @auth_attribute  = defaults['auth_attribute']  || 'uid'
+            @pid_attribute   = defaults['pid_attribute']   || 'uid'
+            @auth_method_uri = defaults['auth_method_uri'] || 'urn:oasis:names:tc:SAML:1.0:am:unspecified'
+            @auth_class_uri  = defaults['auth_class_uri']  || 'urn:oasis:names:tc:SAML:1.0:am:unspecified'
+            @idp_type        = defaults['idp_type']        || 'shibboleth2'
+            @add_tid         = defaults['add_tid']         ||  true
+            @session_expiry  = defaults['session_expiry']  ||  300
+            @idp_path        = defaults['idp_path']        ||  "/idp/"
+            @old_status_path = defaults['old_status_path'] ||  "/profile/Status"
+            @new_status_path = defaults['new_status_path'] ||  "/status"
+            
           end
           
           ## What sort of IDP software is this meant to be?
@@ -53,28 +74,28 @@ module Shibkit
           ## Login path
           def login_path
 
-            return "/logout"
+            return glue_paths(idp_path, login_path)
           
           end
           
           ## SLO path
           def logout_path
 
-            return "/logout"
+            return glue_paths(idp_path, logout_path)
           
           end
           
           ## Shibboleth1-style "OK" page
           def old_status_path
    
-            return "/idp/profile/Status"
+            return glue_paths(idp_path, old_status_path)
                     
           end
           
           ## Shibboleth 2 style text
           def new_status_path
 
-            return "/idp/status"
+            return glue_paths(idp_path, new_status_path)
           
           end
           
