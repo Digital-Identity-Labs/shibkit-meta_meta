@@ -1,5 +1,5 @@
 ---
-default:
+default: &default_shibboleth2
   sso:              true
   auth_attribute:   uid
   pid_attribute:    uid
@@ -8,21 +8,14 @@ default:
   idp_type:         shibboleth2
   add_tid:          true
   session_expiry:   300
-  sim_idp_old_status_path: "/idp/profile/Status"
-  sim_idp_new_status_path: "/idp/status"
+  idp_base_path:    "/idp/"
+  old_status_path:  "/profile/Status"
+  new_status_path:  "/status"
+  login_path:       "/login"
+  logout_path:      "/logout"
 "https://shib.example.ac.uk/shibboleth":
-  sso:              true
-  auth_attribute:   uid
-  pid_attribute:    uid
-  auth_method_uri:  'urn:oasis:names:tc:SAML:1.0:am:unspecified'
-  auth_class_uri:   'urn:oasis:names:tc:SAML:1.0:am:unspecified'
-  idp_type:         shibboleth2
-  add_tid:          true
+  <<: *default_shibboleth2
 "https://yogsothoth.miskatonic.edu/shibboleth":
+  <<: *default_shibboleth2
   sso:              false
-  auth_attribute:   uid
-  pid_attribute:    uid
-  auth_method_uri:  'urn:oasis:names:tc:SAML:1.0:am:unspecified'
-  auth_class_uri:   'urn:oasis:names:tc:SAML:1.0:am:unspecified'
-  idp_type:         shibboleth2
-  add_tid:          true
+  display_name:     "Miskatonic University IDP"

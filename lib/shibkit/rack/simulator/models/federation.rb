@@ -62,13 +62,18 @@ module Shibkit
               federation = Shibkit::Rack::Simulator::Model::Federation.create do |f|
                   
                  f.from_metadata(fed_metadata)
+                 idp_default_behaviour = YAML.load(File.open(Federation.config.sim_idp_behaviours_file))
                                                 
                  ## Each IDP for this federation too
                  fed_metadata.entities.each do |entity_metadata|
 
                    idp = Shibkit::Rack::Simulator::Model::IDPService.create
+                   
+                   ## Base IDP on real or dev metadata
                    idp.from_metadata(entity_metadata)
                    
+                   ## Then apply settings that are not present in metadata but needed for sim
+                   idp.from_defaults(idp_default_behaviour)
                   
                    dir = Shibkit::Rack::Simulator::Model::Directory.create                   
                    dir.display_name = entity_metadata.organisation.display_name + " User Directory"
@@ -90,7 +95,7 @@ module Shibkit
             
             rescue => oops
               
-              puts "Error loading metadata into Shibkit::Rack::Simulator!"
+              puts "Error loading metadata and defaults into Shibkit::Rack::Simulator!"
               puts oops
               puts oops.inspect
               
