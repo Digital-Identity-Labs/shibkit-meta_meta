@@ -119,6 +119,7 @@ module Shibkit
           ## Simple automatic IDs
           def self.generate_id
             
+            @nid ||= 0
             @nid = @nid + 1
             
             return @nid
