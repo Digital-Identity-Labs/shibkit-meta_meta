@@ -4,7 +4,7 @@ module Shibkit
   module Rack
     class Simulator
       module Model
-        class SPService < EntityService
+        class SPService #< Session
           
           ## Easy access to Shibkit's configuration settings
           include Shibkit::Configured 

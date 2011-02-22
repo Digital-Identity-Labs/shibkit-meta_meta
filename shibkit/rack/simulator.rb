@@ -152,19 +152,19 @@ module Shibkit
             case request.path
                   
             ## IDP status information
-            when idp_session.new_status_path
+            when idp_session.idp_service.new_status_path
               
               return idp_new_status_action(env, idp_session)
               
             ## IDP status information
-            when idp_session.old_status_path
+            when idp_session.idp_service.old_status_path
 
               return idp_old_status_action(env, idp_session)
 
             ## Request is for the fake IDP's login function
-            when idp_session.service_base_path,
-                 idp_session.service_root_path,
-                 idp_session.login_path
+            when idp_session.idp_service.service_base_path,
+                 idp_session.idp_service.service_root_path,
+                 idp_session.idp_service.login_path
               
               ## Posting form data?
               if request.request_method.downcase == "post" 
@@ -184,7 +184,7 @@ module Shibkit
               end
             
             ## IDP SLO request?     
-            when idp_session.logout_path
+            when idp_session.idp_service.logout_path
               
               return idp_logout_action(env, idp_session)
           

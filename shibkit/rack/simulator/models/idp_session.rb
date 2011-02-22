@@ -2,7 +2,7 @@ module Shibkit
   module Rack
     class Simulator
       module Model
-        class IDPSession
+        class IDPSession #< Session
           
           ## Easy access to Shibkit's configuration settings
           extend Shibkit::Configured
@@ -10,7 +10,7 @@ module Shibkit
           attr_reader :idp_service
           attr_reader :active_user
           attr_reader :idp_id
-          
+
           ## A new IDP Session
           def initialize(env, idp_id=nil)
   
@@ -140,18 +140,6 @@ module Shibkit
            
           end
          
-          ## Default authentication method
-          def authentication_method
-           
-           
-          end
-         
-          ## Default authentication class
-          def authentication_class
-           
-           
-          end
-         
           ## Session expires at...
           def session_expires
            
@@ -188,41 +176,6 @@ module Shibkit
           def service_base_path
            
             return IDPSession.config.sim_idp_base_path + idp_id
-
-          end
-          
-          ## Shib sim location of this IDP, but with trailing /
-          def service_root_path
-            
-            return service_base_path + '/'
-
-          end
-          
-          ## Location of the fake SP's session status page
-          def login_path
-       
-            return service_base_path + idp_service.login_path
-
-          end
-
-          ## Location of the fake SP's session status page
-          def logout_path
-
-            return service_base_path + idp_service.logout_path
-
-          end
-         
-          ## Location of the fake SP's session status page
-          def new_status_path
-
-            return service_base_path + idp_service.new_status_path
-
-          end
-         
-          ## Location of the fake SP's session status page
-          def old_status_path
-
-            return service_base_path + idp_service.old_status_path
 
           end
           
