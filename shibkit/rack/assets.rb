@@ -1,6 +1,8 @@
 ##
 ##
 
+require 'shibkit/rack/base'
+
 module Shibkit
   
   module Rack

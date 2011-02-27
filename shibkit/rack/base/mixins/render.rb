@@ -38,7 +38,7 @@ module Shibkit
             
             unless @views[view_name]
       
-              view_file_location = "#{::File.dirname(__FILE__)}/../views/#{view_name.to_s}.haml"
+              view_file_location = "#{::File.dirname(__FILE__)}/../../#{component_name}/views/#{view_name.to_s}.haml"
               @views[view_name]  = IO.read(view_file_location)
               
             end

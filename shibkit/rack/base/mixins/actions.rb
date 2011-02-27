@@ -115,6 +115,7 @@ module Shibkit
               :page_title   => "Shibkit",
               :code         => 200,
               :assets_base  => config.sim_asset_base_path,
+              :javascript   => false,
               :content_type => CONTENT_TYPE
             }.merge *specified_locals
             

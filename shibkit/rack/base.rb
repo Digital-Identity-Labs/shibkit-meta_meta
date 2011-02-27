@@ -10,9 +10,7 @@ module Shibkit
   module Rack
   
     class Base
-      
-     
-      
+        
       require 'uuid'
       require 'haml'
       require 'yaml'
@@ -82,6 +80,12 @@ module Shibkit
         end
         
         return @recache[path]
+        
+      end
+  
+      def component_name
+        
+        return self.class.to_s.gsub('::', ':').split(':').reverse[0].downcase
         
       end
   
