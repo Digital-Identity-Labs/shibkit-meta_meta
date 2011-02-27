@@ -46,7 +46,6 @@ module Shibkit
       include Shibkit::Rack::Simulator::Mixin::SPActions
       
       ## Middleware application components and behaviour
-      CONTENT_TYPE   = { "Content-Type" => "text/html; charset=utf-8" }
       START_TIME     = Time.new
     
       def initialize(app)

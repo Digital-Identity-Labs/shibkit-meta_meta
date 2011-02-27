@@ -37,7 +37,10 @@ module Shibkit
       include Shibkit::Configured
     
       ## Middleware application components and behaviour
-      CONTENT_TYPE   = { "Content-Type" => "text/html; charset=utf-8" }
+      CONTENT_TYPE   = "text/html; charset=utf-8"
+      HEADERS        = {
+        "Content-Type" => CONTENT_TYPE
+        }
       START_TIME     = Time.new
     
       def initialize(app)

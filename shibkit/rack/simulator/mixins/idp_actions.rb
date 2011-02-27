@@ -21,7 +21,7 @@ module Shibkit
             
             page_body = render_page(:idp_404, locals)
 
-            return 404, CONTENT_TYPE, [page_body.to_s]
+            return 404, HEADERS, [page_body.to_s]
           
           end
           
@@ -87,7 +87,7 @@ module Shibkit
             
             page_body = render_page(:idp_form, locals)
 
-            return code, CONTENT_TYPE, [page_body.to_s]
+            return code, HEADERS, [page_body.to_s]
            
           end
                    
@@ -138,7 +138,7 @@ module Shibkit
 
                page_body = render_page(:idp_redirect, locals)
 
-               return code, CONTENT_TYPE, [page_body.to_s]
+               return code, HEADERS, [page_body.to_s]
             
             else
               
@@ -160,7 +160,7 @@ module Shibkit
             
             page_body = render_page(:x, render_locals)
  
-            return code, CONTENT_TYPE, [page_body.to_s]
+            return code, HEADERS, [page_body.to_s]
             
           end
           
@@ -174,7 +174,7 @@ module Shibkit
             
             page_body = render_page(:x, render_locals)
  
-            return code, CONTENT_TYPE, [page_body.to_s]
+            return code, HEADERS, [page_body.to_s]
             
           end
           

@@ -48,7 +48,7 @@ module Shibkit
 
             page_body = render_page(:library, locals)
 
-            return code, CONTENT_TYPE, [page_body.to_s]
+            return code, HEADERS, [page_body.to_s]
                       
           end
           

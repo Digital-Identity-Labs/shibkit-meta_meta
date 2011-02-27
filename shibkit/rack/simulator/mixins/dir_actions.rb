@@ -25,7 +25,7 @@ module Shibkit
 
              page_body = render_page(:directory_list, locals)
 
-             return code, CONTENT_TYPE, [page_body.to_s]
+             return code, HEADERS, [page_body.to_s]
                 
           end
 
@@ -46,7 +46,7 @@ module Shibkit
 
              page_body = render_page(:directory_item, locals)
 
-             return code, CONTENT_TYPE, [page_body.to_s]
+             return code, HEADERS, [page_body.to_s]
                 
           end
           
