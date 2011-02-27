@@ -1,15 +1,17 @@
 ##
 ##
 
-## Require various mixins too
-require 'shibkit/rack/demo/mixins/actions'
-
 module Shibkit
   
   module Rack
   
     class Demo < Shibkit::Rack::Base
-    
+      
+      ## Require various mixins too
+      require 'shibkit/rack/demo/mixins/actions'
+      
+      include Shibkit::Rack::Demo::Mixin::Actions
+      
       ## Middleware application components and behaviour
       CONTENT_TYPE   = { "Content-Type" => "text/html; charset=utf-8" }
       START_TIME     = Time.new
@@ -37,9 +39,11 @@ module Shibkit
           when regexify(demo_path)
             
             ## Serve up a suitable page based on content protection being used
-            return config.content_protection == :active ?
-              actively_protected_demo_page_action :
-              passively_protected_demo_page_action
+            #return config.content_protection == :active ?
+            #  actively_protected_demo_page_action :
+            #  passively_protected_demo_page_action
+            
+            return demo_page_action(env, nil, options={})
             
           else
             
@@ -62,10 +66,10 @@ module Shibkit
       
       def demo_path
         
-        glue_paths(config.demo_path, 'scripts')
+        glue_paths(config.demo_path)
         
       end
       
-      
-    end
+    end    
+  end
 end

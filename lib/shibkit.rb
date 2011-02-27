@@ -9,6 +9,7 @@ require 'shibkit/config'
 
 ## Shibkit utility classes
 require 'shibkit/data_tools'
+require 'shibkit/metameta'
 
 ## Essential 
 require 'shibkit/sp_assertion'
@@ -16,8 +17,11 @@ require 'shibkit/sp_assertion'
 ## Rack it up
 if defined?(Rack)
   
+  require "shibkit/rack/assets"
   require "shibkit/rack/simulator"
   require "shibkit/rack/shim"
+  require "shibkit/rack/debug"
+  require "shibkit/rack/demo"
 
 end
 
