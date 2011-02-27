@@ -25,7 +25,7 @@ module Shibkit
             
             page_body = render_page(:browser_404, locals)
 
-            return code, HEADERS, [page_body.to_s]
+            return code, Shibkit::Rack::HEADERS, [page_body.to_s]
           
           end
  

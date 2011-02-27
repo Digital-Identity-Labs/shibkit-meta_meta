@@ -38,7 +38,7 @@ module Shibkit
     
       ## Middleware application components and behaviour
       CONTENT_TYPE   = "text/html; charset=utf-8"
-      HEADERS        = {
+      Shibkit::Rack::HEADERS        = {
         "Content-Type" => CONTENT_TYPE
         }
       START_TIME     = Time.new

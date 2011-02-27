@@ -44,9 +44,6 @@ module Shibkit
       include Shibkit::Rack::Simulator::Mixin::IDPActions
       include Shibkit::Rack::Simulator::Mixin::LibActions
       include Shibkit::Rack::Simulator::Mixin::SPActions
-      
-      ## Middleware application components and behaviour
-      START_TIME     = Time.new
     
       def initialize(app)
         

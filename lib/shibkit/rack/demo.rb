@@ -12,10 +12,6 @@ module Shibkit
       
       include Shibkit::Rack::Demo::Mixin::Actions
       
-      ## Middleware application components and behaviour
-      HEADERS   = { "Content-Type" => "text/html; charset=utf-8" }
-      START_TIME     = Time.new
-      
       ## Setup
       def initialize(app)
       
