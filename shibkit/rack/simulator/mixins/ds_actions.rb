@@ -58,7 +58,7 @@ module Shibkit
             
             page_body = render_page(:wayf_smart, locals)
               
-            return code, HEADERS, [page_body.to_s]
+            return code, Shibkit::Rack::HEADERS, [page_body.to_s]
                 
           end
           

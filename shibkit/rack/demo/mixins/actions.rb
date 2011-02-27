@@ -39,7 +39,7 @@ module Shibkit
             demo_page = DEMO_PAGES[requested_page]            
             page_body = render_page(demo_page, locals)
 
-            return 200, HEADERS, [page_body.to_s]    
+            return 200, Shibkit::Rack::HEADERS, [page_body.to_s]    
         
           end
           
