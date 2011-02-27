@@ -103,7 +103,7 @@ module Shibkit
             render_locals = { :message => oops.to_s }
             page_body = render_page(:fatal_error, render_locals)
 
-            return 500, CONTENT_TYPE, [page_body.to_s]
+            return 500, HEADERS, [page_body.to_s]
 
           end
           

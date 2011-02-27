@@ -17,7 +17,7 @@ module Shibkit
 
             page_body = render_page(:sp_status, render_locals)
  
-            return code, CONTENT_TYPE, [page_body.to_s]
+            return code, HEADERS, [page_body.to_s]
 
           end          
           ## Controller for showing SP session status
@@ -43,7 +43,7 @@ module Shibkit
 
             page_body = render_page(:sp_session, render_locals)
  
-            return code, CONTENT_TYPE, [page_body.to_s]
+            return code, HEADERS, [page_body.to_s]
 
           end
           
@@ -76,7 +76,7 @@ module Shibkit
             
             page_body = render_page(:x, render_locals)
  
-            return code, CONTENT_TYPE, [page_body.to_s]
+            return code, HEADERS, [page_body.to_s]
             
           end
           
