@@ -25,6 +25,7 @@ module Shibkit
       require 'shibkit/rack/base/mixins/render'
       require 'shibkit/rack/base/mixins/actions'
       require 'shibkit/rack/base/mixins/logging'
+      require 'shibkit/rack/base/mixins/http_utils'
       require 'shibkit/rack/exceptions'
       
       
@@ -32,7 +33,8 @@ module Shibkit
       include Shibkit::Rack::Base::Mixin::Render
       include Shibkit::Rack::Base::Mixin::Actions
       include Shibkit::Rack::Base::Mixin::Logging
-      
+      include Shibkit::Rack::Base::Mixin::HTTPUtils
+       
       ## Easy access to Shibkit's configuration settings
       include Shibkit::Configured
     
@@ -45,7 +47,7 @@ module Shibkit
         ## Rack app
         @app = app
         
-         log_debug("Hello")
+         log_debug("Initializing")
         
       end
       
@@ -65,6 +67,22 @@ module Shibkit
         normalised_path = base_path.gsub(/\/$/, '')
         return Regexp.new(normalised_path)
 
+      end
+      
+      ## 
+      ## Memoise relatively expensive regex creation and escaping
+      def regexify(path)
+        
+        @recache ||= Hash.new
+        
+        unless @recache[path]
+          
+          @recache[path] ||= /#{Regexp.escape(path)}/
+        
+        end
+        
+        return @recache[path]
+        
       end
   
     end

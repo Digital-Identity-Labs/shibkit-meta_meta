@@ -15,7 +15,16 @@ module Shibkit
             
             return 302, {'Location'=> url }, []
             
-          end          
+          end
+          
+          ## A Plain 404
+          def simple_404_action(env, nil_session, options={})
+            
+            log_debug("Simple 404")
+                        
+            return 404, {'Content-Type' => 'text/plain'}, ['Oops! File was not found']
+            
+          end         
           
           ####################################################################
           ## Resource Actions
@@ -31,11 +40,9 @@ module Shibkit
         
           end
           
-          ## Return the appropriate image for something from a path ending in /image/something
+          ## Return a javascript file
           def javascript_action(env, nil_session, options={})
             
-            ## TODO: Needs to be a bit fancier and less SVG-hardcoded (made into another lib?)
-      
             specified = options[:specified] || "alert"
             
             page_body = asset(specified + ".js")
@@ -72,7 +79,7 @@ module Shibkit
               
             end
             
-            return browser_404_action(env, nil, {}) unless page_body
+            return simple_404_action(env, nil, {}) unless page_body
             
             return 200, {"Content-Type" => content_type}, [page_body.to_s]
         

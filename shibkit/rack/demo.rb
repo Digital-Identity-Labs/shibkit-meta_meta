@@ -34,7 +34,7 @@ module Shibkit
           case request.path
           
           ## Is the demo being requested?
-          when /#{Regexp.escape(config.demo_path)}/
+          when regexify(demo_path)
             
             ## Serve up a suitable page based on content protection being used
             return config.content_protection == :active ?
@@ -60,7 +60,11 @@ module Shibkit
 
       private
       
-      def 
+      def demo_path
+        
+        glue_paths(config.demo_path, 'scripts')
+        
+      end
       
       
     end

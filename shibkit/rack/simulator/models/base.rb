@@ -5,8 +5,12 @@ module Shibkit
       module Model
         class Base
           
+          require 'shibkit/rack/base/mixins/http_utils'
+          
           ## Easy access to Shibkit's configuration settings
           extend Shibkit::Configured
+          
+          include Shibkit::Rack::Base::Mixin::HTTPUtils
           
           attr_accessor :id
           

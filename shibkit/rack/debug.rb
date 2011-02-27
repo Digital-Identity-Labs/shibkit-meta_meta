@@ -1,5 +1,7 @@
 class Shibkit::Rack::Debug  < Shibkit::Rack::Base
 
+  ## Models to manage sessions and authnz behaviour
+  require 'shibkit/rack/simulator/models/all'
 
   def initialize(app)
     
