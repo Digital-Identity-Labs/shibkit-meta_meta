@@ -12,6 +12,7 @@ require 'json'
 
 ## 
 require 'shibkit/rack/base'
+require 'shibkit/rack/assets'
 
 module Shibkit
   
@@ -32,15 +33,7 @@ module Shibkit
       require 'shibkit/rack/simulator/mixins/injection'
 
       ## Models to manage sessions and authnz behaviour
-      require 'shibkit/rack/simulator/models/account'
-      require 'shibkit/rack/simulator/models/directory'
-      require 'shibkit/rack/simulator/models/federation'
-      require 'shibkit/rack/simulator/models/idp_session'
-      require 'shibkit/rack/simulator/models/idp_service'
-      require 'shibkit/rack/simulator/models/sp_service'
-      require 'shibkit/rack/simulator/models/sp_session'
-      require 'shibkit/rack/simulator/models/wayf_service'
-      require 'shibkit/rack/simulator/models/wayf_session'
+      require 'shibkit/rack/simulator/models/all'
 
       
       ## Methods have been split up into mixins to make things more manageable
@@ -57,14 +50,23 @@ module Shibkit
       START_TIME     = Time.new
     
       def initialize(app)
-      
+        
         ## Rack app
         @app = app
         
+        @token_attribute = "ahahaha"
+        
+        #unless class_exists? "Shibkit::Rack::Assets"
+        # 
+        #@app = Shibkit::Rack::Assets.new(@app)# unless contains_middleware?('Shibkit::Rack::Assets') 
+        
+        ##
+        #@app.use 'Shibkit::Rack::Assets'
+
         ## Load federations, and everything they contain
         Shibkit::Rack::Simulator::Model::Federation.load_records
         
-        log_debug("Panda")
+        
         
       end
       
@@ -311,7 +313,22 @@ module Shibkit
       end
       
       private
-
+      
+      def class_exists?(class_name)
+        
+        begin
+        
+          klass = Module.const_get(class_name)
+          
+          return klass.is_a?(Class)
+        
+        rescue NameError
+        
+          return false
+        
+        end
+        
+      end
   
     end
 

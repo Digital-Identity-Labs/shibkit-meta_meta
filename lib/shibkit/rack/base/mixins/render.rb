@@ -11,13 +11,15 @@ module Shibkit
             
             unless @assets[asset_name]
               
-              asset_file_location = "#{::File.dirname(__FILE__)}/../assets/#{asset_name.to_s}"
+              asset_file_location = "#{::File.dirname(__FILE__)}/../../assets/assets/#{asset_name.to_s}"
               
               begin
                 @assets[asset_name.to_s]  = IO.read(asset_file_location)
               
               ## Catch missing files. We'll just return nothing. Catch higher up.
               rescue Errno::ENOENT => oops
+                
+               log_debug "Requested asset #{asset} cannot be found at #{asset_file_location})"
                 
                 @assets[asset_name.to_s]  = nil
               

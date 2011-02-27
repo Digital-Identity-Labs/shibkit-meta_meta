@@ -6,6 +6,13 @@ module Shibkit
       module Model
         class IDPService < EntityService
           
+          require 'shibkit/rack/base/mixins/http_utils'
+          
+          ## Easy access to Shibkit's configuration settings
+          extend Shibkit::Configured
+          
+          include Shibkit::Rack::Base::Mixin::HTTPUtils
+          
           setup_storage
           
           attr_accessor :scopes
