@@ -203,10 +203,10 @@ module Shibkit
           
           private
        
-          ## Convenient accessor to this object's session data
+          ## Convenient accessor to this object's session data ## TODO: not DRY - refactor into base class
           def idp_session
          
-            return @env['rack.session']['shibkit-simulator']['idps']
+            return @env['rack.session']['shibkit-simulator']['idps'][@idp_id]
          
           end
          

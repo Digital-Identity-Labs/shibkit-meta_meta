@@ -188,6 +188,12 @@ module Shibkit
           
             end
 
+            ## IDP Authn request?     
+            when idp_session.idp_service.authn_path
+              
+              return idp_authn_action(env, idp_session)
+          
+            end
             
           ####################################################################
           ## Directory Routing
@@ -253,7 +259,7 @@ module Shibkit
           ##
     
           ## WAYF request?
-          when Model::WAYFSession.path
+          when base_path_regex(Model::WAYFSession.path)
               
             return wayf_action(env, nil)  
      
@@ -277,7 +283,10 @@ module Shibkit
             return sp_login_action(env, sp_session)
           
           ## SP protected page?    
-          when sp_service.protected_paths[0]
+          when *sp_service.protected_path_patterns
+            
+            puts sp_session.required?
+            puts sp_session.logged_in?
             
             ## Valid session in SP
             if sp_session.required? && sp_session.logged_in?

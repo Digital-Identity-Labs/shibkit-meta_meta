@@ -31,7 +31,8 @@ module Shibkit
           attr_accessor :idp_type       
           attr_accessor :add_tid        
           attr_accessor :session_expiry 
-          attr_accessor :idp_base_path       
+          attr_accessor :idp_base_path
+          attr_accessor :authn_path       
 
           ## Copy data from a suitable MetaMeta object
           def from_metadata(entity)
@@ -61,7 +62,7 @@ module Shibkit
             @idp_path        = defaults['idp_path']        ||  "/idp/"
             @old_status_path = defaults['old_status_path'] ||  "/profile/Status"
             @new_status_path = defaults['new_status_path'] ||  "/status"
-            
+            @authn_path      = defaults['authn_path']      ||  "/profile/Shibboleth/SSO"
           end
           
           ## What sort of IDP software is this meant to be?
@@ -103,6 +104,13 @@ module Shibkit
           def new_status_path
 
             return glue_paths(idp_path, new_status_path)
+          
+          end
+          
+          ## AuthnRequest endpoint
+          def authn_path
+
+            return glue_paths(idp_path, authn_path)
           
           end
           

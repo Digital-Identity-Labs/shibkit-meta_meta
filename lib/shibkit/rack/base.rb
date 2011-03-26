@@ -61,36 +61,7 @@ module Shibkit
       end
       
       private
-      
-      ## Reformat the base path for IDP URLs to capture info in URL
-      def base_path_regex(base_path)
-
-        normalised_path = base_path.gsub(/\/$/, '')
-        return Regexp.new(normalised_path)
-
-      end
-      
-      ## 
-      ## Memoise relatively expensive regex creation and escaping
-      def regexify(path)
-        
-        @recache ||= Hash.new
-        
-        unless @recache[path]
-          
-          @recache[path] ||= /#{Regexp.escape(path)}/
-        
-        end
-        
-        return @recache[path]
-        
-      end
-  
-      def component_name
-        
-        return self.class.to_s.gsub('::', ':').split(':').reverse[0].downcase
-        
-      end
+    
   
     end
 

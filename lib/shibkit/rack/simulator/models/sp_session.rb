@@ -25,6 +25,11 @@ module Shibkit
             ## A default SP service that uses the config for values
             @sp_service = Shibkit::Rack::Simulator::Model::SPService.new
             
+            request = ::Rack::Request.new(env)
+            
+            ## Store destinatation
+            sp_session[:destination] ||= request.path
+            
             ## Replace it with one configured from real metadata?
             if config.sim_sp_use_metadata
               
@@ -74,7 +79,7 @@ module Shibkit
           end
 
           ## Is the specified user logged in at the SP?
-          def logged_in?(user_id)
+          def logged_in?
 
             return false if expired?
             
@@ -119,7 +124,7 @@ module Shibkit
           ## Time when session expires
           def session_expires
 
-            return Time.new - sp_session[:login_time]
+            return Time.new - (sp_session[:login_time] || 0)
 
           end
 
@@ -152,9 +157,15 @@ module Shibkit
           end
           
           ## Where is the user trying to go to?
-          def destination
+          def target
             
-            return sp_session[:destination] || request.path || config.home_path
+            return sp_session[:destination] || config.home_path
+            
+          end
+          
+          def target_cookie
+            
+            
             
           end
           

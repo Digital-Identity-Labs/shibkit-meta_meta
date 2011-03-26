@@ -1,5 +1,7 @@
 ## Some 3rd-party libraries
 require 'deep_merge'
+require 'rack/contrib'
+
 
 ## Custom exception classes
 require 'shibkit/exceptions'
