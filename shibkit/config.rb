@@ -24,7 +24,7 @@ module Shibkit
     ## Default configuration values, attributes and accessors defined here
     CONFIG_DEFAULTS = {
       :app_name                       => "Your New Project",    
-      :protected_paths                => ["/"],
+      :protected_paths                => ["/", "/shibkit/demo/"],
       :federation_metadata            => {"Example Federation"  => "/data/default_metadata/example_federation_metadata.xml".to_absolute_path,
                                           "UnCommon"            => "/data/default_metadata/uncommon_federation_metadata.xml".to_absolute_path,
                                           "Other Organisations" => "/data/default_metadata/local_metadata.xml".to_absolute_path},
@@ -63,6 +63,11 @@ module Shibkit
       :debug_path                     => "/shibkit/debug/",
       :demo_path                      => "/shibkit/demo/"
     }
+    
+    ## TODO
+    ## - common base path for all sim stuff. Maybe all non-SP sk stuff...
+    ## - Move absolute path processing into an internal processing stage?
+    ## 
     
     PERMITTED_VALUES = {
       :content_protection             => [:active, :passive]

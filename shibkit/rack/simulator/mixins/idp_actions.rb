@@ -68,6 +68,19 @@ module Shibkit
             
           end
           
+          ## Controller to accept AuthnRequest requests
+          def idp_authn_action(env, idp_session, options={})
+          
+            message = options[:message] || idp_session.get_message
+            
+            code = 200
+            
+            
+            
+            
+           
+          end
+          
           ## Controller to display login page
           def idp_form_action(env, idp_session, options={})
           

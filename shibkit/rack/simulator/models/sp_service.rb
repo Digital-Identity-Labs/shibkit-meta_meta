@@ -45,11 +45,30 @@ module Shibkit
             
           end  
                   
-          ## URL paths that are protected by Shibboleth
+          ## URL paths that are protected by Shibboleth (as literal strings)
           def protected_paths
             
             return @protected_paths || SPService.config.protected_paths
             
+          end
+          
+          ## Paths to protect converted into regular expressions
+          def protected_path_patterns
+          
+            @recache ||= Hash.new
+
+            ppp = :protected_path_patterns
+
+            unless @recache[ppp]
+              
+              @recache[ppp] ||= protected_paths.collect { |p| /#{"^" + p}/ }
+
+            end
+            
+            puts @recache[ppp].inspect
+            
+            return @recache[ppp]
+                    
           end
           
           ## Location of the fake SP's general status page
@@ -93,7 +112,9 @@ module Shibkit
             return @entity_id || SPService.config.entity_id
 
           end
-         
+          
+          alias :uri :entity_id
+          
           ## Content protection mode (:active or :passive)
           def content_protection
             
