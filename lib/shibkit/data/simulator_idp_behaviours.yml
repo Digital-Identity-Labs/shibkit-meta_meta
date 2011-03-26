@@ -13,6 +13,7 @@ default: &default_shibboleth2
   new_status_path:  "/status"
   login_path:       "/login"
   logout_path:      "/logout"
+  authn_path:       "/profile/Shibboleth/SSO"
 "https://shib.example.ac.uk/shibboleth":
   <<: *default_shibboleth2
 "https://yogsothoth.miskatonic.edu/shibboleth":
