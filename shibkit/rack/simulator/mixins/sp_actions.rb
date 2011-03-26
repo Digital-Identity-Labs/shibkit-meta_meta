@@ -12,9 +12,7 @@ module Shibkit
           def sp_status_action(env, sp_session, options={}) 
 
             code = options[:code].to_i || 200
-  
-            "A valid session was not found."
-
+            
             page_body = render_page(:sp_status, render_locals)
  
             return code, Shibkit::Rack::HEADERS, [page_body.to_s]
@@ -24,8 +22,6 @@ module Shibkit
           def sp_session_action(env, sp_session, options={}) 
 
             code = options[:code].to_i || 200
-  
-            "A valid session was not found."
   
             ## Assemble various stats for the page
             stats = {
@@ -50,18 +46,13 @@ module Shibkit
           ## Controller for handling protected pages with active session
           def sp_active_action(env, sp_session, options={})
             
-
-  
- 
             return @app.call(env)
             
           end
  
           ## Controller for handling protected pages with passive (lazy) session
           def sp_passive_action(env, sp_session, options={})
-            
-
-            
+             
             return @app.call(env)
             
           end
@@ -69,14 +60,16 @@ module Shibkit
           ## Controller for
           def sp_login_action(env, sp_session, options={})
             
-            message = options[:message]
-            code = options[:code].to_i || 200
+            ## Assemble params for WAYF AuthnRequest, old style # TODO: DS protocol
+            details = Hash.new
+            details[:time]        = Time.new.to_i
+            details[:shire]       = sp_session.sp_service.login_path
+            details[:provider_id] = sp_session.sp_service.uri
+            details[:target]      = sp_session.target
             
-            render_locals = {}
-            
-            page_body = render_page(:x, render_locals)
- 
-            return code, Shibkit::Rack::HEADERS, [page_body.to_s]
+            params = ::Rack::Utils.build_query(details) 
+
+            return redirect_to(config.sim_wayf_base_path + "/?" + params)
             
           end
           

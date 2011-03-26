@@ -9,21 +9,62 @@ module Shibkit
           ## WAYF Actions
           ##
           
-          ## Controller for
+          ## Controller for 
           def wayf_action(env, wayf_session, options={})
             
-            request = ::Rack::Request.new(env)
-            term = request.params['term'].to_s.downcase.strip[0..40]
-            idps = Shibkit::Rack::Simulator::Model::IDPService.all
+            ds_session = Shibkit::Rack::Simulator::Model::WAYFSession.new(env)            
+
+            ## If passed all required info (the IDP URI has been supplied) then...
+            if ds_session.origin then
+          
+              return ds_session.wayf_request? ?
+                wayf_forward_to_idp_response(ds_session) :
+                  ds_forward_to_idp_response(ds_session)
+          
+            end
             
+            ## Otherwise display some info to help users choose
+            case ds_session.request_type
+            when :ds, :wayf
+              return ds_wayf_response(ds_session)
+            when :ui
+              return ds_origin_lookup_response(ds_session)
+            else
+              #return ds_direct_response(ds_session)
+              return ds_wayf_response(ds_session)
+            end
+              
+          end
+          
+          ## Build standard page
+          def ds_wayf_response(ds_session)
+          
             code = 200
+            
+            locals = get_locals(
+              :layout     => :layout,
+              :javascript => :wayf,
+              :wayf       => ds_session, 
+              :idps       => ds_session.ds_service.idps.sort! { |a,b| a.display_name.downcase <=> b.display_name.downcase },
+              :page_title => "Select Your Home Organisation"
+            )
+            
+            page_body = render_page(:wayf_smart, locals)
               
+            return code, Shibkit::Rack::HEADERS, [page_body.to_s]
+          
+          
+          end
+          
+          ## Build an AJAX JSON reply
+          def ds_origin_lookup_response(ds_session)
+            
+            results = Array.new
+            
             ## We've got a term request so respond with JSON
-            unless term.empty?  
+            unless ds_session.term.empty?  
               
-              results = Array.new
-              
-              idps.each do |idp|
+              ds_session.ds_service.idps.each do |idp|
               
                 if idp.display_name.downcase =~ /#{term}/  
               
@@ -39,31 +80,17 @@ module Shibkit
               end
               
               page_body = results.to_json
-              
-              puts page_body
-              
+
               return code,
                 { "Content-Type" => "application/json" },
                 page_body
               
-            end  
-                                   
-            locals = get_locals(
-              :layout     => :layout,
-              :javascript => :wayf,
-              :wayf       => wayf_session, # TODO: should this be the service instead?
-              :idps       => idps.sort! { |a,b| a.display_name.downcase <=> b.display_name.downcase },
-              :page_title => "Select Your Home Organisation"
-            )
-            
-            page_body = render_page(:wayf_smart, locals)
-              
-            return code, Shibkit::Rack::HEADERS, [page_body.to_s]
-                
+            end
+
           end
           
-         
-
+          ## Build
+          
         end
       end
     end

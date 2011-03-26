@@ -22,7 +22,7 @@ module Shibkit
           def idps
             
             ## TODO: this bit if bugged and bodged 
-            return IDPService.all.collect {|i|
+            return Shibkit::Rack::Simulator::Model::IDPService.all.collect {|i|
                i if i and
                i.directory and
                !i.directory.accounts.empty?}.compact
@@ -30,6 +30,7 @@ module Shibkit
           end
           
         end
+        
       end
     end
   end
