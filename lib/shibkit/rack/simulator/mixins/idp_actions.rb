@@ -83,7 +83,9 @@ module Shibkit
           
           ## Controller to display login page
           def idp_form_action(env, idp_session, options={})
-          
+            
+            puts "Form action"
+            
             message = options[:message] || idp_session.get_message
             
             code = 200
@@ -106,7 +108,9 @@ module Shibkit
                    
           ## Controller for logging in to IDP
           def idp_login_action(env, idp_session, options={})
-          
+            
+            puts "login action"
+            
             message = options[:message]
             
             code = 200
@@ -165,6 +169,8 @@ module Shibkit
           
           ## Controller for
           def idp_sso_action(env, options={})
+            
+            puts "SSO action"
             
             message = options[:message]
             code = options[:code].to_i || 200

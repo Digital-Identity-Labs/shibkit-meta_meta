@@ -61,9 +61,7 @@ module Shibkit
 
         ## Load federations, and everything they contain
         Shibkit::Rack::Simulator::Model::Federation.load_records
-        
-        
-        
+           
       end
       
       ## Selecting an action and returning to the Rack stack 
@@ -160,9 +158,7 @@ module Shibkit
               return idp_old_status_action(env, idp_session)
 
             ## Request is for the fake IDP's login function
-            when idp_session.idp_service.service_base_path,
-                 idp_session.idp_service.service_root_path,
-                 idp_session.idp_service.login_path
+            when idp_session.idp_service.login_path
               
               ## Posting form data?
               if request.request_method.downcase == "post" 
@@ -186,7 +182,6 @@ module Shibkit
               
               return idp_logout_action(env, idp_session)
           
-            end
 
             ## IDP Authn request?     
             when idp_session.idp_service.authn_path
@@ -194,7 +189,8 @@ module Shibkit
               return idp_authn_action(env, idp_session)
           
             end
-            
+
+
           ####################################################################
           ## Directory Routing
           ##
@@ -255,13 +251,13 @@ module Shibkit
             return search_action(env, sp_session, {})
           
           ####################################################################
-          ## WAYF Routing
+          ## DS/WAYF Routing
           ##
     
           ## WAYF request?
-          when base_path_regex(Model::WAYFSession.path)
+          when base_path_regex(Model::DSSession.path)
               
-            return wayf_action(env, nil)  
+            return ds_action(env, nil)  
      
           ####################################################################
           ## SP Routing

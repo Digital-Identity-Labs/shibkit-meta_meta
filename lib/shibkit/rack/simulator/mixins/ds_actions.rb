@@ -10,16 +10,16 @@ module Shibkit
           ##
           
           ## Controller for 
-          def wayf_action(env, wayf_session, options={})
+          def ds_action(env, wayf_session, options={})
             
-            ds_session = Shibkit::Rack::Simulator::Model::WAYFSession.new(env)            
+            ds_session = Shibkit::Rack::Simulator::Model::DSSession.new(env)            
 
             ## If passed all required info (the IDP URI has been supplied) then...
-            if ds_session.origin then
+            unless ds_session.origin.empty? then
           
               return ds_session.wayf_request? ?
                 wayf_forward_to_idp_response(ds_session) :
-                  ds_forward_to_idp_response(ds_session)
+                  ds_forward_to_sp_response(ds_session)
           
             end
             
@@ -36,20 +36,44 @@ module Shibkit
               
           end
           
+          def ds_forward_to_sp_response(ds_session)
+          
+            puts "NOT IMPLEMENTED"
+            raise Shibkit::Rack::NotImplemented
+          
+          end
+          
+          ## Redirect browser to the requested IDP as an AuthnRequest
+          def wayf_forward_to_idp_response(ds_session)
+            
+             puts "redirecting to IDP"
+             
+             params = ::Rack::Utils.build_query(ds_session.feedback_data) 
+             idp_authn_url = ds_session.origin_sso_url
+             
+             return redirect_to(idp_authn_url + "/?" + params)
+            
+          end
+          
           ## Build standard page
           def ds_wayf_response(ds_session)
-          
+            
+            puts "trying to render wayf page"
+            
+            puts "IDPS:"
+            puts ds_session.ds_service.idps.to_yaml
+            
             code = 200
             
             locals = get_locals(
               :layout     => :layout,
-              :javascript => :wayf,
+              :javascript => :ds,
               :wayf       => ds_session, 
               :idps       => ds_session.ds_service.idps.sort! { |a,b| a.display_name.downcase <=> b.display_name.downcase },
               :page_title => "Select Your Home Organisation"
             )
             
-            page_body = render_page(:wayf_smart, locals)
+            page_body = render_page(:ds_smart, locals)
               
             return code, Shibkit::Rack::HEADERS, [page_body.to_s]
           
