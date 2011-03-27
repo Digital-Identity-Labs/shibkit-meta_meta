@@ -33,7 +33,7 @@ module Shibkit
             
             ## Which IDP service are we represening  a session in?
             begin
-              @idp_service = Shibkit::Rack::Simulator::Model::IDPService.find(@idp_id)
+              @idp_service = Shibkit::Rack::Simulator::Model::IDPService.find(@idp_id) 
             rescue
               
               ## TODO need to raise exception here to deal with bad IDP ID.

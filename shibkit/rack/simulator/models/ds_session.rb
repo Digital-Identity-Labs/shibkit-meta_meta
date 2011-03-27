@@ -2,7 +2,7 @@ module Shibkit
   module Rack
     class Simulator
       module Model
-        class WAYFSession ## TODO: Change name to DSSession
+        class DSSession ## TODO: Change name to DSSession
           
           DEFAULT_RETURN_POLICY = "urn:oasis:names:tc:SAML:profiles:SSO:idpdiscovery-protocol:single"
           
@@ -50,7 +50,8 @@ module Shibkit
             
             ## Which IDP service are we represening  a session in?
             begin
-              @ds_service = Shibkit::Rack::Simulator::Model::WAYFService.find(@ds_id)
+              #@ds_service = Shibkit::Rack::Simulator::Model::DSService.find(@ds_id)
+              @ds_service = Shibkit::Rack::Simulator::Model::DSService.new # Since identical... TODO: Variations
             rescue
               
               ## TODO need to raise exception here to deal with bad IDP ID.
@@ -58,8 +59,10 @@ module Shibkit
               
             end
             
+            puts @ds_service.inspect
+            
             ## Remember previous visits
-            ds_session[:previous_idps] ||= Array.new
+            ds_session_data[:previous_idps] ||= Array.new
             
             request     = ::Rack::Request.new(env)
             
@@ -81,12 +84,24 @@ module Shibkit
             
             ## Quick hack to determine logic...
             @request_type    = :direct
-            @request_type    = :wayf   if @shire
-            @request_type    = :ds     if @return
-            @request_type    = :ui     if @term
+            @request_type    = :wayf   if ! @shire.empty?
+            @request_type    = :ds     if ! @return_to.empty? 
+            @request_type    = :ui     if ! @term.empty?
             
+            puts "ZZZZZZZ"
+            puts self.inspect
+             
+          end
+          
+          ## Returns the authnRequest handler for the selected origin (or nil)
+          def origin_sso_url
             
+            return nil if origin.empty?
             
+            idp = Shibkit::Rack::Simulator::Model::IDPService.find(origin)
+            
+            return idp.authn_url
+                   
           end
           
           ## Session parameters to pass back into next request
@@ -154,9 +169,7 @@ module Shibkit
             return @env['rack.session']['shibkit-simulator']['ds'][@ds_id]
          
           end
-          
-
-          
+                 
         end
       end
     end

@@ -17,6 +17,11 @@ module Shibkit
     class ResourceNotHappy < Shibkit::RackMiddlewareError 
 
     end
-      
+    
+    ## For triggering fake IDP 500s 
+    class NotImplemented < Shibkit::RackMiddlewareError 
+
+    end
+    
   end
 end

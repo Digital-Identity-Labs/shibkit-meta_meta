@@ -6,7 +6,24 @@ module Shibkit
         module HTTPUtils
 
           private
-
+          
+          ## Build a full URL (will be various options to change this later TODO)
+          def build_sim_url(*path_fragments)
+            
+            ## Assuming :numeric type for now
+            
+            scheme   = "http://"
+            hostname = "localhost"
+            port     = 3000.to_s
+            
+            full_path = glue_paths(service_type_base_path, id.to_s, *path_fragments)
+            
+            url = scheme + hostname + ":" + port + full_path
+             
+            return url
+            
+          end
+          
           ##
           ## Glue together path fragments
           def glue_paths(*fragments)

@@ -4,7 +4,7 @@ module Shibkit
   module Rack
     class Simulator
       module Model
-        class WAYFService < Base
+        class DSService < Base
           
           ## Easy access to Shibkit's configuration settings
           extend Shibkit::Configured

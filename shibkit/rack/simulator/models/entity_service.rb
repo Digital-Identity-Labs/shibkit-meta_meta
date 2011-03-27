@@ -20,7 +20,19 @@ module Shibkit
           alias :hidden? :hidden
           
         
-
+          private
+          
+          def sim_url_style
+            
+            return :numeric
+            
+          end
+          
+          def service_type_base_path
+            
+            return "/undefined_service/"
+            
+          end
           
         end
         

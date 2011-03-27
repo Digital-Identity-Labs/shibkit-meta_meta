@@ -32,6 +32,10 @@ module Shibkit
           attr_accessor :add_tid        
           attr_accessor :session_expiry 
           attr_accessor :idp_base_path
+          attr_accessor :login_path
+          attr_accessor :logout_path
+          attr_accessor :new_status_path
+          attr_accessor :old_status_path
           attr_accessor :authn_path       
 
           ## Copy data from a suitable MetaMeta object
@@ -59,10 +63,14 @@ module Shibkit
             @idp_type        = defaults['idp_type']        || 'shibboleth2'
             @add_tid         = defaults['add_tid']         ||  true
             @session_expiry  = defaults['session_expiry']  ||  300
-            @idp_path        = defaults['idp_path']        ||  "/idp/"
+            @idp_base_path   = defaults['idp_base_path']        ||  "/idp/"
             @old_status_path = defaults['old_status_path'] ||  "/profile/Status"
             @new_status_path = defaults['new_status_path'] ||  "/status"
             @authn_path      = defaults['authn_path']      ||  "/profile/Shibboleth/SSO"
+            @login_path      = defaults['login_path']      ||  "/login"
+            @logout_path     = defaults['logout_path']     ||  "/logout"
+            @authn_path      = defaults['authn_path']      ||  "/profile/Shibboleth/SSO"  
+            
           end
           
           ## What sort of IDP software is this meant to be?
@@ -73,45 +81,51 @@ module Shibkit
           end
           
           ## Default landing page, login, and / redirection
-          def default_path
+          def default_url
             
-            return "/"
+            return build_sim_url("/")
           
           end
           
           ## Login path
-          def login_path
+          def login_url
 
-            return glue_paths(idp_path, login_path)
+            return build_sim_url(idp_base_path, login_path)
           
           end
           
           ## SLO path
-          def logout_path
+          def logout_url
 
-            return glue_paths(idp_path, logout_path)
+            return build_sim_url(idp_base_path, logout_path)
           
           end
           
           ## Shibboleth1-style "OK" page
-          def old_status_path
+          def old_status_url
    
-            return glue_paths(idp_path, old_status_path)
+            return build_sim_url(idp_base_path, old_status_path)
                     
           end
           
           ## Shibboleth 2 style text
-          def new_status_path
+          def new_status_url
 
-            return glue_paths(idp_path, new_status_path)
+            return build_sim_url(idp_base_path, new_status_path)
           
           end
           
           ## AuthnRequest endpoint
-          def authn_path
+          def authn_url
 
-            return glue_paths(idp_path, authn_path)
+            return build_sim_url(idp_base_path, authn_path)
           
+          end
+          
+          def service_type_base_path
+            
+            return IDPService.config.sim_idp_base_path
+            
           end
           
         end
