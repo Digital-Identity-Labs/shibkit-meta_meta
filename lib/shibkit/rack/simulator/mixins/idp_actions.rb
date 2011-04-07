@@ -62,7 +62,7 @@ module Shibkit
    
             else
               
-              raise Rack::Simulator::ResourceNotHappy
+              raise ::Rack::Simulator::ResourceNotHappy
               
             end
             
@@ -70,21 +70,38 @@ module Shibkit
           
           ## Controller to accept AuthnRequest requests
           def idp_authn_action(env, idp_session, options={})
-          
-            message = options[:message] || idp_session.get_message
-            
+    
+            puts "authn action"
             code = 200
             
+            request = ::Rack::Request.new(env)
             
+            ## Deal with old style authnrequests
+            if request.params['shire'] then
+
+              idp_session.authn_request = 
+                Shibkit::Rack::Simulator::Model::IDPAuthnRequest.new do |ar|
+
+                   ar.shire       = request.params['shire'].to_s
+                   ar.sp_time     = request.params['time'].to_i.to_s
+                   ar.target      = request.params['target'].to_s
+                   ar.provider_id = request.params['providerId'].to_s
+
+                 end
+
+            else
+                 
+              raise ::Rack::Simulator::NotImplemented
+
+            end
             
+            ## Redirect to the login page
+            return redirect_to idp_session.idp_service.login_url
             
-           
           end
           
           ## Controller to display login page
           def idp_form_action(env, idp_session, options={})
-            
-            puts "Form action"
             
             message = options[:message] || idp_session.get_message
             
@@ -108,8 +125,6 @@ module Shibkit
                    
           ## Controller for logging in to IDP
           def idp_login_action(env, idp_session, options={})
-            
-            puts "login action"
             
             message = options[:message]
             
@@ -169,8 +184,6 @@ module Shibkit
           
           ## Controller for
           def idp_sso_action(env, options={})
-            
-            puts "SSO action"
             
             message = options[:message]
             code = options[:code].to_i || 200
