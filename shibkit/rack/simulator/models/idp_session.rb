@@ -4,6 +4,8 @@ module Shibkit
       module Model
         class IDPSession #< Session
           
+          require 'shibkit/rack/simulator/models/idp_authn_request'
+          
           ## Easy access to Shibkit's configuration settings
           extend Shibkit::Configured
           
@@ -12,7 +14,7 @@ module Shibkit
           attr_reader :idp_id
 
           ## A new IDP Session
-          def initialize(env, idp_id=nil)
+          def initialize(env, idp_id)
   
             ## Store reference to the Rack session: all object data will be stored
             ## in here - this class is really just an interface to part of session
@@ -45,7 +47,21 @@ module Shibkit
             # ...
             
           end
-              
+          
+          ## Store authn_request object
+          def authn_request=(req)
+            
+            idp_session[:authn_request] = req
+            
+          end
+          
+          ## Get authn_request object
+          def authn_request
+            
+            return idp_session[:authn_request] || nil
+            
+          end
+          
           ## Declare that the user has logged in to the SP
           def login!(user_id)
             
