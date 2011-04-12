@@ -172,7 +172,7 @@ module Shibkit
                 return idp_login_action(env, idp_session)
                     
               ## Already logged in? With SSO? Log in again.
-              elsif idp_session.sso? and idp_session.logged_in?
+              elsif idp_session.idp_service.sso? and idp_session.logged_in?
                               
                 return idp_sso_action(env, idp_session)
             

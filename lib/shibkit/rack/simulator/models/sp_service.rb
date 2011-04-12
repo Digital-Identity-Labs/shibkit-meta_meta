@@ -4,7 +4,7 @@ module Shibkit
   module Rack
     class Simulator
       module Model
-        class SPService #< Session
+        class SPService 
 
           require 'shibkit/rack/base/mixins/http_utils'
           
@@ -97,6 +97,12 @@ module Shibkit
 
             return @logout_path || glue_paths(SPService.config.handler_path, SPService.config.logout_handler)
 
+          end
+          
+          def sso_url
+            
+            return @sso_uri || glue_paths(SPService.config.handler_path, SPService.config.sso_handler)
+            
           end
           
           ## The Shibboleth SP application label (defaults to default)
