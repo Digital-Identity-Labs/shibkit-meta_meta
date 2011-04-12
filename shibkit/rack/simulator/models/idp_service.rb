@@ -128,6 +128,33 @@ module Shibkit
             
           end
           
+          def sso?
+            
+            return sso
+            
+          end
+          
+          ## Produce a feeble, inaccurate but functionally equivalent WAYFless URL for this IDP and your SP
+          def wayfless_url
+            
+            return "wayfless URL will go here"
+            
+          end
+          
+          def map_attribute(attribute)
+            
+            unless @attribute_map
+              
+              ## Load attribute map
+              attribute_maps = YAML.load(File.open(IDPService.config.sim_idp_attr_mappings_file))
+              @attribute_map = attribute_maps[entity_id] || attribute_maps['default']
+              
+            end
+            
+            return @attribute_map[attribute.downcase]
+            
+          end
+          
         end
       end
     end

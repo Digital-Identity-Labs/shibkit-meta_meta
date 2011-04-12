@@ -3,7 +3,9 @@ module Shibkit
     class Simulator
       module Mixin
         module IDPActions
-                 
+          
+          require 'base64'
+          
           ####################################################################
           ## IDP Actions
           ##
@@ -134,14 +136,13 @@ module Shibkit
             req = ::Rack::Request.new(env)
             username = req.params['username']
             password = req.params['password']
-            dest_raw = req.params['destination']
 
             ## Are we passed suitable info?
             if username.empty? or password.empty?
               
               idp_session.set_message("Please enter your username and password")
               
-              return redirect_to idp_session.login_path
+              return redirect_to idp_session.idp_service.login_url
             
             end
             
@@ -155,17 +156,26 @@ module Shibkit
               idp_session.set_message("Failed to login. Password or username is incorrect.")
               
               ## User has not logged in. Probably doesn't exist!
-              return redirect_to idp_session.login_path
+              return redirect_to idp_session.idp_service.login_url
               
             end
                          
             ## Authenticate the user?
-            if idp_session.login!(username)
-            
+            if idp_session.login!(username) and idp_session.authn_request
+              
+              ## Don't bother using Metadata - cheat by grabbing the SP service info
+              sp_service = Shibkit::Rack::Simulator::Model::SPSession.new(env).sp_service
+              sp_sso_endpoint = sp_service.sso_url
+              target = idp_session.authn_request.target
+              
+              encoded_response = Base64.encode64(idp_session.assertion(target).to_yaml)
+              
                locals = get_locals(
-                 :layout => :layout,
-                 :page_title => "Forwarding you...",
-                 :destination => URI.unescape(dest_raw)
+                 :layout           => :idp_fwd_layout,
+                 :page_title       => "Forwarding you...",
+                 :sp_sso_endpoint  => sp_sso_endpoint,
+                 :encoded_response => encoded_response,  
+                 :target           => target
                  ) 
 
                page_body = render_page(:idp_redirect, locals)
@@ -174,9 +184,15 @@ module Shibkit
             
             else
               
-              ## This is odd TODO Raise an error here
-              raise "EH? User #{user_id} has failed to login to IDP, but is in directory"
-              return redirect_to idp_session.login_path
+              ## Is the problem a missing authn_request or something else?
+              error_message = idp_session.authn_request ? "An error has occured" :
+                "No Service Provider was specified."
+              
+              ## Explain to user what has happened on next page view
+              idp_session.set_message(error_message)
+              
+              ## Redirect to the login page
+              return redirect_to idp_session.idp_service.login_url
               
             end
             

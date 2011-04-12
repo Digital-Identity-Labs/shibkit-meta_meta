@@ -5,6 +5,7 @@ module Shibkit
         class IDPSession #< Session
           
           require 'shibkit/rack/simulator/models/idp_authn_request'
+          require 'shibkit/rack/simulator/models/idp_saml_response'
           
           ## Easy access to Shibkit's configuration settings
           extend Shibkit::Configured
@@ -63,17 +64,14 @@ module Shibkit
           end
           
           ## Declare that the user has logged in to the SP
-          def login!(user_id)
+          def login!(username)
             
-            user_details = assertion
-            
-            idp_session[:user_id]     = assertion.sim_user_id
+            ## Construct a new session ID 
+            idp_session[:session_id] = Shibkit::DataTools.xsid       
+            idp_session[:principal]   = username
             idp_session[:login_time]  = Time.new
             idp_session[:access_time] = idp_session[:login_time]
-           
-            ## Construct a new session ID 
-            #idp_session[:session_id] = Shibkit::DataTools.xsid
-           
+             
           end
          
           ## Access the SP with an already authentication session
@@ -136,6 +134,13 @@ module Shibkit
             return idp_session[:session_id]
            
           end
+
+          ## Username
+          def principal
+           
+            return idp_session[:principal]
+           
+          end
          
           ## Time when session expires (fixed from first login time)
           def session_expires
@@ -160,32 +165,43 @@ module Shibkit
           def session_expires
            
           end
-         
-          ## IDP session identifier
-          def session_id
-
-          end
-
-          ## The Shibboleth SP entity ID
-          def entity_id
-
-            return IDPSession.config.sim_sp_entity_id
-
-          end
-       
-          ## Does the IDP allow Single Sign On?
-          def sso?
-
-            ##  # TODO needs per-IDP settings too
-            return true
-
-          end
 
           ## Fetch information from directory and hand over
-          def assertion
+          def assertion(sp_entity_id,attributes=false)
    
-            return idp_session[:idp_assertion]
+            assertion = Shibkit::Rack::Simulator::Model::IDPSAMLResponse.new
+              
+            assertion.session_id         = session_id
+            assertion.identity_provider  = idp_service.uri 
+            assertion.auth_instant       = login_time
+            assertion.audience           = sp_entity_id
+            assertion.name_identifier    = "NOTIMPLEMENTEDYET" 
+            assertion.auth_method        = idp_service.auth_method_uri
+            assertion.attributes         = attributes
+              
+            puts "CCCCCC"
+            puts "Assertion is..."
+            puts assertion.inspect
+            
+            
+            return assertion
    
+          end
+          
+          ## Return attributes from directory, processed into appropriate format
+          def attributes
+            
+            mapped_attributes = Hash.new
+            
+            user_entry = idp_service.directory.lookup_account(principal)
+            user_entry.attributes.each_pair do |attribute, value|
+              
+              mapped_attributes[idp_service.map_attribute(attribute)] = value if value
+              
+            end
+            
+            return mapped_attributes
+            
           end
           
           ## Shibsim base location of the IDP
@@ -195,19 +211,14 @@ module Shibkit
 
           end
           
-          ## Produce a feeble, inaccurate but functionally equivalent WAYFless URL for this IDP and your SP
-          def wayfless_url
-            
-            return "wayfless URL will go here"
-            
-          end
-          
+          ## ? # TODO: Need this? Refactor to base class for sessions?
           def set_message(message)
             
             idp_session[:message] = message
             
           end
           
+          ## ? # TODO: Need this? Refactor to base class for sessions?
           def get_message
             
             message = idp_session[:message] || nil
@@ -219,6 +230,7 @@ module Shibkit
           
           private
        
+          # TODO: Refactor this into a session base class.
           ## Convenient accessor to this object's session data ## TODO: not DRY - refactor into base class
           def idp_session
          

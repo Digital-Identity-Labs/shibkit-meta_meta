@@ -41,6 +41,7 @@ module Shibkit
       :logout_handler                 => "Logout",
       :df_handler                     => "DiscoveryFeed",
       :ds_handler                     => "DS",
+      :sso_handler                    => "SAML2/POST",
       :assertion_handler              => "GetAssertion", 
       :sim_remote_user                => %w"eppn persistent-id targeted-id",
       :sim_sp_session_expiry          => 300,
@@ -54,6 +55,7 @@ module Shibkit
       :sim_wayf_base_path             => "/sim_wayf",
       :sim_users_file                 => "/data/simulator_user_directory.yml".to_absolute_path,
       :sim_idp_behaviours_file        => "/data/simulator_idp_behaviours.yml".to_absolute_path,
+      :sim_idp_attr_mappings_file     => "/data/simulator_idp_attr_mapping.yml".to_absolute_path,
       :sim_metadata_cache_file        => "/data/default_metadata_cache.yml".to_absolute_path, 
       :shim_attribute_map_file        => "/data/sp_attr_map.yml".to_absolute_path,
       :shim_user_id_name              => :user_id,
@@ -154,7 +156,14 @@ module Shibkit
       return dump
 
     end
+    
+    ## Load SP config from real metadata
+    def from_metadata(entity_id)
       
+      # ...
+      
+    end
+        
     private
     
     ##

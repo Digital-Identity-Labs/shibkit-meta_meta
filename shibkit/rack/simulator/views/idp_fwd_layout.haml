@@ -1,0 +1,8 @@
+!!!
+%html{ :xmlns => "http://www.w3.org/1999/xhtml", :lang => "en", "xml:lang" => "en"}
+  %head
+    %title=page_title
+    %meta{"http-equiv" => "Content-Type", :content => content_type}
+  %body{:class => "idp", :onload => "document.forms[0].submit()"}
+    = content_html
+
