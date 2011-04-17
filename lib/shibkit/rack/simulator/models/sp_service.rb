@@ -64,9 +64,7 @@ module Shibkit
               @recache[ppp] ||= protected_paths.collect { |p| /#{"^" + p}/ }
 
             end
-            
-            puts @recache[ppp].inspect
-            
+
             return @recache[ppp]
                     
           end

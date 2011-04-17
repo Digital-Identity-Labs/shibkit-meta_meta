@@ -10,9 +10,6 @@ config.each_pair do |name, file|
   metadata.add_source name, file
 end
 
-puts metadata.inspect
-
-
 metadata.refresh
 
 metadata.federations.each do |federation|

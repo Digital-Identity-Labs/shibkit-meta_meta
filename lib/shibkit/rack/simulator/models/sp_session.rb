@@ -47,13 +47,9 @@ module Shibkit
           
           ## Declare that the user has logged in to the SP
           def login!(encoded_assertion)
-            
-            puts "SSSSSSSS"
-            
+
             idp_assertion = YAML.load(Base64.decode64(encoded_assertion))
-            
-            puts idp_assertion.to_yaml
-            
+
             sp_session[:encoded_assertion] = encoded_assertion
             sp_session[:idp_assertion]     = idp_assertion 
             sp_session[:login_time]        = Time.new
@@ -61,9 +57,6 @@ module Shibkit
             
             ## Construct a new session ID 
             sp_session[:session_id] = Shibkit::DataTools.xsid
-            
-            puts "HHHHHHHHHHH"
-            puts self.to_yaml
             
             return true
             
@@ -125,10 +118,7 @@ module Shibkit
           
           ## Time when session expires
           def session_expires
-            
-            puts "expires:"
-            puts session_expires
-            
+
             return Time.new - (sp_session[:login_time] || 0)
 
           end

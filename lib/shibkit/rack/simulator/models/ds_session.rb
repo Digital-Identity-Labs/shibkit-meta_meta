@@ -73,9 +73,6 @@ module Shibkit
             @target      = request.params['target'].to_s
             @provider_id = request.params['providerId'].to_s          
             
-            puts "BBBBBB"
-            puts @target
-            
             ## Not working yet.
             @entity_id       = request.params['entityID'].to_s || 'entityID'
             @return_to       = request.params['return'].to_s

@@ -178,11 +178,6 @@ module Shibkit
             assertion.name_identifier    = "NOTIMPLEMENTEDYET" 
             assertion.auth_method        = idp_service.auth_method_uri
             assertion.attributes         = attributes
-              
-            puts "CCCCCC"
-            puts "Assertion is..."
-            puts assertion.inspect
-            
             
             return assertion
    
