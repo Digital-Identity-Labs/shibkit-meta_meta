@@ -46,14 +46,26 @@ module Shibkit
           end
           
           ## Declare that the user has logged in to the SP
-          def login!(idp_assertion)
-
-            sp_session[:user_id]     = idp_assertion.sim_user_id
-            sp_session[:login_time]  = Time.new
-            sp_session[:access_time] = sp_session[:login_time]
+          def login!(encoded_assertion)
+            
+            puts "SSSSSSSS"
+            
+            idp_assertion = YAML.load(Base64.decode64(encoded_assertion))
+            
+            puts idp_assertion.to_yaml
+            
+            sp_session[:encoded_assertion] = encoded_assertion
+            sp_session[:idp_assertion]     = idp_assertion 
+            sp_session[:login_time]        = Time.new
+            sp_session[:access_time]       = sp_session[:login_time]
             
             ## Construct a new session ID 
             sp_session[:session_id] = Shibkit::DataTools.xsid
+            
+            puts "HHHHHHHHHHH"
+            puts self.to_yaml
+            
+            return true
             
           end
           
@@ -81,24 +93,14 @@ module Shibkit
           ## Is the specified user logged in at the SP?
           def logged_in?
 
+            return false unless idp_assertion
             return false if expired?
             
-            ## Has the fake IDP 'authenticated'?
-            return false unless sp_session[:user_id].to_i > 0
-
-            ## Check that the *same* user has already authenticated with the fake SP too.
-            #return true if env["rack.session"]['shibkit-simulator']['idp'][:user_id].to_i == 
-            #  sim_sp_session(env)[:user_id].to_i
-            #return false
-            
-            
-            return sp_session[:user_id] == user_id
+            return true
 
           end
           
           alias :authenticated? :logged_in?
-          
-
           
           ## When did the user first login? 
           def login_time
@@ -123,7 +125,10 @@ module Shibkit
           
           ## Time when session expires
           def session_expires
-
+            
+            puts "expires:"
+            puts session_expires
+            
             return Time.new - (sp_session[:login_time] || 0)
 
           end
@@ -138,7 +143,8 @@ module Shibkit
           ## Has the session expired?
           def expired?
             
-            return false if Time.new < session_expires
+            return false #true if Time.new.to_i > session_expires
+            return false
             
           end
           
@@ -156,6 +162,13 @@ module Shibkit
             
           end
           
+          ## Remember destination
+          def destination
+            
+            return sp_session[:destination]
+            
+          end
+          
           ## Where is the user trying to go to?
           def target
             
@@ -166,6 +179,12 @@ module Shibkit
           def target_cookie
             
             
+            
+          end
+          
+          def encoded_assertion
+            
+            return sp_session[:encoded_assertion]
             
           end
           

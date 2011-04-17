@@ -283,13 +283,15 @@ module Shibkit
           when sp_service.login_path
           
             return sp_login_action(env, sp_session)
-          
+            
+          ## SP POST/SSO login action
+          when sp_service.sso_path
+
+            return sp_sso_action(env, sp_session)
+        
           ## SP protected page?    
           when *sp_service.protected_path_patterns
-            
-            puts sp_session.required?
-            puts sp_session.logged_in?
-            
+
             ## Valid session in SP
             if sp_session.required? && sp_session.logged_in?
               
