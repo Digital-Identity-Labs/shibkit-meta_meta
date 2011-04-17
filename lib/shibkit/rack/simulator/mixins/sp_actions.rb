@@ -43,6 +43,31 @@ module Shibkit
 
           end
           
+          ## Receive authentication assertion from IDP
+          def sp_sso_action(env, sp_session, options={})
+            
+            request = ::Rack::Request.new(env)
+            
+            target           = request.params['TARGET'].to_s
+            encoded_response = request.params['YAMLResponse'].to_s
+            
+            log_debug "Encoded YAML received: #{encoded_response}"
+            raise "Y/SAML Error" unless encoded_response # TODO: Better SP error handling
+
+            sp_session.login!(encoded_response)
+            
+            if sp_session.logged_in?
+              
+              return redirect_to sp_session.destination 
+              
+            else
+              
+              raise "Failed to login" # TODO Better error handling here too
+              
+            end
+            
+          end
+          
           ## Controller for handling protected pages with active session
           def sp_active_action(env, sp_session, options={})
             
@@ -66,6 +91,9 @@ module Shibkit
             details[:shire]       = sp_session.sp_service.login_path
             details[:provider_id] = sp_session.sp_service.uri
             details[:target]      = sp_session.target
+            
+            puts "AAAAAA: "
+            puts details[:target]
             
             params = ::Rack::Utils.build_query(details) 
 

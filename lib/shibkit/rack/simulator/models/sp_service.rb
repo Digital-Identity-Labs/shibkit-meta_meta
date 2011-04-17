@@ -98,6 +98,12 @@ module Shibkit
             return @logout_path || glue_paths(SPService.config.handler_path, SPService.config.logout_handler)
 
           end
+           
+          def sso_path
+            
+            return @sso_uri || glue_paths(SPService.config.handler_path, SPService.config.sso_handler)
+            
+          end
           
           def sso_url
             

@@ -2,7 +2,7 @@ module Shibkit
   module Rack
     class Simulator
       module Model
-        class DSSession ## TODO: Change name to DSSession
+        class DSSession
           
           DEFAULT_RETURN_POLICY = "urn:oasis:names:tc:SAML:profiles:SSO:idpdiscovery-protocol:single"
           
@@ -59,8 +59,6 @@ module Shibkit
               
             end
             
-            puts @ds_service.inspect
-            
             ## Remember previous visits
             ds_session_data[:previous_idps] ||= Array.new
             
@@ -75,6 +73,9 @@ module Shibkit
             @target      = request.params['target'].to_s
             @provider_id = request.params['providerId'].to_s          
             
+            puts "BBBBBB"
+            puts @target
+            
             ## Not working yet.
             @entity_id       = request.params['entityID'].to_s || 'entityID'
             @return_to       = request.params['return'].to_s
@@ -87,9 +88,6 @@ module Shibkit
             @request_type    = :wayf   if ! @shire.empty?
             @request_type    = :ds     if ! @return_to.empty? 
             @request_type    = :ui     if ! @term.empty?
-            
-            puts "ZZZZZZZ"
-            puts self.inspect
              
           end
           
