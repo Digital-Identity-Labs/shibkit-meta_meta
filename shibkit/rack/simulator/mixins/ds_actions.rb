@@ -38,16 +38,13 @@ module Shibkit
           
           def ds_forward_to_sp_response(ds_session)
           
-            puts "NOT IMPLEMENTED"
             raise Shibkit::Rack::NotImplemented
           
           end
           
           ## Redirect browser to the requested IDP as an AuthnRequest
           def wayf_forward_to_idp_response(ds_session)
-            
-             puts "redirecting to IDP"
-             
+
              params = ::Rack::Utils.build_query(ds_session.feedback_data) 
              idp_authn_url = ds_session.origin_sso_url
              
@@ -57,11 +54,6 @@ module Shibkit
           
           ## Build standard page
           def ds_wayf_response(ds_session)
-            
-            puts "trying to render wayf page"
-            
-            puts "IDPS:"
-            puts ds_session.ds_service.idps.to_yaml
             
             code = 200
             

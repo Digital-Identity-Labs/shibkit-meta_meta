@@ -33,9 +33,7 @@ module Shibkit
             bits = DEMO_PAGE_REGEX.match(path)
 
             requested_page = bits ? bits[2] : 'welcome'
-            
-            puts requested_page
-            
+
             demo_page = DEMO_PAGES[requested_page]            
             page_body = render_page(demo_page, locals)
 

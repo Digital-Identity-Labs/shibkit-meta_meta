@@ -73,7 +73,6 @@ module Shibkit
           ## Controller to accept AuthnRequest requests
           def idp_authn_action(env, idp_session, options={})
     
-            puts "authn action"
             code = 200
             
             request = ::Rack::Request.new(env)

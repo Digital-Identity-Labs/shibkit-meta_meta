@@ -30,9 +30,7 @@ module Shibkit
           
           ## Is the request user_id or username valid? Returns valid user_id or nil
           def authenticate(username, credential) 
-            
-            puts @accounts.to_yaml
-              
+
             ## Hardcoded to passwords at the moment...
             return nil unless username.to_s.downcase == credential.to_s.downcase
             

@@ -92,9 +92,6 @@ module Shibkit
             details[:provider_id] = sp_session.sp_service.uri
             details[:target]      = sp_session.target
             
-            puts "AAAAAA: "
-            puts details[:target]
-            
             params = ::Rack::Utils.build_query(details) 
 
             return redirect_to(config.sim_wayf_base_path + "/?" + params)
