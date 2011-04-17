@@ -108,9 +108,10 @@ module Shibkit
             message = options[:message] || idp_session.get_message
             
             code = 200
-            
+
             locals = get_locals(
               :layout     => :layout,
+              :javascript => :idp,
               :idp        => idp_session.idp_service,
               :sp_home    => config.home_path,
               :sp_name    => config.app_name,

@@ -22,3 +22,13 @@
     %ul
       %li
         %a{:href => sp_home} #{sp_name}
+  #examples
+    %ul
+      - directory.example_accounts.each do |account|
+        %li
+          %a{:href => '#', :class => "autotyper", :id => "creds_#{account.principal}", :"data-cred" => account.principal }
+            = account.principal
+
+  
+
+  

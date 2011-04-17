@@ -78,6 +78,20 @@ form#login input#submit {
 	color: green;
 }
 
+#examples {
+	display: block;
+	background-color: yellow;
+	border 2px solid;
+	border: 2px solid yellow;
+	width: 400px;
+	height: 100px;
+	color: green;
+	margin: 10px;
+	padding: 10px;
+	width: 250px;
+}
+
+
 /* ============================ */
 
 /*

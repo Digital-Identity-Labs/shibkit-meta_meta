@@ -51,6 +51,14 @@ module Shibkit
 
           end
           
+          ## Lists example credentials
+          def example_accounts
+            
+            credentials = @accounts.values.slice(0,5)
+            
+            return credentials
+            
+          end
           
           ## Shibsim base location of the Directory
           def service_base_path
