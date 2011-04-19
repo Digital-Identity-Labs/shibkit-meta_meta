@@ -55,6 +55,8 @@ module Shibkit
             sp_session[:login_time]        = Time.new
             sp_session[:access_time]       = sp_session[:login_time]
             
+           # filter_assertion_attributes
+            
             ## Construct a new session ID 
             sp_session[:session_id] = Shibkit::DataTools.xsid
             
@@ -179,34 +181,28 @@ module Shibkit
           end
           
           ## Returns hash of attribute headers as they would be injected
-          def attribute_headers
-
-            headers = Hash.new
-            
-            #raise Shibkit::Rack::RuntimeError, "Missing user details when trying to add SP headers" unless user_details
-            
-            ## Convert to proper format that matches the live SP (also add new ones)
-            prepared_data = process_attribute_data(idp_assertion.something) # TODO
-
-            ## Now the useful bit
-            prepared_data.each_pair do | header, value| 
-
-              headers[header] = value
-
+          def attributes
+           
+            mapped_attributes = Hash.new
+           
+            idp_assertion.attributes.each_pair do |attribute, value|
+               
+              attr_name = sp_service.map_attribute(attribute)
+              
+              mapped_attributes[attr_name] = value if attr_name
+                
             end
-
-            ## Inject the rather important eptid varieties
-            headers['targeted-id']   = prepared_data['targeted_id']   || 
-              Shibkit::DataTools.targeted_id(user_details['id'], sp_id, user_details['idp_scope'], user_details['idp_salt'], type=:computed)
-            headers['persistent-id'] = prepared_data['persistent_id'] ||
-              Shibkit::DataTools.persistent_id(user_details['id'], sp_id, user_details['idp_id'], user_details['idp_salt'], type=:computed)
-  
-            ## Cache the persistent ID for this user # TODO ? 
-            #user_details['persistent_id'] = headers['persistent-id']
-          
             
-            return headers
-
+            tid = mapped_attributes['targeted-id']
+            mapped_attributes['targeted-id'] = 
+              [tid, idp_assertion.scope].join('@') if tid ## TODO: move join to Data_tools
+            
+            pid =  mapped_attributes['persistent-id']
+            mapped_attributes['persistent-id'] = 
+              [idp_assertion.identity_provider, sp_service.uri, pid].join('!') if pid ## TODO: move join to Data_tools
+            
+            return mapped_attributes
+            
           end
 
           ## Returns hash of session headers as they would be injected
@@ -307,25 +303,6 @@ module Shibkit
             
             return @env['rack.session']['shibkit-simulator']['sp'] 
             
-          end
-          
-          ## Munge the data in attributes to match Shib/SAML expectations
-          def process_attribute_data(user_details)
-
-            munged_data = user_details.dup
-
-            ## Call out to filter (this is monkey patched by shibsim_filter.rb)
-            munged_data = user_record_filter(munged_data)
-
-            return munged_data
-
-          end
-          
-          ## User-overridable method - monkey patch with shibsim_filter.rb
-          def user_record_filter(munged_data)
-
-            return munged_data
-
           end
           
         end

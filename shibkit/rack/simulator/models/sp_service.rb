@@ -145,7 +145,23 @@ module Shibkit
             return content_protection == :active
           
           end
-   
+          
+          def map_attribute(attrib)
+            
+            unless @attribute_map
+
+              ## Load attribute map
+              attribute_maps = YAML.load(File.open(IDPService.config.sim_sp_attr_mappings_file))
+              @attribute_map = attribute_maps[SPService.config.sim_sp_attr_mapper.to_s]
+              raise "No SP attribute mapper!" unless @attribute_map.kind_of?(Hash)
+
+            end
+            
+            return @attribute_map[attrib.to_s.downcase]
+            
+            
+          end
+          
         end
       end
     end

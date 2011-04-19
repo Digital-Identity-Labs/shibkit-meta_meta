@@ -6,14 +6,47 @@ default: &default_shibboleth2
   auth_method_uri:  'urn:oasis:names:tc:SAML:1.0:am:unspecified'
   auth_class_uri:   'urn:oasis:names:tc:SAML:1.0:am:unspecified'
   idp_type:         shibboleth2
+  protocols:        
+    - urn:oasis:names:tc:SAML:2.0:protocol
+    - urn:oasis:names:tc:SAML:1.1:protocol
   add_tid:          true
+  auth:             shibboleth2_password
+  theme:            default
   session_expiry:   300
   idp_base_path:    "/idp/"
   old_status_path:  "/profile/Status"
   new_status_path:  "/status"
   login_path:       "/login"
   logout_path:      "/logout"
-  authn_path:       "/profile/Shibboleth/SSO"
+  authn_path:       "/profile/Shibboleth/SSO"  
+legacy: &default_shibboleth1
+  sso:              true
+  auth_attribute:   uid
+  pid_attribute:    uid
+  auth_method_uri:  'urn:oasis:names:tc:SAML:1.0:am:unspecified'
+  auth_class_uri:   'urn:oasis:names:tc:SAML:1.0:am:unspecified'
+  idp_type:         shibboleth1
+  protocols:        
+    - urn:oasis:names:tc:SAML:1.1:protocol
+  add_tid:          true
+  auth:             basic_password
+  theme:            basic
+  session_expiry:   300
+  idp_base_path:    "/idp/"
+  old_status_path:  "/profile/Status"
+  new_status_path:  "/status"
+  login_path:       "/login"
+  logout_path:      "/logout"
+  authn_path:       "/profile/Shibboleth/SSO"  
+default: &cas_shibboleth2
+  <<: *default_shibboleth2
+  sso:              true
+  auth:             cas_password
+  theme:            fancy_cas
+  auth_method_uri:  'urn:oasis:names:tc:SAML:1.0:am:unspecified'
+  auth_class_uri:   'urn:oasis:names:tc:SAML:1.0:am:unspecified'
+  idp_type:         shibboleth2cas
+  idp_base_path:    "/shibboleth-idp/"
 "https://shib.example.ac.uk/shibboleth":
   <<: *default_shibboleth2
 "https://yogsothoth.miskatonic.edu/shibboleth":

@@ -24,6 +24,7 @@ default:
    telephoneNumber: +1 408 555 1212
    personalTitle: Ms
    description: A big sailing fan.
+   labeledURI: http://www.$SCOPE/directory/b.jensen
 "https://shib.example.ac.uk/shibboleth":
  - uid: pete
    cn: Peter Birkinshaw
