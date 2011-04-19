@@ -13,10 +13,33 @@ module Shibkit
 
             code = options[:code].to_i || 200
             
-            page_body = render_page(:sp_status, render_locals)
+            if sp_session.logged_in?
+              
+              locals = get_locals(
+                :layout     => :layout,
+                :javascript => :idp,
+                :idp        => idp_session.idp_service,
+                :sp_home    => config.home_path,
+                :sp_name    => config.app_name,
+                :directory  => idp_session.idp_service.directory,
+                :page_title => "Session Summary",
+                :message    => message
+                )
+              
+              page_body = render_page(:sp_status, locals)
  
-            return code, Shibkit::Rack::HEADERS, [page_body.to_s]
+              return code, Shibkit::Rack::HEADERS, [page_body.to_s]
 
+            end
+            
+            message = "A valid session was not found."
+            
+            locals = get_locals(
+              :layout     => :plain_layout,
+              :page_title => "Session Summary",
+              :message    => message
+              )  
+            
           end          
           ## Controller for showing SP session status
           def sp_session_action(env, sp_session, options={}) 
@@ -51,7 +74,7 @@ module Shibkit
             target           = request.params['TARGET'].to_s
             encoded_response = request.params['YAMLResponse'].to_s
             
-            log_debug "Encoded YAML received: #{encoded_response}"
+            log_debug "Encoded YAML assertion received"
             raise "Y/SAML Error" unless encoded_response # TODO: Better SP error handling
 
             sp_session.login!(encoded_response)
@@ -70,14 +93,14 @@ module Shibkit
           
           ## Controller for handling protected pages with active session
           def sp_active_action(env, sp_session, options={})
-            
+
             return @app.call(env)
             
           end
  
           ## Controller for handling protected pages with passive (lazy) session
           def sp_passive_action(env, sp_session, options={})
-             
+
             return @app.call(env)
             
           end

@@ -7,7 +7,8 @@ module Shibkit
         class IDPService < EntityService
           
           require 'shibkit/rack/base/mixins/http_utils'
-          
+          require 'digest/md5'
+            
           ## Easy access to Shibkit's configuration settings
           extend Shibkit::Configured
           
@@ -19,6 +20,8 @@ module Shibkit
           attr_accessor :scope
           attr_accessor :auth_attribute
           attr_accessor :pid_attribute
+          attr_accessor :pid_secret
+          attr_accessor :protocols
           attr_accessor :auth_method
           attr_accessor :auth_class
           attr_accessor :add_tid
@@ -70,9 +73,11 @@ module Shibkit
             @login_path      = defaults['login_path']      ||  "/login"
             @logout_path     = defaults['logout_path']     ||  "/logout"
             @authn_path      = defaults['authn_path']      ||  "/profile/Shibboleth/SSO"  
+            @pid_secret      = defaults['secret']          ||  Digest::MD5.hexdigest(@uri)
+            @protocols       = defaults['protocols']       || ['urn:oasis:names:tc:SAML:2.0:protocol']
             
           end
-          
+                  
           ## What sort of IDP software is this meant to be?
           def idp_type
             
@@ -140,17 +145,24 @@ module Shibkit
             return "wayfless URL will go here"
             
           end
-          
+              
           def map_attribute(attribute)
             
             unless @attribute_map
               
               ## Load attribute map
               attribute_maps = YAML.load(File.open(IDPService.config.sim_idp_attr_mappings_file))
-              @attribute_map = attribute_maps[entity_id] || attribute_maps['default']
+              @attribute_map = attribute_maps[uri] || attribute_maps['default']
               
             end
             
+            
+            if IDPService.config.sim_idp_attr_filter
+              
+              return nil unless config.sim_idp_attr_filter.include attribute
+                            
+            end
+              
             return @attribute_map[attribute.downcase]
             
           end

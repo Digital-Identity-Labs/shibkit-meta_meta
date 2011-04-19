@@ -105,25 +105,25 @@ module Shibkit
               raw_records.each do |record|
 
                 record.each_pair do |k,v|
-
-                  if v.respond_to?(:each) 
+                  
+                  if v.kind_of?(Array) 
 
                       v.each do |vv|
 
                         vv.gsub!('$SCOPE', idp.scope)
                         vv.gsub!('$ORG',   idp.display_name || "The Organisation")
-
                         
                       end
                     
                   else
-                
+                    
                     v.gsub!('$SCOPE', idp.scope)
-                    v.gsub!('$ORG',   idp.display_name)
+                    v.gsub!('$ORG',   idp.display_name || "The Organisation")
 
                   end
-                
+                  
                 end
+                
               end         
             end
             

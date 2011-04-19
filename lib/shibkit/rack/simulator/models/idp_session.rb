@@ -167,7 +167,7 @@ module Shibkit
           end
 
           ## Fetch information from directory and hand over
-          def assertion(sp_entity_id,attributes=false)
+          def assertion(sp_entity_id,include_attributes=true)
    
             assertion = Shibkit::Rack::Simulator::Model::IDPSAMLResponse.new
               
@@ -177,14 +177,14 @@ module Shibkit
             assertion.audience           = sp_entity_id
             assertion.name_identifier    = "NOTIMPLEMENTEDYET" 
             assertion.auth_method        = idp_service.auth_method_uri
-            assertion.attributes         = attributes
+            assertion.attributes         = include_attributes ? attributes(sp_entity_id) : {} 
             
             return assertion
    
           end
           
           ## Return attributes from directory, processed into appropriate format
-          def attributes
+          def attributes(sp_entity_id)
             
             mapped_attributes = Hash.new
             
@@ -192,6 +192,30 @@ module Shibkit
             user_entry.attributes.each_pair do |attribute, value|
               
               mapped_attributes[idp_service.map_attribute(attribute)] = value if value
+              
+            end
+            
+            ## Only generate eptid if we have a source attribute
+            source_id = user_entry.attributes[idp_service.pid_attribute]
+            if source_id
+              
+              ## Do nothing if a hardcoded value is present
+              unless mapped_attributes['urn:oid:1.3.6.1.4.1.5923.1.1.1.10']
+            
+                eptid = Shibkit::DataTools.eptid_user_id(source_id, sp_entity_id, idp_service.pid_secret, :computed)
+                mapped_attributes['urn:oid:1.3.6.1.4.1.5923.1.1.1.10'] = eptid if 
+                  idp_service.protocols.include? 'urn:oasis:names:tc:SAML:2.0:protocol'
+             
+              end
+            
+              ## Do nothing if a hardcoded value is present
+              unless mapped_attributes['urn:mace:dir:attribute-def:eduPersonTargetedID']
+            
+                eptid = Shibkit::DataTools.eptid_user_id(source_id, sp_entity_id, idp_service.pid_secret, :computed)
+                mapped_attributes['urn:mace:dir:attribute-def:eduPersonTargetedID'] = eptid if 
+                  idp_service.protocols.include? 'urn:oasis:names:tc:SAML:1.1:protocol'
+             
+              end
               
             end
             
