@@ -43,8 +43,8 @@ default: &cas_shibboleth2
   sso:              true
   auth:             cas_password
   theme:            fancy_cas
-  auth_method_uri:  'urn:oasis:names:tc:SAML:1.0:am:unspecified'
-  auth_class_uri:   'urn:oasis:names:tc:SAML:1.0:am:unspecified'
+  auth_method_uri:  'urn:oasis:names:tc:SAML:2.0:ac:classes:PasswordProtectedTransport'
+  auth_class_uri:   'urn:oasis:names:tc:SAML:2.0:ac:classes:PasswordProtectedTransport'
   idp_type:         shibboleth2cas
   idp_base_path:    "/shibboleth-idp/"
 "https://shib.example.ac.uk/shibboleth":

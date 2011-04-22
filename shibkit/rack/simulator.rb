@@ -278,7 +278,12 @@ module Shibkit
           when sp_service.status_path
             
             return sp_status_action(env, sp_session)
-          
+
+          ## SP metadata page?
+          when sp_service. metadata_path
+
+            return sp_metadata_action(env, sp_session)
+        
           ## SP Login session initiator action
           when sp_service.login_path
           
