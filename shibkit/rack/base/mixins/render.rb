@@ -53,6 +53,7 @@ module Shibkit
 
             ## HAML rendering options
             Haml::Template.options[:format] = :html5
+            Haml::Template.options[:ugly]   = true if locals[:ugly] == true
             
             ## Render the content
             content = Haml::Engine.new(view(view_name))
