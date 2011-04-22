@@ -8,40 +8,46 @@ module Shibkit
           ## SP Actions
           ##
           
-          ## Controller for showing SP session status
+          ## Controller for showing SP status
           def sp_status_action(env, sp_session, options={}) 
 
             code = options[:code].to_i || 200
             
-            if sp_session.logged_in?
-              
-              locals = get_locals(
-                :layout     => :layout,
-                :javascript => :idp,
-                :idp        => idp_session.idp_service,
-                :sp_home    => config.home_path,
-                :sp_name    => config.app_name,
-                :directory  => idp_session.idp_service.directory,
-                :page_title => "Session Summary",
-                :message    => message
-                )
-              
+            locals = get_locals(
+              :layout     => :plain_layout,
+              :sp_session => sp_session,
+              :sp_service => sp_session.sp_service,
+              :config     => config,
+              :page_title => ""
+              )  
+                  
               page_body = render_page(:sp_status, locals)
- 
-              return code, Shibkit::Rack::HEADERS, [page_body.to_s]
 
-            end
-            
-            message = "A valid session was not found."
+              return code, Shibkit::Rack::HEADERS, [page_body.to_s]
+                 
+          end 
+          
+          ## Controller for showing SP Metadata
+          def sp_metadata_action(env, sp_session, options={}) 
+
+            code = options[:code].to_i || 200
             
             locals = get_locals(
               :layout     => :plain_layout,
-              :page_title => "Session Summary",
-              :message    => message
+              :sp_session => sp_session,
+              :sp_service => sp_session.sp_service,
+              :config     => config,
+              :page_title => ""
               )  
-            
-          end          
-          ## Controller for showing SP session status
+                  
+              page_body = render_page(:sp_metadata, locals)
+
+              return code, Shibkit::Rack::HEADERS, [page_body.to_s]
+                 
+          end 
+          
+                   
+          ## Controller for showing SP session information
           def sp_session_action(env, sp_session, options={}) 
 
             code = options[:code].to_i || 200

@@ -12,7 +12,7 @@ module Shibkit
             
             ## Assuming :numeric type for now
             
-            scheme   = "http://"
+            scheme   = "http://" ## TODO: Need switch for HTTPS (see config)
             hostname = "localhost"
             port     = 3000.to_s
             
