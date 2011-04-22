@@ -50,17 +50,28 @@ module Shibkit
 
             idp_assertion = YAML.load(Base64.decode64(encoded_assertion))
 
-            sp_session[:encoded_assertion] = encoded_assertion
-            sp_session[:idp_assertion]     = idp_assertion 
-            sp_session[:login_time]        = Time.new
-            sp_session[:access_time]       = sp_session[:login_time]
-            
-           # filter_assertion_attributes
+            sp_session[:encoded_assertion]  = encoded_assertion
+            sp_session[:idp_auth_assertion] = idp_assertion
+            sp_session[:idp_attr_assertion] = idp_assertion
+            sp_session[:login_time]         = Time.new
+            sp_session[:access_time]        = sp_session[:login_time]
             
             ## Construct a new session ID 
             sp_session[:session_id] = Shibkit::DataTools.xsid
             
             return true
+            
+          end
+          
+          def assertion_count(format=false)
+            
+            count = idp_auth_assertion == idp_attr_assertion ? 1 : 2
+            
+            if format
+              return "%02d" % count
+            else
+              return count
+            end
             
           end
           
@@ -88,7 +99,7 @@ module Shibkit
           ## Is the specified user logged in at the SP?
           def logged_in?
 
-            return false unless idp_assertion
+            return false unless idp_auth_assertion
             return false if expired?
             
             return true
@@ -115,6 +126,20 @@ module Shibkit
           def session_id
             
             return sp_session[:session_id]
+            
+          end
+          
+          def remote_user
+            
+            config.sim_remote_user.each do |id_attribute|
+              
+              username =  attributes[id_attribute]
+              
+              return username if username 
+              
+            end
+            
+            return ""
             
           end
           
@@ -162,16 +187,24 @@ module Shibkit
           
           def identity_provider
             
-            return idp_assertion.identity_provider
+            return idp_auth_assertion.identity_provider
             
           end
           
-          ## Details about the user passed by IDP
-          def idp_assertion
+          ## Details about the user passed by IDP (auth, with or without attribs)
+          def idp_auth_assertion
             
-            return sp_session[:idp_assertion]
+            return sp_session[:idp_auth_assertion]
             
           end
+          
+          ## Details about the user passed by IDP (second/auth assertion or copy of first)
+          def idp_attr_assertion
+            
+            return sp_session[:idp_attr_assertion]
+            
+          end
+
           
           ## Remember destination
           def remember_destination(destination)
@@ -211,9 +244,11 @@ module Shibkit
            
             mapped_attributes = Hash.new
            
-            idp_assertion.attributes.each_pair do |attribute, value|
+            idp_attr_assertion.attributes.each_pair do |attribute, value|
                
               attr_name = sp_service.map_attribute(attribute)
+              
+              value = value.join(';') if value.kind_of?(Array)
               
               mapped_attributes[attr_name] = value if attr_name
                 
@@ -221,83 +256,69 @@ module Shibkit
             
             tid = mapped_attributes['targeted-id']
             mapped_attributes['targeted-id'] = 
-              [tid, idp_assertion.scope].join('@') if tid ## TODO: move join to Data_tools
+              [tid, idp_attr_assertion.scope].join('@') if tid ## TODO: move join to Data_tools
             
             pid =  mapped_attributes['persistent-id']
             mapped_attributes['persistent-id'] = 
-              [idp_assertion.identity_provider, sp_service.uri, pid].join('!') if pid ## TODO: move join to Data_tools
+              [idp_attr_assertion.identity_provider, sp_service.uri, pid].join('!') if pid ## TODO: move join to Data_tools
             
             return mapped_attributes
             
           end
 
           ## Returns hash of session headers as they would be injected
-          def session_headers
+          def session_variables
             
-            headers = Hash.new
+            vars = Hash.new
+            
+            return vars unless logged_in?
             
             ## Application ID
-            headers['Shib-Application-ID'] = 'default'
+            vars['Shib-Application-ID'] = sp_service.application_id
 
             ## Persistent Session ID
-            session_id = sp_session(env)[:session_id]
-            headers['Shib-Session-ID'] = session_id
+            vars['Shib-Session-ID'] = session_id
 
             ## Identity Provider ID
-            headers['Shib-Identity-Provider'] = entity_id
+            vars['Shib-Identity-Provider'] = identity_provider
 
             ## Time authentication occured as a string in xs:DateTime format (with no timezone for some reason)  # TODO
-            headers['Shib-Authentication-Instant'] = login_time.xmlschema.gsub(/(\+.*)/, 'Z')
-
+            vars['Shib-Authentication-Instant'] = idp_auth_assertion.auth_instant.utc.xmlschema
+            
             ## Keep login method rather vague # TODO
-            headers['Shib-Authentication-Method'] = 'urn:oasis:names:tc:SAML:1.0:am:unspecified'
-            headers['Shib-AuthnContext-Class']    = 'urn:oasis:names:tc:SAML:1.0:am:unspecified'
-
-            ## Assertion headers are cargo-culted for not (not sensible - Do Not Use)
-            assertion_header_info(session_id, user_details).each_pair {|header, value| env[header] = value}
-            headers['Shib-Assertion-Count'] = "%02d" % assertion_header_info(session_id, user_details).size
+            vars['Shib-Authentication-Method'] = idp_auth_assertion.auth_method || 'none' ## TODO: need to fix these for Lazy sessions
+            vars['Shib-AuthnContext-Class']    = idp_auth_assertion.auth_class || idp_auth_assertion.auth_method
 
             ## Is targeted ID set to be automatic?
-            headers['REMOTE_USER'] = user_details['persistent_id'] ||
-              Shibkit::DataTools.persistent_id(user_details['id'],
-                sp_id, user_details['idp_id'],
-                user_details['idp_salt'],
-                type=:computed)
+            vars['REMOTE_USER'] = remote_user
             
-            ## This is pure cargo-cult nonsense but enhances the fakery (at some point real assertion parts should be faked, maybe?)
-            ## This should be based on total size of assertion data I believe (this is Shib1.3 style?)
-            (1..2).each do |assertion_part|
-
-              ## Each assertion fragment gets a numbered identifier
-              header = 'Shib-Assertion-' + "%02d" % assertion_part
-
-              ## Building up a mock URL
-              value  = config.sim_assertion_base + '?key=' + session_id + '&ID=' + Shibkit::DataTools.xsid
-
-              ## Collect it
-              headers[header] = value
-
-            end
+            ## Assertion headers are cargo-culted for not (not sensible - Do Not Use)
+            #assertion_header_info(session_id, user_details).each_pair {|header, value| env[header] = value}
+            vars['Shib-Assertion-Count'] = assertion_count(:formatted)
             
-            return headers
+            ## Building up a mock assertion ID URLs
+            vars['Shib-Assertion-001']  = sp_service.assertion_url + 
+              '?key=' + session_id + '&ID=' + idp_auth_assertion.id
+            vars['Shib-Assertion-002']  = sp_service.assertion_url + 
+              '?key=' + session_id + '&ID=' + idp_attr_assertion.id if assertion_count == 2  
+            
+            return vars
             
           end
 
           ## Copy headers for session and user attributes, etc into Rack session
-          def inject_headers!
+          def inject_variables!
             
-            session_headers.each_pair {|header, value| @env[header.to_s] = value.to_s}
-            
-            attribute_headers.each_pair {|header, value| @env[header.to_s] = value.to_s}
+            session_variables.each_pair {|label, value| @env[prep_label(label)] = value.to_s}       
+            attributes.each_pair {|label, value| @env[prep_label(label)]        = value.to_s}
             
           end
           
-          ## Remove all injected headers
-          def flush_headers!
+          ## Remove all injected headers/CGI variables
+          def flush_variables!
 
-            session_headers.each_key   { |header| @env[header.to_s] = nil }
-            
-            attribute_headers.each_key { |header| @env[header.to_s] = nil }
+            session_variables.each_pair {|label, value| @env[prep_label(label)] = nil}       
+            attributes.each_pair {|label, value| @env[prep_label(label)]        = nil}
           
           end
           
@@ -323,6 +344,13 @@ module Shibkit
           ## 
           
           private 
+          
+          def prep_label(label)
+            
+            ## Change keys to mimic the IIS header bodge/workaround
+            return config.iis_headers ? "HTTP_" + label.upcase.gsub('-','_') : label
+  
+          end
           
           ## Convenient accessor to this object's session data
           def sp_session

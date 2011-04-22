@@ -13,6 +13,7 @@ module Shibkit
           
           include Shibkit::Rack::Base::Mixin::HTTPUtils
           
+          attr_accessor :id
           attr_accessor :protocol
           attr_accessor :session_id
           attr_accessor :digest      
@@ -23,6 +24,7 @@ module Shibkit
           attr_accessor :name_identifier
           attr_accessor :auth_instant
           attr_accessor :auth_method
+          attr_accessor :auth_class
           attr_accessor :attributes
           
           ## New object. Takes block
@@ -34,6 +36,9 @@ module Shibkit
             @time_expires   = @issue_instant + 60
             @digest         = "NOTIMPLEMENTEDYET"
             @assertion_id   = "NOTIMPLEMENTEDYET"
+            @auth_class     = nil
+            @auth_method    = ""
+            @id             = DataTools.xsid
         
             ## Execute block if passed one      
             self.instance_eval(&block) if block

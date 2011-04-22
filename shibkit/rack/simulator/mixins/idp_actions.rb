@@ -107,13 +107,16 @@ module Shibkit
             message = options[:message] || idp_session.get_message
             
             code = 200
-
+            
+            ## Because this is simpler than using metadata - we know the SP!
+            sp_service = Shibkit::Rack::Simulator::Model::SPSession.new(env).sp_service
+            
             locals = get_locals(
               :layout     => :layout,
               :javascript => :idp,
               :idp        => idp_session.idp_service,
-              :sp_home    => config.home_path,
-              :sp_name    => config.app_name,
+              :sp_home    => sp_service.home_url,
+              :sp_name    => sp_service.application_name,
               :directory  => idp_session.idp_service.directory,
               :page_title => "#{idp_session.idp_service.display_name} IDP",
               :message    => message

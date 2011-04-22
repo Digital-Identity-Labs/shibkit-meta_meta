@@ -71,9 +71,9 @@ module Shibkit
             stats = {
               :ip_address                   => env['REMOTE_ADDR'], # TODO store in session and read...
               :idp_entity_uri               => sp_session.identity_provider,
-              :sso_protocol                 => sp_session.idp_assertion.protocol,
+              :sso_protocol                 => sp_session.idp_auth_assertion.protocol,
               :authentication_time          => sp_session.login_time.utc.xmlschema,
-              :authentication_context_class => sp_session.idp_assertion.auth_method,
+              :authentication_context_class => sp_session.idp_auth_assertion.auth_method,
               :authentication_context_decl  => "(none)",
               :minutes_remaining            => sp_session.minutes_until_expiry
             }  
@@ -124,6 +124,7 @@ module Shibkit
           def sp_active_action(env, sp_session, options={})
             
             sp_session.access!
+            sp_session.inject_variables!
             
             return @app.call(env)
             
@@ -133,6 +134,7 @@ module Shibkit
           def sp_passive_action(env, sp_session, options={})
             
             sp_session.access!
+            sp_session.inject_variables!
             
             return @app.call(env)
             
