@@ -45,22 +45,45 @@ module Shibkit
           def sp_session_action(env, sp_session, options={}) 
 
             code = options[:code].to_i || 200
-  
+            
+            ## No session to show? Fail realistically and politely
+            unless sp_session.logged_in?
+              
+              locals = get_locals(
+                :layout     => :minimal_layout,
+                :ugly       => true,
+                :page_title => "Session Summary"
+                )
+
+              page_body = render_page(:sp_session_not, locals)
+
+              return code, Shibkit::Rack::HEADERS, [page_body.to_s]
+                      
+            end
+            
             ## Assemble various stats for the page
             stats = {
               :ip_address                   => env['REMOTE_ADDR'], # TODO store in session and read...
-              :idp_entity_uri               => "TODO",
-              :sso_protocol                 => "TODO",
-              :authentication_time          => sim_sp_session(env)[:logintime],
-              :authentication_context_class => "TODO",
-              :authentication_context_decl  => "TODO",
-              :minutes_remaining            => "TODO",
-              :attributes_stats             => {
-                'todo' => 'todo'
-              }
+              :idp_entity_uri               => sp_session.identity_provider,
+              :sso_protocol                 => sp_session.idp_assertion.protocol,
+              :authentication_time          => sp_session.login_time.utc.xmlschema,
+              :authentication_context_class => sp_session.idp_assertion.auth_method,
+              :authentication_context_decl  => "(none)",
+              :minutes_remaining            => sp_session.minutes_until_expiry
             }  
-
-            page_body = render_page(:sp_session, render_locals)
+            
+            attribute_stats = Hash.new
+            sp_session.attributes.each_pair { |k,v| attribute_stats[k] = [v].flatten.count }
+            
+            locals = get_locals(
+              :layout     => :minimal_layout,
+              :ugly       => true,
+              :stats      => stats,
+              :attribute_stats => attribute_stats,
+              :page_title => "Session Summary"
+              )
+            
+            page_body = render_page(:sp_session, locals)
  
             return code, Shibkit::Rack::HEADERS, [page_body.to_s]
 
@@ -93,14 +116,18 @@ module Shibkit
           
           ## Controller for handling protected pages with active session
           def sp_active_action(env, sp_session, options={})
-
+            
+            sp_session.access!
+            
             return @app.call(env)
             
           end
  
           ## Controller for handling protected pages with passive (lazy) session
           def sp_passive_action(env, sp_session, options={})
-
+            
+            sp_session.access!
+            
             return @app.call(env)
             
           end

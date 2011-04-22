@@ -30,7 +30,7 @@ module Shibkit
             
             @type           = :undefined
             @issue_instant  = Time.new
-            @protocol       = :shibboleth2
+            @protocol       = "urn:oasis:names:tc:SAML:2.0:protocol"
             @time_expires   = @issue_instant + 60
             @digest         = "NOTIMPLEMENTEDYET"
             @assertion_id   = "NOTIMPLEMENTEDYET"

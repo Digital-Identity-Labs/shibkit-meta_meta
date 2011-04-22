@@ -177,6 +177,7 @@ module Shibkit
             assertion.audience           = sp_entity_id
             assertion.name_identifier    = "NOTIMPLEMENTEDYET" 
             assertion.auth_method        = idp_service.auth_method_uri
+            assertion.protocol           = idp_service.protocols[0]
             assertion.attributes         = include_attributes ? attributes(sp_entity_id) : {} 
             
             return assertion

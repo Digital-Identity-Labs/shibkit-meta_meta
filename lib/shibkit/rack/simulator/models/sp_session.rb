@@ -118,25 +118,51 @@ module Shibkit
             
           end
           
-          ## Time when session expires
-          def session_expires
-
-            return Time.new - (sp_session[:login_time] || 0)
+          def lifetime
+            
+            return config.sim_sp_session_lifetime
+            
+          end
+          
+          ## Minutes until expiry
+          def minutes_until_expiry
+            
+            login_secs = login_time.to_i
+            return ((login_secs + lifetime) - Time.new.to_i) / 60
 
           end
-
+          
+          def expiry_time
+            
+            return access_time + config.sim_sp_session_lifetime 
+            
+          end
+          
           ## How long has this session been idle? (in minutes)
-          def session_idle
+          def idleness_limit
 
-            return Time.new - Time.login
+            return config.sim_sp_session_lifetime
 
           end      
+          
+          ## How long has the session been idle?
+          def idleness
+            
+            return Time.new.to_i - login_time.to_i
+            
+          end
           
           ## Has the session expired?
           def expired?
             
             return false #true if Time.new.to_i > session_expires
             return false
+            
+          end
+          
+          def identity_provider
+            
+            return idp_assertion.identity_provider
             
           end
           
