@@ -23,9 +23,15 @@ module Shibkit
           
           def application_name
             
-            return @application_name || SPService.config.app_name
+            return @application_name || SPService.config.application_name
             
           end  
+          
+          def application_id
+            
+            return @application_id || SPService.config.app_id
+            
+          end
           
           def protocols
             
@@ -121,6 +127,13 @@ module Shibkit
 
           end
 
+          ## Location of the fake SP's assertion thingy
+          def assertion_url
+
+            return @metadata_path || build_sim_url(SPService.config.handler_path, SPService.config.assertion_handler)
+
+          end
+
           ## Location of the fake SP's 
           def wayf_url
 
@@ -199,7 +212,7 @@ module Shibkit
           ## The Shibboleth SP application label (defaults to default)
           def application_id
 
-            return @application_id || SPService.config.sim_application
+            return @application_id || SPService.config.application_id
 
           end
           

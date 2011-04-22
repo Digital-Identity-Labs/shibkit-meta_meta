@@ -23,7 +23,7 @@ module Shibkit
 
     ## Default configuration values, attributes and accessors defined here
     CONFIG_DEFAULTS = {
-      :app_name                       => "Your New Project",    
+      :application_name               => "Your New Project",    
       :protected_paths                => ["/", "/shibkit/demo/"],
       :federation_metadata            => {"Example Federation"  => "/data/default_metadata/example_federation_metadata.xml".to_absolute_path,
                                           "UnCommon"            => "/data/default_metadata/uncommon_federation_metadata.xml".to_absolute_path,
@@ -32,10 +32,11 @@ module Shibkit
       :exit_path                      => "/",
       :content_protection             => :active,
       :debug                          => true,
-      :application                    => 'default',
+      :application_id                 => 'default',
       :entity_id                      => 'https://sp.example.ac.uk/shibboleth',
       :protocols                      => ['urn:oasis:names:tc:SAML:2.0:protocol', 'urn:oasis:names:tc:SAML:1.1:protocol'],
       :ssl_in_production              => true,
+      :iis_headers                    => false,
       :handler_path                   => "/Shibboleth.sso/",
       :metadata_handler               => "Metadata",
       :status_handler                 => "Status",

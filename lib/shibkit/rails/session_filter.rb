@@ -243,10 +243,6 @@ module Shibkit
           user.language       = sp_assertion.attrs.language
           user.org_id         = 0 # sp_assertion.attrs.org_id <- TODO: Need IDP/Org database
                  
-          ## Store or create full information 
-          #user.idp_assertion_id  = sp_assertion.attrs_targeted_id
-          #user.public_profile_id = sp_assertion.attrs_targeted_id
-          
           ## Store user at this point...
           user.save
           
