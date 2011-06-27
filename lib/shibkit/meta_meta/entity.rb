@@ -17,10 +17,11 @@
 
 module Shibkit
   class MetaMeta
-
     
     ## Class to represent the metadata of a Shibboleth IDP or SP 
-    class Entity
+    class Entity < Metadata
+      
+      require 'shibkit/meta_meta/metadata'
       
       ## The URI of the entity's parent federation
       attr_accessor :federation_uri
@@ -69,6 +70,31 @@ module Shibkit
       alias :accountable? :accountable
       alias :athens? :athens
       alias :organization :organisation
+      
+      private
+      
+      def parse_xml
+        
+        self.entity_uri     = @xml['entityID']
+        self.metadata_id    = @xml['ID']
+      
+        ## Then boolean flags for common/useful info 
+        self.accountable = @xml.xpath('xmlns:Extensions/ukfedlabel:AccountableUsers').size   > 0 ? true : false
+        self.ukfm        = @xml.xpath('xmlns:Extensions/ukfedlabel:UKFederationMember').size > 0 ? true : false
+        self.athens      = @xml.xpath('xmlns:Extensions/elab:AthensPUIDAuthority').size      > 0 ? true : false
+        self.hide        = @xml.xpath('xmlns:Extensions/wayf:HideFromWAYF').size             > 0 ? true : false
+        self.scopes      = @xml.xpath('xmlns:IDPSSODescriptor/xmlns:Extensions/shibmd:Scope').collect { |x| x.text }
+        self.idp         = @xml.xpath('xmlns:IDPSSODescriptor') ? true : false
+        self.sp          = @xml.xpath('xmlns:SPSSODescriptor')  ? true : false
+        
+        ## Include Contact objects
+        self.support_contact   = Contact.new(@xml.xpath("xmlns:ContactPerson[@contactType='support'][1]")[0])
+        self.technical_contact = Contact.new(@xml.xpath("xmlns:ContactPerson[@contactType='technical'][1]")[0])
+        
+        ## Include an organisation object
+        self.organisation = Organisation.new(@xml.xpath('xmlns:Organization[1]'))
+       
+      end
       
     end
 

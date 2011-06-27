@@ -20,7 +20,9 @@ module Shibkit
 
     ## Class to represent a Shibboleth Federation or collection of local metadata
     ## 
-    class Federation
+    class Federation < Metadata
+      
+      require 'shibkit/meta_meta/metadata'
       
       ## The human-readable display name of the Federation or collection of metadata
       attr_accessor :display_name
@@ -47,16 +49,30 @@ module Shibkit
       ## Time the Federation metadata was parsed
       attr_reader :read_at
       
-      ## 
-      def initialize
       
-        @read_at = Time.new
+      private
+  
       
+      def parse_xml
+        
+        self.metadata_id    = @xml['ID']
+        self.federation_uri = @xml['Name']
+        self.valid_until    = @xml['validUntil']
+        self.entities       = Array.new
+        
+        ## Process XML chunk for each entity in turn
+        @xml.xpath("//xmlns:EntityDescriptor").each do |ex|
+        
+          entity = Entity.new(ex)
+          entity.federation_uri = federation_uri
+          
+          ## Collect this entity in the federation object
+          self.entities << entity
+          
+        end
+        
       end
       
     end
-
-
-    end
   end
-  
+end

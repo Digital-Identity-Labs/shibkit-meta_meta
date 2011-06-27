@@ -120,6 +120,7 @@
 			<shibmd:Scope regexp="false">example.com</shibmd:Scope>
 			<ukfedlabel:UKFederationMember/>
 			<ukfedlabel:AccountableUsers/>
+			<wayf:HideFromWAYF/>
 		</Extensions>
 		
 		<IDPSSODescriptor protocolSupportEnumeration="urn:mace:shibboleth:1.0 urn:oasis:names:tc:SAML:1.1:protocol urn:oasis:names:tc:SAML:2.0:protocol">

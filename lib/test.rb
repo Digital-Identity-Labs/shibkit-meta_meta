@@ -1,8 +1,8 @@
-require 'shibkit/metameta'
+require 'shibkit/meta_meta'
 
-config = {"Example Federation"  => "/data/default_metadata/example_federation_metadata.xml".to_absolute_path,
-          "UnCommon"            => "/data/default_metadata/uncommon_federation_metadata.xml".to_absolute_path,
-          "Other Organisations" => "/data/default_metadata/local_metadata.xml".to_absolute_path}
+config = {"Example Federation"  => "shibkit/data/default_metadata/example_federation_metadata.xml",
+          "UnCommon"            => "shibkit/data/default_metadata/uncommon_federation_metadata.xml",
+          "Other Organisations" => "shibkit/data/default_metadata/local_metadata.xml"}
 
 metadata = Shibkit::MetaMeta.new
 
@@ -18,6 +18,8 @@ metadata.federations.each do |federation|
   puts federation.read_at
   puts federation.metadata_id
   puts federation.entities.count
+  
+  puts federation.entities.to_yaml
   
 end
 

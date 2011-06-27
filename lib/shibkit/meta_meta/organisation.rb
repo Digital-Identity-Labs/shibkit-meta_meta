@@ -19,7 +19,9 @@ module Shibkit
   class MetaMeta
 
     ## Class to represent the metadata of the organisation owning a Shibboleth entity
-    class Organisation
+    class Organisation < Metadata
+      
+      require 'shibkit/meta_meta/metadata'
       
       ## The name identifier for the organisation
       attr_accessor :name
@@ -29,9 +31,18 @@ module Shibkit
       
       ## The homepage URL for the organisation
       attr_accessor :url
-      
+    
+    
+     private
+     
+     def parse_xml
+    
+      name         = @xml.xpath('xmlns:OrganizationName[1]')[0].content
+      display_name = @xml.xpath('xmlns:OrganizationDisplayName[1]')[0].content
+      url          = @xml.xpath('xmlns:OrganizationURL[1]')[0].content
+    
     end
-
+        
     end
   end
-  
+end

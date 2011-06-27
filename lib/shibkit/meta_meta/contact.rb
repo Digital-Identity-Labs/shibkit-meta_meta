@@ -15,11 +15,14 @@
 ## limitations under the License.
 ##
 
+
 module Shibkit
   class MetaMeta
 
     ## Class to represent technical or suppor contact details for an entity
-    class Contact
+    class Contact < Metadata
+      
+      require 'shibkit/meta_meta/metadata'
       
       ## The given name of the contact (often the entire name is here)
       attr_accessor :givenname
@@ -40,8 +43,22 @@ module Shibkit
       
       end
       
-    end
+      
+      private
+      
+      def parse_xml
+        
+        if @xml and @xml.content
+          
+          self.givenname = @xml.xpath('xmlns:GivenName[1]')[0].content    if @xml.xpath('xmlns:GivenName[1]')[0]
+          self.surname   = @xml.xpath('xmlns:SurName[1]')[0].content      if @xml.xpath('xmlns:SurName[1]')[0]
+          self.email_url = @xml.xpath('xmlns:EmailAddress[1]')[0].content if @xml.xpath('xmlns:EmailAddress[1]')[0]
+          self.category  = @xml['contactType']
+        
+        end
+  
+      end
 
     end
   end
-  
+end
