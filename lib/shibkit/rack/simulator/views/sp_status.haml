@@ -1,0 +1,19 @@
+!!! XML
+%StatusHandler
+  %Version{ :'Xerces-C' => "0.0.0", :'XML-Security-C' => "0.0.0", :'OpenSAML-C' => "0.0.0", :Shibboleth => "2.0" }
+  %SessionCache
+    %OK/
+  %Application{ :id => "default", :entityID => sp_session.sp_service.uri }
+    %Handlers
+      %Handler{ :type => "AssertionLookup",  :Location => sp_service.assertion_url }
+      %Handler{ :type => "SessionInitiator", :Location => sp_service.login_url }
+      %Handler{ :type => "SessionInitiator", :Location => sp_service.wayf_url }
+      %Handler{ :type => "SessionInitiator", :Location => sp_service.ds_url }
+      %Handler{ :type => "AssertionConsumerService", :Location => sp_service.sso_url, :Binding => "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" }
+      %Handler{ :type => "AssertionConsumerService", :Location => sp_service.sso_url,  :Binding => "urn:oasis:names:tc:SAML:1.0:profiles:browser-post" }
+      %Handler{ :type => "LogoutInitiator", :Location => sp_service.logout_url }
+      %Handler{ :type => "MetadataGenerator", :Location => sp_service.metadata_url }
+      %Handler{ :type => "Status", :Location => sp_service.status_url  }
+      %Handler{ :type => "Session", :Location => sp_service.session_url }
+  %Status
+    %OK/

@@ -1,0 +1,14 @@
+%noscript
+  %p
+    %strong Note:
+    Since your browser does not support JavaScript,
+    you must press the Continue button once to proceed.
+
+%form{:action => sp_sso_endpoint, :method => "post"}
+  .saml_data
+    %input{:type => "hidden", :name => 'YAMLResponse', :value => encoded_response}
+    %input{:type => "hidden", :name => 'TARGET',       :value => target}
+    %noscript
+      .submitter
+        %input{:type => 'submit', :value => 'Continue'}
+

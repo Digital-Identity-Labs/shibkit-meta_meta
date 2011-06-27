@@ -1,0 +1,10 @@
+
+require 'shibkit/rack/simulator/models/account'
+require 'shibkit/rack/simulator/models/directory'
+require 'shibkit/rack/simulator/models/federation'
+require 'shibkit/rack/simulator/models/idp_session'
+require 'shibkit/rack/simulator/models/idp_service'
+require 'shibkit/rack/simulator/models/sp_service'
+require 'shibkit/rack/simulator/models/sp_session'
+require 'shibkit/rack/simulator/models/ds_service'
+require 'shibkit/rack/simulator/models/ds_session'
