@@ -19,20 +19,17 @@ require 'rubygems'
 require 'nokogiri'
 require 'yaml'
 
-require 'shibkit/metameta/contact'
-require 'shibkit/metameta/source'
-require 'shibkit/metameta/entity'
-require 'shibkit/metameta/federation'
-require 'shibkit/metameta/organisation'
+require 'shibkit/meta_meta/contact'
+require 'shibkit/meta_meta/source'
+require 'shibkit/meta_meta/entity'
+require 'shibkit/meta_meta/federation'
+require 'shibkit/meta_meta/organisation'
 
 module Shibkit
   
   ## Simple library to parse Shibboleth metadata files into Ruby objects
   class MetaMeta
         
-    ## Easy access to Shibkit's configuration settings
-    include Shibkit::Configured
-    
     attr_accessor :sources
     attr_accessor :federations
         
