@@ -39,7 +39,10 @@ module Shibkit
       
       ## Is the entity using Athens?
       attr_accessor :athens
-      
+
+      ## Show in normal WAYFs?
+      attr_accessor :hide
+     
       ## Scopes used by the entity (if an IDP)
       attr_accessor :scopes
       
@@ -58,11 +61,11 @@ module Shibkit
       ## Is the entity an SP?
       attr_accessor :sp
                     
-                    
       alias :entity_id :entity_uri
       alias :idp? :idp 
       alias :sp?  :sp
       alias :ukfm? :ukfm
+      alias :hide? :hide
       alias :accountable? :accountable
       alias :athens? :athens
       alias :organization :organisation

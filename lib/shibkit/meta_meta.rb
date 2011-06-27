@@ -112,6 +112,7 @@ module Shibkit
       ## Add exotic namespaces to make sure we can deal with all metadata # TODO
       fx.add_namespace_definition('ukfedlabel','http://ukfederation.org.uk/2006/11/label')
       fx.add_namespace_definition('elab','http://eduserv.org.uk/labels')
+      fx.add_namespace_definition('wayf','http://sdss.ac.uk/2006/06/WAYF')
       
       ## Extract basic 'federation' information 
       federation.display_name   = source.name
@@ -133,6 +134,7 @@ module Shibkit
         entity.accountable = ex.xpath('xmlns:Extensions/ukfedlabel:AccountableUsers').size   > 0 ? true : false
         entity.ukfm        = ex.xpath('xmlns:Extensions/ukfedlabel:UKFederationMember').size > 0 ? true : false
         entity.athens      = ex.xpath('xmlns:Extensions/elab:AthensPUIDAuthority').size      > 0 ? true : false
+        entity.hide        = ex.xpath('xmlns:Extensions/wayf:HideFromWAYF').size             > 0 ? true : false
         entity.scopes      = ex.xpath('xmlns:IDPSSODescriptor/xmlns:Extensions/shibmd:Scope').collect { |x| x.text }
         entity.idp         = ex.xpath('xmlns:IDPSSODescriptor') ? true : false
         entity.sp          = ex.xpath('xmlns:SPSSODescriptor')  ? true : false
@@ -150,7 +152,6 @@ module Shibkit
           org.url          = ox.xpath('xmlns:OrganizationURL[1]')[0].content
         end
         entity.organisation = org
-    
         ## Collect this entity in the federation object
         federation.entities << entity
         
