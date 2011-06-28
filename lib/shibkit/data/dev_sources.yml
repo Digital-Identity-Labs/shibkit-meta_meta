@@ -1,0 +1,80 @@
+##
+## Federation Metdata Metadata: Development/test data
+##
+## * ______________________________________________________________________ *
+## * Important: Please Read This Disclaimer Right Now Before It Is Too Late *
+## * ______________________________________________________________________ *
+##
+## The information in this list is provided for convenience during development.
+## It is not, and *cannot*, be guaranteed to be accurate or up-to-date.
+## Do not rely on this information as-is for production services.
+##
+## Some processes should not always be automated.
+##
+## The correct way to validate metadata is to download the federation certificate
+## and verify it 'out of band', by telephone, signed email, or even by post. 
+## DNS and even federation sites can be compromised or intercepted; if you 
+## can't trust the certificate you can't trust the metadata.
+## 
+
+## This file contains metadata about federation metadata and simpler collections
+## of metadata. It can be used to quickly populate your software with data on
+## SAML SPs and IDPs, run tests, or whatever else takes your fancy.
+
+## Please feel free to fork this project on Github, add new federation info,
+## then send a pull request! 
+
+## UK Example Federation For Software Development  
+example:
+  name: UK Example Federation For Software Development
+  display_name: UK Example Federation
+  type: federation
+  countries: [gb]
+  metadata:    example_federation_metadata.xml
+  certificate: ~
+  fingerprint: ~
+  refeds_info: ~
+  homepage:    http://examplefederation.org.uk
+  languages: ['en-gb', en]
+  support_email: service@examplefederation.org.uk
+  description: >
+    An example federation with a few entities, mostly for software testing
+    purposes and idle amusement. Uttlerly rushed and bodged at present and not
+    actually valid, partially defeating the purpose of the exercise.
+
+## unCommon Federation
+uncommon:
+  name: unCommon Federation
+  display_name: unCommon
+  type: federation
+  countries: [us]
+  metadata:    uncommon_federation_metadata.xml
+  certificate: ~
+  fingerprint: ~
+  refeds_info: ~
+  homepage:    http://www.uncommonfederation.org
+  languages: [en]
+  support_email: admin@uncommonfederation.org
+  description: > 
+    Providing a set of example entities based on unusual and fictional
+    academic organisations.
+
+## Local collection
+local:
+  name: Other Organisations
+  display_name: Other Organisations
+  type: collection
+  countries: [us]
+  metadata:    local_metadata.xml
+  certificate: ~
+  fingerprint: ~
+  refeds_info: ~
+  homepage:    ~
+  languages: [en]
+  support_email: ~
+  description: > 
+    Other organisations that are not members of a federation.
+
+## Want more?  
+## Fork this project on Github, add new federation info and
+## then send a pull request!

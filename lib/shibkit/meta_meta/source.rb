@@ -35,7 +35,7 @@ module Shibkit
         @file    = nil
         @refresh = 0
         @cache   = true
-  
+        
         self.instance_eval(&block) if block
   
       end
