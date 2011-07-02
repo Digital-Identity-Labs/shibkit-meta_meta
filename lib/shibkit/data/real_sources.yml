@@ -25,7 +25,7 @@
 ## then send a pull request! 
 
 ## UK Access Management Federation For Education And Research  
-ukamf:
+'http://ukfederation.org.uk':
   name: UK Access Management Federation For Education And Research
   display_name: UK Access Management Federation
   type: federation
@@ -42,7 +42,7 @@ ukamf:
     education and research in the UK.
 
 ## inCommon Federation
-incommon:
+'urn:mace:incommon':
   name: inCommon Federation
   display_name: inCommon
   type: federation
