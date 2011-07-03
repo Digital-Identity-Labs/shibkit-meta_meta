@@ -94,6 +94,9 @@ Thanks to
 
  - Tango Icon Theme 
 
+https://wiki.shibboleth.net/confluence/display/SHIB2/MetadataCorrectness
+http://docs.oasis-open.org/security/saml/v2.0/saml-metadata-2.0-os.pdf
+
 
 Note on Patches/Pull Requests
 =============================

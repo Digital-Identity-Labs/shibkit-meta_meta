@@ -41,6 +41,24 @@ module Shibkit
         
       end
       
+      def to_hash
+        
+        return {}
+        
+      end
+      
+      def to_json
+        
+        return to_hash.to_json
+        
+      end
+      
+      def to_rdf
+        
+        return
+        
+      end
+      
       private
       
       def prepare_xml(source_xml)

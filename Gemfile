@@ -1,6 +1,10 @@
-source "http://rubygems.org"
+source 'http://rubygems.org'
 
-gem "nokogiri"
+gem 'nokogiri'
+gem 'rest-client'
+gem 'rest-client-components'
+gem 'rack-cache'
+gem 'addressable'
 
 group :development do
   gem "rspec", "~> 2.3.0"

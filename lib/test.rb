@@ -1,14 +1,26 @@
 require 'shibkit/meta_meta'
 
-config = {"Example Federation"  => "shibkit/data/default_metadata/example_federation_metadata.xml",
-          "UnCommon"            => "shibkit/data/default_metadata/uncommon_federation_metadata.xml",
-          "Other Organisations" => "shibkit/data/default_metadata/local_metadata.xml"}
 
 metadata = Shibkit::MetaMeta.new
 
-config.each_pair do |name, file|
-  metadata.add_source name, file
+sources = Shibkit::MetaMeta::Source.load(:real)
+
+sources.each_value { |v| metadata.sources << v }
+
+
+
+metadata.sources.each do |source|
+  
+  source.refresh
+  source.parse
+  
 end
+
+puts metadata.federations.inspect
+
+puts metadata.sources.inspect
+
+exit
 
 metadata.refresh
 

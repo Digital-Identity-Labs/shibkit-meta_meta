@@ -18,6 +18,7 @@
 require 'rubygems'
 require 'nokogiri'
 require 'yaml'
+require 'open-uri'
 
 require 'shibkit/meta_meta/metadata'
 require 'shibkit/meta_meta/contact'
@@ -33,29 +34,28 @@ module Shibkit
         
     attr_accessor :sources
     attr_accessor :federations
+    attr_accessor :source_file
         
     ## New default object
     def initialize(&block)
     
+      @source_file = :auto
       @sources     = Array.new
+      @all_sources = nil
       @federations = Array.new
       @read_at     = nil
       
       self.instance_eval(&block) if block
-    
+      
     end
     
-    ## Convenience method to add a source
-    def add_source(name, file, refresh=360, cache=true)
+    ## Convenience method to add a source by id/name from 
+    def add_source(source_name)
+      
+      ## Load and memoize all sources in selected file
+      @all_sources ||= Source.load(@source_file)
     
-      self.sources << Source.new do |s|
-        
-        s.name    = name
-        s.file    = file
-        s.refresh = refresh
-        s.cache   = cache
-        
-      end
+      self.sources << @all_sources[source_name.downcase.to_s.strip] 
     
     end
     
@@ -64,8 +64,8 @@ module Shibkit
       
       @sources.each do |source|
       
-        @federations << MetaMeta.parse(source)
-        @read_at     = Time.new
+        #@federations << MetaMeta.parse(source)
+        #@read_at     = Time.new
         
       end
       
@@ -98,24 +98,55 @@ module Shibkit
         
     end    
     
-    ## Parses a string containing metadata XML and returns a federation object
-    def MetaMeta.parse(source)
+    def federations
       
-      xml_text = source.content
+      puts "ggngng"
       
-      federation = Federation.new(xml_text) do |f|
-      
-        ## Extract basic 'federation' information 
-        f.display_name   = source.name
+      if @federations.empty?
+        
+        puts "Dfdfdfd"
+        
+        parse_sources
         
       end
-         
-      return federation
+      
+      return @federations
       
     end
     
+    ## Parses sources and returns an array of federation object
+    def parse_sources
+      
+      puts "banana"
+      
+      raise "MetaMeta sources are not an Array! (Should not be a #{sources.class})" unless
+        sources.kind_of? Array
+      
+      @federations ||= Hash.new
+      
+      sources.each do |source|
+        
+        fx = source.parse
+        federation = Federation.new(fx) do |f|
+      
+          ## Extract basic 'federation' information 
+          f.display_name   = source.name
+        
+        end
+        
+        puts federation.inspect
+        
+        @federations << federation
+        
+      end
+      
+      return @federations
+         
+    end
+         
     private
     
+    # ...
  
   end
 end
