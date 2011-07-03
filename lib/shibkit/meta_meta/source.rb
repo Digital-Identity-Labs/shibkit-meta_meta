@@ -60,8 +60,8 @@ module Shibkit
       
       private
             
-      attr_reader   :metadata_local_file
-      attr_reader   :certificate_local_file
+      attr_reader   :metadata_tmpfile
+      attr_reader   :certificate_tmpfile
       
       public
       
@@ -83,8 +83,8 @@ module Shibkit
         @languages = []
         @support_email = nil
         @description = ""
-        @certificate_local_file = nil
-        @metadata_local_file    = nil
+        @certificate_tmpfile = nil
+        @metadata_tmpfile    = nil
         
         self.instance_eval(&block) if block
   
@@ -103,7 +103,7 @@ module Shibkit
       ## Fetch remote file and store locally 
       def fetch_metadata
          
-        @metadata_local_file = case metadata_source
+        @metadata_tmpfile = case metadata_source
           when /^http/
             fetch_remote(metadata_source)
           else
@@ -117,7 +117,7 @@ module Shibkit
       ## Fetch remote file and store locally 
       def fetch_certificate
          
-         @certificate_local_file = case certificate_source
+         @certificate_tmpfile = case certificate_source
            when /^http/
              fetch_remote(certificate_source)
            else
@@ -150,9 +150,9 @@ module Shibkit
       def certificate_pem
         
         ## Deal with caching locally, downloading, etc
-        refresh if AUTO_REFRESH and @certificate_local_file == nil
+        refresh if AUTO_REFRESH and @certificate_tmpfile == nil
         
-        return IO.read(certificate_local_file.path)
+        return IO.read(certificate_tmpfile.path)
         
       end
 
@@ -160,9 +160,9 @@ module Shibkit
       def content
         
         ## Deal with caching locally, downloading, etc
-        refresh if AUTO_REFRESH and @metadata_local_file == nil
+        refresh if AUTO_REFRESH and @metadata_tmpfile == nil
       
-        return IO.read(metadata_local_file.path)
+        return IO.read(metadata_tmpfile.path)
     
       end
     

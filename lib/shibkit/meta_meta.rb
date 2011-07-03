@@ -33,8 +33,8 @@ module Shibkit
   class MetaMeta
         
     attr_accessor :sources
-    attr_accessor :federations
     attr_accessor :source_file
+    attr_reader   :federations    
         
     ## New default object
     def initialize(&block)
@@ -99,13 +99,9 @@ module Shibkit
     end    
     
     def federations
-      
-      puts "ggngng"
-      
+  
       if @federations.empty?
-        
-        puts "Dfdfdfd"
-        
+
         parse_sources
         
       end
@@ -116,9 +112,7 @@ module Shibkit
     
     ## Parses sources and returns an array of federation object
     def parse_sources
-      
-      puts "banana"
-      
+
       raise "MetaMeta sources are not an Array! (Should not be a #{sources.class})" unless
         sources.kind_of? Array
       
@@ -133,9 +127,7 @@ module Shibkit
           f.display_name   = source.name
         
         end
-        
-        puts federation.inspect
-        
+
         @federations << federation
         
       end
