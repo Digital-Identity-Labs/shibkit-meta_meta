@@ -22,16 +22,15 @@ Features include:
 * Compatibility with JRuby and Java scripting - may be included in IDPs and Java applications
 * Easy integration with non-Ruby applications: MetaMeta will act as a loader to build databases of entities for use by your Java, .Net, Python or PHP application.
 
-
 ## CAVEATS
 
 MetaMeta is still early in development, so please bear the following in mind when using it:
 
 * The API may not be stable until version 1.0. If using Bundler please lock the version to avoid upgrades breaking your application
 * Full validation of metadata is not present yet
-* The mock development metadata is not valid or complete. We plan to eventually build some fully-functional example federations, but at present both UnCommon and Example federations are simple test mocks of certain parts of SAML2 metadata.
+* The mock 'dev' metadata is not valid or complete. We plan to eventually build some fully-functional example federations, but at present both UnCommon and Example federations are simple test mocks of certain parts of SAML2 metadata.
 * The source list of federations is _far_ from complete.
-* Please DO NOT use the provided federation source lists in production without manually checking their contents or using your own edited version. Your federation will have its own guidelines for verifying their certificate and metadata, please read them and check that the certificate and source URL you are using are correct.
+* For development and testing the provided lists should be fine but please DO NOT use the provided federation source lists in production without manually checking their contents or using your own edited version. Your federation will have its own guidelines for verifying their certificate and metadata, please read them and check that the certificate and source URL you are using are correct. Your chain of trust should not originate in a file on Github, even if the creators are nice people.
 
 ## INSTALLATION
 
