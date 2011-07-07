@@ -19,9 +19,13 @@ module Shibkit
   class MetaMeta
 
     ## Class to represent the metadata of the organisation owning a Shibboleth entity
-    class Organisation < Metadata
+    class Organisation < MetadataItem
       
-      require 'shibkit/meta_meta/metadata'
+      require 'shibkit/meta_meta/metadata_item'
+      
+      ## Element and attribute used to select XML for new objects
+      ROOT_ELEMENT = 'Organization'
+      TARGET_ATTR  = nil
       
       ## The name identifier for the organisation
       attr_accessor :name

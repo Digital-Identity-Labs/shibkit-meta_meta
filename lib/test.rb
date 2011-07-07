@@ -16,12 +16,6 @@ metadata.sources.each do |source|
   
 end
 
-puts metadata.federations.inspect
-
-puts metadata.sources.inspect
-
-exit
-
 metadata.refresh
 
 metadata.federations.each do |federation|

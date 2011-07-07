@@ -20,9 +20,14 @@ module Shibkit
 
     ## Class to represent a Shibboleth Federation or collection of local metadata
     ## 
-    class Federation < Metadata
+    class Federation < MetadataItem
       
-      require 'shibkit/meta_meta/metadata'
+      require 'shibkit/meta_meta/metadata_item'
+      
+      
+      ## Element and attribute used to select XML for new objects
+      ROOT_ELEMENT = 'EntitiesDescriptor'
+      TARGET_ATTR  = 'Name'
       
       ## The human-readable display name of the Federation or collection of metadata
       attr_accessor :display_name
@@ -51,8 +56,17 @@ module Shibkit
       
       
       private
-  
       
+      ## Special case for federation top-level nodes
+      def select_xml(target=nil, options={})
+      
+        raise "No suitable XML was selected" unless @xml and
+          @xml.kind_of?(Nokogiri::XML::Element) and
+          @xml.name == ROOT_ELEMENT 
+      
+      end
+      
+      ## Build a federation object out of metadata XML
       def parse_xml
         
         self.metadata_id    = @xml['ID']
@@ -70,6 +84,8 @@ module Shibkit
           self.entities << entity
           
         end
+        
+        puts "Done."
         
       end
       

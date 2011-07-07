@@ -20,9 +20,13 @@ module Shibkit
   class MetaMeta
 
     ## Class to represent technical or suppor contact details for an entity
-    class Contact < Metadata
+    class Contact < MetadataItem
       
-      require 'shibkit/meta_meta/metadata'
+      require 'shibkit/meta_meta/metadata_item'
+      
+      ## Element and attribute used to select XML for new objects
+      ROOT_ELEMENT = 'ContactPerson'
+      TARGET_ATTR  = 'contactType'
       
       ## The given name of the contact (often the entire name is here)
       attr_accessor :givenname
@@ -49,6 +53,8 @@ module Shibkit
       def parse_xml
         
         if @xml and @xml.content
+          
+          
           
           self.givenname = @xml.xpath('xmlns:GivenName[1]')[0].content    if @xml.xpath('xmlns:GivenName[1]')[0]
           self.surname   = @xml.xpath('xmlns:SurName[1]')[0].content      if @xml.xpath('xmlns:SurName[1]')[0]

@@ -19,9 +19,13 @@ module Shibkit
   class MetaMeta
     
     ## Class to represent the metadata of a Shibboleth IDP or SP 
-    class Entity < Metadata
+    class Entity < MetadataItem
       
-      require 'shibkit/meta_meta/metadata'
+      require 'shibkit/meta_meta/metadata_item'
+      
+      ## Element and attribute used to select XML for new objects
+      ROOT_ELEMENT = 'EntityDescriptor'
+      TARGET_ATTR  = 'entityID'
       
       ## The URI of the entity's parent federation
       attr_accessor :federation_uri
@@ -92,7 +96,8 @@ module Shibkit
         self.technical_contact = Contact.new(@xml.xpath("xmlns:ContactPerson[@contactType='technical'][1]")[0])
         
         ## Include an organisation object
-        self.organisation = Organisation.new(@xml.xpath('xmlns:Organization[1]'))
+        #self.organisation = Organisation.new(@xml.xpath('xmlns:Organization[1]')[0])
+        self.organisation = Organisation.new(@xml)
        
       end
       

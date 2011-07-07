@@ -20,7 +20,7 @@ require 'nokogiri'
 require 'yaml'
 require 'open-uri'
 
-require 'shibkit/meta_meta/metadata'
+require 'shibkit/meta_meta/metadata_item'
 require 'shibkit/meta_meta/contact'
 require 'shibkit/meta_meta/source'
 require 'shibkit/meta_meta/entity'
@@ -121,8 +121,9 @@ module Shibkit
       sources.each do |source|
         
         fx = source.parse
+
         federation = Federation.new(fx) do |f|
-      
+                    
           ## Extract basic 'federation' information 
           f.display_name   = source.name
         

@@ -243,10 +243,10 @@ module Shibkit
         doc = Nokogiri::XML.parse(content) do |config|
           config.strict.noent.dtdvalid
         end
-        
+
         ## Select the top node  
         xml  = doc.root
-
+        
         ## Add exotic namespaces to make sure we can deal with all metadata # TODO
         NAMESPACES.each_pair { |label, uri| xml.add_namespace_definition(label,uri) }
         
