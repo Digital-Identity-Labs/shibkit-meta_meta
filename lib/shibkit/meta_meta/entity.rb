@@ -103,7 +103,13 @@ module Shibkit
         ## Include an organisation object
         #self.organisation = Organisation.new(@xml.xpath('xmlns:Organization[1]')[0])
         self.organisation = Organisation.new(@xml).filter
-
+        
+        ## Descriptions
+        @descriptions = Hash.new
+        
+        @logos = 
+        
+        
       end
       
     end

@@ -32,7 +32,8 @@ module Shibkit
       NAMESPACES = {
         'ukfedlabel' => 'http://ukfederation.org.uk/2006/11/label',
         'elab'       => 'http://eduserv.org.uk/labels',
-        'wayf'       => 'http://sdss.ac.uk/2006/06/WAYF'
+        'wayf'       => 'http://sdss.ac.uk/2006/06/WAYF',
+        'mdui'       => 'urn:oasis:names:tc:SAML:metadata:ui'
       }
       
       ## New object takes XML (as libXML object or text)

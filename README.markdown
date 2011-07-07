@@ -78,7 +78,7 @@ Also stuff blah:
 
 which is nice.
 
-## ENTITIES (IDPS AND SPS)
+## ENTITIES (IDP/SP)
 
 Stuff blah:
 
@@ -167,6 +167,8 @@ which is nice.
 Text discussing Metadata background reading [Semantic Versioning](http://semver.org/) and uses
 [TomDoc](http://tomdoc.org/) for inline documentation.
 
+http://www.oasis-open.org/committees/download.php/42714/sstc-saml-metadata-ui-v1.0-wd07.pdf
+
 ## SHIBKIT 
 
 ## LICENSE
@@ -183,7 +185,8 @@ for the entire whole license text if you're curious.
 
 ## CONTRIBUTE
 
-If you'd like to add new features to MetaMeta or even remove feature you hate then 
+If you'd like to add new features to MetaMeta or even remove feature you hate
+then 
 
 https://github.com/Digital-Identity-Labs/shibkit-meta_meta
 
