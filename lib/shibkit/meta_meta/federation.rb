@@ -28,6 +28,7 @@ module Shibkit
       ## Element and attribute used to select XML for new objects
       ROOT_ELEMENT = 'EntitiesDescriptor'
       TARGET_ATTR  = 'Name'
+      REQUIRED_QUACKS = [:metadata_id, :federation_uri, :source_file]
       
       ## The human-readable display name of the Federation or collection of metadata
       attr_accessor :display_name
@@ -44,16 +45,11 @@ module Shibkit
       ## Source file for this federation
       attr_accessor :source_file
       
-      ## Was it loaded from the 
-      attr_accessor :cached
-      alias :cached? :cached
-      
       ## Array of entities within the federation or metadata collection
       attr_accessor :entities  
       
       ## Time the Federation metadata was parsed
       attr_reader :read_at
-      
       
       private
       

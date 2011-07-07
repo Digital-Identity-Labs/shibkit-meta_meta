@@ -26,6 +26,7 @@ module Shibkit
       ## Element and attribute used to select XML for new objects
       ROOT_ELEMENT = 'Organization'
       TARGET_ATTR  = nil
+      REQUIRED_QUACKS = [:name, :url]
       
       ## The name identifier for the organisation
       attr_accessor :name
@@ -44,7 +45,7 @@ module Shibkit
       name         = @xml.xpath('xmlns:OrganizationName[1]')[0].content
       display_name = @xml.xpath('xmlns:OrganizationDisplayName[1]')[0].content
       url          = @xml.xpath('xmlns:OrganizationURL[1]')[0].content
-    
+      
     end
         
     end

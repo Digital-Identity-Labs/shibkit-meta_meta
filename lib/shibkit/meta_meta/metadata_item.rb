@@ -24,8 +24,9 @@ module Shibkit
       require 'nokogiri'
       
       ## Element and attribute used to select XML for new objects
-      ROOT_ELEMENT = 'SomeThingThatIsntThere'
-      TARGET_ATTR  = 'ID'
+      ROOT_ELEMENT    = 'SomeThingThatIsntThere'
+      TARGET_ATTR     = 'ID'
+      REQUIRED_QUACKS = [:bananas]
       
       ## Additional namespaces that Nokogiri needs to know about
       NAMESPACES = {
@@ -37,21 +38,35 @@ module Shibkit
       ## New object takes XML (as libXML object or text)
       def initialize(source_xml=nil, target=nil, options={}, &block)
         
+        @read_at = Time.new
+        
         ## Use XML to build object
         if source_xml
           
           prepare_xml(source_xml)
           select_xml(target, options)
           parse_xml
+          
+        end
+        
+        ## Use block for further configuration or manual creation
+        self.instance_eval(&block) if block
+
+      end
+      
+      ## Make sure the object is suitable. Return nil if bad, object if good
+      def filter
+        
+        ## Make sure this object quacks like the suitable variety of duck
+        self.class::REQUIRED_QUACKS.each do |method|
+          
+          return nil unless self.respond_to? method
+          return nil unless self.send(method)
         
         end
         
-        @read_at = Time.new
+        return self
         
-        ## Use block for further configuration
-        self.instance_eval(&block) if block
-        
-
       end
       
       def to_hash
@@ -121,6 +136,7 @@ module Shibkit
         
       end
       
+      ## Process XML to define object attributes
       def parse_xml
 
         raise "parse_xml method has not been implemented in this class"

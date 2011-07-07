@@ -27,6 +27,7 @@ module Shibkit
       ## Element and attribute used to select XML for new objects
       ROOT_ELEMENT = 'ContactPerson'
       TARGET_ATTR  = 'contactType'
+      REQUIRED_QUACKS = [:email_url, :category]
       
       ## The given name of the contact (often the entire name is here)
       attr_accessor :givenname
@@ -53,9 +54,7 @@ module Shibkit
       def parse_xml
         
         if @xml and @xml.content
-          
-          
-          
+             
           self.givenname = @xml.xpath('xmlns:GivenName[1]')[0].content    if @xml.xpath('xmlns:GivenName[1]')[0]
           self.surname   = @xml.xpath('xmlns:SurName[1]')[0].content      if @xml.xpath('xmlns:SurName[1]')[0]
           self.email_url = @xml.xpath('xmlns:EmailAddress[1]')[0].content if @xml.xpath('xmlns:EmailAddress[1]')[0]

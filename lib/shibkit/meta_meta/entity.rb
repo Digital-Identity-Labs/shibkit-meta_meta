@@ -26,6 +26,7 @@ module Shibkit
       ## Element and attribute used to select XML for new objects
       ROOT_ELEMENT = 'EntityDescriptor'
       TARGET_ATTR  = 'entityID'
+      REQUIRED_QUACKS = [:entity_uri]
       
       ## The URI of the entity's parent federation
       attr_accessor :federation_uri
@@ -60,6 +61,9 @@ module Shibkit
       ## Contact object containing technical contact details
       attr_accessor :technical_contact
       
+      ## Contact object containing technical contact details
+      attr_accessor :admin_contact
+      
       ## Is the entity an IDP?
       attr_accessor :idp
       
@@ -92,13 +96,14 @@ module Shibkit
         self.sp          = @xml.xpath('xmlns:SPSSODescriptor')  ? true : false
         
         ## Include Contact objects
-        self.support_contact   = Contact.new(@xml.xpath("xmlns:ContactPerson[@contactType='support'][1]")[0])
-        self.technical_contact = Contact.new(@xml.xpath("xmlns:ContactPerson[@contactType='technical'][1]")[0])
+        self.support_contact   = Contact.new(@xml.xpath("xmlns:ContactPerson[@contactType='support'][1]")[0]).filter
+        self.technical_contact = Contact.new(@xml.xpath("xmlns:ContactPerson[@contactType='technical'][1]")[0]).filter
+        self.admin_contact     = Contact.new(@xml.xpath("xmlns:ContactPerson[@contactType='administrative'][1]")[0]).filter
         
         ## Include an organisation object
         #self.organisation = Organisation.new(@xml.xpath('xmlns:Organization[1]')[0])
-        self.organisation = Organisation.new(@xml)
-       
+        self.organisation = Organisation.new(@xml).filter
+
       end
       
     end
