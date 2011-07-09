@@ -33,6 +33,9 @@ module Shibkit
     ##
     class Source
       
+      require 'shibkit/meta_meta/mixin/cache_control'
+      require 'shibkit/meta_meta/mixin/download'
+      
       ## @note This class currently lacks the ability to properly validate
       ##   metadata.
       

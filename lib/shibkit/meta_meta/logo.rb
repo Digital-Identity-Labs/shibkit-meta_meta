@@ -23,6 +23,8 @@ module Shibkit
     class Logo < MetadataItem
       
       require 'shibkit/meta_meta/metadata_item'
+      require 'shibkit/meta_meta/mixin/cache_control'
+      require 'shibkit/meta_meta/mixin/download'
       
       ## Element and attribute used to select XML for new objects
       ROOT_ELEMENT = 'Logo'
@@ -44,15 +46,28 @@ module Shibkit
       ## Language of the logo
       attr_accessor :language
       
-      ## Calculated mimetype of the image
-      def mime_type
-        
-        
-      end
-      
-      ## Calculated size of the image (:tiny :small :medium :large)
+      ## Calculated size of the image (:tiny :small :medium :large, etc)
+      ## I'm not sure about these.
       def size
         
+        return case pixels
+        when =< 16*16
+          :tiny
+        when =< 32*32
+          :small
+        when =< 64*64
+          :icon
+        when =< (4200..6200)
+          :default
+        when =< 128*128
+          :medium
+        when =< 256*256
+          :large
+        when =< 512*512
+          :huge
+        else
+          :silly
+        end
         
       end
       
@@ -66,9 +81,11 @@ module Shibkit
       ## Returns :square, :portrait or :landscape
       def shape
         
+        return :default   if (75..85).include(width) and (55..65).include(height)
         return :square    if width == height ## TODO: Needs a bit of tolerance for small differences
         return :portrait  if height > width
         return :landscape if width > height
+        
         
         ## Possibly running in the nightmare corpse-city of R'lyeh
         raise "Geometry of logo is abnormal, non-Euclidean, and loathsomely redolent of spheres and dimensions apart from ours."
@@ -78,17 +95,39 @@ module Shibkit
       ## HTTPS resource? 
       def ssl?
         
+        return location =~ /^https/ ? true : false
         
       end
       
-      ## PNG image? Convenience method since these are probably a better choice than JPEGs 
+      ## PNG image? Convenience method since these are probably a better choice than JPEGs
+      ## Not accurate...
       def png?
         
+        return false if location.empty?
+        
+        #if @local_file 
+        #
+        # # ... 
+        #
+        #end
+        
+        return true if location =~ /[.]png$/
+        
+        begin
+          response = RestClient.head(location)
+          return true if response.headers['content-type'] == 'image/png'
+        rescue
+          return false
+        end
+        
+        return false
         
       end
       
       ## Logo is within recommended size range?
-      def recommended_size?
+      def acceptable_size?
+        
+        return true if width >
         
       end
       
