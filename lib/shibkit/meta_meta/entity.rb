@@ -22,6 +22,14 @@ module Shibkit
     class Entity < MetadataItem
       
       require 'shibkit/meta_meta/metadata_item'
+      require 'shibkit/meta_meta/xpath_chores'
+      require 'shibkit/meta_meta/contact'
+      require 'shibkit/meta_meta/logo'
+      require 'shibkit/meta_meta/organisation'
+      
+      
+      ## A few simple utility functions for slurping data from XML
+      include XPathChores
       
       ## Element and attribute used to select XML for new objects
       ROOT_ELEMENT = 'EntityDescriptor'
@@ -104,10 +112,33 @@ module Shibkit
         #self.organisation = Organisation.new(@xml.xpath('xmlns:Organization[1]')[0])
         self.organisation = Organisation.new(@xml).filter
         
-        ## Descriptions
-        @descriptions = Hash.new
+        ## Display names
+        @display_names = extract_lang_map_of_strings('xmlns:IDPSSODescriptor/xmlns:Extensions/mdui:UIInfo/mdui:DisplayName')
         
-        @logos = 
+        ## Descriptions
+        @descriptions = extract_lang_map_of_strings('xmlns:IDPSSODescriptor/xmlns:Extensions/mdui:UIInfo/mdui:Description')
+        
+        ## Keywords
+        @keywords = extract_lang_map_of_string_lists('xmlns:IDPSSODescriptor/xmlns:Extensions/mdui:UIInfo/mdui:Keywords')
+            
+        ## Information URLs
+        @info_urls = extract_lang_map_of_strings('xmlns:IDPSSODescriptor/xmlns:Extensions/mdui:UIInfo/mdui:InformationURL')
+
+        ## Privacy Statement URLs
+        @info_urls = extract_lang_map_of_strings('xmlns:IDPSSODescriptor/xmlns:Extensions/mdui:UIInfo/mdui:PrivacyStatementURL')
+
+        ## Logos
+        @logos = extract_lang_map_of_objects('xmlns:IDPSSODescriptor/xmlns:Extensions/mdui:UIInfo/mdui:Logo',
+          Shibkit::MetaMeta::Logo)
+        
+        ## IP Address Ranges
+        @ip_blocks = extract_simple_list('xmlns:IDPSSODescriptor/xmlns:Extensions/mdui:DiscoHints/mdui:IPHint')
+        
+        ## DNS Domain Names
+        @domains = extract_simple_list("xmlns:IDPSSODescriptor/xmlns:Extensions/mdui:DiscoHints/mdui:DomainHint")
+        
+        ## Geolocations
+        @geolocations = extract_simple_list("xmlns:IDPSSODescriptor/xmlns:Extensions/mdui:DiscoHints/mdui:GeolocationHintt")
         
         
       end
@@ -115,6 +146,6 @@ module Shibkit
     end
 
 
-    end
   end
+end
   

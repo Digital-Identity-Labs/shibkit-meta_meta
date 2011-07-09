@@ -25,7 +25,7 @@ metadata.federations.each do |federation|
   puts federation.metadata_id
   puts federation.entities.count
   
-  #puts federation.entities.to_yaml
+  puts federation.entities.to_yaml
   
 end
 

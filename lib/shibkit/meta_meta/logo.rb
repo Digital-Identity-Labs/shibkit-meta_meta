@@ -25,7 +25,7 @@ module Shibkit
       require 'shibkit/meta_meta/metadata_item'
       
       ## Element and attribute used to select XML for new objects
-      ROOT_ELEMENT = 'mdui:Logo'
+      ROOT_ELEMENT = 'Logo'
       TARGET_ATTR  = 'width'
       REQUIRED_QUACKS = [:location]
       
@@ -41,6 +41,8 @@ module Shibkit
       ## URL of the image
       attr_accessor :location   
       
+      ## Language of the logo
+      attr_accessor :language
       
       ## Calculated mimetype of the image
       def mime_type
@@ -79,6 +81,12 @@ module Shibkit
         
       end
       
+      ## PNG image? Convenience method since these are probably a better choice than JPEGs 
+      def png?
+        
+        
+      end
+      
       ## Logo is within recommended size range?
       def recommended_size?
         
@@ -99,7 +107,7 @@ module Shibkit
       end
     
       ## Download the file and update this object based on real characteristics
-      def confirm_file
+      def confirm_attribs
       
         
       
@@ -112,9 +120,10 @@ module Shibkit
         
         if @xml and @xml.content
           
-          self.location = @xml.content.strip
+          self.location = @xml.content.strip || nil
           self.height   = @xml['height'] ? @xml['height'].to_i : 0 
-          self.width    = @xml['width'] ? @xml['width'].to_i : 0
+          self.width    = @xml['width']  ? @xml['width'].to_i  : 0
+          lang          = @xml['xml:lang'] || :en
         
         end
   
