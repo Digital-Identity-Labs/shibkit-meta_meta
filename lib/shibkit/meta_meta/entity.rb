@@ -28,7 +28,7 @@ module Shibkit
       
       ## A few simple utility functions for slurping data from XML
       require 'shibkit/meta_meta/mixin/xpath_chores'
-      include XPathChores
+      include Shibkit::MetaMeta::Mixin::XPathChores
       
       
       ## Element and attribute used to select XML for new objects

@@ -17,6 +17,8 @@
 
 module Shibkit
   class MetaMeta
+    
+    module Mixin
 
     ## A few simple utility functions for slurping data from XML
     ## 
@@ -103,7 +105,7 @@ module Shibkit
         return results
   
       end
-      
+    end    
     end
   end
 end

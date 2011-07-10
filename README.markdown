@@ -36,7 +36,9 @@ MetaMeta is still early in development, so please bear the following in mind whe
 
 If you use RubyGems directly then simply type:
 
-    $ [sudo] gem install shibkit-meta_meta
+```sh
+    gem install shibkit-meta_meta
+```
 
 Bundler users can add MetaMeta to their Gemfiles like this:
 
@@ -178,6 +180,23 @@ code       # => 2
 
 which is nice.
 
+### Logos
+
+Stuff blah:
+
+```ruby
+code       # => 1
+code       # => 2
+```
+
+Also stuff blah:
+
+```ruby
+code       # => 1
+code       # => 2
+```
+
+which is nice.
 
 ### Discovery Hints
 
