@@ -23,8 +23,9 @@ module Shibkit
     class Logo < MetadataItem
       
       require 'shibkit/meta_meta/metadata_item'
-      require 'shibkit/meta_meta/mixin/cache_control'
-      require 'shibkit/meta_meta/mixin/download'
+      
+      require 'shibkit/meta_meta/mixin/cached_downloads'
+      include Shibkit::MetaMeta::Mixin::CachedDownloads
       
       ## Element and attribute used to select XML for new objects
       ROOT_ELEMENT = 'Logo'
@@ -50,20 +51,20 @@ module Shibkit
       ## I'm not sure about these.
       def size
         
-        return case pixels
-        when =< 16*16
+        return case 
+        when pixels <= (16*16)
           :tiny
-        when =< 32*32
+        when pixels <= (32*32)
           :small
-        when =< 64*64
+        when pixels <= (64*64)
           :icon
-        when =< (4200..6200)
+        when pixels <= (4200..6200)
           :default
-        when =< 128*128
+        when pixels <= (128*128)
           :medium
-        when =< 256*256
+        when pixels <= (256*256)
           :large
-        when =< 512*512
+        when pixels <= (512*512)
           :huge
         else
           :silly
@@ -127,7 +128,10 @@ module Shibkit
       ## Logo is within recommended size range?
       def acceptable_size?
         
-        return true if width >
+        return true if width > 50 and
+          width < 100 and
+          height > 50 and
+          height < 100
         
       end
       
@@ -165,9 +169,7 @@ module Shibkit
           lang          = @xml['xml:lang'] || :en
         
         end
-  
       end
-
     end
   end
 end

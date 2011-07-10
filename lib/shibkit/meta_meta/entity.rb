@@ -22,11 +22,11 @@ module Shibkit
     class Entity < MetadataItem
       
       require 'shibkit/meta_meta/metadata_item'
-      require 'shibkit/meta_meta/xpath_chores'
       require 'shibkit/meta_meta/contact'
       require 'shibkit/meta_meta/logo'
       require 'shibkit/meta_meta/organisation'
       
+      require 'shibkit/meta_meta/mixin/xpath_chores'
       
       ## A few simple utility functions for slurping data from XML
       include XPathChores
