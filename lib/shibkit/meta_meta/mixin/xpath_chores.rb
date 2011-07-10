@@ -49,7 +49,7 @@ module Shibkit
         @xml.xpath(xpath).each do |ix|
 
           lang = ix['lang'] || :en
-          results[lang.to_sym] = ix.content.strip
+          results[lang.to_sym] = ix.content.strip.squeeze('')
       
         end
         

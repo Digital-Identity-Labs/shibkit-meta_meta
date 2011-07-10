@@ -72,6 +72,26 @@ module Shibkit
       ## Contact object containing technical contact details
       attr_accessor :admin_contact
       
+      attr_accessor :display_names
+      
+      attr_accessor :descriptions
+      
+      attr_accessor :keyword_sets
+      
+      attr_accessor :info_urls
+      
+      attr_accessor :privacy_urls
+      
+      attr_accessor :ip_blocks
+      
+      attr_accessor :domains
+      
+      attr_accessor :geolocation_urls
+      
+      attr_accessor :service_name
+      
+      attr_accessor :service_description
+      
       ## Is the entity an IDP?
       attr_accessor :idp
       
@@ -86,6 +106,48 @@ module Shibkit
       alias :accountable? :accountable
       alias :athens? :athens
       alias :organization :organisation
+      
+      def display_name(lang=:en)
+        
+        return display_names[lang] unless display_names[lang].to_s.empty?
+        return service_name unless service_name.to_s.empty?
+        return entity_id
+        
+      end
+      
+      def description(lang=:en)
+        
+        return descriptions[lang] unless descriptions[lang].to_s.empty?
+        return service_description unless service_description.to_s.empty?
+        return organisation.display_name if (organisation and ! organisation.display_name.to_s.empty?)
+        return organisation.name if (organisation and ! organisation.name.to_s.empty?)
+        return "" 
+        
+      end
+      
+      def keywords(lang=:en)
+      
+        return keyword_sets[lang] || []
+      
+      end
+      
+      def info_url(lang=:en)
+        
+        return info_urls[lang] || nil
+        
+      end
+      
+      def privacy_url(lang=:en)
+        
+        return privacy_urls[lang] || nil
+        
+      end
+      
+      def logos(lang=:en)
+        
+        return logos[lang] || []
+        
+      end
       
       private
       
@@ -119,13 +181,13 @@ module Shibkit
         @descriptions = extract_lang_map_of_strings('xmlns:IDPSSODescriptor/xmlns:Extensions/mdui:UIInfo/mdui:Description')
         
         ## Keywords
-        @keywords = extract_lang_map_of_string_lists('xmlns:IDPSSODescriptor/xmlns:Extensions/mdui:UIInfo/mdui:Keywords')
+        @keyword_sets = extract_lang_map_of_string_lists('xmlns:IDPSSODescriptor/xmlns:Extensions/mdui:UIInfo/mdui:Keywords')
             
         ## Information URLs
         @info_urls = extract_lang_map_of_strings('xmlns:IDPSSODescriptor/xmlns:Extensions/mdui:UIInfo/mdui:InformationURL')
 
         ## Privacy Statement URLs
-        @info_urls = extract_lang_map_of_strings('xmlns:IDPSSODescriptor/xmlns:Extensions/mdui:UIInfo/mdui:PrivacyStatementURL')
+        @privacy_urls = extract_lang_map_of_strings('xmlns:IDPSSODescriptor/xmlns:Extensions/mdui:UIInfo/mdui:PrivacyStatementURL')
 
         ## Logos
         @logos = extract_lang_map_of_objects('xmlns:IDPSSODescriptor/xmlns:Extensions/mdui:UIInfo/mdui:Logo',

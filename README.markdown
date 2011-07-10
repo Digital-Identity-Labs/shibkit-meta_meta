@@ -169,7 +169,9 @@ which is nice.
 Text discussing Metadata background reading [Semantic Versioning](http://semver.org/) and uses
 [TomDoc](http://tomdoc.org/) for inline documentation.
 
+http://docs.oasis-open.org/security/saml/v2.0/saml-metadata-2.0-os.pdf
 http://www.oasis-open.org/committees/download.php/42714/sstc-saml-metadata-ui-v1.0-wd07.pdf
+
 
 ## SHIBKIT 
 
