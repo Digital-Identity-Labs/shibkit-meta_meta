@@ -32,11 +32,10 @@ module Shibkit
         require 'tempfile'
         require 'addressable/uri'
         require 'fileutils'
-  
+        
+        ## Automatically add class methods to the including class
         def self.included(receiver)
-        
-          puts "GGAAAH"
-        
+
           receiver.extend(CDClassMethods)
         
         end
@@ -68,6 +67,7 @@ module Shibkit
 
         end
         
+        ## Class methods to mixin to including class
         module CDClassMethods
           
           ##
@@ -162,7 +162,25 @@ module Shibkit
             return base_dir
 
           end
+          
+          
+          ## Send progress information to STDOUT
+          ## @return [String]
+          def verbose?
 
+           return @verbose || false
+
+          end
+
+          ## Send progress information to STDOUT
+          ## @return [String]
+          def auto_refresh?
+
+           return @auto_refresh || false
+
+          end
+
+          
           ## Create the web cache 
           def init_caches
 

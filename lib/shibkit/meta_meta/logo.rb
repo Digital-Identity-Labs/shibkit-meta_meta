@@ -22,6 +22,8 @@ module Shibkit
     ## Class to represent technical or suppor contact details for an entity
     class Logo < MetadataItem
       
+      require 'chunky_png'
+      
       require 'shibkit/meta_meta/metadata_item'
       
       require 'shibkit/meta_meta/mixin/cached_downloads'
@@ -87,7 +89,6 @@ module Shibkit
         return :portrait  if height > width
         return :landscape if width > height
         
-        
         ## Possibly running in the nightmare corpse-city of R'lyeh
         raise "Geometry of logo is abnormal, non-Euclidean, and loathsomely redolent of spheres and dimensions apart from ours."
         
@@ -104,14 +105,20 @@ module Shibkit
       ## Not accurate...
       def png?
         
+        if @tmpfile 
+          begin
+            image = ChunkyPNG::Image.from_file(@tmpfile.path)
+            return true if image
+          rescue
+            return false
+          end
+        end
+        
+        return @png  if @png
         return false if location.empty?
-        
-        #if @local_file 
-        #
+
         # # ... 
-        #
-        #end
-        
+
         return true if location =~ /[.]png$/
         
         begin
@@ -138,22 +145,50 @@ module Shibkit
       ## Download and cache the image, returning a filehandle
       def download
       
+        @tmpfile = fetch_remote(location)
+         
+        @fetched_at = Time.new
+         
+        return @tmpfile
         
-      
       end
       
       ## Filehandle for the local, downloaded file. Will download.
-      def local_file
+      def tmpfile
       
+        unless @tmpfile
+          
+          return download
+          
+        end
         
+        return @tmpfile
       
       end
     
       ## Download the file and update this object based on real characteristics
       def confirm_attribs
-      
         
-      
+        if png?
+          
+          begin
+          
+            image = ChunkyPNG::Image.from_file(tmpfile.path)
+          
+            width = image.width
+            height = image.height
+            pixels = image.area
+            
+            @png = true
+            
+          rescue
+            return    
+          end
+          
+          return
+          
+        end
+       
       end
       
       private

@@ -2,6 +2,7 @@ GEM
   remote: http://rubygems.org/
   specs:
     addressable (2.2.2)
+    chunky_png (1.2.0)
     crack (0.1.8)
     diff-lcs (1.1.2)
     git (1.2.5)
@@ -38,6 +39,7 @@ PLATFORMS
 DEPENDENCIES
   addressable
   bundler (~> 1.0.0)
+  chunky_png
   httparty
   jeweler (~> 1.6.2)
   nokogiri

@@ -326,23 +326,7 @@ module Shibkit
         return sources 
         
       end
-      
-      ## Send progress information to STDOUT
-      ## @return [String]
-      def self.verbose?
-      
-       return @verbose || false
-        
-      end
-      
-      ## Send progress information to STDOUT
-      ## @return [String]
-      def self.auto_refresh?
-      
-       return @auto_refresh || false
-        
-      end
-      
+
     end
   end
 end

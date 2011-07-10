@@ -42,7 +42,9 @@ module Shibkit
       ## Language-mapped Hash
       def extract_lang_map_of_strings(xpath)
   
-        results = Hash.new
+        results      = Hash.new
+        results[:en] = Array.new
+        
 
         @xml.xpath(xpath).each do |ix|
 
@@ -58,7 +60,8 @@ module Shibkit
       ## Language-mapped Hash of string lists
       def extract_lang_map_of_string_lists(xpath)
         
-        results = Hash.new
+        results      = Hash.new
+        results[:en] = Array.new
   
         @xml.xpath(xpath).each do |ix|
   
@@ -77,7 +80,8 @@ module Shibkit
       ## Language-mapped Hash
       def extract_lang_map_of_objects(xpath, req_class)
   
-        results = Hash.new
+        results      = Hash.new
+        results[:en] = Array.new
   
         @xml.xpath(xpath).each do |ix|
           

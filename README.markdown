@@ -42,6 +42,8 @@ Bundler users can add MetaMeta to their Gemfiles like this:
 
 then of course run bundle install
 
+## USAGE
+
 ## CONVENIENCE FEATURES
 
 Stuff blah:

@@ -26,10 +26,10 @@ module Shibkit
       require 'shibkit/meta_meta/logo'
       require 'shibkit/meta_meta/organisation'
       
-      require 'shibkit/meta_meta/mixin/xpath_chores'
-      
       ## A few simple utility functions for slurping data from XML
+      require 'shibkit/meta_meta/mixin/xpath_chores'
       include XPathChores
+      
       
       ## Element and attribute used to select XML for new objects
       ROOT_ELEMENT = 'EntityDescriptor'
@@ -130,7 +130,7 @@ module Shibkit
         ## Logos
         @logos = extract_lang_map_of_objects('xmlns:IDPSSODescriptor/xmlns:Extensions/mdui:UIInfo/mdui:Logo',
           Shibkit::MetaMeta::Logo)
-        
+
         ## IP Address Ranges
         @ip_blocks = extract_simple_list('xmlns:IDPSSODescriptor/xmlns:Extensions/mdui:DiscoHints/mdui:IPHint')
         
@@ -139,8 +139,7 @@ module Shibkit
         
         ## Geolocations
         @geolocations = extract_simple_list("xmlns:IDPSSODescriptor/xmlns:Extensions/mdui:DiscoHints/mdui:GeolocationHintt")
-        
-        
+  
       end
       
     end
