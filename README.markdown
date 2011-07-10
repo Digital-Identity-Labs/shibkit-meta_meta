@@ -44,120 +44,272 @@ then of course run bundle install
 
 ## USAGE
 
-## CONVENIENCE FEATURES
+### Convenience Features
 
 Stuff blah:
 
-    code
+```ruby
+code       # => 1
+code       # => 2
+```
 
 Also stuff blah:
 
-    code
+```ruby
+code       # => 1
+code       # => 2
+```
 
 which is nice.
 
-## METADATA SOURCES
+### Metadata Sources
 
 Stuff blah:
 
-    code
+```ruby
+code       # => 1
+code       # => 2
+```
 
 Also stuff blah:
 
-    code
-
-which is nice.
-
-## FEDERATIONS
-
-Stuff blah:
-
-    code
-
-Also stuff blah:
-
-    code
-
-which is nice.
-
-## ENTITIES (IDP/SP)
-
-Stuff blah:
-
-    code
-
-Also stuff blah:
-
-    code
+```ruby
+code       # => 1
+code       # => 2
+```
 
 which is nice.
 
 
-## CONTACTS
+### Federations
 
 Stuff blah:
 
-    code
+```ruby
+code       # => 1
+code       # => 2
+```
 
 Also stuff blah:
 
-    code
+```ruby
+
+  code       # => 1
+  code       # => 2
+
+```
 
 which is nice.
 
 
-
-## ORGANISATIONS
-
-Stuff blah:
-
-    code
-
-Also stuff blah:
-
-    code
-
-which is nice.
-
-
-
-## WRITING SOURCE LISTS
+### Entities (IDPs & SPs)
 
 Stuff blah:
 
-    code
+```ruby
+code       # => 1
+code       # => 2
+```
 
 Also stuff blah:
 
-    code
+```ruby
+code       # => 1
+code       # => 2
+```
 
 which is nice.
 
 
 
-## OPTIONS
+### Contacts
 
 Stuff blah:
 
-    code
+```ruby
+code       # => 1
+code       # => 2
+```
 
 Also stuff blah:
 
-    code
+```ruby
+code       # => 1
+code       # => 2
+```
+
+which is nice.
+
+
+### Organisations
+
+Stuff blah:
+
+```ruby
+code       # => 1
+code       # => 2
+```
+
+Also stuff blah:
+
+```ruby
+code       # => 1
+code       # => 2
+```
+
+which is nice.
+
+
+### User Interface Info
+
+Stuff blah:
+
+```ruby
+code       # => 1
+code       # => 2
+```
+
+Also stuff blah:
+
+```ruby
+code       # => 1
+code       # => 2
+```
+
+which is nice.
+
+
+### Discovery Hints
+
+Stuff blah:
+
+```ruby
+code       # => 1
+code       # => 2
+```
+
+Also stuff blah:
+
+```ruby
+code       # => 1
+code       # => 2
+```
+
+which is nice.
+
+
+### Advertised Attributes
+
+
+Stuff blah:
+
+```ruby
+code       # => 1
+code       # => 2
+```
+
+Also stuff blah:
+
+```ruby
+code       # => 1
+code       # => 2
+```
+
+which is nice.
+
+
+### Service Information
+
+Stuff blah:
+
+```ruby
+code       # => 1
+code       # => 2
+```
+
+Also stuff blah:
+
+```ruby
+code       # => 1
+code       # => 2
+```
+
+which is nice.
+
+### Provisioning Your Application
+
+Stuff blah:
+
+```ruby
+code       # => 1
+code       # => 2
+```
+
+Also stuff blah:
+
+```ruby
+code       # => 1
+code       # => 2
+```
+
+which is nice.
+
+
+### Writing Source Lists
+
+Stuff blah:
+
+```ruby
+code       # => 1
+code       # => 2
+```
+
+Also stuff blah:
+
+```ruby
+code       # => 1
+code       # => 2
+```
+
+which is nice.
+
+
+### General Options
+
+Stuff blah:
+
+```ruby
+code       # => 1
+code       # => 2
+```
+
+Also stuff blah:
+
+```ruby
+code       # => 1
+code       # => 2
+```
 
 which is nice.
 
 
 
-## CACHING OPTIONS
+
+### Caching Options
 
 Stuff blah:
 
-    code
+```ruby
+code       # => 1
+code       # => 2
+```
 
 Also stuff blah:
 
-    code
+```ruby
+code       # => 1
+code       # => 2
+```
 
 which is nice.
 
