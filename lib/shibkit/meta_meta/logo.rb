@@ -23,6 +23,7 @@ module Shibkit
     class Logo < MetadataItem
       
       require 'chunky_png'
+      require 'dimensions'
       
       require 'shibkit/meta_meta/metadata_item'
       
@@ -48,6 +49,8 @@ module Shibkit
       
       ## Language of the logo
       attr_accessor :language
+      
+      attr_reader   :metadata_pixels
       
       ## Calculated size of the image (:tiny :small :medium :large, etc)
       ## I'm not sure about these.
@@ -167,27 +170,18 @@ module Shibkit
       end
     
       ## Download the file and update this object based on real characteristics
-      def confirm_attribs
-        
-        if png?
+      def confirm_attribs?
+
+        #begin
           
-          begin
-          
-            image = ChunkyPNG::Image.from_file(tmpfile.path)
-          
-            width = image.width
-            height = image.height
-            pixels = image.area
+          width, height = Dimensions.dimensions(tmpfile.path)  
+          return pixels == metadata_pixels ? true : false 
             
-            @png = true
-            
-          rescue
-            return    
-          end
+        #rescue
+          return nil   
+        #end
           
-          return
-          
-        end
+        return true
        
       end
       
@@ -202,7 +196,9 @@ module Shibkit
           self.height   = @xml['height'] ? @xml['height'].to_i : 0 
           self.width    = @xml['width']  ? @xml['width'].to_i  : 0
           lang          = @xml['xml:lang'] || :en
-        
+          
+          @metadata_pixels = height * width
+          
         end
       end
     end

@@ -22,6 +22,7 @@ module Shibkit
     class MetadataItem
       
       require 'nokogiri'
+      require 'uuid'
       
       ## Element and attribute used to select XML for new objects
       ROOT_ELEMENT    = 'SomeThingThatIsntThere'
@@ -36,9 +37,13 @@ module Shibkit
         'mdui'       => 'urn:oasis:names:tc:SAML:metadata:ui'
       }
       
+      attr_reader :uuid
+      attr_reader :read_at
+      
       ## New object takes XML (as libXML object or text)
       def initialize(source_xml=nil, target=nil, options={}, &block)
         
+        @uuid    = UUID.new.generate
         @read_at = Time.new
         
         ## Use XML to build object

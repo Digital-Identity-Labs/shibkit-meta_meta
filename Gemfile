@@ -6,6 +6,7 @@ gem 'rest-client-components'
 gem 'rack-cache'
 gem 'addressable'
 gem 'chunky_png'
+gem 'dimensions'
 
 group :development do
   gem "rspec", "~> 2.3.0"

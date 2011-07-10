@@ -130,7 +130,7 @@ module Shibkit
         ## Logos
         @logos = extract_lang_map_of_objects('xmlns:IDPSSODescriptor/xmlns:Extensions/mdui:UIInfo/mdui:Logo',
           Shibkit::MetaMeta::Logo)
-
+        
         ## IP Address Ranges
         @ip_blocks = extract_simple_list('xmlns:IDPSSODescriptor/xmlns:Extensions/mdui:DiscoHints/mdui:IPHint')
         
