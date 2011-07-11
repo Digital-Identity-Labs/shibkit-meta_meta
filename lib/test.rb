@@ -25,9 +25,15 @@ metadata.federations.each do |federation|
   puts federation.metadata_id
   puts federation.entities.count
   
-  puts federation.entities.to_yaml
+  #puts federation.entities.to_yaml
   
-  #federation.entities.each do |e|
+  federation.entities.each do |e|
+  
+  puts "----------------------"
+  puts e.entity_uri
+  puts "IDP!" if e.idp?
+  puts "SP!"  if e.sp?
+  puts
     
   #  puts e.display_name
   #  puts e.description
@@ -39,7 +45,7 @@ metadata.federations.each do |federation|
   #  puts e.geolocation_urls
   #  puts
     
-  #end
+  end
   
 end
 

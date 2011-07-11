@@ -52,6 +52,7 @@ module Shibkit
           prepare_xml(source_xml)
           select_xml(target, options)
           parse_xml
+          #purge_xml if ...
           
         end
         
