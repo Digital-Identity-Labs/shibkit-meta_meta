@@ -23,13 +23,9 @@ module Shibkit
       
       require 'shibkit/meta_meta/metadata_item'
       require 'shibkit/meta_meta/contact'
-      require 'shibkit/meta_meta/logo'
+      require 'shibkit/meta_meta/idp'
+      require 'shibkit/meta_meta/sp'
       require 'shibkit/meta_meta/organisation'
-      
-      ## A few simple utility functions for slurping data from XML
-      require 'shibkit/meta_meta/mixin/xpath_chores'
-      include Shibkit::MetaMeta::Mixin::XPathChores
-      
       
       ## Element and attribute used to select XML for new objects
       ROOT_ELEMENT = 'EntityDescriptor'
@@ -37,7 +33,7 @@ module Shibkit
       REQUIRED_QUACKS = [:entity_uri]
       
       ## The URI of the entity's parent federation
-      attr_accessor :federation_uri
+      attr_accessor :federation_uris
       
       ## The ID of the entity with the metadata file (not globally unique)
       attr_accessor :metadata_id
@@ -56,10 +52,7 @@ module Shibkit
 
       ## Show in normal WAYFs?
       attr_accessor :hide
-     
-      ## Scopes used by the entity (if an IDP)
-      attr_accessor :scopes
-      
+ 
       ## Organisation object for the owner of the entity 
       attr_accessor :organisation
       
@@ -72,26 +65,6 @@ module Shibkit
       ## Contact object containing technical contact details
       attr_accessor :admin_contact
       
-      attr_accessor :display_names
-      
-      attr_accessor :descriptions
-      
-      attr_accessor :keyword_sets
-      
-      attr_accessor :info_urls
-      
-      attr_accessor :privacy_urls
-      
-      attr_accessor :ip_blocks
-      
-      attr_accessor :domains
-      
-      attr_accessor :geolocation_urls
-      
-      attr_accessor :service_name
-      
-      attr_accessor :service_description
-      
       ## Is the entity an IDP?
       attr_accessor :idp
       
@@ -99,53 +72,21 @@ module Shibkit
       attr_accessor :sp
                     
       alias :entity_id :entity_uri
-      alias :idp? :idp 
-      alias :sp?  :sp
       alias :ukfm? :ukfm
       alias :hide? :hide
       alias :accountable? :accountable
       alias :athens? :athens
       alias :organization :organisation
       
-      def display_name(lang=:en)
+      def idp? 
         
-        return display_names[lang] unless display_names[lang].to_s.empty?
-        return service_name unless service_name.to_s.empty?
-        return entity_id
+        return idp.kind_of?(Shibkit::MetaMeta::IDP)
         
       end
       
-      def description(lang=:en)
+      def sp?
         
-        return descriptions[lang] unless descriptions[lang].to_s.empty?
-        return service_description unless service_description.to_s.empty?
-        return organisation.display_name if (organisation and ! organisation.display_name.to_s.empty?)
-        return organisation.name if (organisation and ! organisation.name.to_s.empty?)
-        return "" 
-        
-      end
-      
-      def keywords(lang=:en)
-      
-        return keyword_sets[lang] || []
-      
-      end
-      
-      def info_url(lang=:en)
-        
-        return info_urls[lang] || nil
-        
-      end
-      
-      def privacy_url(lang=:en)
-        
-        return privacy_urls[lang] || nil
-        
-      end
-      
-      def logos(lang=:en)
-        
-        return logos[lang] || []
+        return sp.kind_of?(Shibkit::MetaMeta::SP)
         
       end
       
@@ -155,15 +96,18 @@ module Shibkit
         
         self.entity_uri     = @xml['entityID']
         self.metadata_id    = @xml['ID']
-      
-        ## Then boolean flags for common/useful info 
+        
+        @federation_uris ||= Array.new
+              
+        ## Boolean flags for common/useful info 
         self.accountable = @xml.xpath('xmlns:Extensions/ukfedlabel:AccountableUsers').size   > 0 ? true : false
         self.ukfm        = @xml.xpath('xmlns:Extensions/ukfedlabel:UKFederationMember').size > 0 ? true : false
         self.athens      = @xml.xpath('xmlns:Extensions/elab:AthensPUIDAuthority').size      > 0 ? true : false
         self.hide        = @xml.xpath('xmlns:Extensions/wayf:HideFromWAYF').size             > 0 ? true : false
-        self.scopes      = @xml.xpath('xmlns:IDPSSODescriptor/xmlns:Extensions/shibmd:Scope').collect { |x| x.text }
-        self.idp         = @xml.xpath('xmlns:IDPSSODescriptor') ? true : false
-        self.sp          = @xml.xpath('xmlns:SPSSODescriptor')  ? true : false
+        
+        ## IDP and SP objects, if available. Based on the same XML as their parent/entity object
+        self.idp         = Shibkit::MetaMeta::IDP.new(@xml).filter
+        self.sp          =  Shibkit::MetaMeta::SP.new(@xml).filter
         
         ## Include Contact objects
         self.support_contact   = Contact.new(@xml.xpath("xmlns:ContactPerson[@contactType='support'][1]")[0]).filter
@@ -171,37 +115,8 @@ module Shibkit
         self.admin_contact     = Contact.new(@xml.xpath("xmlns:ContactPerson[@contactType='administrative'][1]")[0]).filter
         
         ## Include an organisation object
-        #self.organisation = Organisation.new(@xml.xpath('xmlns:Organization[1]')[0])
         self.organisation = Organisation.new(@xml).filter
         
-        ## Display names
-        @display_names = extract_lang_map_of_strings('xmlns:IDPSSODescriptor/xmlns:Extensions/mdui:UIInfo/mdui:DisplayName')
-        
-        ## Descriptions
-        @descriptions = extract_lang_map_of_strings('xmlns:IDPSSODescriptor/xmlns:Extensions/mdui:UIInfo/mdui:Description')
-        
-        ## Keywords
-        @keyword_sets = extract_lang_map_of_string_lists('xmlns:IDPSSODescriptor/xmlns:Extensions/mdui:UIInfo/mdui:Keywords')
-            
-        ## Information URLs
-        @info_urls = extract_lang_map_of_strings('xmlns:IDPSSODescriptor/xmlns:Extensions/mdui:UIInfo/mdui:InformationURL')
-
-        ## Privacy Statement URLs
-        @privacy_urls = extract_lang_map_of_strings('xmlns:IDPSSODescriptor/xmlns:Extensions/mdui:UIInfo/mdui:PrivacyStatementURL')
-
-        ## Logos
-        @logos = extract_lang_map_of_objects('xmlns:IDPSSODescriptor/xmlns:Extensions/mdui:UIInfo/mdui:Logo',
-          Shibkit::MetaMeta::Logo)
-        
-        ## IP Address Ranges
-        @ip_blocks = extract_simple_list('xmlns:IDPSSODescriptor/xmlns:Extensions/mdui:DiscoHints/mdui:IPHint')
-        
-        ## DNS Domain Names
-        @domains = extract_simple_list("xmlns:IDPSSODescriptor/xmlns:Extensions/mdui:DiscoHints/mdui:DomainHint")
-        
-        ## Geolocations
-        @geolocations = extract_simple_list("xmlns:IDPSSODescriptor/xmlns:Extensions/mdui:DiscoHints/mdui:GeolocationHintt")
-  
       end
       
     end

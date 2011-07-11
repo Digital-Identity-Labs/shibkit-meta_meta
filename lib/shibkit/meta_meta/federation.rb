@@ -74,7 +74,7 @@ module Shibkit
         @xml.xpath("//xmlns:EntityDescriptor").each do |ex|
         
           entity = Entity.new(ex)
-          entity.federation_uri = federation_uri
+          entity.federation_uris << federation_uri
           
           ## Collect this entity in the federation object
           self.entities << entity

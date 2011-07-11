@@ -24,6 +24,11 @@ module Shibkit
       require 'nokogiri'
       require 'uuid'
       
+      ## A few simple utility functions for slurping data from XML
+      require 'shibkit/meta_meta/mixin/xpath_chores'
+      include Shibkit::MetaMeta::Mixin::XPathChores
+      
+      
       ## Element and attribute used to select XML for new objects
       ROOT_ELEMENT    = 'SomeThingThatIsntThere'
       TARGET_ATTR     = 'ID'
