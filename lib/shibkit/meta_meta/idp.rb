@@ -42,8 +42,7 @@ module Shibkit
         
         self.scopes      = @xml.xpath('xmlns:IDPSSODescriptor/xmlns:Extensions/shibmd:Scope').collect { |x| x.text }
         
-        @valid = @xml.xpath('xmlns:IDPSSODescriptor[1]') ? true : false
-
+        @valid = @xml.xpath('xmlns:IDPSSODescriptor[1]').empty? ? false : true
 
       end
       

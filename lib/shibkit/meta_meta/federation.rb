@@ -80,9 +80,7 @@ module Shibkit
           self.entities << entity
           
         end
-        
-        puts "Done."
-        
+
       end
       
     end

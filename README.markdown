@@ -122,6 +122,41 @@ code       # => 2
 
 which is nice.
 
+### IDPs
+
+Stuff blah:
+
+```ruby
+code       # => 1
+code       # => 2
+```
+
+Also stuff blah:
+
+```ruby
+code       # => 1
+code       # => 2
+```
+
+which is nice.
+
+### SPs
+
+Stuff blah:
+
+```ruby
+code       # => 1
+code       # => 2
+```
+
+Also stuff blah:
+
+```ruby
+code       # => 1
+code       # => 2
+```
+
+which is nice.
 
 
 ### Contacts
