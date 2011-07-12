@@ -18,7 +18,7 @@
 
 module Shibkit
   class MetaMeta
-    module Provision
+    module Provisioning
     
       ## Abstract base class for provisioning drivers
       class Base

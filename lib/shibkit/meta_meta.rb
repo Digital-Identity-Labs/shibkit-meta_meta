@@ -16,6 +16,8 @@
 ##
 
 require 'rubygems'
+require 'bundler'
+
 require 'nokogiri'
 require 'yaml'
 require 'open-uri'

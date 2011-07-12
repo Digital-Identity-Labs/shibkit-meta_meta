@@ -141,7 +141,7 @@ module Shibkit
             @xml = @xml.xpath(selector)[0]
           end  
           
-          raise "No suitable XML was selected: using #{selector} from a #{@xml.name} node" unless @xml and
+          raise "No suitable XML was selected: using #{selector}" unless @xml and
             @xml.kind_of?(Nokogiri::XML::Element) and @xml.name
           
         end

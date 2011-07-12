@@ -31,6 +31,8 @@ MetaMeta is still early in development, so please bear the following in mind whe
 * The mock 'dev' metadata is not valid or complete. We plan to eventually build some fully-functional example federations, but at present both UnCommon and Example federations are simple test mocks of certain parts of SAML2 metadata.
 * The source list of federations is _far_ from complete.
 * For development and testing the provided lists should be fine but please DO NOT use the provided federation source lists in production without manually checking their contents or using your own edited version. Your federation will have its own guidelines for verifying their certificate and metadata, please read them and check that the certificate and source URL you are using are correct. Your chain of trust should not originate in a file on Github, even if the creators are nice people.
+* MetaMeta is using far too much memory when processing metadata XML. 
+* MetaMeta is not compatible with JRuby yet (but we hope it will be) 
 
 ## INSTALLATION
 
@@ -122,6 +124,41 @@ code       # => 2
 
 which is nice.
 
+### IDPs
+
+Stuff blah:
+
+```ruby
+code       # => 1
+code       # => 2
+```
+
+Also stuff blah:
+
+```ruby
+code       # => 1
+code       # => 2
+```
+
+which is nice.
+
+### SPs
+
+Stuff blah:
+
+```ruby
+code       # => 1
+code       # => 2
+```
+
+Also stuff blah:
+
+```ruby
+code       # => 1
+code       # => 2
+```
+
+which is nice.
 
 
 ### Contacts

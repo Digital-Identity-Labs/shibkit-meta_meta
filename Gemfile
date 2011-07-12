@@ -1,5 +1,6 @@
 source 'http://rubygems.org'
 
+gem 'uuid'
 gem 'nokogiri'
 gem 'rest-client'
 gem 'rest-client-components'

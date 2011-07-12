@@ -25,27 +25,29 @@ metadata.federations.each do |federation|
   puts federation.metadata_id
   puts federation.entities.count
   
-  puts federation.entities.to_yaml
+  #puts federation.entities.to_yaml
   
-  #federation.entities.each do |e|
+  federation.entities.each do |e|
   
-  #puts "----------------------"
-  #puts e.entity_uri
-  #puts "IDP!" if e.idp?
-  #puts "SP!"  if e.sp?
-  #puts
+  puts "----------------------"
+  puts e.entity_uri
+  puts "IDP!" if e.idp?
+  puts "SP!"  if e.sp?
+  puts
+  
+  
+  
+  puts e.idp.display_name
+  puts e.idp.description
+  puts e.idp.keywords.join
+  puts e.idp.info_url
+  puts e.idp.privacy_url
+  puts e.idp.ip_blocks
+  puts e.idp.domains
+  puts e.idp.geolocation_urls
+  puts
     
-  #  puts e.display_name
-  #  puts e.description
-  #  puts e.keywords.join
-  #  puts e.info_url
-  #  puts e.privacy_url
-  #  puts e.ip_blocks
-  #  puts e.domains
-  #  puts e.geolocation_urls
-  #  puts
-    
-  #end
+  end
   
 end
 

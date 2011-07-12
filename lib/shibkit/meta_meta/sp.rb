@@ -42,7 +42,7 @@ module Shibkit
         
         super
         
-        @valid = @xml.xpath('xmlns:SPSSODescriptor[1]')  ? true : false
+        @valid = @xml.xpath('xmlns:SPSSODescriptor[1]').empty?  ? false : true
 
       end
       
