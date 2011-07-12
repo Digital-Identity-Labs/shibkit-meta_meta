@@ -115,7 +115,9 @@ module Shibkit
         self.admin_contact     = Contact.new(@xml.xpath("xmlns:ContactPerson[@contactType='administrative'][1]")[0]).filter
         
         ## Include an organisation object
-        self.organisation = Organisation.new(@xml).filter
+        self.organisation     = Organisation.new(@xml.xpath("xmlns:Organization[1]")[0]).filter
+        self.idp.organisation = self.organisation if idp?
+        self.sp.organisation  = self.organisation if sp?
         
       end
       

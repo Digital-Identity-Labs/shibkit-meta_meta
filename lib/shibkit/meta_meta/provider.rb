@@ -52,7 +52,9 @@ module Shibkit
       attr_accessor :geolocation_urls
       
       attr_reader   :valid
-       
+      
+      attr_accessor   :organisation
+      
       alias :entity_id :entity_uri
       alias :valid?    :valid
       
@@ -60,7 +62,11 @@ module Shibkit
       def display_name(lang=:en)
         
         return display_names[lang] unless display_names[lang].to_s.empty?
-        return service_name unless service_name.to_s.empty?
+        
+        if self.kind_of?(Shibkit::MetaMeta::SP)
+          #return service_name unless service_name.to_s.empty?
+        end
+        
         return entity_id
         
       end
@@ -68,10 +74,17 @@ module Shibkit
       def description(lang=:en)
         
         return descriptions[lang] unless descriptions[lang].to_s.empty?
-        return service_description unless service_description.to_s.empty?
-        return organisation.display_name if (organisation and ! organisation.display_name.to_s.empty?)
-        return organisation.name if (organisation and ! organisation.name.to_s.empty?)
-        return "" 
+        
+        if self.kind_of?(Shibkit::MetaMeta::SP)
+          #return service_name unless service_name.to_s.empty?
+        end
+        
+        if organisation
+          return organisation.display_name unless organisation.display_name.to_s.empty?
+          return organisation.name         unless organisation.name.to_s.empty?
+        end
+        
+        return ""
         
       end
       

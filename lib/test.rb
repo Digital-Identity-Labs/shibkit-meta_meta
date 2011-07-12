@@ -30,13 +30,12 @@ metadata.federations.each do |federation|
   federation.entities.each do |e|
   
   puts "----------------------"
-  puts e.entity_uri
-  puts "IDP!" if e.idp?
-  puts "SP!"  if e.sp?
-  puts
+  #puts e.entity_uri
+  #puts "IDP!" if e.idp?
+  #puts "SP!"  if e.sp?
+  #puts
   
-  
-  
+  if e.idp?
   puts e.idp.display_name
   puts e.idp.description
   puts e.idp.keywords.join
@@ -45,7 +44,10 @@ metadata.federations.each do |federation|
   puts e.idp.ip_blocks
   puts e.idp.domains
   puts e.idp.geolocation_urls
-  puts
+  puts e.idp.protocols.join(', ')
+  puts e.idp.nameid_format
+  puts e.organisation.name
+  end
     
   end
   

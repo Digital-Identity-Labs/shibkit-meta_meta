@@ -26,7 +26,7 @@ module Shibkit
       ## Element and attribute used to select XML for new objects
       ROOT_ELEMENT = 'Organization'
       TARGET_ATTR  = nil
-      REQUIRED_QUACKS = [:name, :url]
+      REQUIRED_QUACKS = [:name]
       
       ## The name identifier for the organisation
       attr_accessor :name
@@ -42,9 +42,14 @@ module Shibkit
      
      def parse_xml
     
-      name         = @xml.xpath('xmlns:OrganizationName[1]')[0].content
-      display_name = @xml.xpath('xmlns:OrganizationDisplayName[1]')[0].content
-      url          = @xml.xpath('xmlns:OrganizationURL[1]')[0].content
+      @name         = @xml.xpath('xmlns:OrganizationName[1]')[0].content
+
+      
+      @display_name = @xml.xpath('xmlns:OrganizationDisplayName[1]')[0].content
+
+      
+      @url          = @xml.xpath('xmlns:OrganizationURL[1]')[0].content
+
       
     end
         

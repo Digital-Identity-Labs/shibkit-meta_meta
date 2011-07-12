@@ -32,7 +32,10 @@ module Shibkit
       MDUI_ROOT = 'IDPSSODescriptor'
 
       ## Scopes used by the entity (if an IDP)
-      attr_accessor :scopes
+      attr_accessor  :scopes
+      attr_accessor  :protocols
+      attr_accessor  :nameid_format
+      attr_accessor  :attributes
       
       private
       
@@ -40,10 +43,17 @@ module Shibkit
         
         super
         
-        self.scopes      = @xml.xpath('xmlns:IDPSSODescriptor/xmlns:Extensions/shibmd:Scope').collect { |x| x.text }
+        @scopes = @xml.xpath('xmlns:IDPSSODescriptor/xmlns:Extensions/shibmd:Scope').collect { |x| x.text }
         
         @valid = @xml.xpath('xmlns:IDPSSODescriptor[1]').empty? ? false : true
-
+        
+        proto_set = @xml.xpath('xmlns:IDPSSODescriptor/@protocolSupportEnumeration')[0]
+        @protocols = proto_set.value.split(' ') if proto_set 
+        
+       # @nameid_format = @xml.xpath('xmlns:IDPSSODescriptor/xmlns:NameIDFormat').to_s || nil
+        
+        @attributes = []
+        
       end
       
     end
