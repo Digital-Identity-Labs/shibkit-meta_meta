@@ -20,31 +20,41 @@ module Shibkit
 
     ## Class to represent the metadata of the organisation owning a Shibboleth entity
     class Attribute < MetadataItem
-      
-      require 'shibkit/meta_meta/metadata_item'
-      
+
       ## Element and attribute used to select XML for new objects
       ROOT_ELEMENT = 'Attribute'
-      TARGET_ATTR  = nil
-      REQUIRED_QUACKS = [:name, :url]
+      TARGET_ATTR  = 'Name'
+      REQUIRED_QUACKS = [:Name, :NameFormat]
       
-      ## The name identifier for the organisation
+      
+      ## 
       attr_accessor :name
       
-      ## The human-readable display name for the organisation
-      attr_accessor :display_name
+      attr_accessor :is_required
       
-      ## The homepage URL for the organisation
-      attr_accessor :url
-    
-    
-     private
+      attr_accessor :name_format
+      
+      attr_accessor :friendly_name
+      
+      ## 
+      attr_accessor :values
+      
+      alias :required? :is_required
+      
+      private
      
      def parse_xml
-    
-      name         = @xml.xpath('xmlns:OrganizationName[1]')[0].content
-      display_name = @xml.xpath('xmlns:OrganizationDisplayName[1]')[0].content
-      url          = @xml.xpath('xmlns:OrganizationURL[1]')[0].content
+      
+      @name = @xml['Name']
+      
+      @is_required = @xml['isRequired'].downcase == 'true' ? true : false
+      
+      @name_format = @xml['NameFormat']
+      
+      @friendly_name = @xml['FriendlyName']
+      
+      @values ||= Array.new
+      @xml.xpath('saml:AttributeValue').each { |ax| @values << ax.content.strip }
       
     end
         
