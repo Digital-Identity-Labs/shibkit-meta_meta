@@ -39,7 +39,8 @@ module Shibkit
         'ukfedlabel' => 'http://ukfederation.org.uk/2006/11/label',
         'elab'       => 'http://eduserv.org.uk/labels',
         'wayf'       => 'http://sdss.ac.uk/2006/06/WAYF',
-        'mdui'       => 'urn:oasis:names:tc:SAML:metadata:ui'
+        'mdui'       => 'urn:oasis:names:tc:SAML:metadata:ui',
+        'saml'       => 'urn:oasis:names:tc:SAML:2.0:assertion'
       }
       
       attr_reader :uuid
