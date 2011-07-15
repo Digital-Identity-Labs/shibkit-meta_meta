@@ -7,8 +7,6 @@ sources = Shibkit::MetaMeta::Source.load(:real)
 
 sources.each_value { |v| metadata.sources << v }
 
-
-
 metadata.sources.each do |source|
   
   source.refresh
@@ -50,6 +48,13 @@ metadata.federations.each do |federation|
   puts e.idp.nameid_formats.join(';')
   puts e.scopes.join(';')
   puts e.idp.scopes.join(';')
+  end
+  if e.sp?
+    puts "SP..."
+    puts e.sp.protocols.join(';')
+    puts e.sp.services.inspect
+    puts e.sp.default_service.inspect
+    
   end
     
   end

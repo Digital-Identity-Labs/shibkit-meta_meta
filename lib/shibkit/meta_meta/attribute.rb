@@ -47,7 +47,7 @@ module Shibkit
       
       @name = @xml['Name']
       
-      @is_required = @xml['isRequired'].downcase == 'true' ? true : false
+      @is_required = @xml['isRequired'].to_s.downcase == 'true' ? true : false
       
       @name_format = @xml['NameFormat']
       

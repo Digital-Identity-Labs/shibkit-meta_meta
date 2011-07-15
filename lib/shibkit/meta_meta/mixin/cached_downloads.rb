@@ -43,8 +43,8 @@ module Shibkit
         ## Copy a filesystem file into the working directory (slower but safer)  
         def fetch_local(filename)
 
-          file_path = File.absolute_path(filename)
-          raise unless File.exists?(file_path) and File.readable?(file_path)
+          file_path = ::File.absolute_path(filename)
+          raise unless ::File.exists?(file_path) and ::File.readable?(file_path)
 
           file = Tempfile.new(uuid)
           open(file_path, 'w') { |f| f << http_response.to_s }

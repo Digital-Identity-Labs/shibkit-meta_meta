@@ -23,6 +23,7 @@ module Shibkit
     ## Class to represent an IDP 
     class IDP < Provider
       
+      require 'shibkit/meta_meta/attribute'
       
       ## Element and attribute used to select XML for new objects
       ROOT_ELEMENT = 'EntityDescriptor'
@@ -62,12 +63,10 @@ module Shibkit
           
         end
         
-        
-  
         @attributes ||= Array.new
-        @xml.xpath('xmlns:IDPSSODescriptor/saml:AttributeValue').each do |ax|
+        @xml.xpath('xmlns:IDPSSODescriptor/saml:Attribute').each do |ax|
           
-          @attributes << Shibkit::MetaMeta::IDP.new(ax).filter
+          @attributes << Shibkit::MetaMeta::Attribute.new(ax).filter
           
         end
         

@@ -22,7 +22,11 @@ module Shibkit
   
     ## Class to represent an SP
     class SP < Provider
-            
+      
+      
+      require 'shibkit/meta_meta/service'
+      require 'shibkit/meta_meta/requested_attribute'
+      
       ## Element and attribute used to select XML for new objects
       ROOT_ELEMENT = 'EntityDescriptor'
       TARGET_ATTR  = 'entityID'
@@ -35,6 +39,7 @@ module Shibkit
       
       attr_accessor :default_service
       
+      attr_accessor :protocols
       
       private
       
@@ -44,6 +49,25 @@ module Shibkit
         
         @valid = @xml.xpath('xmlns:SPSSODescriptor[1]').empty?  ? false : true
 
+        proto_set = @xml.xpath('xmlns:SPSSODescriptor/@protocolSupportEnumeration')[0]
+        @protocols = proto_set.value.split(' ') if proto_set 
+        
+        ## Include services objects
+        @services ||= Array.new
+        @xml.xpath("xmlns:SPSSODescriptor/xmlns:AttributeConsumingService").each do |sx|
+          
+          service = Shibkit::MetaMeta::Service.new(sx).filter
+          
+          next unless service
+          
+          @services << service
+          @default_service = service if service.default?
+          
+        end
+        
+        @services.sort! { |a,b| a.index <=> b.index }
+        @default_service = @services[0] unless @default_service
+        
       end
       
     end
