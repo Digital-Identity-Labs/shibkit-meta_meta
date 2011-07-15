@@ -383,6 +383,10 @@ http://www.oasis-open.org/committees/download.php/42714/sstc-saml-metadata-ui-v1
 
 ## SHIBKIT 
 
+## CONTRIBUTORS
+
+* Pete Birkinshaw
+
 ## LICENSE
 
 Shibkit is copyright (c) 2011, Digital Identity Ltd. It's licensed under the 
