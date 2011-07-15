@@ -52,7 +52,9 @@ module Shibkit
 
       ## Show in normal WAYFs?
       attr_accessor :hide
- 
+  
+      attr_accessor :scopes
+      
       ## Organisation object for the owner of the entity 
       attr_accessor :organisation
       
@@ -104,6 +106,12 @@ module Shibkit
         self.ukfm        = @xml.xpath('xmlns:Extensions/ukfedlabel:UKFederationMember').size > 0 ? true : false
         self.athens      = @xml.xpath('xmlns:Extensions/elab:AthensPUIDAuthority').size      > 0 ? true : false
         self.hide        = @xml.xpath('xmlns:Extensions/wayf:HideFromWAYF').size             > 0 ? true : false
+        
+        @scopes = @xml.xpath('xmlns:Extensions/shibmd:Scope').collect do |sx|
+        
+         sx['regexp'] == 'true' ? Regexp.new(sx.text) : sx.text  
+          
+        end
         
         ## IDP and SP objects, if available. Based on the same XML as their parent/entity object
         self.idp         = Shibkit::MetaMeta::IDP.new(@xml).filter

@@ -34,7 +34,7 @@ module Shibkit
       ## Scopes used by the entity (if an IDP)
       attr_accessor  :scopes
       attr_accessor  :protocols
-      attr_accessor  :nameid_format
+      attr_accessor  :nameid_formats
       attr_accessor  :attributes
       
       private
@@ -43,16 +43,33 @@ module Shibkit
         
         super
         
-        @scopes = @xml.xpath('xmlns:IDPSSODescriptor/xmlns:Extensions/shibmd:Scope').collect { |x| x.text }
+        @scopes = @xml.xpath('xmlns:IDPSSODescriptor/xmlns:Extensions/shibmd:Scope').collect do |sx|
+        
+         sx['regexp'] == 'true' ? Regexp.new(sx.text) : sx.text  
+          
+        end 
+       
         
         @valid = @xml.xpath('xmlns:IDPSSODescriptor[1]').empty? ? false : true
         
         proto_set = @xml.xpath('xmlns:IDPSSODescriptor/@protocolSupportEnumeration')[0]
         @protocols = proto_set.value.split(' ') if proto_set 
         
-       # @nameid_format = @xml.xpath('xmlns:IDPSSODescriptor/xmlns:NameIDFormat').to_s || nil
+        @nameid_formats ||= Array.new
+        @xml.xpath('xmlns:IDPSSODescriptor/xmlns:NameIDFormat').each do |nx|
+          
+          @nameid_formats << nx.content
+          
+        end
         
-        @attributes = []
+        
+  
+        @attributes ||= Array.new
+        @xml.xpath('xmlns:IDPSSODescriptor/saml:AttributeValue').each do |ax|
+          
+          @attributes << Shibkit::MetaMeta::IDP.new(ax).filter
+          
+        end
         
       end
       

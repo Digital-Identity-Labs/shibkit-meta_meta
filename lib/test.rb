@@ -44,9 +44,12 @@ metadata.federations.each do |federation|
   puts e.idp.ip_blocks
   puts e.idp.domains
   puts e.idp.geolocation_urls
-  puts e.idp.protocols.join(', ')
-  puts e.idp.nameid_format
   puts e.organisation.name
+  puts e.idp.attributes.join(';')
+  puts e.idp.protocols.join(';')
+  puts e.idp.nameid_formats.join(';')
+  puts e.scopes.join(';')
+  puts e.idp.scopes.join(';')
   end
     
   end
