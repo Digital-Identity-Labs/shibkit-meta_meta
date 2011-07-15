@@ -58,6 +58,23 @@
     Providing a secure and privacy-preserving trust fabric for research and
     higher education institutions, and their partners, in the United States.
 
+## Australian Access Federation
+'urn:mace:aaf.edu.au:AAFProduction':
+  name: Australian Access Federation
+  display_name: AAF
+  type: federation
+  countries: [au]
+  metadata:    http://manager.aaf.edu.au/metadata/metadata.aaf.signed.xml
+  certificate: ~
+  fingerprint: ~
+  refeds_info: https://refeds.terena.org/index.php/FederationAAF
+  homepage:    http://www.aaf.edu.au/
+  languages: ['en']
+  support_email: enquiries@aaf.edu.au
+  description: > 
+    The Australian Access Federation.
+
+
 ## Want more?  
 ## Fork this project on Github, add new federation info and
 ## then send a pull request!
