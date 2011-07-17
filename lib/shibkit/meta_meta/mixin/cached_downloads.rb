@@ -42,7 +42,9 @@ module Shibkit
 
         ## Copy a filesystem file into the working directory (slower but safer)  
         def fetch_local(filename)
-
+          
+          return unless filename
+          
           file_path = ::File.absolute_path(filename)
           raise unless ::File.exists?(file_path) and ::File.readable?(file_path)
 

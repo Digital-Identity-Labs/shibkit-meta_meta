@@ -57,7 +57,7 @@ module Shibkit
         @xml.xpath("xmlns:SPSSODescriptor/xmlns:AttributeConsumingService").each do |sx|
           
           service = Shibkit::MetaMeta::Service.new(sx).filter
-          
+
           next unless service
           
           @services << service

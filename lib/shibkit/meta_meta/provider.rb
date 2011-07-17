@@ -63,8 +63,13 @@ module Shibkit
         
         return display_names[lang] unless display_names[lang].to_s.empty?
         
-        if self.kind_of?(Shibkit::MetaMeta::SP)
-          #return service_name unless service_name.to_s.empty?
+        if self.kind_of?(Shibkit::MetaMeta::SP) and default_service
+          return self.default_service.name[lang] unless default_service.name[lang].to_s.empty?
+        end
+        
+        if organisation
+          return [entity_id, organisation.display_name].join(' ') unless organisation.display_name.to_s.empty?
+          return [organisation.name, "service"].joing(' ')        unless organisation.name.to_s.empty?
         end
         
         return entity_id
@@ -75,10 +80,10 @@ module Shibkit
         
         return descriptions[lang] unless descriptions[lang].to_s.empty?
         
-        if self.kind_of?(Shibkit::MetaMeta::SP)
-          #return service_name unless service_name.to_s.empty?
-        end
-        
+         if self.kind_of?(Shibkit::MetaMeta::SP) and default_service
+            return default_service.description(lang) unless default_service.description(lang).to_s.empty?
+          end
+   
         if organisation
           return organisation.display_name unless organisation.display_name.to_s.empty?
           return organisation.name         unless organisation.name.to_s.empty?

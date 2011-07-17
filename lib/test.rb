@@ -32,28 +32,16 @@ metadata.federations.each do |federation|
   #puts "IDP!" if e.idp?
   #puts "SP!"  if e.sp?
   #puts
-  
-  if e.idp?
-  puts e.idp.display_name
-  puts e.idp.description
-  puts e.idp.keywords.join
-  puts e.idp.info_url
-  puts e.idp.privacy_url
-  puts e.idp.ip_blocks
-  puts e.idp.domains
-  puts e.idp.geolocation_urls
-  puts e.organisation.name
-  puts e.idp.attributes.join(';')
-  puts e.idp.protocols.join(';')
-  puts e.idp.nameid_formats.join(';')
-  puts e.scopes.join(';')
-  puts e.idp.scopes.join(';')
-  end
+
   if e.sp?
     puts "SP..."
+    puts e.sp.display_name
+    puts e.sp.description
+    if e.sp.default_service
+      puts e.sp.default_service.attributes.inspect
+    end
     puts e.sp.protocols.join(';')
-    puts e.sp.services.inspect
-    puts e.sp.default_service.inspect
+
     
   end
     
