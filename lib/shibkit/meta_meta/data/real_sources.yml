@@ -64,8 +64,8 @@
   display_name: AAF
   type: federation
   countries: [au]
-  metadata:    http://manager.aaf.edu.au/metadata/metadata.aaf.signed.xml
-  certificate: ~
+  metadata:    http://manager.aaf.edu.au/metadata/metadata.aaf.signed.complete.xml
+  certificate: https://manager.aaf.edu.au/metadata/metadata-cert.pem
   fingerprint: ~
   refeds_info: https://refeds.terena.org/index.php/FederationAAF
   homepage:    http://www.aaf.edu.au/
