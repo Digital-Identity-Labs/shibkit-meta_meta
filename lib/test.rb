@@ -5,6 +5,16 @@ metadata = Shibkit::MetaMeta.new
 
 sources = Shibkit::MetaMeta::Source.load(:real)
 
+#sources['urn:mace:incommon'].read.each do |node|
+  
+ # next unless node.name == "EntityDescriptor"
+#  puts node.name
+#  puts node.class
+  
+#end
+
+#exit
+
 sources.each_value { |v| metadata.sources << v }
 
 metadata.sources.each do |source|

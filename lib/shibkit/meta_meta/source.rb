@@ -51,7 +51,8 @@ module Shibkit
         'elab'       => 'http://eduserv.org.uk/labels',
         'wayf'       => 'http://sdss.ac.uk/2006/06/WAYF',
         'mdui'       => 'urn:oasis:names:tc:SAML:metadata:ui',
-        'saml'       => 'urn:oasis:names:tc:SAML:2.0:assertion'
+        'saml'       => 'urn:oasis:names:tc:SAML:2.0:assertion',
+        'shibmd'     => 'urn:mace:shibboleth:metadata:1.0'
       }
       
       ## @return [String] the URI identifier for the federation or collection
@@ -232,10 +233,13 @@ module Shibkit
       ## Return raw source string from the file
       ## @return [String] Metadata XML as text
       def content
-        
+                
         ## Deal with caching locally, downloading, etc
         refresh if Source.auto_refresh? and @metadata_tmpfile == nil
-      
+        
+        raise "No content is available, source has not been downloaded" unless 
+          metadata_tmpfile.path
+        
         return IO.read(metadata_tmpfile.path)
     
       end
@@ -258,7 +262,14 @@ module Shibkit
         return xml
        
       end
-    
+      
+      def read
+        
+        Nokogiri::XML::Reader(content)
+        
+        
+      end
+      
       ## Does the source object look sensible?
       ## @return [TrueClass, FalseClass] True or false
       def ok?

@@ -178,7 +178,7 @@ module Shibkit
           ## @return [String]
           def auto_refresh?
 
-           return @auto_refresh || false
+           return @auto_refresh || true
 
           end
 

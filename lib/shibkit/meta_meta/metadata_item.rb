@@ -40,7 +40,8 @@ module Shibkit
         'elab'       => 'http://eduserv.org.uk/labels',
         'wayf'       => 'http://sdss.ac.uk/2006/06/WAYF',
         'mdui'       => 'urn:oasis:names:tc:SAML:metadata:ui',
-        'saml'       => 'urn:oasis:names:tc:SAML:2.0:assertion'
+        'saml'       => 'urn:oasis:names:tc:SAML:2.0:assertion',
+        'shibmd'     => 'urn:mace:shibboleth:metadata:1.0'
       }
       
       attr_reader :uuid
@@ -58,7 +59,7 @@ module Shibkit
           prepare_xml(source_xml)
           select_xml(target, options)
           parse_xml
-          #purge_xml if ...
+          #purge_xml
           
         end
         
