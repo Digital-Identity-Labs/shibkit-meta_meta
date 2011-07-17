@@ -68,8 +68,8 @@ module Shibkit
         end
         
         if organisation
-          return [entity_id, organisation.display_name].join(' ') unless organisation.display_name.to_s.empty?
-          return [organisation.name, "service"].joing(' ')        unless organisation.name.to_s.empty?
+          return organisation.display_name  unless organisation.display_name.to_s.empty?
+          return [organisation.name, "service"].join(' ') unless organisation.name.to_s.empty?
         end
         
         return entity_id

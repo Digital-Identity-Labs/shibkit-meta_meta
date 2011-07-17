@@ -73,7 +73,9 @@ module Shibkit
        @attributes ||= Array.new
        @xml.xpath('xmlns:RequestedAttribute').each do |ax|
           
-         @attributes << Shibkit::MetaMeta::RequestedAttribute.new(ax).filter
+         attribute = Shibkit::MetaMeta::RequestedAttribute.new(ax).filter
+          
+         @attributes << attribute if attribute
           
        end
        
