@@ -36,7 +36,8 @@ module Shibkit
         
     attr_accessor :sources
     attr_accessor :source_file
-    attr_reader   :federations    
+    attr_reader   :federations 
+    attr_accessor :only   
         
     ## New default object
     def initialize(&block)
@@ -46,6 +47,7 @@ module Shibkit
       @all_sources = nil
       @federations = Array.new
       @read_at     = nil
+      @only        = :all
       
       self.instance_eval(&block) if block
       
@@ -128,7 +130,8 @@ module Shibkit
                     
           ## Extract basic 'federation' information 
           f.display_name   = source.name
-        
+          f.only           = self.only
+          
         end
 
         @federations << federation

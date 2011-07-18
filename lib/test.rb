@@ -2,6 +2,7 @@ require 'shibkit/meta_meta'
 
 
 metadata = Shibkit::MetaMeta.new
+metadata.only = :sps
 
 sources = Shibkit::MetaMeta::Source.load(:real)
 
@@ -20,7 +21,7 @@ sources.each_value { |v| metadata.sources << v }
 metadata.sources.each do |source|
   
   source.refresh
-  source.parse
+  #source.parse
   
 end
 
@@ -59,4 +60,4 @@ metadata.federations.each do |federation|
   
 end
 
-metadata.save_cache_file("/Users/pete/Desktop/test_metadata2.yml")
+#metadata.save_cache_file("/Users/pete/Desktop/test_metadata2.yml")
