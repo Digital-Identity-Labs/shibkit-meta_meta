@@ -74,6 +74,21 @@
   description: > 
     The Australian Access Federation.
 
+## Canadian Access Federation
+'urn:mace:
+ name: Canadian Access Federation
+ display_name: CAF
+ type: federation
+ countries: [ca]
+ metadata:  
+ certificate: https://caf-shibops.ca/CoreServices/cafshib_metadata_verify.pem
+ fingerprint: ~
+ refeds_info: 
+ homepage: http://www.cuccio-cdpiuc.ca/en/index.php
+ support_email: ~
+ description: >
+   Canadian Access Federation
+
 
 ## Want more?  
 ## Fork this project on Github, add new federation info and
