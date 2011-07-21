@@ -75,7 +75,7 @@
     The Australian Access Federation.
 
 ## Canadian Access Federation
-'https://caf-fcga.ca/entity'
+'https://caf-fcga.ca/entity':
  name: Canadian Access Federation
  display_name: CAF
  type: federation
@@ -85,6 +85,7 @@
  fingerprint: ~
  refeds_info: 
  homepage: http://www.cuccio-cdpiuc.ca/en/index.php
+ languages: ['en']
  support_email: ~
  description: >
    Canadian Access Federation
