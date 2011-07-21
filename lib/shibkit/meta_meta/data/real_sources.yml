@@ -80,7 +80,7 @@
  display_name: CAF
  type: federation
  countries: [ca]
- metadata:  
+ metadata:    https://caf‐shibops.ca/CoreServices/cafshib_metadata_signed.xml
  certificate: https://caf-shibops.ca/CoreServices/cafshib_metadata_verify.pem
  fingerprint: ~
  refeds_info: 
