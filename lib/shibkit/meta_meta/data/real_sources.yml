@@ -75,20 +75,67 @@
     The Australian Access Federation.
 
 ## Canadian Access Federation
-'https://caf-fcga.ca/entity':
- name: Canadian Access Federation
- display_name: CAF
- type: federation
- countries: [ca]
- metadata:    https://caf-shibops.ca/CoreServices/cafshib_metadata_signed.xml
- certificate: https://caf-shibops.ca/CoreServices/cafshib_metadata_verify.pem
- fingerprint: ~
- refeds_info: 
- homepage: http://www.cuccio-cdpiuc.ca/en/index.php
- languages: ['en']
- support_email: ~
- description: >
-   Canadian Access Federation
+ 'https://caf-fcga.ca/entity':
+  name: Canadian Access Federation
+  display_name: CAF
+  type: federation
+  countries: [ca]
+  metadata:    https://caf-shibops.ca/CoreServices/cafshib_metadata_signed.xml
+  certificate: https://caf-shibops.ca/CoreServices/cafshib_metadata_verify.pem
+  fingerprint: ~
+  refeds_info: 
+  homepage: http://www.cuccio-cdpiuc.ca/en/index.php
+  languages: ['en']
+  support_email: ~
+  description: >
+    Canadian Access Federation
+
+## Swiss Access Federation
+ 'urn:mace:switch.ch:SWITCHaai'
+  name: Swiss Acess Federation
+  display_name: SWITCHaai
+  type: federation
+  countries: [ch]
+  metadata: http://www.switch.ch/aai/support/metadata/
+  certificate: 
+  fingerprint: ~
+  refeds_info: 
+  homepage: 
+  languages: []
+  support_email: aai@switch.ch
+  description: >
+    Swiss Access Federation
+
+##  FederationCARSI 
+  name: 
+  display_name: 
+  type:
+  countries: []
+  metadata: ~
+  certificate:
+  fingerprint: ~
+  refeds_info: ~
+  homepage: ~
+  languages: ~
+  support_email: 
+  description: >
+     No information listed
+
+## FederationEdulDcz
+  name:
+  display_name:
+  type: 
+  countries: []
+  metadata: ~
+  certificate: ~
+  fingerprint: ~
+  refeds_info: ~
+  homepage: ~
+  languages: ~
+  support_email: Linden.mikael@rediris.es
+  description: >
+    No information listed
+ 
 
 
 ## Want more?  
