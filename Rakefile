@@ -16,10 +16,10 @@ Jeweler::Tasks.new do |gem|
   # gem is a Gem::Specification... see http://docs.rubygems.org/read/chapter/20 for more options
   gem.name = "shibkit-meta_meta"
   gem.homepage = "http://github.com/binaryape/shibkit-meta_meta"
-  gem.license = "MIT"
-  gem.summary = %Q{TODO: one-line summary of your gem}
-  gem.description = %Q{TODO: longer description of your gem}
-  gem.email = "pete@binary-ape.org"
+  gem.license = "Apache 2.0"
+  gem.summary = %Q{Parses SAML2 (Shibboleth) metadata}
+  gem.description = %Q{Library to download and parse SAML2 metadata}
+  gem.email = "pete@digitalidentitylabs.com"
   gem.authors = ["Pete Birkinshaw"]
   # dependencies defined in Gemfile
 end
@@ -38,12 +38,3 @@ end
 
 task :default => :spec
 
-require 'rake/rdoctask'
-Rake::RDocTask.new do |rdoc|
-  version = File.exist?('VERSION') ? File.read('VERSION') : ""
-
-  rdoc.rdoc_dir = 'rdoc'
-  rdoc.title = "shibkit-meta_meta #{version}"
-  rdoc.rdoc_files.include('README*')
-  rdoc.rdoc_files.include('lib/**/*.rb')
-end

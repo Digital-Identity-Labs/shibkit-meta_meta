@@ -52,6 +52,7 @@ DEPENDENCIES
   jeweler (~> 1.6.2)
   nokogiri
   rack-cache
+  rake
   rcov
   rest-client
   rest-client-components
