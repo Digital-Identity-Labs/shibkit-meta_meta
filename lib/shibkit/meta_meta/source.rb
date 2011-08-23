@@ -33,7 +33,9 @@ module Shibkit
     ##
     class Source
       
-      require 'shibkit/meta_meta/mixin/cached_downloads' 
+      require 'shibkit/meta_meta/mixin/cached_downloads'
+      require 'shibkit/meta_meta/federation'
+      
       include Shibkit::MetaMeta::Mixin::CachedDownloads
       
       ## @note This class currently lacks the ability to properly validate
@@ -85,6 +87,7 @@ module Shibkit
       
       ## @return [String, nil] URL of the federation's Refeds wiki entry
       attr_accessor :refeds_info
+      alias :refeds_url :refeds_info 
       
       ## @return [String] URL of the federation or collection's home page
       attr_accessor :homepage
@@ -143,6 +146,29 @@ module Shibkit
         
         self.instance_eval(&block) if block
   
+      end
+      
+      ## Build a parsed Federation object containing Entitiess
+      ## @return [Shibkit::MetaMeta::Federation]
+      def to_federation
+        
+        fx = self.parse_xml
+
+        federation = ::Shibkit::MetaMeta::Federation.new(fx)
+                    
+        ## Pass additional information from source into federation object  
+        federation.display_name  = display_name || name
+        federation.type          = type 
+        federation.refeds_url     = refeds_info 
+        federation.countries     = countries
+        federation.languages     = languages
+        federation.support_email = support_email
+        federation.homepage_url  = homepage
+        federation.description   = description
+
+        
+        return federation
+        
       end
       
       ## Redownload and revalidate remote files for the source
@@ -246,7 +272,7 @@ module Shibkit
     
       ## Return Nokogiri object tree for the metadata
       ## @return [Nokogiri::XML::Document] Nokogiri document
-      def parse
+      def parse_xml
         
         ## Parse the entire file as an XML document
         doc = Nokogiri::XML.parse(content) do |config|

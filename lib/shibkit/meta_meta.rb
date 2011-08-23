@@ -120,21 +120,11 @@ module Shibkit
       raise "MetaMeta sources are not an Array! (Should not be a #{sources.class})" unless
         sources.kind_of? Array
       
-      @federations ||= Hash.new
+      @federations ||= Array.new
       
       sources.each do |source|
-        
-        fx = source.parse
 
-        federation = Federation.new(fx) do |f|
-                    
-          ## Extract basic 'federation' information 
-          f.display_name   = source.name
-          f.only           = self.only
-          
-        end
-
-        @federations << federation
+        @federations << source.to_federation
         
       end
       

@@ -30,11 +30,14 @@ module Shibkit
       TARGET_ATTR  = 'Name'
       REQUIRED_QUACKS = [:metadata_id, :federation_uri, :source_file]
       
-      ## The human-readable display name of the Federation or collection of metadata
-      attr_accessor :display_name
-      
       ## The unique ID of the federation document (probably time/version based)
       attr_accessor :metadata_id
+      
+      ## @return [String] the full name of the federation or collection
+      attr_accessor :name
+      
+      ## The human-readable display name of the Federation or collection of metadata
+      attr_accessor :display_name
       
       ## The URI name of the federation (may be missing for local collections)
       attr_accessor :federation_uri
@@ -45,6 +48,28 @@ module Shibkit
       ## Source file for this federation
       attr_accessor :source_file
       
+      ## @return [String] :federation for proper federations, :collection for 
+      ##   simple collections of entities.
+      attr_accessor :type
+      
+      ## @return [Array] country codes for areas served by the federation 
+      attr_accessor :countries
+      
+      ## @return [String, nil] URL of the federation's Refeds wiki entry
+      attr_accessor :refeds_url
+      
+      ## @return [String] URL of the federation or collection's home page
+      attr_accessor :homepage_url
+      
+      ## @return [Array] Array of languages supported by the federation or collection
+      attr_accessor :languages
+      
+      ## @return [String] Main contact email address for the federation 
+      attr_accessor :support_email
+      
+      ## @return [String] Brief description of the federation or collection
+      attr_accessor :description
+            
       attr_accessor :only
       
       ## Array of entities within the federation or metadata collection
