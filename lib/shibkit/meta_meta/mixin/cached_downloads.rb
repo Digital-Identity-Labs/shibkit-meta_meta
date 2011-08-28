@@ -23,7 +23,7 @@ module Shibkit
       ## A few simple utility functions for slurping data from XML
       ## 
       module CachedDownloads
-
+        
         require 'rest_client'
         require 'restclient/components'
         require 'rack/cache'
@@ -45,8 +45,9 @@ module Shibkit
           
           return unless filename
           
-          file_path = ::File.absolute_path(filename)
-          raise unless ::File.exists?(file_path) and ::File.readable?(file_path)
+          file_path = ::File.expand_path(filename)
+          raise "Can't access file #{file_path}!" unless ::File.exists?(file_path) and
+            ::File.readable?(file_path)
 
           file = Tempfile.new(uuid)
           open(file_path, 'w') { |f| f << http_response.to_s }
@@ -141,11 +142,15 @@ module Shibkit
           ## Work out if we are in production or not by snooping on environment
           ## This is a magical bodge to make :auto option in #load vaguely useful
           def in_production?
-
+            
+            return true # Obviously temporary until the dev metadata is fixed
+            
             return true if self.environment == :production
             return true if defined? Rails and Rails.env.production? 
             return true if defined? Rack and defined? RACK_ENV and RACK_ENV == 'production'
-
+            
+            return false
+            
           end
 
           ## Are we on a POSIX standard system or on MS-DOS/Windows, etc?

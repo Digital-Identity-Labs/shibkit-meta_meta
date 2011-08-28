@@ -41,6 +41,7 @@ module Shibkit
       
       ## The URI name of the federation (may be missing for local collections)
       attr_accessor :federation_uri
+      alias :uri :federation_uri
       
       ## Expiry date of the published metadata file
       attr_accessor :valid_until

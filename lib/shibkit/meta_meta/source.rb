@@ -59,6 +59,7 @@ module Shibkit
       
       ## @return [String] the URI identifier for the federation or collection
       attr_accessor :name_uri
+      alias    :uri :name_uri
       
       ## @return [String] the full name of the federation or collection
       attr_accessor :name
@@ -86,8 +87,8 @@ module Shibkit
       attr_accessor :fingerprint
       
       ## @return [String, nil] URL of the federation's Refeds wiki entry
-      attr_accessor :refeds_info
-      alias :refeds_url :refeds_info 
+      attr_accessor :refeds_url
+      alias :refeds_info :refeds_url 
       
       ## @return [String] URL of the federation or collection's home page
       attr_accessor :homepage
@@ -115,6 +116,8 @@ module Shibkit
       ## @return [String] Status of the source: indicates success of last operation
       attr_reader   :status
       
+      attr_reader   :created_at
+      
       private
             
       attr_reader   :metadata_tmpfile
@@ -128,6 +131,7 @@ module Shibkit
   
         @uuid       = UUID.new.generate
         @name_uri   = "urn:uuid:" + @uuid
+        @created_at = Time.new
         @name       = "Unnown"
         @refresh_delay = 86400
         @display_name = "Unknown"
@@ -148,6 +152,34 @@ module Shibkit
   
       end
       
+      ## Create a new source from a hash
+      def self.from_hash(data, uri=nil)
+        
+        data = data.inject({}){|m,(k,v)| m[k.to_sym] = v; m}
+        
+        new_source = self.new do |source|
+          
+          source.name_uri           = data[:uri]  || uri
+          source.name               = data[:name] || uri
+          source.refresh_delay      = data[:refresh].to_i || 86400
+          source.display_name       = data[:display_name] || data['name'] || uri
+          source.type               = data[:type].to_sym  || :collection
+          source.countries          = data[:countries]    || []
+          source.metadata_source    = data[:metadata]
+          source.certificate_source = data[:certificate]
+          source.fingerprint        = data[:fingerprint]
+          source.refeds_url         = data[:refeds_info]
+          source.homepage           = data[:homepage]
+          source.languages          = data[:languages]     || ['en']
+          source.support_email      = data[:support_email] || nil
+          source.description        = data[:description]   || ""
+          
+        end
+
+        return new_source
+        
+      end
+      
       ## Build a parsed Federation object containing Entitiess
       ## @return [Shibkit::MetaMeta::Federation]
       def to_federation
@@ -159,7 +191,7 @@ module Shibkit
         ## Pass additional information from source into federation object  
         federation.display_name  = display_name || name
         federation.type          = type 
-        federation.refeds_url     = refeds_info 
+        federation.refeds_url    = refeds_info 
         federation.countries     = countries
         federation.languages     = languages
         federation.support_email = support_email
@@ -316,55 +348,41 @@ module Shibkit
       ## @param [String] source_list Filesystem path of a sources YAML file or
       ##   :real for included list of real sources, :dev for mock sources, or
       ##   :auto for either :real or :dev, based on environment
-      ## @return [Hash] Hash of source objects keyed by their URI IDs.
+      ## @return [Array] Array of metadata source objects
       def self.load(source_list=:auto, options={})
         
-        case source_list
-        when :auto
-          file = Sources.in_production? ? REAL_SOURCES_FILE : DEV_SOURCES_FILE
-        when :dev, :test
-          file = DEV_SOURCES_FILE
-        when :real, :prod, :production
-          file = REAL_SOURCES_FILE
-        else
-          file = source_list
-        end
+        file = self.locate_sources_file(source_list)
         
-        sources = Hash.new
+        sources = Array.new
         source_data = YAML::load(File.open(file))
         source_data.each_pair do |id, data|
           
-          Source.new do |source|
-            
-            source.name_uri      = id
-            source.name          = data['name'] || id
-            source.refresh_delay = data['refresh'].to_i || 86400
-            source.display_name  = data['display_name'] || data['name'] || id
-            source.type          = data['type'].to_sym || :collection
-            source.countries     = data['countries'] || []
-            source.metadata_source    = data['metadata']
-            source.certificate_source = data['certificate']
-            source.fingerprint   = data['fingerprint']
-            source.refeds_info   = data['refeds_info']
-            source.homepage      = data['homepage']
-            source.languages     = data['languages'] || ['en']
-            source.support_email = data['support_email'] || nil
-            source.description   = data['description'] || ""
-            
-            sources[id] = source
-            
-          end
+          sources << Source.from_hash(data, id)
        
         end
                
-        ## Options parsing for filtering, etc would go here, but not sure if 
-        ## actually needed. Going with YAGNI and just skipping it for now...
-        # ...
-          
         return sources 
         
       end
-
+      
+      ## Return appropriate file path for 
+      def self.locate_sources_file(source_list)
+      
+        case source_list
+        when :auto
+          file_path = self.in_production? ? REAL_SOURCES_FILE : DEV_SOURCES_FILE
+        when :dev, :test
+          file_path = DEV_SOURCES_FILE
+        when :real, :prod, :production
+          file_path = REAL_SOURCES_FILE
+        else
+          file_path = source_list
+        end
+        
+        return file_path
+        
+      end
+      
     end
   end
 end

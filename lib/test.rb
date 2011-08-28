@@ -1,8 +1,52 @@
 require 'shibkit/meta_meta'
 
 
-metadata = Shibkit::MetaMeta.new
-metadata.only = :sps
+
+
+#######
+
+Shibkit::MetaMeta.reset
+
+#Shibkit::MetaMeta.sources_file = :dev # Normally automatic
+
+
+Shibkit::MetaMeta.add_source({
+    :uri => 'http://ukfederation.org.uk',
+    :name => ' UK Access Management Federation For Education And Research',
+    :display_name => ' UK Access Management Federation',
+    :type => 'federation',
+    :countries => ['gb'],
+    :metadata => 'http://metadata.ukfederation.org.uk/ukfederation-metadata.xml',
+    :certificate => 'http://metadata.ukfederation.org.uk/ukfederation.pem',
+    :fingerprint => '',
+    :refeds_info => 'https://refeds.terena.org/index.php/FederationUkfed',
+    :homepage => 'http://www.ukfederation.org.uk',
+    :languages => ['en-gb', 'en'],
+    :support_email => ' service@ukfederation.org.uk',
+    :description => 'A single solution for accessing online resources and services',
+})       
+
+Shibkit::MetaMeta.only_use('http://ukfederation.org.uk')
+
+Shibkit::MetaMeta.sources
+
+Shibkit::MetaMeta.refresh
+
+
+
+
+Shibkit::MetaMeta.federations.each {|f| puts f.uri }
+
+Shibkit::MetaMeta.entities.each { |e| puts e.uri }
+
+Shibkit::MetaMeta.idps.each { |e| puts e.uri }
+
+Shibkit::MetaMeta.sps.each { |e| puts e.uri }
+
+Shibkit::MetaMeta.orgs.each { |e| puts e.uid }
+
+
+exit
 
 sources = Shibkit::MetaMeta::Source.load(:real)
 

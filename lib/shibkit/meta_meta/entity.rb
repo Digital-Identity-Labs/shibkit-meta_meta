@@ -37,9 +37,11 @@ module Shibkit
       
       ## The ID of the entity with the metadata file (not globally unique)
       attr_accessor :metadata_id
+
       
       ## The URI of the entity
       attr_accessor :entity_uri
+      alias :uri :entity_uri
       
       ## Is the entity accountable?
       attr_accessor :accountable

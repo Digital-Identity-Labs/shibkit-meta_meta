@@ -37,7 +37,13 @@ module Shibkit
       ## The homepage URL for the organisation
       attr_accessor :url
     
-    
+      ## Try to make a crude unique id for the organisation
+      def uid
+        
+        return display_name.strip.downcase.delete " .,-_'"
+        
+      end
+      
      private
      
      def parse_xml

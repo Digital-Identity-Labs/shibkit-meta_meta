@@ -16,7 +16,6 @@
 ##
 
 require 'rubygems'
-require 'bundler'
 
 require 'nokogiri'
 require 'yaml'
@@ -33,50 +32,186 @@ module Shibkit
   
   ## Simple library to parse Shibboleth metadata files into Ruby objects
   class MetaMeta
-        
-    attr_accessor :sources
-    attr_accessor :source_file
-    attr_reader   :federations 
-    attr_accessor :only   
-        
-    ## New default object
-    def initialize(&block)
+  
+    ## Flush out all available sources, metadata caches, etc.
+    def self.reset
+      
+      ## Clear the source data
+      @additional_sources   = Hash.new
+      @loaded_sources       = Hash.new
+      @selected_federations = Array.new
+      
+      ## Clear federation entity data
+      self.flush
+      
+    end
     
-      @source_file = :auto
-      @sources     = Array.new
-      @all_sources = nil
+    ## Clear all loaded entity & federation data 
+    def self.flush
+      
+      @orgs        = Array.new
+      @entities    = Array.new
       @federations = Array.new
-      @read_at     = nil
-      @only        = :all
-      
-      self.instance_eval(&block) if block
+      @by_uri      = Hash.new
       
     end
     
-    ## Convenience method to add a source by id/name from 
-    def add_source(source_name)
+    ## Convenience method to add a source from a hash or object
+    def self.add_source(data)
       
-      ## Load and memoize all sources in selected file
-      @all_sources ||= Source.load(@source_file)
+      @additional_sources ||= Hash.new
+      
+      case data
+      when Hash
+        source = Source.from_hash(data)
+      when ::Shibkit::MetaMeta::Source
+        source = data
+      else 
+        raise "Expected either hash or Source object!"
+      end
+
+      @additional_sources[source.uri] = source
+      
+    end
+
+    ## Access to all additional sources
+    def self.additional_sources
+      
+      @additional_sources ||= Hash.new
+      return @additional_sources
     
-      self.sources << @all_sources[source_name.downcase.to_s.strip] 
+    end
+
+    ## Access to all additional sources
+    def self.loaded_sources
+      
+      @loaded_sources ||= Hash.new
+      return @loaded_sources
     
     end
     
-    ## Downloads and reprocesses metadata files  
-    def refresh(force=false)
+    ## Load sources from a YAML file
+    def self.load_sources
       
-      @sources.each do |source|
-      
-        #@federations << MetaMeta.parse(source)
-        #@read_at     = Time.new
+      Source.load(sources_file).each do |source|
         
+        ## More than one definition for a source is a problem 
+        raise "Duplicate source for #{source.uri}!" if @loaded_sources[source.uri]
+        
+        @loaded_sources[source.uri] = source
+        
+      end 
+      
+    end
+    
+    ## Save all known sources to sources list file
+    def self.save_sources(filename)
+      
+      src_dump = Hash.new
+      self.sources.each { |s| src_dump[s.uri] = s }
+      
+      File.open(filename, 'w') { |out| YAML.dump(src_dump, out) }
+        
+    end
+    
+    ## Have we loaded any sources?
+    def self.loaded_sources?
+      
+      return @loaded_sources ? true : false
+      
+    end
+    
+    ## Select a specific source file
+    def self.sources_file=(file_path)
+      
+      @sources_file = file_path
+      
+    end
+    
+    ## Give location of sources file
+    def self.sources_file
+      
+      sf = @sources_file || :auto
+      
+      return Source.locate_sources_file(sf)
+      
+    end
+    
+    ## Load a metadata sources file automatically (true or false)
+    def self.autoload=(setting)
+      
+      @autoload = setting ? true : false
+      
+    end
+    
+    ## Should metadata sources and objects be loaded automatically? Normally, yes.
+    def self.autoload?
+      
+      return @autoload || true
+      
+    end
+    
+    ## List all sources as a hash
+    def self.sources
+      
+      if autoload?
+        
+        self.load_sources unless @loaded_sources
+      
       end
       
-    end 
+      return @loaded_sources.merge(@additional_sources).values.sort {|a,b| a.created_at <=> b.created_at }
+      
+    end
+    
+    ## Only use these federations/sources even if know about 100s
+    def self.only_use(selection)
+      
+      @selected_federation_uris ||= []
+      
+      case selection
+      when String
+        @selected_federation_uris << selection
+      when Array
+        @selected_federation_uris.concat(selection)
+      when Hash
+        @selected_federation_uris.concat(selection.keys)
+      when :all, :everything, nil, false
+        @selected_federation_uris = []
+      else
+        raise "Expected federation/source selection to be single uri or array"
+      end
+      
+    end
+    
+    ## List of federation/collection uris
+    def self.selected_federation_uris
+      
+      return @selected_federations || []
+      
+    end
+    
+    ## Has a limited subset of federations/sources been selected?
+    def self.filtered_sources?
+      
+      return self.selected_federation_uris.empty? ? false : true 
+      
+    end
+    
+    ## Load or save cache if it's recent or, er, something
+    def self.smart_cache(file_or_url)
+      
+      ## Do something smart.
+      # ...
+      
+      #load_cache_file(file_or_url)
+      
+      raise "Not Implemented!"
+      
+    end
     
     ## Loads federation metadata contents 
-    def load_cache_file(file_or_url)
+    def self.load_cache_file(file_or_url)
         
         @federations = YAML::load(File.open(file_or_url))
         
@@ -85,7 +220,7 @@ module Shibkit
     end
     
     ## Save entity data into a YAML file. 
-    def save_cache_file(file)
+    def self.save_cache_file(file)
         
       ## Will *not* overwrite the example/default file in gem! TODO: this code is awful.
       gem_data_path = "#{::File.dirname(__FILE__)}/data"
@@ -100,41 +235,166 @@ module Shibkit
         
       return true
         
-    end    
-    
-    def federations
-  
-      if @federations.empty?
-
-        parse_sources
-        
-      end
-      
-      return @federations
-      
     end
     
-    ## Parses sources and returns an array of federation object
-    def parse_sources
+    ## Parses sources and returns an array of all federation object
+    def self.process_sources
 
-      raise "MetaMeta sources are not an Array! (Should not be a #{sources.class})" unless
-        sources.kind_of? Array
+      raise "MetaMeta sources are not an Array! (Should not be a #{self.sources.class})" unless
+        self.sources.kind_of? Array
       
-      @federations ||= Array.new
+      self.flush
       
-      sources.each do |source|
-
-        @federations << source.to_federation
+      self.sources.each do |source|
+        
+        if self.filtered_sources?
+          
+          next unless self.selected_federation_uris.include? source.uri
+        
+        end
+          
+        federation = source.to_federation
+        
+        ## Store all federations in array
+        @federations << federation
         
       end
       
       return @federations
          
     end
-         
+    
+    ## Downloads and reprocesses metadata files  
+    def self.refresh(force=false)
+      
+      ## Reload source lists overwriting previous set
+      self.load_sources
+      
+      ## Reprocess sources to create fresh set of federation and entity objects
+      self.process_sources 
+      
+      return true
+      
+    end
+    
+    def self.stockup
+      
+      if self.autoload?
+      
+        self.process_sources unless @federations
+        self.process_sources if @federations.empty? 
+      
+      end
+      
+    end
+    
+    ## Return list of Federations objects (filtered if select_federations is set)
+    def self.federations
+      
+      self.stockup
+     
+      if self.filtered_sources?
+      
+        return @federations.select { |f| self.selected_federation_uris.include? f.uri }
+      
+      end
+        
+      return @federations
+      
+    end
+   
+    def self.entities
+      
+      unless @entities and @entities.size > 0
+        
+        @entities ||= Array.new
+        processed = Hash.new 
+        
+        self.federations.each do |f|
+           
+           f.entities.each do |e|
+           
+             next if processed[e.uri]
+           
+             @entities << e 
+             processed[e.uri] = true
+           
+           end
+        
+        end
+        
+      end
+      
+      return @entities
+      
+    end
+    
+    def self.orgs
+      
+      unless @orgs and @orgs.size > 0
+        
+        @orgs ||= Array.new
+        
+        processed = Hash.new
+        
+        self.entities.each do |e|
+           
+           org = e.organisation
+           
+           next unless org
+           next if processed[org.uid]
+           
+           @orgs << org
+           
+          
+           processed[org.uid] = true
+           
+        end
+        
+        @orgs.sort! {|a,b| a.uid <=> b.uid }
+        
+      end
+      
+      return @orgs
+      
+    end
+    
+    ## 
+    def self.idps
+      
+      return entities.select { |e| e.idp? }
+      
+    end
+    
+    ## 
+    def self.sps
+      
+      return entities.select { |e| e.sp? }
+      
+    end
+    
+    def self.from_uri(uri)
+      
+      unless @by_uri and @by_uri.size > 0
+        
+        @by_uri ||= Hash.new
+        
+        self.entities.each { |e| by_uri[e.uri] = e unless by_uri[e.uri] }
+          
+      end
+      
+      return @by_uri[uri]
+      
+    end
+     
     private
     
-    # ...
+    def self.highlander_uri(list)
+      
+      list.uniq { |i| i.uri }
+      
+    end
+      
  
   end
 end
