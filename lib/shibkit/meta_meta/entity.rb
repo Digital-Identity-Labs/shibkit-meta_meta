@@ -82,6 +82,12 @@ module Shibkit
       alias :athens? :athens
       alias :organization :organisation
       
+      def to_s
+        
+        return uri
+        
+      end
+      
       def idp? 
         
         return idp.kind_of?(Shibkit::MetaMeta::IDP)

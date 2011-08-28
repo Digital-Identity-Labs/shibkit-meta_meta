@@ -52,6 +52,12 @@ module Shibkit
       
       attr_reader   :metadata_pixels
       
+      def to_s
+        
+        return location
+        
+      end
+      
       ## Calculated size of the image (:tiny :small :medium :large, etc)
       ## I'm not sure about these.
       def size

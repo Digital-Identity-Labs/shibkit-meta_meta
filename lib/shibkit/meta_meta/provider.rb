@@ -34,6 +34,7 @@ module Shibkit
       
       ## The URI of the entity
       attr_accessor :entity_uri
+      alias :uri :entity_uri
       
       attr_accessor :display_names
       
@@ -58,6 +59,11 @@ module Shibkit
       alias :entity_id :entity_uri
       alias :valid?    :valid
       
+      def to_s
+        
+        return uri
+        
+      end
       
       def display_name(lang=:en)
         

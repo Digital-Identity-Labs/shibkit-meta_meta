@@ -43,6 +43,13 @@ module Shibkit
       
       private
      
+      ## Nicer presentation as a string
+      def to_s
+        
+        return friendly_name
+       
+      end
+     
      def parse_xml
       
       @name = @xml['Name']

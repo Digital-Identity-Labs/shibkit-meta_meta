@@ -7,12 +7,12 @@ require 'shibkit/meta_meta'
 
 Shibkit::MetaMeta.reset
 
-#Shibkit::MetaMeta.sources_file = :dev # Normally automatic
+#Shibkit::MetaMeta.sources_file = :real # Normally automatic
 
 
 Shibkit::MetaMeta.add_source({
     :uri => 'http://ukfederation.org.uk',
-    :name => ' UK Access Management Federation For Education And Research',
+    :name => ' UK Access Management Federation For Education And Research EXTRA',
     :display_name => ' UK Access Management Federation',
     :type => 'federation',
     :countries => ['gb'],
@@ -26,25 +26,59 @@ Shibkit::MetaMeta.add_source({
     :description => 'A single solution for accessing online resources and services',
 })       
 
-Shibkit::MetaMeta.only_use('http://ukfederation.org.uk')
+#Shibkit::MetaMeta.only_use(['http://ukfederation.org.uk'])
 
-Shibkit::MetaMeta.sources
+puts "Using the source list #{Shibkit::MetaMeta.sources_file}"
 
-Shibkit::MetaMeta.refresh
+puts Shibkit::MetaMeta.autoload?
+
+#Shibkit::MetaMeta.load_sources
+Shibkit::MetaMeta.load_sources
+
+puts
+puts "Loaded sources:"
+Shibkit::MetaMeta.loaded_sources.keys.each {|s| puts s}
+puts "==="
+puts 
+
+
+puts "Additional sources:"
+Shibkit::MetaMeta.additional_sources.keys.each { |s| puts s }
+
+
+puts 
+puts "Using these combined sources:"
+Shibkit::MetaMeta.sources.each { |s| puts s }
+
+
+puts "Filtering using:"
+puts Shibkit::MetaMeta.selected_federation_uris
 
 
 
 
-Shibkit::MetaMeta.federations.each {|f| puts f.uri }
+#Shibkit::MetaMeta.sources
 
-Shibkit::MetaMeta.entities.each { |e| puts e.uri }
+#Shibkit::MetaMeta.refresh
 
-Shibkit::MetaMeta.idps.each { |e| puts e.uri }
 
-Shibkit::MetaMeta.sps.each { |e| puts e.uri }
 
-Shibkit::MetaMeta.orgs.each { |e| puts e.uid }
 
+Shibkit::MetaMeta.federations.each {|f| puts f }
+
+Shibkit::MetaMeta.entities.each { |e| puts e }
+
+Shibkit::MetaMeta.idps.each { |e| puts e }
+
+Shibkit::MetaMeta.sps.each { |e| puts e }
+
+Shibkit::MetaMeta.orgs.each { |e| puts e }
+
+puts "Number of federations:"
+puts Shibkit::MetaMeta.federations.size
+
+puts "Number of entities:"
+puts Shibkit::MetaMeta.entities.size
 
 exit
 

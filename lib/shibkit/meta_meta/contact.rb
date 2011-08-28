@@ -48,6 +48,18 @@ module Shibkit
       
       end
       
+      def email_address
+        
+        return email_url.gsub('mailto:','')
+        
+      end
+      
+      ## Nicer presentation as a string
+      def to_s
+        
+        return "#{display_name} <#{email_address}>"
+       
+      end
       
       private
       

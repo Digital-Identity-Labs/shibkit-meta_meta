@@ -44,6 +44,12 @@ module Shibkit
         
       end
       
+      def to_s
+        
+        return display_name
+        
+      end
+      
      private
      
      def parse_xml

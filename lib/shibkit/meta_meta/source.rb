@@ -152,6 +152,12 @@ module Shibkit
   
       end
       
+      def to_s
+        
+        return uri
+        
+      end
+      
       ## Create a new source from a hash
       def self.from_hash(data, uri=nil)
         
@@ -360,7 +366,7 @@ module Shibkit
           sources << Source.from_hash(data, id)
        
         end
-               
+        
         return sources 
         
       end

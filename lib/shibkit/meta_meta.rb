@@ -93,7 +93,9 @@ module Shibkit
     ## Load sources from a YAML file
     def self.load_sources
       
-      Source.load(sources_file).each do |source|
+      @loaded_sources = Hash.new
+      
+      Source.load(self.sources_file).each do |source|
         
         ## More than one definition for a source is a problem 
         raise "Duplicate source for #{source.uri}!" if @loaded_sources[source.uri]
@@ -151,20 +153,33 @@ module Shibkit
       
     end
     
-    ## List all sources as a hash
+    ## List all sources as an array
     def self.sources
       
-      if autoload?
+      if self.autoload? and @loaded_sources.size == 0
         
-        self.load_sources unless @loaded_sources
+        self.load_sources
       
       end
       
-      return @loaded_sources.merge(@additional_sources).values.sort {|a,b| a.created_at <=> b.created_at }
+      all_sources_indexed = @loaded_sources.merge(@additional_sources)
+
+      sources = all_sources_indexed.values
+
+      sources = sources.sort {|a,b| a.created_at <=> b.created_at }
+
+      if self.filtered_sources?
+        
+        sources = sources.select { |s| self.selected_federation_uris.include? s.uri }
+      
+      end
+
+      return sources 
       
     end
     
-    ## Only use these federations/sources even if know about 100s
+    ## Only use these federations/sources even if know about 100s - works on 
+    ## various functions (loading, processing and listing *after* it is set)
     def self.only_use(selection)
       
       @selected_federation_uris ||= []
@@ -187,7 +202,7 @@ module Shibkit
     ## List of federation/collection uris
     def self.selected_federation_uris
       
-      return @selected_federations || []
+      return @selected_federation_uris || []
       
     end
     
@@ -292,13 +307,15 @@ module Shibkit
     def self.federations
       
       self.stockup
-     
-      if self.filtered_sources?
       
+
+      
+      if self.filtered_sources?
+        
         return @federations.select { |f| self.selected_federation_uris.include? f.uri }
       
       end
-        
+
       return @federations
       
     end
@@ -391,7 +408,7 @@ module Shibkit
     
     def self.highlander_uri(list)
       
-      list.uniq { |i| i.uri }
+      return list.uniq { |i| i.uri }
       
     end
       

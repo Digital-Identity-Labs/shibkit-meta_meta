@@ -79,6 +79,12 @@ module Shibkit
       ## Time the Federation metadata was parsed
       attr_reader :read_at
       
+      def to_s
+        
+        return uri
+        
+      end
+      
       private
       
       ## Special case for federation top-level nodes

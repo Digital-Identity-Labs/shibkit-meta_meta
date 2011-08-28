@@ -56,6 +56,12 @@ module Shibkit
         
       end
     
+      def to_s
+        
+        return name(:en)
+        
+      end
+    
      private
      
      def parse_xml
