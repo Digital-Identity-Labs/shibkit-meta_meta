@@ -55,7 +55,8 @@ source "http://rubygems.org"
 gem "shibkit-meta_meta"
 ```
 
-then of course run `bundle install`, and `require Bundler` within your code.
+then of course run `bundle install` on the commandline and
+ `require 'bundler'` within your code.
 
 
 ## USAGE
@@ -81,6 +82,9 @@ puts Shibkit::MetaMeta.entities.sort!{|a,b| a.uri.size <=> b.uri.size}.last
 Metadata will normally be downloaded, cached, parsed and sorted on first use. 
 
 #### Easy access to Federation, Entities and Organisations
+MetaMeta can return arrays of all federations, and all entities (SPs and IDPs),
+IDPs or SPs in all Federations. It can also attempt to list all organisations but
+the data returned is not yet particularly useful. 
 
 ```ruby
 Shibkit::MetaMeta.federations.each {|f| puts f }
@@ -101,26 +105,129 @@ puts entity.idp?
 puts entity.accountable? 
 ```
 
+Read more about the Shibkit::MetaMeta class
+
 ### Metadata Sources
 
-Stuff blah:
+MetaMeta needs to know various things about a Federation before it can access
+its metadata. This information is handled by the Source class. Sources can be
+specified directly in your code or loaded from a source list file.
+
+Source objects describe federations and collections and are effectively metadata
+about metadata, hence the name of this software.
+
+#### Loading your own source list
+It's best to write and load your own source list for your software.
+
+* You can download and process only the federations you require, saving time and
+energy.
+* You can check that file locations, certificates and fingerprints are correct
+* You can include your own federations or simpler local metadata collections 
+
+Source lists are simple YAML documents. Copy the examples included with MetaMeta
+or read the Shibkit::MetaMeta::Source documentation before writing your own.
 
 ```ruby
-code       # => 1
-code       # => 2
+Shibkit::MetaMeta.sources_file = '/etc/mm/my_metadata_sources.yml'
+Shibkit::MetaMeta.idps.each { |e| puts e }
 ```
 
-Also stuff blah:
+#### Selecting a built-in source list
+MetaMeta comes with a few source lists that you can choose from.
+
+ * `:real` is a list of all major federations (this file may not be complete yet!)
+ * `:dev`  is a small list of tiny fictional federations for testing and development
+
+They are loaded by specifying the symbol instead of a real filename string
 
 ```ruby
-code       # => 1
-code       # => 2
+Shibkit::MetaMeta.sources_file = :real
+Shibkit::MetaMeta.idps.each { |e| puts e }
 ```
 
-which is nice.
+## Accessing Source information
+Source objects can be accessed directly, to be read or adjusted after loading.
 
+```ruby
+## List homepages specified in all metadata sources, wherever the source is defined
+Shibkit::MetaMeta.sources.each {|s| puts s.homepage_url}
+
+## All sources loaded from the source list file
+Shibkit::MetaMeta.loaded_sources.each {|s| puts s.uri}
+
+# All sources added by hand
+Shibkit::MetaMeta.additional_sources.each {|s| puts s.uri}
+```
+
+#### Automatic selection of source lists
+By default MetaMeta will choose a (hopefully) suitable source list for you. 
+
+(At the moment this is always the `:real` list but when the `:dev` list is fixed this will
+be used instead when in 'development' mode in Rails and Sinatra applications)
+
+#### Automatic loading and processing of Metadata
+MetaMeta will normally load and process XML from your sources when you first 
+ask for data. However, this can sometimes cause delays exactly when you don't want them.
+
+Autoloading of metadata can be turned off and on at any time:
+
+```ruby
+Shibkit::MetaMeta.autoload = false
+# or maybe
+Shibkit::MetaMeta.autoload = true if Date.today.day == 1 
+```
+
+Of course if autoloading is turned off you'll not get any federations or entities
+when you need them. To load data call the `#load_sources` method:
+
+```ruby
+Shibkit::MetaMeta.load_sources    # Loads sources file but not actual metadata
+Shibkit::MetaMeta.process_sources # Downloads and processes metadata into objects
+
+# There will now be a delay while metadata is downloaded and processed...
+
+Shibkit::MetaMeta.loaded_sources? # => true
+Shibkit::MetaMeta.stocked? # => true
+```
+
+You can call `Shibkit::MetaMeta.process_sources`  to pre-emptively create objects
+even if `Shibkit::MetaMeta.autoload` is active.
+
+#### Adding your own Sources without a sources file
+
+It's possible to append additional sources using the `Shibkit::MetaMeta.add_source`
+method. Pass either a hash or a Source object you prepared earlier.
+
+If a source with the same ID URI already exists then it will be replaced by the
+new one.
+
+```ruby
+Shibkit::MetaMeta.add_source({
+    :uri           => 'http://ukfederation.org.uk',
+    :name          => 'UK Access Management Federation For Education And Research',
+    :display_name  => 'UK Access Management Federation',
+    :type          => 'federation',
+    :countries     => ['gb'],
+    :metadata      => 'http://metadata.ukfederation.org.uk/ukfederation-metadata.xml',
+    :certificate   => 'http://metadata.ukfederation.org.uk/ukfederation.pem',
+    :fingerprint   => '94:7F:5E:8C:4E:F5:E1:69:E7:DF:68:1E:48:AA:98:44:A5:41:56:EE',
+    :refeds_info   => 'https://refeds.terena.org/index.php/FederationUkfed',
+    :homepage      => 'http://www.ukfederation.org.uk',
+    :languages     => ['en-gb', 'en'],
+    :support_email => ' service@ukfederation.org.uk',
+    :description   => 'A single solution for accessing online resources and services',
+})
+
+Shibkit::MetaMeta.additional_sources.each { |s| puts s.display_name }
+
+```
 
 ### Federations
+
+#### Loading federation objects ahead of time
+
+#### Filtering and selecting Sources/Federations
+
 
 Stuff blah:
 
