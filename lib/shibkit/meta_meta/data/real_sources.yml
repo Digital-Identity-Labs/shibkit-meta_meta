@@ -90,6 +90,8 @@
   description: >
     Canadian Access Federation
 
+## Partial sources disabled with comment # until complete
+
 ## Swiss Access Federation
 #'urn:mace:switch.ch:SWITCHaai':
 #  name: Swiss Access Federation
