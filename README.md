@@ -36,8 +36,8 @@ using Shibkit::Disco, a library that builds on Shibkit::MetaMeta to provide a
 SAML discovery framework. Most features of Shibkit::MetaMeta will still be available inside
 Shibkit::Disco.
 
-  I feel the same way about disco as I do about herpes. 
-  Hunter S. Thompson
+> I feel the same way about disco as I do about herpes. 
+> *Hunter S. Thompson*
   
 If you don't fancy the heavier framework in Shibkit::Disco you can probably get
 what you need from Shibkit::MetaMeta, or use it in a framework of your own.
