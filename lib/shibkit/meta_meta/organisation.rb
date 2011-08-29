@@ -38,8 +38,9 @@ module Shibkit
       attr_accessor :url
     
       ## Try to make a crude unique id for the organisation
-      def uid
+      def druid 
         
+        ## Derived, *relatively* unique ID.
         return display_name.strip.downcase.delete " .,-_'"
         
       end

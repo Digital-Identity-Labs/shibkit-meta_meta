@@ -367,16 +367,16 @@ module Shibkit
            org = e.organisation
            
            next unless org
-           next if processed[org.uid]
+           next if processed[org.druid]
            
            @orgs << org
            
           
-           processed[org.uid] = true
+           processed[org.druid] = true
            
         end
         
-        @orgs.sort! {|a,b| a.uid <=> b.uid }
+        @orgs.sort! {|a,b| a.druid <=> b.druid }
         
       end
       
