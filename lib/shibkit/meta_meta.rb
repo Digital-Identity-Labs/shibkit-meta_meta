@@ -156,13 +156,13 @@ module Shibkit
     ## List all sources as an array
     def self.sources
       
-      if self.autoload? and @loaded_sources.size == 0
+      if self.autoload? and loaded_sources.size == 0
         
         self.load_sources
       
       end
       
-      all_sources_indexed = @loaded_sources.merge(@additional_sources)
+      all_sources_indexed = loaded_sources.merge(additional_sources)
 
       sources = all_sources_indexed.values
 
