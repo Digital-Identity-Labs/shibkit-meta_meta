@@ -54,13 +54,13 @@ module Shibkit
      
      def parse_xml
     
-      @name         = @xml.xpath('xmlns:OrganizationName[1]')[0].content
+      @name         = @xml.xpath('xmlns:OrganizationName[1]')[0].content.strip
 
       
-      @display_name = @xml.xpath('xmlns:OrganizationDisplayName[1]')[0].content
+      @display_name = @xml.xpath('xmlns:OrganizationDisplayName[1]')[0].content.strip
 
       
-      @url          = @xml.xpath('xmlns:OrganizationURL[1]')[0].content
+      @url          = @xml.xpath('xmlns:OrganizationURL[1]')[0].content.strip
 
       
     end

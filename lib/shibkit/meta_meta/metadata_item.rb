@@ -85,17 +85,23 @@ module Shibkit
       
       def to_hash
         
+        raise "Not Implemented!"
+        
         return {}
         
       end
       
       def to_json
         
+        raise "Not Implemented!"
+        
         return to_hash.to_json
         
       end
       
       def to_rdf
+        
+        raise "Not Implemented!"
         
         return
         

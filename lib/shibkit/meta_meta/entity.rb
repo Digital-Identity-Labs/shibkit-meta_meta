@@ -104,8 +104,8 @@ module Shibkit
       
       def parse_xml
         
-        self.entity_uri     = @xml['entityID']
-        self.metadata_id    = @xml['ID']
+        self.entity_uri     = @xml['entityID'].to_s.strip
+        self.metadata_id    = @xml['ID'].to_s.strip
         
         @federation_uris ||= Array.new
               

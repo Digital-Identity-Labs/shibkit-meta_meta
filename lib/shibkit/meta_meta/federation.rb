@@ -99,9 +99,9 @@ module Shibkit
       ## Build a federation object out of metadata XML
       def parse_xml
         
-        self.metadata_id    = @xml['ID']
-        self.federation_uri = @xml['Name']
-        self.valid_until    = @xml['validUntil']
+        self.metadata_id    = @xml['ID'].to_s.strip
+        self.federation_uri = @xml['Name'].to_s.strip
+        self.valid_until    = @xml['validUntil'].strip
         self.entities       = Array.new
         
         ## Process XML chunk for each entity in turn
