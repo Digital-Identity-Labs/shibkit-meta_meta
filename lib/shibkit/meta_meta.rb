@@ -327,25 +327,43 @@ module Shibkit
       return @federations
       
     end
-   
+    
+    ## All primary entities from all federations
     def self.entities
       
+      ## Populate memoised array of entities if it's empty
       unless @entities and @entities.size > 0
         
+        ## Array for memoising primary entities
         @entities ||= Array.new
+        
+        ## For keeping track of already processed entities & marking them as primary
         processed = Hash.new 
         
         self.federations.each do |f|
+          
+          f.entities.each do |e|
+            
+            ## If we've already found the primary version of the entity
+            if processed[e.uri]
+              
+              ## Add this federation's URI to the primary
+              primary = processed[e.uri]              
+              primary.other_federation_uris << f.uri
+              
+              next
            
-           f.entities.each do |e|
-           
-             next if processed[e.uri]
-           
-             @entities << e 
-             processed[e.uri] = true
-           
-           end
-        
+            end
+            
+            ## Mark this entity as the primary and remember it as already processed.
+            e.primary = true
+            processed[e.uri] = e
+            
+            ## Collect entity
+            @entities << e 
+
+          end
+
         end
         
       end

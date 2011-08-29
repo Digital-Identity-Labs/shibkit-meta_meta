@@ -32,17 +32,23 @@ module Shibkit
       TARGET_ATTR  = 'entityID'
       REQUIRED_QUACKS = [:entity_uri]
       
+      ## The URI of the entity
+      attr_accessor :entity_uri
+      alias    :uri :entity_uri
+      
       ## The URI of the entity's parent federation
-      attr_accessor :federation_uris
+      attr_accessor :primary_federation_uri
+      
+      ## The URI of the entity's parent federation
+      attr_accessor :other_federation_uris
+      alias :secondary_federation_uris :other_federation_uris
+      
+      ## Has this entity object been selected to represent the service?
+      attr_accessor :primary
       
       ## The ID of the entity with the metadata file (not globally unique)
       attr_accessor :metadata_id
 
-      
-      ## The URI of the entity
-      attr_accessor :entity_uri
-      alias :uri :entity_uri
-      
       ## Is the entity accountable?
       attr_accessor :accountable
       
@@ -90,14 +96,37 @@ module Shibkit
       
       def idp? 
         
-        return idp.kind_of?(Shibkit::MetaMeta::IDP)
+        return idp.kind_of?(::Shibkit::MetaMeta::IDP)
         
       end
       
       def sp?
         
-        return sp.kind_of?(Shibkit::MetaMeta::SP)
+        return sp.kind_of?(::Shibkit::MetaMeta::SP)
         
+      end
+      
+      ##
+      def primary?
+        
+        return @primary ? true : false
+        
+      end
+      
+      def multi_federated?
+        
+        return other_federation_uris.size > 0 ? true : false
+        
+      end
+      
+      ## All federations that this entity is a member of
+      def federation_uris
+
+        ## All unique federations, making sure we include primary
+        all_fed_uris = [primary_federation_uri].concat other_federation_uris 
+        
+        return all_fed_uris.uniq
+      
       end
       
       private
@@ -106,8 +135,8 @@ module Shibkit
         
         self.entity_uri     = @xml['entityID'].to_s.strip
         self.metadata_id    = @xml['ID'].to_s.strip
-        
-        @federation_uris ||= Array.new
+         
+        @other_federation_uris        ||= Array.new
               
         ## Boolean flags for common/useful info 
         self.accountable = @xml.xpath('xmlns:Extensions/ukfedlabel:AccountableUsers').size   > 0 ? true : false

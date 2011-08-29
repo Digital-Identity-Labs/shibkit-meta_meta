@@ -110,7 +110,7 @@ changes you wish to contribute.
 ### Convenience Features
 
 The MetaMeta class provides a number of simple factory-style methods to return
-simplified representations of data with SAML metadata files.
+simplified representations of the items within SAML metadata files.
 
 #### Automatic metadata retrieval and parsing
 
@@ -125,7 +125,7 @@ need is:
 puts Shibkit::MetaMeta.entities.sort!{|a,b| a.uri.size <=> b.uri.size}.last
 ```
 
-Metadata will normally be downloaded, cached, parsed and sorted on first use. 
+Metadata will normally be automatically downloaded, cached, parsed and sorted on first use. 
 
 #### Easy access to Federation, Entities and Organisations
 MetaMeta can return arrays of all federations, and all entities (SPs and IDPs),
@@ -160,7 +160,7 @@ its metadata. This information is handled by the Source class. Sources can be
 specified directly in your code or loaded from a source list file.
 
 Source objects describe federations and collections and are effectively metadata
-about metadata, hence the name of this software.
+about metadata, hence the odd name of this software.
 
 #### Loading your own source list
 It's best to write and load your own source list for your software.
@@ -574,6 +574,8 @@ http://www.oasis-open.org/committees/download.php/42714/sstc-saml-metadata-ui-v1
 ## CONTRIBUTORS
 
 * Pete Birkinshaw
+* Linda Ward
+* Sam Jones
 
 ## LICENSE
 

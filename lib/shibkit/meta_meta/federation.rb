@@ -108,7 +108,7 @@ module Shibkit
         @xml.xpath("//xmlns:EntityDescriptor").each do |ex|
         
           entity = Entity.new(ex)
-          entity.federation_uris << federation_uri
+          entity.primary_federation_uri = self.federation_uri
           
           @only ||= :all
           
