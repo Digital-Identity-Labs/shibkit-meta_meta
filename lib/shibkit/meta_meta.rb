@@ -396,7 +396,7 @@ module Shibkit
         
         @by_uri ||= Hash.new
         
-        self.entities.each { |e| by_uri[e.uri] = e unless by_uri[e.uri] }
+        self.entities.each { |e| @by_uri[e.uri] = e unless @by_uri[e.uri] }
           
       end
       

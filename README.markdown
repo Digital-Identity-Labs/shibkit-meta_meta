@@ -39,32 +39,67 @@ MetaMeta is still early in development, so please bear the following in mind whe
 If you use RubyGems directly then simply type:
 
 ```sh
-    gem install shibkit-meta_meta
+gem install shibkit-meta_meta
+```
+
+and require the gem in your code
+
+```ruby
+require 'shibkit/meta_meta'
 ```
 
 Bundler users can add MetaMeta to their Gemfiles like this:
 
-then of course run bundle install
+```ruby
+source "http://rubygems.org"
+gem "shibkit-meta_meta"
+```
+
+then of course run `bundle install`, and `require Bundler` within your code.
+
 
 ## USAGE
 
 ### Convenience Features
 
-Stuff blah:
+The MetaMeta class provides a number of simple factory-style methods to return
+simplified representations of data with SAML metadata files.
+
+#### Automatic metadata retrieval and parsing
+
+MetaMeta contains information about a number of popular federations which it 
+will access by default. While it's best to use your own list of sources, it be 
+convenient to get started immediately.
+
+For instance, to find the longest entity URI in all popular federations all you
+need is:
 
 ```ruby
-code       # => 1
-code       # => 2
+puts Shibkit::MetaMeta.entities.sort!{|a,b| a.uri.size <=> b.uri.size}.last
 ```
 
-Also stuff blah:
+Metadata will normally be downloaded, cached, parsed and sorted on first use. 
+
+#### Easy access to Federation, Entities and Organisations
 
 ```ruby
-code       # => 1
-code       # => 2
+Shibkit::MetaMeta.federations.each {|f| puts f }
+Shibkit::MetaMeta.entities.each { |e| puts e }
+Shibkit::MetaMeta.idps.each { |e| puts e }
+Shibkit::MetaMeta.sps.each { |e| puts e }
+Shibkit::MetaMeta.orgs.each { |o| puts o }
 ```
 
-which is nice.
+#### Select an entity by URI
+If you already know the URI of an entity in a loaded federation then you can get it directly using
+`#from_uri`.
+
+```ruby
+entity = Shibkit::MetaMeta.from_uri('https://shib.manchester.ac.uk/shibboleth')
+
+puts entity.idp?         
+puts entity.accountable? 
+```
 
 ### Metadata Sources
 
