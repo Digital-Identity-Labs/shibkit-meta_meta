@@ -3,13 +3,17 @@ Shibkit::MetaMeta - Lazy SAML Metadata Access
 
 ## DESCRIPTION
 
-SAML2 Metadata is widely used in education to build federations - groups of trusted IDPs (login servers) and SPs (websites using the IDPs for authentication). 
+SAML2 Metadata is widely used in education to build access management federations
+- groups of trusted IDPs (login servers) and SPs (websites using the IDPs for authentication). 
 
-MetaMeta is the first part of Shibkit to be released.
+MetaMeta is the first part of Shibkit to be released. It does not require any
+of the other Shibkit gems to work but most of the others depend on it.
 
 ### Why use Shibkit::MetaMeta?
 
-There are few reasons to use MetaMeta if you are running an IDP or a simple authenticated website. However, if you are building a more advanced web application that needs to be aware of other entities in its federations then MetaMeta may be useful to you.
+There are few reasons to use MetaMeta if you are running an IDP or a simple
+authenticated website. However, if you are building a more advanced web application
+that needs to be aware of other entities in its federations then MetaMeta may be useful to you.
 
 Features include:
 
@@ -19,8 +23,24 @@ Features include:
 * Immediate access to metadata as XML or parsed Nokogiri documents
 * Conversion of metadata into convenient Ruby objects for Federations, Entities, Contacts and Organisations.
 * Easy storage of objects into databases for querying
-* Compatibility with JRuby and Java scripting - may be included in IDPs and Java applications
+* Compatibility with JRuby and Java scripting - it may then be included in Java IDPs and other Java applications (not working yet)
 * Easy integration with non-Ruby applications: MetaMeta will act as a loader to build databases of entities for use by your Java, .Net, Python or PHP application.
+
+### Shibkit::Disco
+
+Shibkit::MetaMeta provides a simple interface to data stored in SAML metadata files
+but does not include any persistence or query facilities, discovery protocol support, etc.
+
+If you are planning to use SAML metadata within your application you might be better
+using Shibkit::Disco, a library that builds on Shibkit::MetaMeta to provide a 
+SAML discovery framework. Most features of Shibkit::MetaMeta will still be available inside
+Shibkit::Disco.
+
+  I feel the same way about disco as I do about herpes. 
+  Hunter S. Thompson
+  
+If you don't fancy the heavier framework in Shibkit::Disco you can probably get
+what you need from Shibkit::MetaMeta, or use it in a framework of your own.
 
 ## CAVEATS
 
@@ -38,6 +58,8 @@ MetaMeta is still early in development, so please bear the following in mind whe
 
 ### As a released Ruby Gem
 
+#### Rubygems
+
 If you use RubyGems directly then simply type:
 
 ```bash
@@ -49,6 +71,8 @@ and require the gem in your code
 ```ruby
 require 'shibkit/meta_meta'
 ```
+
+#### Bundler
 
 Bundler users can add MetaMeta to their Gemfiles like this:
 
@@ -64,7 +88,7 @@ It's a very good idea to immediately specify a gem version since MetaMeta is
 going to a little unstable for awhile, and there may be breaking-things API
 changes until v1.0.0. 
 
-#### Using the latest development version
+### Using the latest development version
 If you'd like to use the very latest in-development version of MetaMeta, possibly
 as a developer you should check it out of Github and include it with Bundler by specifying
 the source location:
