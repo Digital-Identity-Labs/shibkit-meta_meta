@@ -1,7 +1,42 @@
 require 'shibkit/meta_meta'
 
+puts "Fetching sources"
+Shibkit::MetaMeta.load_sources
+puts "Fetched!"
+
+puts "Processing"
+Shibkit::MetaMeta.process_sources
+puts "done"
 
 
+puts "Biggest URI competition winner is..."
+puts Shibkit::MetaMeta.entities.sort!{|a,b| a.uri.size <=> b.uri.size}.last
+
+puts "Grab a particular entity by URI: is it an IDP? Is it accountable?"
+entity = Shibkit::MetaMeta.from_uri('https://shib.manchester.ac.uk/shibboleth')
+puts entity.idp?         # => true
+puts entity.accountable? # => true
+entity.other_federation_uris << 'http://example.org'
+puts "Primary: " + entity.primary_federation_uri
+puts "Secondary:" + entity.other_federation_uris.join(';')
+puts "All: " + entity.federation_uris.join(';')
+
+"Who is on more than one Federation?"
+Shibkit::MetaMeta.entities.each do |e|
+  
+  if e.multi_federated?
+    
+    puts "#{e.uri} is in #{e.federation_uris.join(', ')}"
+    
+  end
+  
+end
+
+Shibkit::MetaMeta.entities.each {|e| puts "OUCH" unless e.primary?  }
+
+puts "There are #{Shibkit::MetaMeta.sps.count} SPs in #{Shibkit::MetaMeta.federations.count} Federations"
+
+exit
 
 #######
 
@@ -64,21 +99,28 @@ puts Shibkit::MetaMeta.selected_federation_uris
 
 
 
-Shibkit::MetaMeta.federations.each {|f| puts f }
+#Shibkit::MetaMeta.federations.each {|f| puts f }
 
-Shibkit::MetaMeta.entities.each { |e| puts e }
+#Shibkit::MetaMeta.entities.each { |e| puts e }
 
-Shibkit::MetaMeta.idps.each { |e| puts e }
+#Shibkit::MetaMeta.idps.each { |e| puts e }
 
-Shibkit::MetaMeta.sps.each { |e| puts e }
+#Shibkit::MetaMeta.sps.each { |e| puts e }
 
-Shibkit::MetaMeta.orgs.each { |e| puts e }
+#Shibkit::MetaMeta.orgs.each { |e| puts e }
 
 puts "Number of federations:"
 puts Shibkit::MetaMeta.federations.size
 
 puts "Number of entities:"
 puts Shibkit::MetaMeta.entities.size
+
+
+Shibkit::MetaMeta.entities.sort!{|a,b| a.uri.size <=> b.uri.size}.each { |e| puts e }
+
+puts "and the winner is..."
+puts Shibkit::MetaMeta.entities.sort!{|a,b| a.uri.size <=> b.uri.size}.last
+
 
 exit
 
