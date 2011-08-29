@@ -36,9 +36,11 @@ MetaMeta is still early in development, so please bear the following in mind whe
 
 ## INSTALLATION
 
+### As a released Ruby Gem
+
 If you use RubyGems directly then simply type:
 
-```sh
+```bash
 gem install shibkit-meta_meta
 ```
 
@@ -58,6 +60,26 @@ gem "shibkit-meta_meta"
 then of course run `bundle install` on the commandline and
  `require 'bundler'` within your code.
 
+It's a very good idea to immediately specify a gem version since MetaMeta is
+going to a little unstable for awhile, and there may be breaking-things API
+changes until v1.0.0. 
+
+#### Using the latest development version
+If you'd like to use the very latest in-development version of MetaMeta, possibly
+as a developer you should check it out of Github and include it with Bundler by specifying
+the source location:
+
+```bash
+git clone git@github.com:Digital-Identity-Labs/shibkit-meta_meta.git
+```
+
+```ruby
+source "http://rubygems.org"
+gem "shibkit-meta_meta", :path => "~/Projects/shibkit-meta_meta/"
+```
+
+Please feel welcome to fork the project on Github and send pull requests for any
+changes you wish to contribute.
 
 ## USAGE
 
