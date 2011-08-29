@@ -292,7 +292,7 @@ module Shibkit
       
     end
     
-    def self.stockup
+    def self.stockup(force=false)
       
       if self.autoload?
       
@@ -300,6 +300,14 @@ module Shibkit
         self.process_sources if @federations.empty? 
       
       end
+      
+    end
+    
+    ## Have objects been loaded from metadata?
+    def self.stocked?
+      
+      return false unless @federations
+      return false if @federations.empty? 
       
     end
     
