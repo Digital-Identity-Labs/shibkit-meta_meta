@@ -270,47 +270,78 @@ Shibkit::MetaMeta.additional_sources.each { |s| puts s.display_name }
 
 ### Federations
 
+Federation objects describe a federation, including its members 
+(SPs and IDPs). 
+
+#### Listing federation objects
+
+You can get an array of all loaded federations using '#federations'
+
+```ruby
+all_federations = Shibkit::MetaMeta.federations 
+```
+
 #### Loading federation objects ahead of time
+
+Calling `Shibkit::MetaMeta.process_sources` will re-process federation metadata
+into objects, removing previously generated objects from MetaMeta's lists.
+
+```ruby
+Shibkit::MetaMeta.process_sources 
+Shibkit::MetaMeta.stocked? # => true
+```
 
 #### Filtering and selecting Sources/Federations
 
+It's nice to have easy access to many different federations but if you're only
+interested in one or two of them it can add a lot of wasteful overhead to process
+all of them together.
 
-Stuff blah:
-
-```ruby
-code       # => 1
-code       # => 2
-```
-
-Also stuff blah:
+You can limit the sources/federations to be processed using the `#only_use` method:
 
 ```ruby
-
-  code       # => 1
-  code       # => 2
+Shibkit::MetaMeta.only_use(['http://ukfederation.org.uk'])
 
 ```
 
-which is nice.
+After specifying federation URIs only matching federations will be processed.
 
+You can go back to processing all federations by using `:all` or `:everything`
+
+```ruby
+Shibkit::MetaMeta.only_use(:everything)
+
+```
 
 ### Entities (IDPs & SPs)
 
-Stuff blah:
+Entity objects are generic representations of entities listed in SAML metadata.
+They can be IDPs, SPs, or both. MetaMeta only stores general information about the
+entity in the Entity object itself, and then uses SP and IDP objects inside it
+to store more detailed information about the roles of entity.
+
+#### Accessing all the entities in a federation
 
 ```ruby
-code       # => 1
-code       # => 2
+uk_fed_entities = federation.entities
 ```
 
-Also stuff blah:
+#### Finding an entity by URI
 
 ```ruby
-code       # => 1
-code       # => 2
+uom_idp = Shibkit::MetaMeta.from_uri('https://shib.manchester.ac.uk/shibboleth')
 ```
 
-which is nice.
+#### Listing all primary entities in all federations
+
+```ruby
+all_entities = Shibkit::MetaMeta.entities
+```
+
+#### Multi-federation entities and primary entities
+
+#### Entity objects
+
 
 ### IDPs
 
