@@ -281,6 +281,12 @@ You can get an array of all loaded federations using '#federations'
 all_federations = Shibkit::MetaMeta.federations 
 ```
 
+#### Finding an federation by URI
+
+```ruby
+uk_fed = Shibkit::MetaMeta.from_uri('http://ukfederation.org.uk')
+```
+
 #### Loading federation objects ahead of time
 
 Calling `Shibkit::MetaMeta.process_sources` will re-process federation metadata
@@ -323,6 +329,7 @@ to store more detailed information about the roles of entity.
 #### Accessing all the entities in a federation
 
 ```ruby
+federation = Shibkit::MetaMeta.from_uri('http://ukfederation.org.uk')
 uk_fed_entities = federation.entities
 ```
 
