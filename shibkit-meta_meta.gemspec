@@ -14,7 +14,7 @@ Gem::Specification.new do |s|
   s.email = %q{pete@digitalidentitylabs.com}
   s.extra_rdoc_files = [
     "LICENSE.txt",
-    "README.markdown"
+    "README.md"
   ]
   s.files = [
     ".document",
@@ -23,7 +23,7 @@ Gem::Specification.new do |s|
     "Gemfile.lock",
     "Icon.png",
     "LICENSE.txt",
-    "README.markdown",
+    "README.md",
     "Rakefile",
     "VERSION",
     "lib/shibkit/meta_meta.rb",
