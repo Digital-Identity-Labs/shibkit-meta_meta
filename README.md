@@ -340,267 +340,201 @@ uom_idp = Shibkit::MetaMeta.from_uri('https://shib.manchester.ac.uk/shibboleth')
 ```
 
 #### Listing all primary entities in all federations
+If you're read this far you can probably guess how this will go.
 
 ```ruby
 all_entities = Shibkit::MetaMeta.entities
 ```
 
+This doesn't list *all* entities, only all *primary* entities. I'm afraid we've made
+up the term "primary entity". Read on for enlightenment.
+
 #### Multi-federation entities and primary entities
+
+The same IDP or SP, represented by the same URI, can be in more than one federation.
+The Shibboleth IDP will load the only the first one that it finds. Because of this,
+although it's possible to give the same service different metadata in each
+federation it's probably a bad idea to do so - you don't know which metadata
+for your service will be used.
+
+IDPs and SPs don't usually care which trusted federation an entity belongs to - they're
+trusted, and that's what matters. However, your SAML-aware software might care, so
+MetaMeta tries to keep track of multiple federation membership.
+
+Each Federation object has its own list of entities. These are separate objects and if
+metadata for a service varies between different federations it should be different
+between their MetaMeta objects too.
+
+```ruby
+entity1 = fed1.entities.collect { |e| e.uri = 'http://silly-idp.com/shib' }[0]
+entity2 = fed2.entities.collect { |e| e.uri = 'http://silly-idp.com/shib' }[0]
+
+entity1.primary_federation_uri # => 'http://fed1.org'
+entity1.idp.protocols
+  # => ['urn:oasis:names:tc:SAML:1.1:protocol', 'urn:oasis:names:tc:SAML:2.0:protocol']
+
+entity2.primary_federation_uri # => 'http://fed2.org'
+entity2.idp.protocols
+  # => ['urn:oasis:names:tc:SAML:2.0:protocol']
+
+```
+
+In most cases you don't want to know about the other varieties; you want to know about
+the entity with the first metadata to be loaded. Shibkit::MetaMeta refers to this
+as the "Primary Entity", and its parent Federation as its "primary federation".
+
+Shibkit::MetaMeta only lists primary records when you call `Shibkit::MetaMeta.from_uri` and
+`Shibkit::MetaMeta.entities`
+
+Primary entities will have any other federations that they are a member of listed under 
+`#other_federations` and `#secondary_federations`. Both primary and seconday/other federations are
+listed by `#federation_uris`. 
+
+You can quickly check if an entity is primary or multifederation:
+
+```ruby
+ent = Shibkit::MetaMeta.from_uri('https://idp.uni.ac.uk/shibboleth')
+
+ent.primary? # => true
+ent.multi_federated? # => true
+```
 
 #### Entity objects
 
+```ruby
+ent = Shibkit::MetaMeta.from_uri('https://idp.uni.ac.uk/shibboleth')
+
+ent.uri # => 'https://idp.uni.ac.uk/shibboleth'
+ent.accountable? # => true
+ent.hide?        # => false
+ent.sp?          # => false
+ent.idp?         # => true
+
+ent.idp.scopes # => ['uni.ac.uk']
+
+```
+
+For more information on Entity objects please read the API documentation.
 
 ### IDPs
 
-Stuff blah:
+While an Entity object can represent an IDP (indicated by the `#idp?` method) the details of its
+IDP role are held in the IDP object it contains.
 
 ```ruby
-code       # => 1
-code       # => 2
+entity.idp? # => true
+entity.idp.protocols        # => ['urn:oasis:names:tc:SAML:2.0:protocol']
+entity.idp.scopes           # => ['uni.ac.uk']
+
+entity.idp.display_name     # => "The University of Studies"
+entity.idp.display_name :fr # => "L'Université des Etudes"
+entity.idp.description      # => "Example login service for UoS"  
+entity.idp.domains          # => ['uni.ac.uk']
 ```
 
-Also stuff blah:
+For more information on IDP objects please read the API documentation.
 
-```ruby
-code       # => 1
-code       # => 2
-```
-
-which is nice.
 
 ### SPs
 
-Stuff blah:
+Entity objects can also represent an SP (even if also an IDP). As with IDPs the
+additional information is represented by an SP object within the Entity object.
 
 ```ruby
-code       # => 1
-code       # => 2
+entity.sp? # => true
+entity.sp.protocols     # => ['urn:oasis:names:tc:SAML:2.0:protocol']
+
+entity.sp.display_name     # => "University of Studies Webmail"
+entity.sp.display_name :fr # => "L'Université des Etudes de Webmail"
+entity.sp.description      # => "Email service for staff and students"  
+entity.sp.ip_blocks        # => ['192.168.1.0/24', '10.50.1.0/24']
 ```
 
-Also stuff blah:
-
-```ruby
-code       # => 1
-code       # => 2
-```
-
-which is nice.
-
+For more information on SP objects please read the API documentation.
 
 ### Contacts
 
-Stuff blah:
+IDP and SP objects may contain Contact objects.
 
-```ruby
-code       # => 1
-code       # => 2
-```
-
-Also stuff blah:
-
-```ruby
-code       # => 1
-code       # => 2
-```
-
-which is nice.
-
+...
 
 ### Organisations
 
-Stuff blah:
+IDP and SP objects may contain Organisation objects.
 
-```ruby
-code       # => 1
-code       # => 2
-```
-
-Also stuff blah:
-
-```ruby
-code       # => 1
-code       # => 2
-```
-
-which is nice.
-
+...
 
 ### User Interface Info
 
-Stuff blah:
+Shibkit::MetaMeta aims to reproduce the details that Shibboleth IDPs can present 
+to users during authentication - friendly, localised information on SPs and IDPs.
+
+User interface information for SPs and IDPs is available as as English default, a 
+specified locale (if available, falling back to English) and as a hash of all available
+content.
 
 ```ruby
-code       # => 1
-code       # => 2
+entity.idp.display_name     # => "The University of Studies"
+entity.idp.display_name :fr # => "L'Université des Etudes"
+entity.idp.display_names  
+  # => {:en => "The University of Studies", :fr => "L'Université des Etudes"}
+
+entity.idp.keywords      # => ['example', 'university']
+entity.idp.keywords :fr  # => ['exemple', 'université']
+entity.idp.keyword_sets  
+  # => {:en => ['example', 'university'], :fr => ['exemple', 'université']}
+
 ```
-
-Also stuff blah:
-
-```ruby
-code       # => 1
-code       # => 2
-```
-
-which is nice.
 
 ### Logos
 
-Stuff blah:
+SPs and IDPs may also have Logo objects, for use in user interfaces or just to
+decorate your federation reports.
 
-```ruby
-code       # => 1
-code       # => 2
-```
-
-Also stuff blah:
-
-```ruby
-code       # => 1
-code       # => 2
-```
-
-which is nice.
+...
 
 ### Discovery Hints
 
-Stuff blah:
+Discovery hints can be used by WAYF/Discovery Services to guess at likely
+options for users.
 
 ```ruby
-code       # => 1
-code       # => 2
+entity.sp.ip_blocks          # => ['192.168.1.0/24', '10.50.1.0/24']
+entity.sp.domains            # => ['uni.ac.uk']
+entity.idp.geo_location_uris # => nil 
 ```
-
-Also stuff blah:
-
-```ruby
-code       # => 1
-code       # => 2
-```
-
-which is nice.
-
 
 ### Advertised Attributes
 
-
-Stuff blah:
-
-```ruby
-code       # => 1
-code       # => 2
-```
-
-Also stuff blah:
-
-```ruby
-code       # => 1
-code       # => 2
-```
-
-which is nice.
-
+...
 
 ### Service Information
 
-Stuff blah:
-
-```ruby
-code       # => 1
-code       # => 2
-```
-
-Also stuff blah:
-
-```ruby
-code       # => 1
-code       # => 2
-```
-
-which is nice.
+...
 
 ### Provisioning Your Application
 
-Stuff blah:
-
-```ruby
-code       # => 1
-code       # => 2
-```
-
-Also stuff blah:
-
-```ruby
-code       # => 1
-code       # => 2
-```
-
-which is nice.
-
+...
 
 ### Writing Source Lists
 
-Stuff blah:
-
-```ruby
-code       # => 1
-code       # => 2
-```
-
-Also stuff blah:
-
-```ruby
-code       # => 1
-code       # => 2
-```
-
-which is nice.
-
+...
 
 ### General Options
 
-Stuff blah:
-
-```ruby
-code       # => 1
-code       # => 2
-```
-
-Also stuff blah:
-
-```ruby
-code       # => 1
-code       # => 2
-```
-
-which is nice.
-
-
-
+...
 
 ### Caching Options
 
-Stuff blah:
+...
 
-```ruby
-code       # => 1
-code       # => 2
-```
+## BACKGROUND READING
 
-Also stuff blah:
+...
 
-```ruby
-code       # => 1
-code       # => 2
-```
+Text discussing Metadata background reading
 
-which is nice.
-
-
-## BACKGROUND
-
-
-
-Text discussing Metadata background reading [Semantic Versioning](http://semver.org/) and uses
+[Semantic Versioning](http://semver.org/) and uses
 [TomDoc](http://tomdoc.org/) for inline documentation.
 
 http://docs.oasis-open.org/security/saml/v2.0/saml-metadata-2.0-os.pdf
@@ -608,6 +542,8 @@ http://www.oasis-open.org/committees/download.php/42714/sstc-saml-metadata-ui-v1
 
 
 ## SHIBKIT 
+
+...
 
 ## CONTRIBUTORS
 
@@ -626,15 +562,27 @@ for the entire whole license text if you're curious.
 
 ## DIGITAL IDENTITY LABS
 
+## OOPS...
+
+We've definitely made mistakes. This is software - there are going to be coding bugs,
+inaccurate documentation, misinterpreted specs, and horrible, embarrassing things that
+we haven't even worried about yet.
+
+If you find something wrong, weird or confusing please let us know on the Shibkit-MetaMeta
+issue tracker. It might cause us blushes but we'd rather someone let us know straight away.
+
+https://github.com/Digital-Identity-Labs/shibkit-meta_meta/issues
 
 ## CONTRIBUTE
 
 If you'd like to add new features to MetaMeta or even remove feature you hate
-then 
+then please fork the repository on Github. Change the code to work the way you want,
+and then send us a pull request if you'd like us to merge any of your changes back
+into the official repository.
 
 https://github.com/Digital-Identity-Labs/shibkit-meta_meta
 
-
+If you'd like us to add a feature for you then please get in touch.
 
 
 
