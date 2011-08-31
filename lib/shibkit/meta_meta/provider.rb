@@ -34,7 +34,7 @@ module Shibkit
       
       ## The URI of the entity
       attr_accessor :entity_uri
-      alias :uri :entity_uri
+      alias :uri    :entity_uri
       
       attr_accessor :display_names
       

@@ -144,6 +144,8 @@ Shibkit::MetaMeta.sps.each { |e| puts e }
 Shibkit::MetaMeta.orgs.each { |o| puts o }
 ```
 
+----
+
 #### Select an entity by URI
 If you already know the URI of an entity in a loaded federation then you can get it directly using
 `#from_uri`.
@@ -156,6 +158,8 @@ puts entity.accountable?
 ```
 
 Read more about the Shibkit::MetaMeta class
+
+----
 
 ### Metadata Sources
 
@@ -194,6 +198,8 @@ They are loaded by specifying the symbol instead of a real filename string
 Shibkit::MetaMeta.sources_file = :real
 Shibkit::MetaMeta.idps.each { |e| puts e }
 ```
+
+----
 
 ### Accessing Source information
 Source objects can be accessed directly, to be read or adjusted after loading.
@@ -272,6 +278,8 @@ Shibkit::MetaMeta.additional_sources.each { |s| puts s.display_name }
 
 ```
 
+----
+
 ### Federations
 
 Federation objects describe a federation, including its members 
@@ -322,6 +330,8 @@ You can go back to processing all federations by using `:all` or `:everything`
 Shibkit::MetaMeta.only_use(:everything)
 
 ```
+
+----
 
 ### Entities (IDPs & SPs)
 
@@ -420,6 +430,8 @@ ent.idp.scopes # => ['uni.ac.uk']
 
 For more information on Entity objects please read the API documentation.
 
+----
+
 ### IDPs
 
 While an Entity object can represent an IDP (indicated by the `#idp?` method) the details of its
@@ -438,6 +450,8 @@ entity.idp.domains          # => ['uni.ac.uk']
 
 For more information on IDP objects please read the API documentation.
 
+----
+
 
 ### SPs
 
@@ -455,6 +469,8 @@ entity.sp.ip_blocks        # => ['192.168.1.0/24', '10.50.1.0/24']
 ```
 
 For more information on SP objects please read the API documentation.
+
+----
 
 ### Contacts
 
@@ -484,11 +500,37 @@ contact.category      # => :support
 
 For more information on Contact objects please read the API documentation.
 
+----
+
 ### Organisations
 
-IDP and SP objects may contain Organisation objects.
+IDP and SP objects may contain Organisation objects. Organisation details have 
+often been used to describe services (especially IDPs) rather than the organisation
+running the service. Recent additions to SAML metadata (described in the next section) will
+hopefully lead to organisation details gradually becoming more useful.
 
-...
+```ruby
+org = entity.organisation
+
+org.name          # => 'University of Studies'
+org.display_name  # => 'University of Studies IDP (test)'
+org.url           # => 'uni.ac.uk' 
+```
+
+MetaMeta will fall back to using Organisation data to describe entities when no
+user interface information is available.
+
+The `Shibkit::MetaMeta.orgs` method will list all organisations found in all federations
+after trying, rather badly, to minimise repeated records. We added this feature to 
+see how well it would work, and so far it doesn't work very well at all.
+
+For the curious or optimistic:
+
+```ruby
+messy_list_organisations = Shibkit::MetaMeta.orgs
+```
+
+----
 
 ### User Interface Info
 
@@ -509,15 +551,32 @@ entity.idp.keywords      # => ['example', 'university']
 entity.idp.keywords :fr  # => ['exemple', 'université']
 entity.idp.keyword_sets  
   # => {:en => ['example', 'university'], :fr => ['exemple', 'université']}
-
 ```
+
+----
 
 ### Logos
 
 SPs and IDPs may also have Logo objects, for use in user interfaces or just to
-decorate your federation reports.
+decorate your federation reports. Like user interface information they can be 
+grouped according to language, and the defaults assume `:en`
 
-...
+```ruby
+default_logos = entity.idp.logos
+french_logos  = entity.idp.logos :fr
+
+default_logos.each { |logo| puts logo.url ; puts logo.width }
+
+## Find location of largest image in a set
+french_logos.sort{ |a,b| a.pixels <=> b.pixels }.last.uri
+
+```
+
+Logo objects have various methods for describing the image, downloading it,
+comparing the real image to details in metadata, etc. Please read the API docs
+for more info.  
+
+----
 
 ### Discovery Hints
 
@@ -530,25 +589,58 @@ entity.sp.domains            # => ['uni.ac.uk']
 entity.idp.geo_location_uris # => nil 
 ```
 
-### Advertised Attributes
+----
 
-...
 
 ### Service Information
+SPs can advertise a number of Services.
 
 ...
+
+### IDP and SP Attributes
+While rarely used, it's possible for metadata to list the attributes made available
+by IDPs or requested by SPs. These should be available via the SP and IDP objects.
+
+```ruby
+entity.idp.attributes.each { |a| puts a.friendly_name }
+
+entity.sp.default_service.attributes.each { |a| puts a.name }
+
+```
+
+----
 
 ### Provisioning Your Application
 
-...
+Shibkit::MetaMeta is **not** a sleek and speedy bit of software. It can use a
+fairly large amount of RAM to process metadata - when loading four federations
+(c.2400 unique entities) a couple of hundred megabytes of RAM is typical,
+and also takes about a minute on a typical PC. 
+
+Because of this it is probably a very bad idea to autoload objects inside a 
+persistent web application, especially at startup. Using multiple Mongrel processes,
+each loading their own metadata, is definitely not advisable. 
+
+Shibkit::MetaMeta is best suited to running scripts that process metadata then quit,
+maybe loading data into other storage formats.
+
+If you want a persistent database to query within your applications you should
+consider Shibkit::Disco, which builds on MetaMeta and provides a variety of database
+backends.
+
+----
 
 ### Writing Source Lists
 
 ...
 
+----
+
 ### General Options
 
 ...
+
+----
 
 ### Caching Options
 
@@ -558,14 +650,6 @@ entity.idp.geo_location_uris # => nil
 
 ...
 
-Text discussing Metadata background reading
-
-[Semantic Versioning](http://semver.org/) and uses
-[TomDoc](http://tomdoc.org/) for inline documentation.
-
-http://docs.oasis-open.org/security/saml/v2.0/saml-metadata-2.0-os.pdf
-http://www.oasis-open.org/committees/download.php/42714/sstc-saml-metadata-ui-v1.0-wd07.pdf
-
 
 ## SHIBKIT 
 
@@ -574,6 +658,7 @@ http://www.oasis-open.org/committees/download.php/42714/sstc-saml-metadata-ui-v1
 ## CONTRIBUTORS
 
 * Pete Birkinshaw
+* Eddy Wheldon
 * Linda Ward
 * Sam Jones
 

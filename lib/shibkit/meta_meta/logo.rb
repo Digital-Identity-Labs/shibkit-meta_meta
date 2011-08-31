@@ -46,6 +46,8 @@ module Shibkit
       
       ## URL of the image
       attr_accessor :location   
+      alias :url    :location
+      
       
       ## Language of the logo
       attr_accessor :language
