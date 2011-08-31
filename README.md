@@ -1,8 +1,11 @@
-Shibkit::MetaMeta - Lazy SAML Metadata Access
-==============================================
+Shibkit::MetaMeta - Lazy Access To SAML Metadata
+================================================
+
+## EXAMPLES
 
 ## DESCRIPTION
 
+### What is SAML Metadata? What is Shibboleth?
 SAML2 Metadata is widely used in education to build access management federations
 - groups of trusted IDPs (login servers) and SPs (websites using the IDPs for authentication). 
 
@@ -44,10 +47,11 @@ what you need from Shibkit::MetaMeta, or use it in a framework of your own.
 
 ## CAVEATS
 
-MetaMeta is still early in development, so please bear the following in mind when using it:
+MetaMeta is still early in development so please bear the following in mind when using it:
 
+* Tests and API documentation are not complete. They will be completed before version 1.0.0.
 * The API may not be stable until version 1.0. If using Bundler please lock the version to avoid upgrades breaking your application
-* Full validation of metadata is not present yet
+* Full validation of metadata is not present yet. **Do not use MetaMeta for security checks yet.**
 * The mock 'dev' metadata is not valid or complete. We plan to eventually build some fully-functional example federations, but at present both UnCommon and Example federations are simple test mocks of certain parts of SAML2 metadata.
 * The source list of federations is _far_ from complete.
 * For development and testing the provided lists should be fine but please DO NOT use the provided federation source lists in production without manually checking their contents or using your own edited version. Your federation will have its own guidelines for verifying their certificate and metadata, please read them and check that the certificate and source URL you are using are correct. Your chain of trust should not originate in a file on Github, even if the creators are nice people.
@@ -191,7 +195,7 @@ Shibkit::MetaMeta.sources_file = :real
 Shibkit::MetaMeta.idps.each { |e| puts e }
 ```
 
-## Accessing Source information
+### Accessing Source information
 Source objects can be accessed directly, to be read or adjusted after loading.
 
 ```ruby
@@ -324,7 +328,7 @@ Shibkit::MetaMeta.only_use(:everything)
 Entity objects are generic representations of entities listed in SAML metadata.
 They can be IDPs, SPs, or both. MetaMeta only stores general information about the
 entity in the Entity object itself, and then uses SP and IDP objects inside it
-to store more detailed information about the roles of entity.
+to store more detailed information about the roles of the entity.
 
 #### Accessing all the entities in a federation
 
@@ -454,9 +458,31 @@ For more information on SP objects please read the API documentation.
 
 ### Contacts
 
-IDP and SP objects may contain Contact objects.
+IDP and SP objects may contain Contact objects. Each type of contact is available 
+from its own method in an Entity object. If a contact type is not available then `nil`
+is returned.
 
-...
+```ruby
+sc = entity.support_contact
+tc = entity.technical_contact
+ac = entity.admin_contact
+```
+
+Contact objects are very simple:
+
+```ruby
+contact = entity.support_contact
+
+contact.givenname     # => 'Joe'
+contact.surname       # => 'Yossarian'
+contact.display_name  # => 'Joe Yossarian'
+contact.email_url     # => "mailto:joe.yossarian@uni.ac.uk"
+contact.email_address # => 'joe.yossarian@uni.ac.uk'
+contact.category      # => :support
+
+```
+
+For more information on Contact objects please read the API documentation.
 
 ### Organisations
 
