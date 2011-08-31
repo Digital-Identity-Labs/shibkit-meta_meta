@@ -1,9 +1,11 @@
 Shibkit::MetaMeta - Lazy Access To SAML Metadata
 ================================================
 
-## EXAMPLES
-
 ## DESCRIPTION
+
+Shibkit::MetaMeta aims to provide lazy, friendly handling of
+Shibboleth/SAML2 metadata. Easily download and parse metadata XML into Ruby
+objects. 
 
 ### What is SAML Metadata? What is Shibboleth?
 SAML2 Metadata is widely used in education to build access management federations
@@ -143,8 +145,6 @@ Shibkit::MetaMeta.idps.each { |e| puts e }
 Shibkit::MetaMeta.sps.each { |e| puts e }
 Shibkit::MetaMeta.orgs.each { |o| puts o }
 ```
-
-----
 
 #### Select an entity by URI
 If you already know the URI of an entity in a loaded federation then you can get it directly using
@@ -672,6 +672,8 @@ See [LICENSE.md](https://github.com/Digital-Identity-Labs/shibkit-meta_meta/blob
 for the entire whole license text if you're curious.
 
 ## DIGITAL IDENTITY LABS
+
+...
 
 ## OOPS...
 
