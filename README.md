@@ -22,7 +22,7 @@ that needs to be aware of other entities in its federations then MetaMeta may be
 
 Features include:
 
-* Ready-to-use configurations and information for all major SAML federations (not complete yet)
+* Ready-to-use configurations and information for all major SAML federations (not actually complete yet)
 * Efficient download, caching and expiry of metadata, using ETag, Expires, Cache-Control and Last-Modified headers where available
 * Validation of metadata (also not complete but we're working on it)
 * Immediate access to metadata as XML or parsed Nokogiri documents
@@ -41,8 +41,8 @@ using Shibkit::Disco, a library that builds on Shibkit::MetaMeta to provide a
 SAML discovery framework. Most features of Shibkit::MetaMeta will still be available inside
 Shibkit::Disco.
 
-> I feel the same way about disco as I do about herpes. 
-> *Hunter S. Thompson*
+>I feel the same way about disco as I do about herpes. 
+>*Hunter S. Thompson*
   
 If you don't fancy the heavier framework in Shibkit::Disco you can probably get
 what you need from Shibkit::MetaMeta, or use it in a framework of your own.
@@ -58,7 +58,8 @@ MetaMeta is still early in development so please bear the following in mind when
 * The source list of federations is _far_ from complete.
 * For development and testing the provided lists should be fine but please DO NOT use the provided federation source lists in production without manually checking their contents or using your own edited version. Your federation will have its own guidelines for verifying their certificate and metadata, please read them and check that the certificate and source URL you are using are correct. Your chain of trust should not originate in a file on Github, even if the creators are nice people.
 * MetaMeta is using far too much memory when processing metadata XML. 
-* MetaMeta is not compatible with JRuby yet (but we hope it will be) 
+* MetaMeta is not compatible with JRuby yet (but we hope it will be)
+* Not yet tested on Windows, although it detects Windows and tries to compensate.
 
 ## INSTALLATION
 
@@ -627,12 +628,6 @@ maybe loading data into other storage formats.
 If you want a persistent database to query within your applications you should
 consider Shibkit::Disco, which builds on MetaMeta and provides a variety of database
 backends.
-
-----
-
-### Writing Source Lists
-
-...
 
 ----
 
