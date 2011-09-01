@@ -63,6 +63,18 @@ MetaMeta is still early in development so please bear the following in mind when
 
 ## INSTALLATION
 
+Please note: we haven't actually released the gem yet! It's best to download
+the source from Github and then run `rake install`
+
+### Requirements
+Shibkit::MetaMeta is available as a gem and should bring in most dependencies itself
+when installed. It does need a few of other things as well:
+
+* Ruby 1.8.7+ or Ruby 1.9.2+
+* Rubygems (not required but makes things much simpler)
+* LibXML2 (including LibXML2-devel on Linux)
+* Linux, Mac OS, *BSD, Solaris (Windows is unsupported at present)
+
 ### As a released Ruby Gem
 
 #### Rubygems
@@ -107,6 +119,12 @@ git clone git@github.com:Digital-Identity-Labs/shibkit-meta_meta.git
 ```ruby
 source "http://rubygems.org"
 gem "shibkit-meta_meta", :path => "~/Projects/shibkit-meta_meta/"
+```
+
+You can also skip Bundler and install the gem directly from source by typing
+
+```shell
+rake install 
 ```
 
 Please feel welcome to fork the project on Github and send pull requests for any
@@ -594,9 +612,20 @@ entity.idp.geo_location_uris # => nil
 
 
 ### Service Information
-SPs can advertise a number of Services.
+SPs can advertise a number of Services. 
 
-...
+```ruby
+
+entity.sp.services         # Returns an array of service objects
+service = entity.sp.default_service  # Returns one service
+
+service.attributes      # Array of attribute objects
+service.index           # Returns the index number of the service
+service.description     # Default description
+service.description :en # English description
+service.description     # Hash of all descriptions, keyed on language.
+
+```
 
 ### IDP and SP Attributes
 While rarely used, it's possible for metadata to list the attributes made available
@@ -606,6 +635,14 @@ by IDPs or requested by SPs. These should be available via the SP and IDP object
 entity.idp.attributes.each { |a| puts a.friendly_name }
 
 entity.sp.default_service.attributes.each { |a| puts a.name }
+
+attribute = entity.idp.attributes[0]
+
+attribute.name           # Name uri for the attribute
+attribute.required?      # (Used by SPs)
+attribute.name_format    # 
+attribute.friendly_name  #
+attribute.values         # Available values (from IDPs)
 
 ```
 
@@ -633,7 +670,8 @@ backends.
 
 ### General Options
 
-...
+[There are a few methods in the Source class that need to be refactored out for use everywhere
+in MetaMeta. Should be fixed soon.]
 
 ----
 
@@ -643,12 +681,19 @@ backends.
 
 ## BACKGROUND READING
 
-...
-
+* [Wikipedia on SAML2](http://en.wikipedia.org/wiki/SAML_2.0)
+* [Shibboleth software](http://shibboleth.internet2.edu/)
+* [SAML2 Metadata spec](http://www.oasis-open.org/committees/download.php/35391/sstc-saml-metadata-errata-2.0-wd-04-diff.pdf)
+* [Metadata UI spec](http://docs.oasis-open.org/security/saml/Post2.0/sstc-saml-metadata-ui/v1.0/sstc-saml-metadata-ui-v1.0.pdf)
+* [The SAML2 Spec](http://docs.oasis-open.org/security/saml/v2.0/saml-profiles-2.0-os.pdf)
+* [All the SAML2 specs](http://saml.xml.org/saml-specifications)
 
 ## SHIBKIT 
 
-...
+Shibkit::MetaMeta is part of Shibkit, a collection of Ruby gems derived from
+code used by Digital Identity Ltd in various projects and experiments. Most
+future commercial and open source Digital Identity Labs projects will be based
+on Shibkit libraries.
 
 ## CONTRIBUTORS
 
