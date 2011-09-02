@@ -123,6 +123,8 @@ module Shibkit
       
     end
     
+    alias :sources_loaded? :loaded_sources?
+    
     ## Select a specific source file
     def self.sources_file=(file_path)
       

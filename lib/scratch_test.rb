@@ -8,12 +8,20 @@ puts "Processing"
 Shibkit::MetaMeta.process_sources
 puts "done"
 
+exit
+
+Shibkit::MetaMeta.entities.each { |e| next unless e.organisation ; puts e.organisation.display_name ; puts e.organisation.url }
+
+exit
 
 puts "Biggest URI competition winner is..."
 puts Shibkit::MetaMeta.entities.sort!{|a,b| a.uri.size <=> b.uri.size}.last
 
 puts "Grab a particular entity by URI: is it an IDP? Is it accountable?"
 entity = Shibkit::MetaMeta.from_uri('https://shib.manchester.ac.uk/shibboleth')
+puts entity.idp.protocols
+puts entity.idp.scopes
+exit
 puts entity.idp?         # => true
 puts entity.accountable? # => true
 entity.other_federation_uris << 'http://example.org'
