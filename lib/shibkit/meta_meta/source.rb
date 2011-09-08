@@ -195,6 +195,7 @@ module Shibkit
         federation = ::Shibkit::MetaMeta::Federation.new(fx)
                     
         ## Pass additional information from source into federation object  
+        federation.name          = name || uri
         federation.display_name  = display_name || name
         federation.type          = type 
         federation.refeds_url    = refeds_info 

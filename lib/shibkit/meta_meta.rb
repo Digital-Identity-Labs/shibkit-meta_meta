@@ -20,6 +20,7 @@ require 'rubygems'
 require 'nokogiri'
 require 'yaml'
 require 'open-uri'
+require 'logger'
 
 require 'shibkit/meta_meta/metadata_item'
 require 'shibkit/meta_meta/contact'
@@ -32,27 +33,38 @@ module Shibkit
   
   ## Simple library to parse Shibboleth metadata files into Ruby objects
   class MetaMeta
+        
+    def self.logger=(logger)
+        
+      @logger = logger
+        
+    end
+      
+    def self.logger
+        
+      unless @logger
+          
+        @logger        = ::Logger.new(STDOUT)
+        @logger.level  = ::Logger::INFO
+        @logger.datetime_format = "%Y-%m-%d %H:%M:%S"
+          
+      end
+        
+      return @logger
+        
+    end
     
+    def self.download_log=(file_path)
       
-      def self.logger=(logger)
-        
-        @logger = logger
-        
-      end
+      Shibkit::MetaMeta::Source.log_file = file_path
       
-      def self.logger
-        
-        unless @logger
-          
-          @logger        = ::Logger.new(STDOUT)
-          @logger.level  = ::Logger::INFO
-          @logger.datetime_format = "%Y-%m-%d %H:%M:%S"
-          
-        end
-        
-        return @logger
-        
-      end
+    end
+    
+    def self.download_log
+      
+      return Source.log_file
+      
+    end
     
     ## Flush out all available sources, metadata caches, etc.
     def self.reset
@@ -299,6 +311,9 @@ module Shibkit
         
       end
       
+      ## Bodge to make sure primary ents are set, multifederation calculated, etc
+      self.entities
+      
       logger.info "Processing complete."
       
       return @federations
@@ -324,6 +339,7 @@ module Shibkit
       
         self.process_sources unless @federations
         self.process_sources if @federations.empty? 
+        
       
       end
       
