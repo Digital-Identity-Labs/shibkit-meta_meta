@@ -70,9 +70,7 @@ module Shibkit
       
       ## @return [String] Brief description of the federation or collection
       attr_accessor :description
-            
-      attr_accessor :only
-      
+
       ## Array of entities within the federation or metadata collection
       attr_accessor :entities  
       
@@ -109,16 +107,7 @@ module Shibkit
         
           entity = Entity.new(ex)
           entity.primary_federation_uri = self.federation_uri
-          
-          @only ||= :all
-          
-          case only.to_sym
-          when :idp, :idps
-            next unless entity.idp?
-          when :sp, :sps
-            next unless entity.sp?
-          end
-          
+        
           ## Collect this entity in the federation object
           self.entities << entity
           
