@@ -70,7 +70,7 @@ module Shibkit
           self.givenname = @xml.xpath('xmlns:GivenName[1]')[0].content    if @xml.xpath('xmlns:GivenName[1]')[0]
           self.surname   = @xml.xpath('xmlns:SurName[1]')[0].content      if @xml.xpath('xmlns:SurName[1]')[0]
           self.email_url = @xml.xpath('xmlns:EmailAddress[1]')[0].content if @xml.xpath('xmlns:EmailAddress[1]')[0]
-          self.category  = @xml['contactType']
+          self.category  = @xml['contactType'].to_sym
         
         end
   

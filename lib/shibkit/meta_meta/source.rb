@@ -203,7 +203,6 @@ module Shibkit
         federation.support_email = support_email
         federation.homepage_url  = homepage
         federation.description   = description
-
         
         return federation
         

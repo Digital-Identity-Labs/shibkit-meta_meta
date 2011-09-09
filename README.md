@@ -1,8 +1,13 @@
-Shibkit::MetaMeta - Lazy SAML Metadata Access
-==============================================
+Shibkit::MetaMeta - Lazy Access To SAML Metadata
+================================================
 
 ## DESCRIPTION
 
+Shibkit::MetaMeta aims to provide lazy, friendly handling of
+Shibboleth/SAML2 metadata. Easily download and parse metadata XML into Ruby
+objects. 
+
+### What is SAML Metadata? What is Shibboleth?
 SAML2 Metadata is widely used in education to build access management federations
 - groups of trusted IDPs (login servers) and SPs (websites using the IDPs for authentication). 
 
@@ -17,7 +22,7 @@ that needs to be aware of other entities in its federations then MetaMeta may be
 
 Features include:
 
-* Ready-to-use configurations and information for all major SAML federations (not complete yet)
+* Ready-to-use configurations and information for all major SAML federations (not actually complete yet)
 * Efficient download, caching and expiry of metadata, using ETag, Expires, Cache-Control and Last-Modified headers where available
 * Validation of metadata (also not complete but we're working on it)
 * Immediate access to metadata as XML or parsed Nokogiri documents
@@ -36,25 +41,39 @@ using Shibkit::Disco, a library that builds on Shibkit::MetaMeta to provide a
 SAML discovery framework. Most features of Shibkit::MetaMeta will still be available inside
 Shibkit::Disco.
 
-> I feel the same way about disco as I do about herpes. 
-> *Hunter S. Thompson*
+>I feel the same way about disco as I do about herpes. 
+>*Hunter S. Thompson*
   
 If you don't fancy the heavier framework in Shibkit::Disco you can probably get
 what you need from Shibkit::MetaMeta, or use it in a framework of your own.
 
 ## CAVEATS
 
-MetaMeta is still early in development, so please bear the following in mind when using it:
+MetaMeta is still early in development so please bear the following in mind when using it:
 
+* Tests and API documentation are not complete. They will be completed before version 1.0.0.
 * The API may not be stable until version 1.0. If using Bundler please lock the version to avoid upgrades breaking your application
-* Full validation of metadata is not present yet
+* Full validation of metadata is not present yet. **Do not use MetaMeta for security checks yet.**
 * The mock 'dev' metadata is not valid or complete. We plan to eventually build some fully-functional example federations, but at present both UnCommon and Example federations are simple test mocks of certain parts of SAML2 metadata.
 * The source list of federations is _far_ from complete.
 * For development and testing the provided lists should be fine but please DO NOT use the provided federation source lists in production without manually checking their contents or using your own edited version. Your federation will have its own guidelines for verifying their certificate and metadata, please read them and check that the certificate and source URL you are using are correct. Your chain of trust should not originate in a file on Github, even if the creators are nice people.
 * MetaMeta is using far too much memory when processing metadata XML. 
-* MetaMeta is not compatible with JRuby yet (but we hope it will be) 
+* MetaMeta is not compatible with JRuby yet (but we hope it will be)
+* Not yet tested on Windows, although it detects Windows and tries to compensate.
 
 ## INSTALLATION
+
+Please note: we haven't actually released the gem yet! It's best to download
+the source from Github and then run `rake install`
+
+### Requirements
+Shibkit::MetaMeta is available as a gem and should bring in most dependencies itself
+when installed. It does need a few of other things as well:
+
+* Ruby 1.8.7+ or Ruby 1.9.2+
+* Rubygems (not required but makes things much simpler)
+* LibXML2 (including LibXML2-devel on Linux)
+* Linux, Mac OS, *BSD, Solaris (Windows is unsupported at present)
 
 ### As a released Ruby Gem
 
@@ -100,6 +119,12 @@ git clone git@github.com:Digital-Identity-Labs/shibkit-meta_meta.git
 ```ruby
 source "http://rubygems.org"
 gem "shibkit-meta_meta", :path => "~/Projects/shibkit-meta_meta/"
+```
+
+You can also skip Bundler and install the gem directly from source by typing
+
+```shell
+rake install 
 ```
 
 Please feel welcome to fork the project on Github and send pull requests for any
@@ -153,6 +178,8 @@ puts entity.accountable?
 
 Read more about the Shibkit::MetaMeta class
 
+----
+
 ### Metadata Sources
 
 MetaMeta needs to know various things about a Federation before it can access
@@ -191,7 +218,9 @@ Shibkit::MetaMeta.sources_file = :real
 Shibkit::MetaMeta.idps.each { |e| puts e }
 ```
 
-## Accessing Source information
+----
+
+### Accessing Source information
 Source objects can be accessed directly, to be read or adjusted after loading.
 
 ```ruby
@@ -268,6 +297,8 @@ Shibkit::MetaMeta.additional_sources.each { |s| puts s.display_name }
 
 ```
 
+----
+
 ### Federations
 
 Federation objects describe a federation, including its members 
@@ -319,12 +350,14 @@ Shibkit::MetaMeta.only_use(:everything)
 
 ```
 
+----
+
 ### Entities (IDPs & SPs)
 
 Entity objects are generic representations of entities listed in SAML metadata.
 They can be IDPs, SPs, or both. MetaMeta only stores general information about the
 entity in the Entity object itself, and then uses SP and IDP objects inside it
-to store more detailed information about the roles of entity.
+to store more detailed information about the roles of the entity.
 
 #### Accessing all the entities in a federation
 
@@ -340,278 +373,332 @@ uom_idp = Shibkit::MetaMeta.from_uri('https://shib.manchester.ac.uk/shibboleth')
 ```
 
 #### Listing all primary entities in all federations
+If you're read this far you can probably guess how this will go.
 
 ```ruby
 all_entities = Shibkit::MetaMeta.entities
 ```
 
+This doesn't list *all* entities, only all *primary* entities. I'm afraid we've made
+up the term "primary entity". Read on for enlightenment.
+
 #### Multi-federation entities and primary entities
+
+The same IDP or SP, represented by the same URI, can be in more than one federation.
+The Shibboleth IDP will load the only the first one that it finds. Because of this,
+although it's possible to give the same service different metadata in each
+federation it's probably a bad idea to do so - you don't know which metadata
+for your service will be used.
+
+IDPs and SPs don't usually care which trusted federation an entity belongs to - they're
+trusted, and that's what matters. However, your SAML-aware software might care, so
+MetaMeta tries to keep track of multiple federation membership.
+
+Each Federation object has its own list of entities. These are separate objects and if
+metadata for a service varies between different federations it should be different
+between their MetaMeta objects too.
+
+```ruby
+entity1 = fed1.entities.collect { |e| e.uri = 'http://silly-idp.com/shib' }[0]
+entity2 = fed2.entities.collect { |e| e.uri = 'http://silly-idp.com/shib' }[0]
+
+entity1.primary_federation_uri # => 'http://fed1.org'
+entity1.idp.protocols
+  # => ['urn:oasis:names:tc:SAML:1.1:protocol', 'urn:oasis:names:tc:SAML:2.0:protocol']
+
+entity2.primary_federation_uri # => 'http://fed2.org'
+entity2.idp.protocols
+  # => ['urn:oasis:names:tc:SAML:2.0:protocol']
+
+```
+
+In most cases you don't want to know about the other varieties; you want to know about
+the entity with the first metadata to be loaded. Shibkit::MetaMeta refers to this
+as the "Primary Entity", and its parent Federation as its "primary federation".
+
+Shibkit::MetaMeta only lists primary records when you call `Shibkit::MetaMeta.from_uri` and
+`Shibkit::MetaMeta.entities`
+
+Primary entities will have any other federations that they are a member of listed under 
+`#other_federations` and `#secondary_federations`. Both primary and seconday/other federations are
+listed by `#federation_uris`. 
+
+You can quickly check if an entity is primary or multifederation:
+
+```ruby
+ent = Shibkit::MetaMeta.from_uri('https://idp.uni.ac.uk/shibboleth')
+
+ent.primary? # => true
+ent.multi_federated? # => true
+```
 
 #### Entity objects
 
+```ruby
+ent = Shibkit::MetaMeta.from_uri('https://idp.uni.ac.uk/shibboleth')
+
+ent.uri # => 'https://idp.uni.ac.uk/shibboleth'
+ent.accountable? # => true
+ent.hide?        # => false
+ent.sp?          # => false
+ent.idp?         # => true
+
+ent.idp.scopes # => ['uni.ac.uk']
+
+```
+
+For more information on Entity objects please read the API documentation.
+
+----
 
 ### IDPs
 
-Stuff blah:
+While an Entity object can represent an IDP (indicated by the `#idp?` method) the details of its
+IDP role are held in the IDP object it contains.
 
 ```ruby
-code       # => 1
-code       # => 2
+entity.idp? # => true
+entity.idp.protocols        # => ['urn:oasis:names:tc:SAML:2.0:protocol']
+entity.idp.scopes           # => ['uni.ac.uk']
+
+entity.idp.display_name     # => "The University of Studies"
+entity.idp.display_name :fr # => "L'Université des Etudes"
+entity.idp.description      # => "Example login service for UoS"  
+entity.idp.domains          # => ['uni.ac.uk']
 ```
 
-Also stuff blah:
+For more information on IDP objects please read the API documentation.
 
-```ruby
-code       # => 1
-code       # => 2
-```
+----
 
-which is nice.
 
 ### SPs
 
-Stuff blah:
+Entity objects can also represent an SP (even if also an IDP). As with IDPs the
+additional information is represented by an SP object within the Entity object.
 
 ```ruby
-code       # => 1
-code       # => 2
+entity.sp? # => true
+entity.sp.protocols     # => ['urn:oasis:names:tc:SAML:2.0:protocol']
+
+entity.sp.display_name     # => "University of Studies Webmail"
+entity.sp.display_name :fr # => "L'Université des Etudes de Webmail"
+entity.sp.description      # => "Email service for staff and students"  
+entity.sp.ip_blocks        # => ['192.168.1.0/24', '10.50.1.0/24']
 ```
 
-Also stuff blah:
+For more information on SP objects please read the API documentation.
 
-```ruby
-code       # => 1
-code       # => 2
-```
-
-which is nice.
-
+----
 
 ### Contacts
 
-Stuff blah:
+IDP and SP objects may contain Contact objects. Each type of contact is available 
+from its own method in an Entity object. If a contact type is not available then `nil`
+is returned.
 
 ```ruby
-code       # => 1
-code       # => 2
+sc = entity.support_contact
+tc = entity.technical_contact
+ac = entity.admin_contact
 ```
 
-Also stuff blah:
+Contact objects are very simple:
 
 ```ruby
-code       # => 1
-code       # => 2
+contact = entity.support_contact
+
+contact.givenname     # => 'Joe'
+contact.surname       # => 'Yossarian'
+contact.display_name  # => 'Joe Yossarian'
+contact.email_url     # => "mailto:joe.yossarian@uni.ac.uk"
+contact.email_address # => 'joe.yossarian@uni.ac.uk'
+contact.category      # => :support
+
 ```
 
-which is nice.
+For more information on Contact objects please read the API documentation.
 
+----
 
 ### Organisations
 
-Stuff blah:
+IDP and SP objects may contain Organisation objects. Organisation details have 
+often been used to describe services (especially IDPs) rather than the organisation
+running the service. Recent additions to SAML metadata (described in the next section) will
+hopefully lead to organisation details gradually becoming more useful.
 
 ```ruby
-code       # => 1
-code       # => 2
+org = entity.organisation
+
+org.name          # => 'University of Studies'
+org.display_name  # => 'University of Studies IDP (test)'
+org.url           # => 'uni.ac.uk' 
 ```
 
-Also stuff blah:
+MetaMeta will fall back to using Organisation data to describe entities when no
+user interface information is available.
+
+The `Shibkit::MetaMeta.orgs` method will list all organisations found in all federations
+after trying, rather badly, to minimise repeated records. We added this feature to 
+see how well it would work, and so far it doesn't work very well at all.
+
+For the curious or optimistic:
 
 ```ruby
-code       # => 1
-code       # => 2
+messy_list_organisations = Shibkit::MetaMeta.orgs
 ```
 
-which is nice.
-
+----
 
 ### User Interface Info
 
-Stuff blah:
+Shibkit::MetaMeta aims to reproduce the details that Shibboleth IDPs can present 
+to users during authentication - friendly, localised information on SPs and IDPs.
+
+User interface information for SPs and IDPs is available as as English default, a 
+specified locale (if available, falling back to English) and as a hash of all available
+content.
 
 ```ruby
-code       # => 1
-code       # => 2
+entity.idp.display_name     # => "The University of Studies"
+entity.idp.display_name :fr # => "L'Université des Etudes"
+entity.idp.display_names  
+  # => {:en => "The University of Studies", :fr => "L'Université des Etudes"}
+
+entity.idp.keywords      # => ['example', 'university']
+entity.idp.keywords :fr  # => ['exemple', 'université']
+entity.idp.keyword_sets  
+  # => {:en => ['example', 'university'], :fr => ['exemple', 'université']}
 ```
 
-Also stuff blah:
-
-```ruby
-code       # => 1
-code       # => 2
-```
-
-which is nice.
+----
 
 ### Logos
 
-Stuff blah:
+SPs and IDPs may also have Logo objects, for use in user interfaces or just to
+decorate your federation reports. Like user interface information they can be 
+grouped according to language, and the defaults assume `:en`
 
 ```ruby
-code       # => 1
-code       # => 2
+default_logos = entity.idp.logos
+french_logos  = entity.idp.logos :fr
+
+default_logos.each { |logo| puts logo.url ; puts logo.width }
+
+## Find location of largest image in a set
+french_logos.sort{ |a,b| a.pixels <=> b.pixels }.last.uri
+
 ```
 
-Also stuff blah:
+Logo objects have various methods for describing the image, downloading it,
+comparing the real image to details in metadata, etc. Please read the API docs
+for more info.  
 
-```ruby
-code       # => 1
-code       # => 2
-```
-
-which is nice.
+----
 
 ### Discovery Hints
 
-Stuff blah:
+Discovery hints can be used by WAYF/Discovery Services to guess at likely
+options for users.
 
 ```ruby
-code       # => 1
-code       # => 2
+entity.sp.ip_blocks          # => ['192.168.1.0/24', '10.50.1.0/24']
+entity.sp.domains            # => ['uni.ac.uk']
+entity.idp.geo_location_uris # => nil 
 ```
 
-Also stuff blah:
-
-```ruby
-code       # => 1
-code       # => 2
-```
-
-which is nice.
-
-
-### Advertised Attributes
-
-
-Stuff blah:
-
-```ruby
-code       # => 1
-code       # => 2
-```
-
-Also stuff blah:
-
-```ruby
-code       # => 1
-code       # => 2
-```
-
-which is nice.
+----
 
 
 ### Service Information
-
-Stuff blah:
-
-```ruby
-code       # => 1
-code       # => 2
-```
-
-Also stuff blah:
+SPs can advertise a number of Services. 
 
 ```ruby
-code       # => 1
-code       # => 2
+
+entity.sp.services         # Returns an array of service objects
+service = entity.sp.default_service  # Returns one service
+
+service.attributes      # Array of attribute objects
+service.index           # Returns the index number of the service
+service.description     # Default description
+service.description :en # English description
+service.description     # Hash of all descriptions, keyed on language.
+
 ```
 
-which is nice.
+### IDP and SP Attributes
+While rarely used, it's possible for metadata to list the attributes made available
+by IDPs or requested by SPs. These should be available via the SP and IDP objects.
+
+```ruby
+entity.idp.attributes.each { |a| puts a.friendly_name }
+
+entity.sp.default_service.attributes.each { |a| puts a.name }
+
+attribute = entity.idp.attributes[0]
+
+attribute.name           # Name uri for the attribute
+attribute.required?      # (Used by SPs)
+attribute.name_format    # 
+attribute.friendly_name  #
+attribute.values         # Available values (from IDPs)
+
+```
+
+----
 
 ### Provisioning Your Application
 
-Stuff blah:
+Shibkit::MetaMeta is **not** a sleek and speedy bit of software. It can use a
+fairly large amount of RAM to process metadata - when loading four federations
+(c.2400 unique entities) a couple of hundred megabytes of RAM is typical,
+and also takes about a minute on a typical PC. 
 
-```ruby
-code       # => 1
-code       # => 2
-```
+Because of this it is probably a very bad idea to autoload objects inside a 
+persistent web application, especially at startup. Using multiple Mongrel processes,
+each loading their own metadata, is definitely not advisable. 
 
-Also stuff blah:
+Shibkit::MetaMeta is best suited to running scripts that process metadata then quit,
+maybe loading data into other storage formats.
 
-```ruby
-code       # => 1
-code       # => 2
-```
+If you want a persistent database to query within your applications you should
+consider Shibkit::Disco, which builds on MetaMeta and provides a variety of database
+backends.
 
-which is nice.
-
-
-### Writing Source Lists
-
-Stuff blah:
-
-```ruby
-code       # => 1
-code       # => 2
-```
-
-Also stuff blah:
-
-```ruby
-code       # => 1
-code       # => 2
-```
-
-which is nice.
-
+----
 
 ### General Options
 
-Stuff blah:
+[There are a few methods in the Source class that need to be refactored out for use everywhere
+in MetaMeta. Should be fixed soon.]
 
-```ruby
-code       # => 1
-code       # => 2
-```
-
-Also stuff blah:
-
-```ruby
-code       # => 1
-code       # => 2
-```
-
-which is nice.
-
-
-
+----
 
 ### Caching Options
 
-Stuff blah:
+...
 
-```ruby
-code       # => 1
-code       # => 2
-```
+## BACKGROUND READING
 
-Also stuff blah:
-
-```ruby
-code       # => 1
-code       # => 2
-```
-
-which is nice.
-
-
-## BACKGROUND
-
-
-
-Text discussing Metadata background reading [Semantic Versioning](http://semver.org/) and uses
-[TomDoc](http://tomdoc.org/) for inline documentation.
-
-http://docs.oasis-open.org/security/saml/v2.0/saml-metadata-2.0-os.pdf
-http://www.oasis-open.org/committees/download.php/42714/sstc-saml-metadata-ui-v1.0-wd07.pdf
-
+* [Wikipedia on SAML2](http://en.wikipedia.org/wiki/SAML_2.0)
+* [Shibboleth software](http://shibboleth.internet2.edu/)
+* [SAML2 Metadata spec](http://www.oasis-open.org/committees/download.php/35391/sstc-saml-metadata-errata-2.0-wd-04-diff.pdf)
+* [Metadata UI spec](http://docs.oasis-open.org/security/saml/Post2.0/sstc-saml-metadata-ui/v1.0/sstc-saml-metadata-ui-v1.0.pdf)
+* [The SAML2 Spec](http://docs.oasis-open.org/security/saml/v2.0/saml-profiles-2.0-os.pdf)
+* [All the SAML2 specs](http://saml.xml.org/saml-specifications)
 
 ## SHIBKIT 
+
+Shibkit::MetaMeta is part of Shibkit, a collection of Ruby gems derived from
+code used by Digital Identity Ltd in various projects and experiments. Most
+future commercial and open source Digital Identity Labs projects will be based
+on Shibkit libraries.
 
 ## CONTRIBUTORS
 
 * Pete Birkinshaw
+* Eddy Wheldon
 * Linda Ward
 * Sam Jones
 
@@ -626,15 +713,29 @@ for the entire whole license text if you're curious.
 
 ## DIGITAL IDENTITY LABS
 
+...
+
+## OOPS...
+
+We've definitely made mistakes. This is software - there are going to be coding bugs,
+inaccurate documentation, misinterpreted specs, and horrible, embarrassing things that
+we haven't even worried about yet.
+
+If you find something wrong, weird or confusing please let us know on the Shibkit-MetaMeta
+issue tracker. It might cause us blushes but we'd rather someone let us know straight away.
+
+https://github.com/Digital-Identity-Labs/shibkit-meta_meta/issues
 
 ## CONTRIBUTE
 
 If you'd like to add new features to MetaMeta or even remove feature you hate
-then 
+then please fork the repository on Github. Change the code to work the way you want,
+and then send us a pull request if you'd like us to merge any of your changes back
+into the official repository.
 
 https://github.com/Digital-Identity-Labs/shibkit-meta_meta
 
-
+If you'd like us to add a feature for you then please get in touch.
 
 
 

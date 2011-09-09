@@ -39,7 +39,8 @@ module Shibkit
       ## 
       attr_accessor :values
       
-      alias :required? :is_required
+      alias :required?     :is_required
+      alias :is_required? :is_required
       
       private
      

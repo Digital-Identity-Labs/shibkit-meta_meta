@@ -32,7 +32,28 @@ module Shibkit
   
   ## Simple library to parse Shibboleth metadata files into Ruby objects
   class MetaMeta
-  
+    
+      
+      def self.logger=(logger)
+        
+        @logger = logger
+        
+      end
+      
+      def self.logger
+        
+        unless @logger
+          
+          @logger        = ::Logger.new(STDOUT)
+          @logger.level  = ::Logger::INFO
+          @logger.datetime_format = "%Y-%m-%d %H:%M:%S"
+          
+        end
+        
+        return @logger
+        
+      end
+    
     ## Flush out all available sources, metadata caches, etc.
     def self.reset
       
@@ -90,6 +111,13 @@ module Shibkit
     
     end
     
+    ## Have we loaded any sources?
+    def self.loaded_sources?
+      
+      return @loaded_sources ? true : false
+      
+    end
+    
     ## Load sources from a YAML file
     def self.load_sources
       
@@ -116,13 +144,7 @@ module Shibkit
         
     end
     
-    ## Have we loaded any sources?
-    def self.loaded_sources?
-      
-      return @loaded_sources ? true : false
-      
-    end
-    
+
     ## Select a specific source file
     def self.sources_file=(file_path)
       
@@ -254,7 +276,9 @@ module Shibkit
     
     ## Parses sources and returns an array of all federation object
     def self.process_sources
-
+      
+      logger.info "Processing content of sources into objects..."
+      
       raise "MetaMeta sources are not an Array! (Should not be a #{self.sources.class})" unless
         self.sources.kind_of? Array
       
@@ -274,6 +298,8 @@ module Shibkit
         @federations << federation
         
       end
+      
+      logger.info "Processing complete."
       
       return @federations
          
