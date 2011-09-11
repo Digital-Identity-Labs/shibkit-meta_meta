@@ -59,10 +59,9 @@ describe Shibkit::MetaMeta do
 
   describe "#save_sources" do
     it "should save the sources list to a file" do
-      index=0
-      while((@sourcesfile = "/tmp/sources#{index.to_s}.list") && (File.exists? @sourcesfile)) do
-        index = index+1
-      end
+      tmpfile = Tempfile.new('metametasources')
+      @sourcesfile = tmpfile.path
+      tmpfile.close
       Shibkit::MetaMeta.save_sources(@sourcesfile)
       (File.exists? @sourcesfile).should == true
     end
