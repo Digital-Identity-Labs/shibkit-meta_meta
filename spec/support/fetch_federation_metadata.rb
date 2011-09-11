@@ -24,7 +24,6 @@ end
 def metadata_file(label)
   
   file = "#{::File.dirname(__FILE__)}/../data/metadata_cache/#{label}.xml"
-  raise "No file with that label exists!" unless File.exists? file
   
   return file
   
