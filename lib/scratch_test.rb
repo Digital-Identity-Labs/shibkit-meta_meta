@@ -1,15 +1,15 @@
 require 'shibkit/meta_meta'
 
-Shibkit::MetaMeta.download_log    = "/tmp/dl.log"
-Shibkit::MetaMeta::Source.verbose = true
+Shibkit::MetaMeta.config do |c|
+  c.downloads_logger  = STDOUT
+  c.verbose_downloads = true
+end
 
-puts "Fetching sources"
+
+
 Shibkit::MetaMeta.load_sources
-puts "Fetched!"
 
-puts "Processing"
 Shibkit::MetaMeta.process_sources
-puts "done"
 
 
 Shibkit::MetaMeta.entities.each { |e| next unless e.organisation ; puts e.organisation.display_name ; puts e.organisation.url }

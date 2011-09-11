@@ -288,7 +288,7 @@ module Shibkit
       def certificate_pem
         
         ## Deal with caching locally, downloading, etc
-        refresh if Source.auto_refresh? and @certificate_tmpfile == nil
+        refresh if ::Shibkit::MetaMeta.config.auto_refresh? and @certificate_tmpfile == nil
         
         return IO.read(certificate_tmpfile.path)
         
@@ -299,7 +299,7 @@ module Shibkit
       def content
                 
         ## Deal with caching locally, downloading, etc
-        refresh if Source.auto_refresh? and @metadata_tmpfile == nil
+        refresh if ::Shibkit::MetaMeta.config.auto_refresh? and @metadata_tmpfile == nil
         
         raise "No content is available, source has not been downloaded" unless 
           metadata_tmpfile.path
@@ -374,9 +374,11 @@ module Shibkit
       ## Return appropriate file path for 
       def self.locate_sources_file(source_list)
       
+        config = ::Shibkit::MetaMeta.config
+      
         case source_list
         when :auto
-          file_path = self.in_production? ? REAL_SOURCES_FILE : DEV_SOURCES_FILE
+          file_path = config.in_production? ? REAL_SOURCES_FILE : DEV_SOURCES_FILE
         when :dev, :test
           file_path = DEV_SOURCES_FILE
         when :real, :prod, :production

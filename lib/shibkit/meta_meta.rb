@@ -22,6 +22,7 @@ require 'yaml'
 require 'open-uri'
 require 'logger'
 
+require 'shibkit/meta_meta/config'
 require 'shibkit/meta_meta/metadata_item'
 require 'shibkit/meta_meta/contact'
 require 'shibkit/meta_meta/source'
@@ -57,8 +58,7 @@ module Shibkit
       ## Clear the source data
       @additional_sources   = Hash.new
       @loaded_sources       = Hash.new
-      @selected_federations = Array.new
-      
+   
       ## Clear federation entity data
       self.flush
       
@@ -120,7 +120,7 @@ module Shibkit
       
       @loaded_sources = Hash.new
       
-      Source.load(self.sources_file).each do |source|
+      Source.load(self.config.sources_file).each do |source|
         
         ## More than one definition for a source is a problem 
         raise "Duplicate source for #{source.uri}!" if @loaded_sources[source.uri]
@@ -141,41 +141,10 @@ module Shibkit
         
     end
     
-
-    ## Select a specific source file
-    def self.sources_file=(file_path)
-      
-      @sources_file = file_path
-      
-    end
-    
-    ## Give location of sources file
-    def self.sources_file
-      
-      sf = @sources_file || :auto
-      
-      return Source.locate_sources_file(sf)
-      
-    end
-    
-    ## Load a metadata sources file automatically (true or false)
-    def self.autoload=(setting)
-      
-      @autoload = setting ? true : false
-      
-    end
-    
-    ## Should metadata sources and objects be loaded automatically? Normally, yes.
-    def self.autoload?
-      
-      return @autoload || true
-      
-    end
-    
     ## List all sources as an array
     def self.sources
       
-      if self.autoload? and loaded_sources.size == 0
+      if self.config.autoload? and loaded_sources.size == 0
         
         self.load_sources
       
@@ -196,32 +165,11 @@ module Shibkit
       return sources 
       
     end
-    
-    ## Only use these federations/sources even if know about 100s - works on 
-    ## various functions (loading, processing and listing *after* it is set)
-    def self.only_use(selection)
-      
-      @selected_federation_uris ||= []
-      
-      case selection
-      when String
-        @selected_federation_uris << selection
-      when Array
-        @selected_federation_uris.concat(selection)
-      when Hash
-        @selected_federation_uris.concat(selection.keys)
-      when :all, :everything, nil, false
-        @selected_federation_uris = []
-      else
-        raise "Expected federation/source selection to be single uri or array"
-      end
-      
-    end
-    
+        
     ## List of federation/collection uris
     def self.selected_federation_uris
       
-      return @selected_federation_uris || []
+      return self.config.selected_federation_uris
       
     end
     
@@ -320,12 +268,11 @@ module Shibkit
     
     def self.stockup(force=false)
       
-      if self.autoload?
+      if self.config.autoload?
       
         self.process_sources unless @federations
-        self.process_sources if @federations.empty? 
+        self.process_sources if @federations.empty?
         
-      
       end
       
     end
@@ -342,9 +289,7 @@ module Shibkit
     def self.federations
       
       self.stockup
-      
-
-      
+       
       if self.filtered_sources?
         
         return @federations.select { |f| self.selected_federation_uris.include? f.uri }
@@ -460,12 +405,7 @@ module Shibkit
      
     private
     
-    def self.highlander_uri(list)
-      
-      return list.uniq { |i| i.uri }
-      
-    end
-      
+    # ...
  
   end
 end

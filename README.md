@@ -201,7 +201,7 @@ Source lists are simple YAML documents. Copy the examples included with MetaMeta
 or read the Shibkit::MetaMeta::Source documentation before writing your own.
 
 ```ruby
-Shibkit::MetaMeta.sources_file = '/etc/mm/my_metadata_sources.yml'
+Shibkit::MetaMeta.config.sources_file = '/etc/mm/my_metadata_sources.yml'
 Shibkit::MetaMeta.idps.each { |e| puts e }
 ```
 
@@ -214,7 +214,7 @@ MetaMeta comes with a few source lists that you can choose from.
 They are loaded by specifying the symbol instead of a real filename string
 
 ```ruby
-Shibkit::MetaMeta.sources_file = :real
+Shibkit::MetaMeta.config.sources_file = :real
 Shibkit::MetaMeta.idps.each { |e| puts e }
 ```
 
@@ -247,9 +247,9 @@ ask for data. However, this can sometimes cause delays exactly when you don't wa
 Autoloading of metadata can be turned off and on at any time:
 
 ```ruby
-Shibkit::MetaMeta.autoload = false
+Shibkit::MetaMeta.config.autoload = false
 # or maybe
-Shibkit::MetaMeta.autoload = true if Date.today.day == 1 
+Shibkit::MetaMeta.config.autoload = true if Date.today.day == 1 
 ```
 
 Of course if autoloading is turned off you'll not get any federations or entities
@@ -266,7 +266,7 @@ Shibkit::MetaMeta.stocked? # => true
 ```
 
 You can call `Shibkit::MetaMeta.process_sources`  to pre-emptively create objects
-even if `Shibkit::MetaMeta.autoload` is active.
+even if `Shibkit::MetaMeta.config.autoload` is active.
 
 #### Adding your own Sources without a sources file
 
@@ -337,7 +337,7 @@ all of them together.
 You can limit the sources/federations to be processed using the `#only_use` method:
 
 ```ruby
-Shibkit::MetaMeta.only_use(['http://ukfederation.org.uk'])
+Shibkit::MetaMeta.config.only_use(['http://ukfederation.org.uk'])
 
 ```
 
@@ -346,7 +346,7 @@ After specifying federation URIs only matching federations will be processed.
 You can go back to processing all federations by using `:all` or `:everything`
 
 ```ruby
-Shibkit::MetaMeta.only_use(:everything)
+Shibkit::MetaMeta.config.only_use(:everything)
 
 ```
 

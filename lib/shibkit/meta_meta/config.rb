@@ -17,13 +17,17 @@
 
 module Shibkit
   
-  module MetaMeta
+  class MetaMeta
   
     class Config
       
       require 'logger'
-      
-      require 'singleton'    
+      require 'rbconfig'
+      require 'tempfile'
+      require 'addressable/uri'
+      require 'fileutils'
+      require 'singleton'
+          
       include Singleton
       
       ## Location of default real sources list (contains real-world federation details)
@@ -33,7 +37,7 @@ module Shibkit
       DEV_SOURCES_FILE  = "#{::File.dirname(__FILE__)}/data/dev_sources.yml"
       
       ##
-      def initialize
+      def initialize(&block)
         
         @environment   = :development
         
@@ -55,14 +59,18 @@ module Shibkit
         
         @download_cache_options = {
           :default_ttl => 60*60*2,
-          :verbose     => self.respond_to?(:verbose?) ? self.verbose? : false,
+          :verbose     => false,
           :metastore   => Addressable::URI.convert_path(File.join(cache_root, 'meta')).to_s,
           :entitystore => Addressable::URI.convert_path(File.join(cache_root, 'body')).to_s            
         }
+         
+      end
+      
+      def configure(&block)
         
         ## Execute block if passed one      
         self.instance_eval(&block) if block
-           
+        
       end
       
       ##
@@ -90,17 +98,16 @@ module Shibkit
         
       end
       
-      ##
-      def config_directory=(dir)
+      def verbose_downloads=(bool)
 
-        @config_dir=dir
+       @verbose = bool ? true : false
+       self.download_cache_options = { :verbose => @verbose }
 
       end
-      
-      ##
-      def config_directory
 
-        return @config_dir || File.join(File.dirname(__FILE__), '..', 'config')
+      def verbose_downloads?
+
+       return @verbose || false
 
       end
       
@@ -119,16 +126,16 @@ module Shibkit
       end
       
       ##
-      def downloads_log_file=(file_path)
+      def downloads_logger=(logger)
 
-        return @downloads_log_file = file_path
+        return @downloads_logger = logger
 
       end
       
       ##  
-      def downloads_log_file
+      def downloads_logger
 
-        return @downloads_log_file || nil
+        return @downloads_logger || nil
 
       end
 
@@ -232,9 +239,9 @@ module Shibkit
       ## @param [Hash] Rack::Cache compatible hash of options
       ## @see http://rtomayko.github.com/rack-cache/ Rack::Cache for more information
       def download_cache_options=(options)
-
+        
         if download_cache_options
-          @download_cache_options.merge(options) 
+          @download_cache_options.merge!(options) 
         else
           @download_cache_options = @options
         end  
@@ -247,25 +254,7 @@ module Shibkit
         return @download_cache_options
 
       end
-        
-      private
       
-      ## Calculate the filesystem path to store the web cache
-      def cache_root
-
-        tmp_dir  = sensible_os? ? '/tmp' : ENV['TEMP']
-        base_dir = File.join(tmp_dir, 'skmm-cache')
-
-        return base_dir
-
-      end
-           
-      ## Are we on a POSIX standard system or on MS-DOS/Windows, etc?
-      def sensible_os?
-
-        return Config::CONFIG['host_os'] =~ /mswin|mingw/ ? false : true
-
-      end
       
       ## Work out if we are in production or not by snooping on environment
       ## This is a magical bodge to make :auto option in #load vaguely useful
@@ -279,7 +268,38 @@ module Shibkit
         
         return false
         
-      end 
+      end
+      
+      ## Set cache root
+      def cache_root=(file_path)
+
+        @cache_root = file_path
+        
+      end
+      
+      ## return or calculate the filesystem path to store the web cache
+      def cache_root
+        
+        unless @cache_root 
+        
+          tmp_dir     = sensible_os? ? '/tmp' : ENV['TEMP']
+          @cache_root = File.join(tmp_dir, 'skmm-cache')
+
+        end
+
+        return @cache_root
+
+      end
+      
+      private
+      
+      ## Are we on a POSIX standard system or on MS-DOS/Windows, etc?
+      def sensible_os?
+
+        return ::Config::CONFIG['host_os'] =~ /mswin|mingw/ ? false : true
+
+      end
+
 
     end
   end
