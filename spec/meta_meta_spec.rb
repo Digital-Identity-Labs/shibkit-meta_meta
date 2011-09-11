@@ -45,9 +45,6 @@ describe Shibkit::MetaMeta do
       Shibkit::MetaMeta.additional_sources.keys[0].should == 'urn:mace:aaf.edu.au:AAFProduction'
     end
 
-    it "should allow a refresh period to be set"
-    it "should allow simple caching"
-    
   end
 
   describe "#save_sources" do
