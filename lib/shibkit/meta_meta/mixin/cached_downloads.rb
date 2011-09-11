@@ -84,11 +84,12 @@ module Shibkit
 
             @initialised_caches ||= false
 
+            ## Because these long class names are pain to keep typing
+            config = ::Shibkit::MetaMeta.config
+          
             unless @initialised_caches
               
-              ## Because these long class names are pain to keep typing
-              config = ::Shibkit::MetaMeta.config
-              
+
               ## JIT loading of the Cache module so we can set options first
               RestClient.enable Rack::Cache, config.download_cache_options
 
@@ -103,14 +104,20 @@ module Shibkit
 
               end
 
-              ## Helps if the locations actually exist, of course.
-              FileUtils.mkdir_p File.join(config.cache_root, 'meta')
-              FileUtils.mkdir_p File.join(config.cache_root, 'body')
 
               @initialised_caches = true
 
             end
+            
+            ## Helps if the locations actually exist, of course.
+            FileUtils.mkdir_p File.join(config.cache_root, 'meta')
+            FileUtils.mkdir_p File.join(config.cache_root, 'body')
+            
           end
+        
+        
+        
+        
         end
       end
     end

@@ -197,7 +197,14 @@ module Shibkit
         end
 
       end
+      
+      ## List of federation/collection uris
+      def selected_federation_uris=(selection)
 
+        only_use(selection)
+
+      end
+      
       ## List of federation/collection uris
       def selected_federation_uris
 
@@ -219,6 +226,18 @@ module Shibkit
 
       end
       
+      def can_delete=(bool)
+        
+        @can_delete = bool ? true : false
+        
+      end
+      
+      def can_delete?
+        
+        return @can_delete || false
+        
+      end
+            
       ## Forcibly set environment (not normally needed)
       ## @return [String]
       def environment=(environ)

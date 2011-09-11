@@ -3,10 +3,13 @@ require 'shibkit/meta_meta'
 Shibkit::MetaMeta.config do |c|
   c.downloads_logger  = STDOUT
   c.verbose_downloads = true
+  c.can_delete = false
 end
 
+Shibkit::MetaMeta.delete_all_cached_files!
+
 Shibkit::MetaMeta.config.only_use(['http://ukfederation.org.uk'])
-#Shibkit::MetaMeta.config.only_use(:all)
+#Shibkit::MetaMeta.config.selected_federation_uris = :all
 
 
 Shibkit::MetaMeta.load_sources
@@ -19,6 +22,8 @@ Shibkit::MetaMeta.entities.each { |e| next unless e.organisation ; puts e.organi
 
 puts "Biggest URI competition winner is..."
 puts Shibkit::MetaMeta.entities.sort!{|a,b| a.uri.size <=> b.uri.size}.last
+
+exit
 
 puts "Grab a particular entity by URI: is it an IDP? Is it accountable?"
 entity = Shibkit::MetaMeta.from_uri('https://shib.manchester.ac.uk/shibboleth')
