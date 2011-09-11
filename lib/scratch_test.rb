@@ -5,6 +5,8 @@ Shibkit::MetaMeta.config do |c|
   c.verbose_downloads = true
 end
 
+Shibkit::MetaMeta.config.only_use(['http://ukfederation.org.uk'])
+#Shibkit::MetaMeta.config.only_use(:all)
 
 
 Shibkit::MetaMeta.load_sources
@@ -14,7 +16,6 @@ Shibkit::MetaMeta.process_sources
 
 Shibkit::MetaMeta.entities.each { |e| next unless e.organisation ; puts e.organisation.display_name ; puts e.organisation.url }
 
-exit
 
 puts "Biggest URI competition winner is..."
 puts Shibkit::MetaMeta.entities.sort!{|a,b| a.uri.size <=> b.uri.size}.last
@@ -71,11 +72,10 @@ Shibkit::MetaMeta.add_source({
     :description => 'A single solution for accessing online resources and services',
 })       
 
-#Shibkit::MetaMeta.only_use(['http://ukfederation.org.uk'])
 
 puts "Using the source list #{Shibkit::MetaMeta.sources_file}"
 
-puts Shibkit::MetaMeta.autoload?
+puts Shibkit::MetaMeta.config.autoload?
 
 #Shibkit::MetaMeta.load_sources
 Shibkit::MetaMeta.load_sources

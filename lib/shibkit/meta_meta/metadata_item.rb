@@ -109,6 +109,13 @@ module Shibkit
       
       private
       
+      ## Logging 
+      def log
+      
+        return ::Shibkit::MetaMeta.config.logger
+        
+      end
+      
       ## Make sure we have consistent Nokogiri document whether string or Nokogiri passed
       def prepare_xml(source_xml)
       

@@ -45,12 +45,6 @@ module Shibkit
       end
 
     end
-    
-    def self.logger
-
-      return config.logger
-        
-    end
 
     ## Flush out all available sources, metadata caches, etc.
     def self.reset
@@ -222,7 +216,7 @@ module Shibkit
     ## Parses sources and returns an array of all federation object
     def self.process_sources
       
-      logger.info "Processing content of sources into objects..."
+      log.info "Processing content of sources into objects..."
       
       raise "MetaMeta sources are not an Array! (Should not be a #{self.sources.class})" unless
         self.sources.kind_of? Array
@@ -247,7 +241,7 @@ module Shibkit
       ## Bodge to make sure primary ents are set, multifederation calculated, etc
       self.entities
       
-      logger.info "Processing complete."
+      log.info "Processing complete."
       
       return @federations
          
@@ -405,7 +399,13 @@ module Shibkit
      
     private
     
-    # ...
+    ## Logging 
+    def self.log
+    
+      return ::Shibkit::MetaMeta.config.logger
+      
+    end
+   
  
   end
 end

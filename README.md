@@ -341,7 +341,8 @@ Shibkit::MetaMeta.config.only_use(['http://ukfederation.org.uk'])
 
 ```
 
-After specifying federation URIs only matching federations will be processed.
+After specifying federation URIs only matching federations will be downloaded
+ and processed.
 
 You can go back to processing all federations by using `:all` or `:everything`
 

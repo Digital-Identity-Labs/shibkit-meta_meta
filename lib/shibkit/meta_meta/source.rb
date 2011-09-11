@@ -213,6 +213,15 @@ module Shibkit
       ## @return [TrueClass, FalseClass]
       def refresh
         
+        unless selected?
+          
+          log.info "Source for #{ uri}: skipping refresh as not selected."
+          return false
+          
+        end
+        
+        log.info "Source for #{ uri}: refreshing..."
+        
         fetch_metadata
         fetch_certificate
         
@@ -283,6 +292,19 @@ module Shibkit
         
       end
       
+      ## Has this federation/source been selected by the user? 
+      def selected?
+        
+        ## If nothing has been specified then everything has been selected.
+        return true if ::Shibkit::MetaMeta.config.selected_federation_uris.empty?
+        
+        ## If this source's uri is present in the list, then yup.
+        return true if ::Shibkit::MetaMeta.config.selected_federation_uris.include?(uri)
+        
+        return false
+        
+      end
+      
       ## The content of the certificate associated with the metadata
       ## @return [String, nil]
       def certificate_pem
@@ -343,7 +365,18 @@ module Shibkit
         return true
     
       end
-            
+      
+      private
+      
+      
+      ## Logging 
+      def log
+      
+        return ::Shibkit::MetaMeta.config.logger
+        
+      end
+      
+         
       public
       
       ##
