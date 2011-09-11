@@ -2,13 +2,6 @@ require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
 describe Shibkit::MetaMeta do
   
-  describe "#new" do
-    
-    it "does not accept any parameters"
-    it "will accept a block for configuration"
-
-  end
-  
   describe "#add_source" do
 
     it "should accept a single source" do
@@ -91,13 +84,6 @@ describe Shibkit::MetaMeta do
     end
   end
 
-  describe "#refresh" do
-    
-    it "should "
-    
-  end
-
-  
   describe "#load_cache_file" do
     
     it "should"
@@ -110,16 +96,4 @@ describe Shibkit::MetaMeta do
     
   end
   
-  describe "#parse" do
-    
-    it "should"
-    
-  end
-  
-  describe "#extract_contact" do
-    
-    it "should"
-    
-  end
-
 end
