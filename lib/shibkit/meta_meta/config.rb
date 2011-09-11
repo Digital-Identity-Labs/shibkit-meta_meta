@@ -91,7 +91,7 @@ module Shibkit
         when :real, :prod, :production
           file_path = REAL_SOURCES_FILE
         else
-          file_path = source_list
+          file_path = @sources_file
         end
         
         return file_path
