@@ -97,16 +97,19 @@ describe Shibkit::MetaMeta do
     end
   end
 
-  describe "#load_cache_file" do
-    
-    it "should"
-    
-  end
   
+  describe "#process_sources" do
+    it "should read it's sources and return an array of federation objects" do
+      Shibkit::MetaMeta.reset
+      federations = Shibkit::MetaMeta.process_sources
+      federations.size.should > 0
+    end
+  end
   describe "#save_cache_file" do
-    
     it "should"
-    
+  end
+  describe "#load_cache_file" do
+    it "should"
   end
   
 end
