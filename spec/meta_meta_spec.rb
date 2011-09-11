@@ -2,6 +2,14 @@ require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
 describe Shibkit::MetaMeta do
   
+  describe "#reset" do
+    it "should reduce the number of sources to zero" do
+      Shibkit::MetaMeta.reset
+      Shibkit::MetaMeta.additional_sources.size.should == 0 &&
+      Shibkit::MetaMeta.loaded_sources.size.should == 0 
+    end
+  end
+
   describe "#add_source" do
 
     it "should accept a single source" do
@@ -40,7 +48,7 @@ describe Shibkit::MetaMeta do
           :support_email => 'enquiries@aaf.edu.au',
           :description   => 'The Australian Access Federation.',
       })
-      Shibkit::MetaMeta.additional_sources.keys.size.should == 2 &&
+      Shibkit::MetaMeta.additional_sources.size.should == 2 &&
       Shibkit::MetaMeta.additional_sources.keys[1].should == 'http://ukfederation.org.uk' &&
       Shibkit::MetaMeta.additional_sources.keys[0].should == 'urn:mace:aaf.edu.au:AAFProduction'
     end
@@ -50,34 +58,28 @@ describe Shibkit::MetaMeta do
   describe "#save_sources" do
     it "should save the sources list to a file" do
       tmpfile = Tempfile.new('metametasources')
-      @sourcesfile = tmpfile.path
+      @@sourcesfile = tmpfile.path
       tmpfile.close
-      Shibkit::MetaMeta.save_sources(@sourcesfile)
-      (File.exists? @sourcesfile).should == true
+      Shibkit::MetaMeta.save_sources(@@sourcesfile)
+      (File.exists? @@sourcesfile).should == true &&
+      File.size(@@sourcesfile).should > 0 
     end
   end
-  describe "#reset" do
-
-    it "should reduce the number of sources to zero" do
-      Shibkit::MetaMeta.reset
-      Shibkit::MetaMeta.additional_sources.size.should == 0 
-    end
-
-  end
-
   describe "#load_sources" do
-#TODO Should it really do that? # You know, I don't think it should...
-    it "should fail gracefully if there is no data to load" do
+    it "should automatically load sources if no source file has been specified." do
       Shibkit::MetaMeta.load_sources
+      Shibkit::MetaMeta.loaded_sources.size.should == 4 &&
+      Shibkit::MetaMeta.loaded_sources.keys[2].should == 'http://ukfederation.org.uk'
     end
     it "should be possible to set the file to load from" do
-      Shibkit::MetaMeta.config.sources_file=@sourcesfile
+      Shibkit::MetaMeta.reset
+      Shibkit::MetaMeta.config.sources_file=@@sourcesfile
     end
     it "should load sources from a file" do
       Shibkit::MetaMeta.load_sources
-      Shibkit::MetaMeta.additional_sources.size.should == 2 &&
-      Shibkit::MetaMeta.additional_sources.keys[1].should == 'http://ukfederation.org.uk' &&
-      Shibkit::MetaMeta.additional_sources.keys[0].should == 'urn:mace:aaf.edu.au:AAFProduction'
+      Shibkit::MetaMeta.loaded_sources.size.should == 2 &&
+      Shibkit::MetaMeta.loaded_sources.keys[1].should == 'http://ukfederation.org.uk' &&
+      Shibkit::MetaMeta.loaded_sources.keys[0].should == 'urn:mace:aaf.edu.au:AAFProduction'
     end
   end
 
