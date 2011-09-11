@@ -12,6 +12,4 @@ RSpec.configure do |config|
   
 end
 
-## Fetch and cache real metadata files from the Internet
-download_metadata_files
 
