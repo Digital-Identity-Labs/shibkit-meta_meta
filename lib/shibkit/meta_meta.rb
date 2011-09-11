@@ -21,6 +21,7 @@ require 'nokogiri'
 require 'yaml'
 require 'open-uri'
 require 'logger'
+require 'fileutils'
 
 require 'shibkit/meta_meta/config'
 require 'shibkit/meta_meta/metadata_item'
@@ -49,6 +50,8 @@ module Shibkit
     ## Flush out all available sources, metadata caches, etc.
     def self.reset
       
+      log.info "Resetting all sources, metadata caches, etc."
+      
       ## Clear the source data
       @additional_sources   = Hash.new
       @loaded_sources       = Hash.new
@@ -61,10 +64,31 @@ module Shibkit
     ## Clear all loaded entity & federation data 
     def self.flush
       
+      log.info "Flushing all loaded objects"
+      
       @orgs        = Array.new
       @entities    = Array.new
       @federations = Array.new
       @by_uri      = Hash.new
+      
+    end
+    
+    ## Delete all cache files
+    def self.delete_all_cached_files!
+      
+      dir = config.cache_root
+      
+      if config.can_delete?
+        
+        log.info "Deleting all files at #{dir}..."
+        FileUtils.rm_rf   dir
+        FileUtils.mkdir_p dir
+        
+      else
+        
+        log.warn "Cannot delete files at #{dir} - check config settings."
+        
+      end
       
     end
     
@@ -82,6 +106,8 @@ module Shibkit
         raise "Expected either hash or Source object!"
       end
 
+      log.info "Added a source for #{source.uri}"
+      
       @additional_sources[source.uri] = source
       
     end
@@ -112,6 +138,8 @@ module Shibkit
     ## Load sources from a YAML file
     def self.load_sources
       
+      log.info "Loading sources from disk..."
+      
       @loaded_sources = Hash.new
       
       Source.load(self.config.sources_file).each do |source|
@@ -127,6 +155,8 @@ module Shibkit
     
     ## Save all known sources to sources list file
     def self.save_sources(filename)
+      
+      log.info "Saving sources to disk..."
       
       src_dump = Hash.new
       self.sources.each { |s| src_dump[s.uri] = s }
@@ -177,6 +207,8 @@ module Shibkit
     ## Load or save cache if it's recent or, er, something
     def self.smart_cache(file_or_url)
       
+      log.info "Smart caching"
+      
       ## Do something smart.
       # ...
       
@@ -189,6 +221,8 @@ module Shibkit
     ## Loads federation metadata contents 
     def self.load_cache_file(file_or_url)
         
+        log.info "Loading object cache file from #{file_or_url}"
+        
         @federations = YAML::load(File.open(file_or_url))
         
         return true
@@ -197,7 +231,9 @@ module Shibkit
     
     ## Save entity data into a YAML file. 
     def self.save_cache_file(file)
-        
+      
+      log.info "Saving object cache file from #{file_or_url}"
+      
       ## Will *not* overwrite the example/default file in gem! TODO: this code is awful.
       gem_data_path = "#{::File.dirname(__FILE__)}/data"
       if file.include? gem_data_path 
@@ -249,6 +285,8 @@ module Shibkit
     
     ## Downloads and reprocesses metadata files  
     def self.refresh(force=false)
+      
+      log.info "Refreshing all selected federations"
       
       ## Reload source lists overwriting previous set
       self.load_sources

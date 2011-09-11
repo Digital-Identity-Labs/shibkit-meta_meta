@@ -215,12 +215,12 @@ module Shibkit
         
         unless selected?
           
-          log.info "Source for #{ uri}: skipping refresh as not selected."
+          log.info "Content for #{ uri} - skipping refresh as not selected."
           return false
           
         end
         
-        log.info "Source for #{ uri}: refreshing..."
+        log.info "Content for #{ uri} is being refreshed..."
         
         fetch_metadata
         fetch_certificate
