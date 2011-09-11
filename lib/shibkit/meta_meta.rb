@@ -33,39 +33,24 @@ module Shibkit
   
   ## Simple library to parse Shibboleth metadata files into Ruby objects
   class MetaMeta
-        
-    def self.logger=(logger)
-        
-      @logger = logger
-        
-    end
-      
-    def self.logger
-        
-      unless @logger
-          
-        @logger        = ::Logger.new(STDOUT)
-        @logger.level  = ::Logger::INFO
-        @logger.datetime_format = "%Y-%m-%d %H:%M:%S"
-          
+    
+    ## 
+    def self.config(&block)
+
+      if block
+        return ::Shibkit::MetaMeta::Config.instance.configure(&block)
+      else
+        return ::Shibkit::MetaMeta::Config.instance
       end
+
+    end
+    
+    def self.logger
+
+      return config.logger
         
-      return @logger
-        
     end
-    
-    def self.download_log=(file_path)
-      
-      Shibkit::MetaMeta::Source.log_file = file_path
-      
-    end
-    
-    def self.download_log
-      
-      return Source.log_file
-      
-    end
-    
+
     ## Flush out all available sources, metadata caches, etc.
     def self.reset
       

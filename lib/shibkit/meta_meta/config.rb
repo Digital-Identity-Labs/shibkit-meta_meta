@@ -1,0 +1,286 @@
+## @author    Pete Birkinshaw (<pete@digitalidentitylabs.com>)
+## Copyright: Copyright (c) 2011 Digital Identity Ltd.
+## License:   Apache License, Version 2.0
+
+## Licensed under the Apache License, Version 2.0 (the "License");
+## you may not use this file except in compliance with the License.
+## You may obtain a copy of the License at
+## 
+##     http://www.apache.org/licenses/LICENSE-2.0
+## 
+## Unless required by applicable law or agreed to in writing, software
+## distributed under the License is distributed on an "AS IS" BASIS,
+## WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+## See the License for the specific language governing permissions and
+## limitations under the License.
+##
+
+module Shibkit
+  
+  module MetaMeta
+  
+    class Config
+      
+      require 'logger'
+      
+      require 'singleton'    
+      include Singleton
+      
+      ## Location of default real sources list (contains real-world federation details)
+      REAL_SOURCES_FILE = "#{::File.dirname(__FILE__)}/data/real_sources.yml"
+      
+      ## Location of default mock sources list (contains small fictional federations)
+      DEV_SOURCES_FILE  = "#{::File.dirname(__FILE__)}/data/dev_sources.yml"
+      
+      ##
+      def initialize
+        
+        @environment   = :development
+        
+        @logger                 = ::Logger.new(STDOUT)
+        @logger.level           = ::Logger::INFO
+        @logger.datetime_format = "%Y-%m-%d %H:%M:%S"
+        @logger.formatter       = proc { |severity, datetime, progname, msg| "#{datetime}: #{severity} #{msg}\n" }
+        @logger.progname        = "MetaMeta"
+        
+        @download_log_file  = nil
+        
+        @quickload = false
+        
+        @quickload_cache_file = File.join(cache_root, 'quickload_cache.yml')
+        
+        @sources_file  = :auto
+        
+        @selected_federation_uris = []
+        
+        @download_cache_options = {
+          :default_ttl => 60*60*2,
+          :verbose     => self.respond_to?(:verbose?) ? self.verbose? : false,
+          :metastore   => Addressable::URI.convert_path(File.join(cache_root, 'meta')).to_s,
+          :entitystore => Addressable::URI.convert_path(File.join(cache_root, 'body')).to_s            
+        }
+        
+        ## Execute block if passed one      
+        self.instance_eval(&block) if block
+           
+      end
+      
+      ##
+      def sources_file=(file_path)
+      
+        @sources_file = file_path
+        
+      end
+      
+      ##
+      def sources_file
+        
+        case @sources_file
+        when :auto
+          file_path = self.in_production? ? REAL_SOURCES_FILE : DEV_SOURCES_FILE
+        when :dev, :test
+          file_path = DEV_SOURCES_FILE
+        when :real, :prod, :production
+          file_path = REAL_SOURCES_FILE
+        else
+          file_path = source_list
+        end
+        
+        return file_path
+        
+      end
+      
+      ##
+      def config_directory=(dir)
+
+        @config_dir=dir
+
+      end
+      
+      ##
+      def config_directory
+
+        return @config_dir || File.join(File.dirname(__FILE__), '..', 'config')
+
+      end
+      
+      ## Set main logger
+      def logger=(logger)
+        
+        @logger = logger
+
+      end
+      
+      ## Returns current main logger
+      def logger
+
+        return @logger
+
+      end
+      
+      ##
+      def downloads_log_file=(file_path)
+
+        return @downloads_log_file = file_path
+
+      end
+      
+      ##  
+      def downloads_log_file
+
+        return @downloads_log_file || nil
+
+      end
+
+      ## Load a metadata sources file automatically (true or false)
+      def autoload=(setting)
+
+        @autoload = setting ? true : false
+
+      end
+
+      ## Should metadata sources and objects be loaded automatically? Normally, yes.
+      def autoload?
+
+        return @autoload || true
+
+      end
+      
+      def quickload=(bool)
+        
+        @quickload = bool ? true : false
+        
+      end
+      
+      def quickload?
+        
+        return @quickload
+        
+      end
+      
+      def quickload_cache_file=(file_path)
+        
+        @quickload_cache_file = file_path
+        
+      end
+      
+      def quickload_cache_file
+        
+        return @quickload_cache_file
+        
+      end
+      
+      ## Only use these federations/sources even if know about 100s - works on 
+      ## various functions (loading, processing and listing *after* it is set)
+      def only_use(selection)
+
+        @selected_federation_uris ||= []
+
+        case selection
+        when String
+          @selected_federation_uris << selection
+        when Array
+          @selected_federation_uris.concat(selection)
+        when Hash
+          @selected_federation_uris.concat(selection.keys)
+        when :all, :everything, nil, false
+          @selected_federation_uris = []
+        else
+          raise "Expected federation/source selection to be single uri or array"
+        end
+
+      end
+
+      ## List of federation/collection uris
+      def selected_federation_uris
+
+        return @selected_federation_uris || []
+
+      end
+
+      ## @return [String]
+      def auto_refresh=(bool)
+
+       @auto_refresh = bool ? true : false
+
+      end
+      
+      ## @return [String]
+      def auto_refresh?
+
+       return @auto_refresh || true
+
+      end
+      
+      ## Forcibly set environment (not normally needed)
+      ## @return [String]
+      def environment=(environ)
+
+        @environment = environ
+
+      end
+
+      ## Forcibly set environment (not normally needed)
+      ## @return [String]
+      def environment
+
+        return @environment || 'production'
+
+      end
+
+      ## Options to set how remote files are cached and expired
+      ## @param [Hash] Rack::Cache compatible hash of options
+      ## @see http://rtomayko.github.com/rack-cache/ Rack::Cache for more information
+      def download_cache_options=(options)
+
+        if download_cache_options
+          @download_cache_options.merge(options) 
+        else
+          @download_cache_options = @options
+        end  
+        
+      end      
+
+      ## Returns hash of options to set how remote files are cached and expired
+      def download_cache_options
+
+        return @download_cache_options
+
+      end
+        
+      private
+      
+      ## Calculate the filesystem path to store the web cache
+      def cache_root
+
+        tmp_dir  = sensible_os? ? '/tmp' : ENV['TEMP']
+        base_dir = File.join(tmp_dir, 'skmm-cache')
+
+        return base_dir
+
+      end
+           
+      ## Are we on a POSIX standard system or on MS-DOS/Windows, etc?
+      def sensible_os?
+
+        return Config::CONFIG['host_os'] =~ /mswin|mingw/ ? false : true
+
+      end
+      
+      ## Work out if we are in production or not by snooping on environment
+      ## This is a magical bodge to make :auto option in #load vaguely useful
+      def in_production?
+        
+        return true # Obviously temporary until the dev metadata is fixed
+        
+        return true if self.environment == :production
+        return true if defined? Rails and Rails.env.production? 
+        return true if defined? Rack and defined? RACK_ENV and RACK_ENV == 'production'
+        
+        return false
+        
+      end 
+
+    end
+  end
+end
