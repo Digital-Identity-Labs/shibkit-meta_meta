@@ -1,6 +1,20 @@
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
 describe Shibkit::MetaMeta do
+  before(:all) do
+    Shibkit::MetaMeta.config.logger= Logger.new("rspec.log")
+    Shibkit::MetaMeta.config.logger.level = Logger::DEBUG
+    Shibkit::MetaMeta.config.logger.datetime_format = "%Y-%m-%d %H:%M:%S"
+    Shibkit::MetaMeta.config.logger.formatter       = proc { |severity, datetime, progname, msg| "#{datetime}: #{severity} #{msg}\n" }
+    Shibkit::MetaMeta.config.logger.progname        = "MetaMeta-RSpec"
+  end
+
+  before(:each) do |test|
+    Shibkit::MetaMeta.config.logger.info "Running [#{test.example.metadata[:full_description]}]"
+  end
+ after(:each) do |test|
+    Shibkit::MetaMeta.config.logger.info "Finihed [#{test.example.metadata[:full_description]}]"
+  end
   
   describe "#reset" do
     it "should reduce the number of sources to zero" do
