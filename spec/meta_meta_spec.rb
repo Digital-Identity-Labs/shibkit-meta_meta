@@ -40,7 +40,7 @@ describe Shibkit::MetaMeta do
           :support_email => 'enquiries@aaf.edu.au',
           :description   => 'The Australian Access Federation.',
       })
-      Shibkit::MetaMeta.additional_sources.size.should == 2 &&
+      Shibkit::MetaMeta.additional_sources.keys.size.should == 2 &&
       Shibkit::MetaMeta.additional_sources.keys[1].should == 'http://ukfederation.org.uk' &&
       Shibkit::MetaMeta.additional_sources.keys[0].should == 'urn:mace:aaf.edu.au:AAFProduction'
     end
@@ -66,12 +66,12 @@ describe Shibkit::MetaMeta do
   end
 
   describe "#load_sources" do
-#TODO Should it really do that?
+#TODO Should it really do that? # You know, I don't think it should...
     it "should fail gracefully if there is no data to load" do
       Shibkit::MetaMeta.load_sources
     end
     it "should be possible to set the file to load from" do
-      Shibkit::MetaMeta.sources_file=@sourcesfile
+      Shibkit::MetaMeta.config.sources_file=@sourcesfile
     end
     it "should load sources from a file" do
       Shibkit::MetaMeta.load_sources
