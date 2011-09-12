@@ -49,7 +49,6 @@ Gem::Specification.new do |s|
     "lib/shibkit/meta_meta/service.rb",
     "lib/shibkit/meta_meta/source.rb",
     "lib/shibkit/meta_meta/sp.rb",
-    "lib/test.rb",
     "spec/config_spec.rb",
     "spec/contact_spec.rb",
     "spec/data/metadata_cache/README",
