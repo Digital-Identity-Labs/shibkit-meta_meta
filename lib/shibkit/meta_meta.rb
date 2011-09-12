@@ -168,7 +168,7 @@ module Shibkit
     ## List all sources as an array
     def self.sources
       
-      if self.config.autoload? and loaded_sources.size == 0
+      if self.config.autoload? and loaded_sources.size == 0 and additional_sources.size == 0
         
         self.load_sources
       
