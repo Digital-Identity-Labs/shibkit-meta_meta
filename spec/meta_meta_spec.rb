@@ -2,7 +2,8 @@ require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
 describe Shibkit::MetaMeta do
   before(:all) do
-    Shibkit::MetaMeta.config.logger= Logger.new("rspec.log")
+    file = File.open("rspec.log",File::WRONLY |  File::CREAT)
+    Shibkit::MetaMeta.config.logger= Logger.new(file)
     Shibkit::MetaMeta.config.logger.level = Logger::DEBUG
     Shibkit::MetaMeta.config.logger.datetime_format = "%Y-%m-%d %H:%M:%S"
     Shibkit::MetaMeta.config.logger.formatter       = proc { |severity, datetime, progname, msg| "#{datetime}: #{severity} #{msg}\n" }
@@ -10,6 +11,7 @@ describe Shibkit::MetaMeta do
   end
 
   before(:each) do |test|
+    Shibkit::MetaMeta.reset
     Shibkit::MetaMeta.config.logger.info "Running [#{test.example.metadata[:full_description]}]"
   end
  after(:each) do |test|
@@ -27,7 +29,6 @@ describe Shibkit::MetaMeta do
   describe "#add_source" do
 
     it "should accept a single source" do
-      Shibkit::MetaMeta.reset
       Shibkit::MetaMeta.add_source({
           :uri           => 'http://ukfederation.org.uk',
           :name          => 'UK Access Management Federation For Education And Research',
@@ -48,6 +49,21 @@ describe Shibkit::MetaMeta do
     end
 
     it "should accept more than one source" do
+      Shibkit::MetaMeta.add_source({
+          :uri           => 'http://ukfederation.org.uk',
+          :name          => 'UK Access Management Federation For Education And Research',
+          :display_name  => 'UK Access Management Federation',
+          :type          => 'federation',
+          :countries     => ['gb'],
+          :metadata      => 'http://metadata.ukfederation.org.uk/ukfederation-metadata.xml',
+          :certificate   => 'http://metadata.ukfederation.org.uk/ukfederation.pem',
+          :fingerprint   => '94:7F:5E:8C:4E:F5:E1:69:E7:DF:68:1E:48:AA:98:44:A5:41:56:EE',
+          :refeds_info   => 'https://refeds.terena.org/index.php/FederationUkfed',
+          :homepage      => 'http://www.ukfederation.org.uk',
+          :languages     => ['en-gb', 'en'],
+          :support_email => ' service@ukfederation.org.uk',
+          :description   => 'A single solution for accessing online resources and services',
+      })
       Shibkit::MetaMeta.add_source({
           :uri           => 'urn:mace:aaf.edu.au:AAFProduction',
           :name          => 'Australian Access Federation',
@@ -71,6 +87,35 @@ describe Shibkit::MetaMeta do
 
   describe "#save_sources" do
     it "should save the sources list to a file" do
+      Shibkit::MetaMeta.add_source({
+          :uri           => 'http://ukfederation.org.uk',
+          :name          => 'UK Access Management Federation For Education And Research',
+          :display_name  => 'UK Access Management Federation',
+          :type          => 'federation',
+          :countries     => ['gb'],
+          :metadata      => 'http://metadata.ukfederation.org.uk/ukfederation-metadata.xml',
+          :certificate   => 'http://metadata.ukfederation.org.uk/ukfederation.pem',
+          :fingerprint   => '94:7F:5E:8C:4E:F5:E1:69:E7:DF:68:1E:48:AA:98:44:A5:41:56:EE',
+          :refeds_info   => 'https://refeds.terena.org/index.php/FederationUkfed',
+          :homepage      => 'http://www.ukfederation.org.uk',
+          :languages     => ['en-gb', 'en'],
+          :support_email => ' service@ukfederation.org.uk',
+          :description   => 'A single solution for accessing online resources and services',
+      })
+      Shibkit::MetaMeta.add_source({
+          :uri           => 'urn:mace:aaf.edu.au:AAFProduction',
+          :name          => 'Australian Access Federation',
+          :display_name  => 'AAF',
+          :type          => 'federation',
+          :countries     => ['au'],
+          :metadata      => 'http://manager.aaf.edu.au/metadata/metadata.aaf.signed.complete.xml',
+          :certificate   => 'https://manager.aaf.edu.au/metadata/metadata-cert.pem',
+          :refeds_info   => 'https://refeds.terena.org/index.php/FederationAAF',
+          :homepage      => 'http://www.aaf.edu.au/',
+          :languages     => ['en'],
+          :support_email => 'enquiries@aaf.edu.au',
+          :description   => 'The Australian Access Federation.',
+      })
       tmpfile = Tempfile.new('metametasources')
       @@sourcesfile = tmpfile.path
       tmpfile.close
@@ -86,7 +131,6 @@ describe Shibkit::MetaMeta do
       Shibkit::MetaMeta.loaded_sources.keys[2].should == 'http://ukfederation.org.uk'
     end
     it "should be possible to set the file to load from" do
-      Shibkit::MetaMeta.reset
       Shibkit::MetaMeta.config.sources_file=@@sourcesfile
     end
     it "should load sources from a file" do
@@ -100,7 +144,6 @@ describe Shibkit::MetaMeta do
   
   describe "#process_sources" do
     it "should read it's sources and return an array of federation objects" do
-      Shibkit::MetaMeta.reset
       federations = Shibkit::MetaMeta.process_sources
       federations.size.should > 0
     end
