@@ -160,7 +160,9 @@ module Shibkit
       
       ## Create a new source from a hash
       def self.from_hash(data, uri=nil)
-        
+
+        raise "#{data.class} is not a hash" if not data.instance_of? Hash
+
         data = data.inject({}){|m,(k,v)| m[k.to_sym] = v; m}
         
         new_source = self.new do |source|
@@ -392,12 +394,19 @@ module Shibkit
         
         file = self.locate_sources_file(source_list)
         
+        Shibkit::MetaMeta.log.debug "Load sources from #{source_list.to_s}"
         sources = Array.new
         source_data = YAML::load(File.open(file))
+        Shibkit::MetaMeta.log.debug "Source YAML:\n#{source_data.inspect}"
         source_data.each_pair do |id, data|
-          
-          sources << Source.from_hash(data, id)
-       
+          case data
+          when Source
+            sources << data
+          when Hash
+            sources << Source.from_hash(data,id)
+          else
+            raise "Don't know how to convert #{source_data.class} to Source"
+          end
         end
         
         return sources 
