@@ -4,9 +4,36 @@ Shibkit::MetaMeta.config do |c|
   c.downloads_logger  = STDOUT
   c.verbose_downloads = true
   c.can_delete = false
+  c.sources_file = "/Users/pete/Desktop/save.yaml"
 end
 
 Shibkit::MetaMeta.delete_all_cached_files!
+
+
+Shibkit::MetaMeta.load_sources
+
+#Shibkit::MetaMeta.save_sources('/Users/pete/Desktop/save.yaml')
+
+puts
+puts "Loaded sources:"
+Shibkit::MetaMeta.loaded_sources.keys.each {|s| puts s}
+puts "==="
+puts 
+
+
+puts "Additional sources:"
+Shibkit::MetaMeta.additional_sources.keys.each { |s| puts s }
+
+
+puts 
+puts "Using these combined sources:"
+Shibkit::MetaMeta.sources.each { |s| puts s }
+
+
+puts "Filtering using:"
+puts Shibkit::MetaMeta.selected_federation_uris
+
+exit
 
 Shibkit::MetaMeta.config.only_use(['http://ukfederation.org.uk'])
 #Shibkit::MetaMeta.config.selected_federation_uris = :all

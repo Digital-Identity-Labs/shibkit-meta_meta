@@ -159,7 +159,7 @@ module Shibkit
       log.info "Saving sources to disk..."
       
       src_dump = Hash.new
-      self.sources.each { |s| src_dump[s.uri] = s }
+      self.sources.each { |s| src_dump[s.uri] = s.to_hash }
       
       File.open(filename, 'w') { |out| YAML.dump(src_dump, out) }
         

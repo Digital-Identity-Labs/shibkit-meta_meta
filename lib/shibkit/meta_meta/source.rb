@@ -188,6 +188,30 @@ module Shibkit
         
       end
       
+      ## Create a new hash from a source object
+      def to_hash
+
+        data = Hash.new
+        
+        data['uri']           = name_uri.strip
+        data['name']          = name
+        data['refresh']       = refresh_delay.to_i
+        data['display_name']  = display_name
+        data['type']          = type
+        data['countries']     = countries
+        data['metadata']      = metadata_source
+        data['certificate']   = certificate_source
+        data['fingerprint']   = fingerprint
+        data['refeds_info']   = refeds_url
+        data['homepage']      = homepage
+        data['languages']     = languages
+        data['support_email'] = support_email
+        data['description']   = description.strip
+        
+        return data
+        
+      end
+      
       ## Build a parsed Federation object containing Entitiess
       ## @return [Shibkit::MetaMeta::Federation]
       def to_federation
