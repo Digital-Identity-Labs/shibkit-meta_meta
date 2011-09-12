@@ -2,7 +2,7 @@ require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
 describe Shibkit::MetaMeta do
   before(:all) do
-    file = File.open("rspec.log",File::WRONLY |  File::CREAT)
+    file = File.open("rspec.log",'w')
     Shibkit::MetaMeta.config.logger= Logger.new(file)
     Shibkit::MetaMeta.config.logger.level = Logger::DEBUG
     Shibkit::MetaMeta.config.logger.datetime_format = "%Y-%m-%d %H:%M:%S"
