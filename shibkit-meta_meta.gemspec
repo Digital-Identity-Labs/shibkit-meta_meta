@@ -29,6 +29,7 @@ Gem::Specification.new do |s|
     "lib/shibkit/meta_meta.rb",
     "lib/shibkit/meta_meta/attribute.rb",
     "lib/shibkit/meta_meta/contact.rb",
+    "lib/shibkit/meta_meta/config.rb",
     "lib/shibkit/meta_meta/data/default_metadata/example_federation_metadata.xml",
     "lib/shibkit/meta_meta/data/default_metadata/local_metadata.xml",
     "lib/shibkit/meta_meta/data/default_metadata/uncommon_federation_metadata.xml",
@@ -86,7 +87,6 @@ Gem::Specification.new do |s|
       s.add_development_dependency(%q<bundler>, ["~> 1.0.0"])
       s.add_development_dependency(%q<jeweler>, ["~> 1.6.2"])
       s.add_development_dependency(%q<rcov>, [">= 0"])
-      s.add_development_dependency(%q<httparty>, [">= 0"])
     else
       s.add_dependency(%q<rake>, [">= 0"])
       s.add_dependency(%q<uuid>, [">= 0"])
@@ -101,7 +101,6 @@ Gem::Specification.new do |s|
       s.add_dependency(%q<bundler>, ["~> 1.0.0"])
       s.add_dependency(%q<jeweler>, ["~> 1.6.2"])
       s.add_dependency(%q<rcov>, [">= 0"])
-      s.add_dependency(%q<httparty>, [">= 0"])
     end
   else
     s.add_dependency(%q<rake>, [">= 0"])
@@ -117,7 +116,6 @@ Gem::Specification.new do |s|
     s.add_dependency(%q<bundler>, ["~> 1.0.0"])
     s.add_dependency(%q<jeweler>, ["~> 1.6.2"])
     s.add_dependency(%q<rcov>, [">= 0"])
-    s.add_dependency(%q<httparty>, [">= 0"])
   end
 end
 
