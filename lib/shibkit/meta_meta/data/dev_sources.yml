@@ -41,6 +41,12 @@ example:
     An example federation with a few entities, mostly for software testing
     purposes and idle amusement. Uttlerly rushed and bodged at present and not
     actually valid, partially defeating the purpose of the exercise.
+  trustiness: 1
+  groups: 
+    - fictional
+  tags:   
+    - example 
+  
 
 ## unCommon Federation
 uncommon:

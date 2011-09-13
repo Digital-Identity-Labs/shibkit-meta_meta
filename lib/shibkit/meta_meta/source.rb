@@ -116,6 +116,14 @@ module Shibkit
       ## @return [String] Status of the source: indicates success of last operation
       attr_reader   :status
       
+      ## Group names (for loading sets of )
+      attr_accessor   :groups
+
+      attr_accessor   :tags
+      
+      attr_accessor   :active
+      alias :active?  :active
+      
       attr_reader   :created_at
       
       private
@@ -147,6 +155,10 @@ module Shibkit
         @description = ""
         @certificate_tmpfile = nil
         @metadata_tmpfile    = nil
+        @active = true
+        @trustiness = 1
+        @groups = []
+        @tags   = []
         
         self.instance_eval(&block) if block
   
@@ -181,6 +193,9 @@ module Shibkit
           source.languages          = data[:languages]     || ['en']
           source.support_email      = data[:support_email] || nil
           source.description        = data[:description]   || ""
+          source.trustiness         = data[:trustiness].to_f || 1
+          source.groups             = data[:groups] || []
+          source.tags               = data[:tags] || []
           
         end
 
@@ -197,7 +212,7 @@ module Shibkit
         data['name']          = name
         data['refresh']       = refresh_delay.to_i
         data['display_name']  = display_name
-        data['type']          = type
+        data['type']          = type.to_s
         data['countries']     = countries
         data['metadata']      = metadata_source
         data['certificate']   = certificate_source
@@ -207,6 +222,9 @@ module Shibkit
         data['languages']     = languages
         data['support_email'] = support_email
         data['description']   = description.strip
+        data['trustiness']    = trustiness 
+        data['groups']        = groups 
+        data['tags']          = tags 
         
         return data
         
@@ -230,8 +248,30 @@ module Shibkit
         federation.support_email = support_email
         federation.homepage_url  = homepage
         federation.description   = description
+        federation.groups        = groups
+        federation.tags          = tags
+        federation.trustiness    = trustiness
         
         return federation
+        
+      end
+
+      def trustiness=(level)
+        
+        @trustiness = level.to_f
+        
+      end
+      
+      def trustiness
+        
+        case 
+        when @trustiness > 1
+          return 1
+        when @trustiness < 0
+          return 0
+        else
+          return @strustiness
+        end  
         
       end
       
@@ -378,8 +418,7 @@ module Shibkit
       def read
         
         Nokogiri::XML::Reader(content)
-        
-        
+         
       end
       
       ## Does the source object look sensible?

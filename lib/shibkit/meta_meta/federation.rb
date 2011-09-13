@@ -73,6 +73,12 @@ module Shibkit
 
       ## Array of entities within the federation or metadata collection
       attr_accessor :entities  
+
+      attr_accessor :trustiness
+      
+      attr_accessor :groups
+      
+      attr_accessor :tags
       
       ## Time the Federation metadata was parsed
       attr_reader :read_at
