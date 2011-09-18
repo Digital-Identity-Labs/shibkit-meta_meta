@@ -1,46 +1,46 @@
 --- 
 urn:mace:aaf.edu.au:AAFProduction: 
-  groups: []
-
+  uri: urn:mace:aaf.edu.au:AAFProduction
+  name: Australian Access Federation
+  refresh: 0
+  display_name: AAF
+  type: federation
   countries: 
   - au
-  name: Australian Access Federation
-  refeds_info: https://refeds.terena.org/index.php/FederationAAF
-  uri: urn:mace:aaf.edu.au:AAFProduction
-  support_email: enquiries@aaf.edu.au
-  certificate: https://manager.aaf.edu.au/metadata/metadata-cert.pem
   metadata: http://manager.aaf.edu.au/metadata/metadata.aaf.signed.complete.xml
-  tags: []
-
-  refresh: 0
-  type: federation
+  certificate: https://manager.aaf.edu.au/metadata/metadata-cert.pem
+  fingerprint: 
+  refeds_info: https://refeds.terena.org/index.php/FederationAAF
+  homepage: http://www.aaf.edu.au/
   languages: 
   - en
-  homepage: http://www.aaf.edu.au/
-  trustiness: 
+  support_email: enquiries@aaf.edu.au
   description: The Australian Access Federation.
-  fingerprint: 
-  display_name: AAF
-http://ukfederation.org.uk: 
+  trustiness: 
   groups: []
 
-  countries: 
-  - gb
-  name: UK Access Management Federation For Education And Research
-  refeds_info: https://refeds.terena.org/index.php/FederationUkfed
-  uri: http://ukfederation.org.uk
-  support_email: " service@ukfederation.org.uk"
-  certificate: http://metadata.ukfederation.org.uk/ukfederation.pem
-  metadata: http://metadata.ukfederation.org.uk/ukfederation-metadata.xml
   tags: []
 
+http://ukfederation.org.uk: 
+  uri: http://ukfederation.org.uk
+  name: UK Access Management Federation For Education And Research
   refresh: 0
+  display_name: UK Access Management Federation
   type: federation
+  countries: 
+  - gb
+  metadata: http://metadata.ukfederation.org.uk/ukfederation-metadata.xml
+  certificate: http://metadata.ukfederation.org.uk/ukfederation.pem
+  fingerprint: 94:7F:5E:8C:4E:F5:E1:69:E7:DF:68:1E:48:AA:98:44:A5:41:56:EE
+  refeds_info: https://refeds.terena.org/index.php/FederationUkfed
+  homepage: http://www.ukfederation.org.uk
   languages: 
   - en-gb
   - en
-  homepage: http://www.ukfederation.org.uk
-  trustiness: 
+  support_email: " service@ukfederation.org.uk"
   description: A single solution for accessing online resources and services
-  fingerprint: 94:7F:5E:8C:4E:F5:E1:69:E7:DF:68:1E:48:AA:98:44:A5:41:56:EE
-  display_name: UK Access Management Federation
+  trustiness: 
+  groups: []
+
+  tags: []
+
