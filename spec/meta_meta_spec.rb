@@ -135,9 +135,10 @@ describe Shibkit::MetaMeta do
       Shibkit::MetaMeta.loaded_sources.keys[2].should == 'http://ukfederation.org.uk'
     end
     it "should be possible to set the file to load from" do
-      Shibkit::MetaMeta.config.sources_file=@@sourcesfile
+      Shibkit::MetaMeta.config.sources_file="#{File.dirname(__FILE__)}/saved_sources.yaml"
     end
     it "should load sources from a file" do
+      Shibkit::MetaMeta.config.sources_file="#{File.dirname(__FILE__)}/saved_sources.yaml"
       Shibkit::MetaMeta.load_sources
       Shibkit::MetaMeta.loaded_sources.size.should == 2 &&
       Shibkit::MetaMeta.loaded_sources.keys[1].should == 'http://ukfederation.org.uk' &&
