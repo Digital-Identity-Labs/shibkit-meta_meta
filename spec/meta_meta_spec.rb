@@ -1,4 +1,5 @@
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
+require 'digest/md5'
 
 describe Shibkit::MetaMeta do
   before(:all) do
@@ -120,8 +121,11 @@ describe Shibkit::MetaMeta do
       @@sourcesfile = tmpfile.path
       tmpfile.close
       Shibkit::MetaMeta.save_sources(@@sourcesfile)
+      referencefile = File.open("#{File.dirname(__FILE__)}/saved_sources.yaml").read
+      resultfile = File.open(@@sourcesfile).read
+      Shibkit::MetaMeta.config.logger.debug "referencefile (MD5:#{Digest::MD5.hexdigest(referencefile)}):\n#{referencefile}\nsavedfile (MD5:#{Digest::MD5.hexdigest(resultfile)}):\n#{resultfile}\n"
       (File.exists? @@sourcesfile).should == true &&
-      File.size(@@sourcesfile).should > 0 
+      resultfile.should == referencefile
     end
   end
   describe "#load_sources" do
