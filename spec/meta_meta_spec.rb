@@ -132,6 +132,7 @@ describe Shibkit::MetaMeta do
     it "should automatically load sources if no source file has been specified." do
       Shibkit::MetaMeta.load_sources
       Shibkit::MetaMeta.loaded_sources.size.should == 4 &&
+      Shibkit::MetaMeta.loaded_sources?.should == true &&
       Shibkit::MetaMeta.loaded_sources.keys[2].should == 'http://ukfederation.org.uk'
     end
     it "should be possible to set the file to load from" do
@@ -141,6 +142,7 @@ describe Shibkit::MetaMeta do
       Shibkit::MetaMeta.config.sources_file="#{File.dirname(__FILE__)}/saved_sources.yaml"
       Shibkit::MetaMeta.load_sources
       Shibkit::MetaMeta.loaded_sources.size.should == 2 &&
+      Shibkit::MetaMeta.loaded_sources?.should == true &&
       Shibkit::MetaMeta.loaded_sources.keys[1].should == 'http://ukfederation.org.uk' &&
       Shibkit::MetaMeta.loaded_sources.keys[0].should == 'urn:mace:aaf.edu.au:AAFProduction'
     end
@@ -153,11 +155,52 @@ describe Shibkit::MetaMeta do
       federations.size.should > 0
     end
   end
+  describe
   describe "#save_cache_file" do
+    it "should"
+  end
+  describe "#flush" do
     it "should"
   end
   describe "#load_cache_file" do
     it "should"
   end
-  
+  describe "#delete_all_cached_files" do
+    it "should prevent me from accidentally harming my system"
+    it "should delete cache file"
+  end
+  describe "#smart_cache" do
+    it "should do 'something smart'"
+  end
+  describe "#refresh" do
+    it "should refresh selected federations"
+    it "should not referesh federations that are not selected"
+    it "shouldn't refresh, (under certain conditions)"
+    it "should be forcable"
+  end
+  describe "#stockup" do
+    it "should load sources, if it is configured to auto-load"
+    it "shouldn't do anything if it isn't configured to auto-load"
+    it "shouldn't load sources if they have already been loaded"
+  end
+  describe "#federations" do
+    it "should auto-initilize"
+    it "should return a array of Shibkit::Federation objects"
+  end
+  describe "#entities" do
+    it "should return an array of Shibkit::Entitie objects"
+  end
+  describe "#orgs" do
+    it "should return an array of Shibkit::Organisation objects, sorted by druid"
+  end
+  describe "#idps" do
+    it "should return an array of Shibkit::Idp objects"
+  end
+  describe "#sps" do
+    it "should return an array of Shibkit::Sp objects"
+  end
+  describe "#from_uri" do
+    # TODO I don't know what this is for
+  end
+
 end
