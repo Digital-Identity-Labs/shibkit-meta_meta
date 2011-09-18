@@ -1,5 +1,4 @@
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
-require 'digest/md5'
 
 describe Shibkit::MetaMeta do
   before(:all) do
@@ -13,6 +12,7 @@ describe Shibkit::MetaMeta do
 
   before(:each) do |test|
     Shibkit::MetaMeta.reset
+    Shibkit::MetaMeta.config.autoload = true
     Shibkit::MetaMeta.config.logger.info "Running [#{test.example.metadata[:full_description]}]"
   end
  after(:each) do |test|
@@ -119,6 +119,7 @@ describe Shibkit::MetaMeta do
       })
       tmpfile = Tempfile.new('metametasources')
       sourcesfile = tmpfile.path
+      sourcesfile = 'mysaved_sources.yaml'
       tmpfile.close
       Shibkit::MetaMeta.save_sources(sourcesfile)
       referencefile = File.open("#{File.dirname(__FILE__)}/saved_sources.yaml").read
@@ -133,7 +134,7 @@ describe Shibkit::MetaMeta do
       Shibkit::MetaMeta.load_sources
       Shibkit::MetaMeta.loaded_sources.size.should == 4 &&
       Shibkit::MetaMeta.loaded_sources?.should == true &&
-      Shibkit::MetaMeta.loaded_sources.keys[2].should == 'http://ukfederation.org.uk'
+      Shibkit::MetaMeta.loaded_sources.keys[0].should == 'http://ukfederation.org.uk'
     end
     it "should be possible to set the file to load from" do
       Shibkit::MetaMeta.config.sources_file="#{File.dirname(__FILE__)}/saved_sources.yaml"
@@ -152,7 +153,9 @@ describe Shibkit::MetaMeta do
   describe "#process_sources" do
     it "should read it's sources and return an array of federation objects" do
       federations = Shibkit::MetaMeta.process_sources
+      federations.is_a?(Array).should == true
       federations.size.should > 0
+      federations.each {|fed| fed.is_a?(Shibkit::MetaMeta::Federation).should == true}
     end
   end
   describe "#save_cache_file" do
@@ -186,34 +189,81 @@ describe Shibkit::MetaMeta do
     it "should do 'something smart'"
   end
   describe "#refresh" do
-    it "should refresh selected federations"
-    it "should not referesh federations that are not selected"
+    it "should refresh metadata" do
+      Shibkit::MetaMeta.refresh
+      Shibkit::MetaMeta.stocked?
+    end
     it "shouldn't refresh, (under certain conditions)"
     it "should be forcable"
   end
   describe "#stockup" do
-    it "should load sources, if it is configured to auto-load"
-    it "shouldn't do anything if it isn't configured to auto-load"
-    it "shouldn't load sources if they have already been loaded"
+    it "should load sources, if it is configured to auto-load" do
+      Shibkit::MetaMeta.config.autoload = true
+      Shibkit::MetaMeta.stockup
+      Shibkit::MetaMeta.stocked?.should == true
+    end
+    it "shouldn't do anything if it isn't configured to auto-load" do
+      Shibkit::MetaMeta.config.autoload = false
+      Shibkit::MetaMeta.stockup
+      Shibkit::MetaMeta.stocked?.should == false
+    end
+    it "shouldn't load sources if federations have already been loaded"
   end
   describe "#federations" do
-    it "should auto-initilize"
-    it "should return a array of Shibkit::Federation objects"
+    it "should auto-initilize" do
+      Shibkit::MetaMeta.federations
+      Shibkit::MetaMeta.stocked?.should == true
+    end
+    it "should return a array of Shibkit::Federation objects" do
+      feds = Shibkit::MetaMeta.federations
+      feds.is_a?(Array).should == true
+      feds.size.should > 0
+      feds.each {|fed| fed.is_a?(Shibkit::MetaMeta::Federation).should == true}
+    end
   end
   describe "#entities" do
-    it "should return an array of Shibkit::Entitie objects"
+    it "should return an array of Shibkit::Entity objects" do
+      ents = Shibkit::MetaMeta.entities
+      ents.is_a?(Array)
+      ents.size.should > 0
+      ents.each {|ent| ent.is_a?(Shibkit::MetaMeta::Entity).should == true}
+    end
   end
   describe "#orgs" do
-    it "should return an array of Shibkit::Organisation objects, sorted by druid"
+    it "should return an array of Shibkit::Organisation objects, sorted by druid" do
+      orgs = Shibkit::MetaMeta.orgs
+      orgs.is_a?(Array)
+      orgs.size.should > 0
+      orgs.each {|org| org.is_a?(Shibkit::MetaMeta::Organisation).should == true}
+    end
   end
   describe "#idps" do
-    it "should return an array of Shibkit::Idp objects"
+    it "should return an array of Shibkit::IDP objects" do
+      idps = Shibkit::MetaMeta.idps
+      idps.is_a?(Array)
+      idps.size.should > 0
+      Shibkit::MetaMeta.config.logger.debug "IDP Array:"
+      idps.each {|idp| 
+        Shibkit::MetaMeta.config.logger.debug "  object type:#{idp.class}"
+        idp.is_a?(Shibkit::MetaMeta::Entity).should == true
+        idp.idp?.should == true
+      }
+    end
   end
   describe "#sps" do
-    it "should return an array of Shibkit::Sp objects"
+    it "should return an array of Shibkit::SP objects" do
+      sps = Shibkit::MetaMeta.sps
+      sps.is_a?(Array)
+      sps.size.should > 0
+      Shibkit::MetaMeta.config.logger.debug "SP Array:"
+      sps.each {|sp| 
+        Shibkit::MetaMeta.config.logger.debug "  object type:#{sp.class}"
+        sp.is_a?(Shibkit::MetaMeta::Entity).should == true
+        sp.sp?.should == true
+      }
+    end
   end
   describe "#from_uri" do
     # TODO I don't know what this is for
   end
-
 end
