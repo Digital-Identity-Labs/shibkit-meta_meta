@@ -205,17 +205,23 @@ module Shibkit
     end
     
     ## Load or save cache if it's recent or, er, something
-    def self.smart_cache(file_or_url)
+    def self.smartcache(force_save=false)
       
       log.info "Smart caching"
       
-      ## Do something smart.
-      # ...
+      actions = Array.new
+      file    = config.smartcache_file
       
-      #load_cache_file(file_or_url)
+      return
       
-      raise "Not Implemented!"
+      ## If file does not exist (or is stale) and we have objects, save
+      self.load_cache_file(file)
       
+      ## If file exists and we do not have objects and it is fresh, load
+      
+      ## If forced to save, save.
+      self.save_cache_file(file)
+
     end
     
     ## Loads federation metadata contents 
@@ -224,24 +230,27 @@ module Shibkit
         log.info "Loading object cache file from #{file_or_url}"
         
         @federations = YAML::load(File.open(file_or_url))
+        self.entities      
+        
+        log.info "Processing complete."
         
         return true
         
     end
     
     ## Save entity data into a YAML file. 
-    def self.save_cache_file(file)
+    def self.save_cache_file(file_path)
       
-      log.info "Saving object cache file from #{file_or_url}"
+      log.info "Saving object cache file from #{file_path}"
       
       ## Will *not* overwrite the example/default file in gem! TODO: this code is awful.
       gem_data_path = "#{::File.dirname(__FILE__)}/data"
-      if file.include? gem_data_path 
+      if file_path.include? gem_data_path 
         raise "Attempt to overwrite gem's default metadata cache! Please specify your own file to save cache in"
       end
         
       ## Write the YAML to disk
-      File.open(file, 'w') do |out|
+      File.open(file_path, 'w') do |out|
         YAML.dump(@federations, out)
       end
         

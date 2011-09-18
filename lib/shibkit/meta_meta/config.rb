@@ -51,8 +51,6 @@ module Shibkit
         
         @quickload = false
         
-        @quickload_cache_file = File.join(cache_root, 'quickload_cache.yml')
-        
         @sources_file  = :auto
         
         @selected_federation_uris = []
@@ -98,6 +96,42 @@ module Shibkit
         
         return file_path
         
+      end
+      
+      def smartcache_expiry=(seconds)
+        
+        @smartcache_expiry = seconds.to_i
+      
+      end
+      
+      def smartcache_expiry
+        
+       return @smart_cache_expiry || 60*60
+      
+      end
+      
+      def smartcache_active=(bool)
+        
+         @smartcache_active = bool ? true : false
+        
+      end
+      
+      def smartcache_active
+        
+         return @smartcache_active || false
+        
+      end
+      
+      def smartcache_file=(file_path) 
+
+        @smartcache_file = file_path
+
+      end 
+       
+      def smartcache_file 
+      
+        return @smartcache_file  || File.join(cache_root, 'smartcache.yml')
+      
       end
       
       def verbose_downloads=(bool)
@@ -153,30 +187,6 @@ module Shibkit
 
         return @autoload || true
 
-      end
-      
-      def quickload=(bool)
-        
-        @quickload = bool ? true : false
-        
-      end
-      
-      def quickload?
-        
-        return @quickload
-        
-      end
-      
-      def quickload_cache_file=(file_path)
-        
-        @quickload_cache_file = file_path
-        
-      end
-      
-      def quickload_cache_file
-        
-        return @quickload_cache_file
-        
       end
       
       ## Only use these federations/sources even if know about 100s - works on 

@@ -3,14 +3,24 @@ require 'shibkit/meta_meta'
 Shibkit::MetaMeta.config do |c|
   c.downloads_logger  = STDOUT
   c.verbose_downloads = true
+  c.autoload   = false
   c.can_delete = false
-  c.sources_file = "/Users/pete/Desktop/save.yaml"
+  c.smartcache_expiry = 60*60
+  c.smartcache_active = true
+  #c.smartcache_file   = "/Users/pete/Desktop/smart.yaml"
+  #c.sources_file = "/Users/pete/Desktop/save.yaml"
 end
 
-Shibkit::MetaMeta.delete_all_cached_files!
+#Shibkit::MetaMeta.delete_all_cached_files!
 
+#Shibkit::MetaMeta.load_sources
 
-Shibkit::MetaMeta.load_sources
+#Shibkit::MetaMeta.save_cache_file "/Users/pete/Desktop/dump.yaml"
+
+Shibkit::MetaMeta.flush
+Shibkit::MetaMeta.reset
+
+#Shibkit::MetaMeta.load_cache_file "/Users/pete/Desktop/smart.yaml"
 
 #Shibkit::MetaMeta.save_sources('/Users/pete/Desktop/save.yaml')
 
@@ -32,6 +42,9 @@ Shibkit::MetaMeta.sources.each { |s| puts s }
 
 puts "Filtering using:"
 puts Shibkit::MetaMeta.selected_federation_uris
+
+Shibkit::MetaMeta.entities.each { |e| next unless e.organisation ; puts e.organisation.display_name ; puts e.organisation.url }
+#Shibkit::MetaMeta.save_cache_file "/Users/pete/Desktop/dump.yaml"
 
 exit
 
