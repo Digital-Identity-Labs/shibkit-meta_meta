@@ -80,14 +80,28 @@ describe Shibkit::MetaMeta do
           :description   => 'The Australian Access Federation.',
       })
       Shibkit::MetaMeta.additional_sources.size.should == 2 &&
-      Shibkit::MetaMeta.additional_sources.keys[1].should == 'http://ukfederation.org.uk' &&
-      Shibkit::MetaMeta.additional_sources.keys[0].should == 'urn:mace:aaf.edu.au:AAFProduction'
+      Shibkit::MetaMeta.additional_sources.keys[0].should == 'http://ukfederation.org.uk' &&
+      Shibkit::MetaMeta.additional_sources.keys[1].should == 'urn:mace:aaf.edu.au:AAFProduction'
     end
 
   end
 
   describe "#save_sources" do
     it "should save the sources list to a file" do
+      Shibkit::MetaMeta.add_source({
+          :uri           => 'urn:mace:aaf.edu.au:AAFProduction',
+          :name          => 'Australian Access Federation',
+          :display_name  => 'AAF',
+          :type          => 'federation',
+          :countries     => ['au'],
+          :metadata      => 'http://manager.aaf.edu.au/metadata/metadata.aaf.signed.complete.xml',
+          :certificate   => 'https://manager.aaf.edu.au/metadata/metadata-cert.pem',
+          :refeds_info   => 'https://refeds.terena.org/index.php/FederationAAF',
+          :homepage      => 'http://www.aaf.edu.au/',
+          :languages     => ['en'],
+          :support_email => 'enquiries@aaf.edu.au',
+          :description   => 'The Australian Access Federation.',
+      })
       Shibkit::MetaMeta.add_source({
           :uri           => 'http://ukfederation.org.uk',
           :name          => 'UK Access Management Federation For Education And Research',
@@ -103,28 +117,14 @@ describe Shibkit::MetaMeta do
           :support_email => ' service@ukfederation.org.uk',
           :description   => 'A single solution for accessing online resources and services',
       })
-      Shibkit::MetaMeta.add_source({
-          :uri           => 'urn:mace:aaf.edu.au:AAFProduction',
-          :name          => 'Australian Access Federation',
-          :display_name  => 'AAF',
-          :type          => 'federation',
-          :countries     => ['au'],
-          :metadata      => 'http://manager.aaf.edu.au/metadata/metadata.aaf.signed.complete.xml',
-          :certificate   => 'https://manager.aaf.edu.au/metadata/metadata-cert.pem',
-          :refeds_info   => 'https://refeds.terena.org/index.php/FederationAAF',
-          :homepage      => 'http://www.aaf.edu.au/',
-          :languages     => ['en'],
-          :support_email => 'enquiries@aaf.edu.au',
-          :description   => 'The Australian Access Federation.',
-      })
       tmpfile = Tempfile.new('metametasources')
-      @@sourcesfile = tmpfile.path
+      sourcesfile = tmpfile.path
       tmpfile.close
-      Shibkit::MetaMeta.save_sources(@@sourcesfile)
+      Shibkit::MetaMeta.save_sources(sourcesfile)
       referencefile = File.open("#{File.dirname(__FILE__)}/saved_sources.yaml").read
-      resultfile = File.open(@@sourcesfile).read
+      resultfile = File.open(sourcesfile).read
       Shibkit::MetaMeta.config.logger.debug "referencefile (MD5:#{Digest::MD5.hexdigest(referencefile)}):\n#{referencefile}\nsavedfile (MD5:#{Digest::MD5.hexdigest(resultfile)}):\n#{resultfile}\n"
-      (File.exists? @@sourcesfile).should == true &&
+      (File.exists? sourcesfile).should == true &&
       resultfile.should == referencefile
     end
   end
@@ -155,15 +155,28 @@ describe Shibkit::MetaMeta do
       federations.size.should > 0
     end
   end
-  describe
   describe "#save_cache_file" do
-    it "should"
-  end
-  describe "#flush" do
-    it "should"
+    it "should save the federation cache to a file" do
+      federations = Shibkit::MetaMeta.process_sources
+      tmpfile = Tempfile.new('metametacache')
+      cachefile = tmpfile.path
+      Shibkit::MetaMeta.save_cache_file(cachefile)
+      (File.exists? cachefile).should == true
+    end
   end
   describe "#load_cache_file" do
-    it "should"
+    it "should load objects from a cache file" do
+      Shibkit::MetaMeta.load_cache_file("#{File.dirname(__FILE__)}/cache_example.yaml")
+      Shibkit::MetaMeta.stocked?.should == true
+    end 
+  end
+  describe "#flush" do
+    it "should clear the cache" do
+      Shibkit::MetaMeta.load_cache_file("#{File.dirname(__FILE__)}/cache_example.yaml")
+      Shibkit::MetaMeta.stocked?.should == true &&
+      Shibkit::MetaMeta.flush &&
+      Shibkit::MetaMeta.stocked?.should == false
+    end
   end
   describe "#delete_all_cached_files" do
     it "should prevent me from accidentally harming my system"

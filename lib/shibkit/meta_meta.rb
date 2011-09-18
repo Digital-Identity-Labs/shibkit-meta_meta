@@ -232,7 +232,7 @@ module Shibkit
     ## Save entity data into a YAML file. 
     def self.save_cache_file(file)
       
-      log.info "Saving object cache file from #{file_or_url}"
+      log.info "Saving object cache file from #{file}"
       
       ## Will *not* overwrite the example/default file in gem! TODO: this code is awful.
       gem_data_path = "#{::File.dirname(__FILE__)}/data"
@@ -315,6 +315,7 @@ module Shibkit
       return false unless @federations
       return false if @federations.empty? 
       
+      return true
     end
     
     ## Return list of Federations objects (filtered if select_federations is set)
