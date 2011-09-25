@@ -22,6 +22,7 @@ require 'yaml'
 require 'open-uri'
 require 'logger'
 require 'fileutils'
+require 'json'
 
 require 'shibkit/meta_meta/config'
 require 'shibkit/meta_meta/metadata_item'
@@ -225,11 +226,21 @@ module Shibkit
     end
     
     ## Loads federation metadata contents 
-    def self.load_cache_file(file_or_url)
+    def self.load_cache_file(file_or_url, format=:yaml)
         
-        log.info "Loading object cache file from #{file_or_url}"
+        log.info "Loading object cache file from #{file_or_url} as #{format.to_s.upcase}"
         
-        @federations = YAML::load(File.open(file_or_url))
+        @federations = case format
+        when :yaml
+          YAML.load(File.open(file_or_url))
+        when :marshal
+          Marshal.load(File.open(file_or_url))
+        when :json
+          JSON.load(File.open(file_or_url))
+        else
+          raise "Unexpected cache file format requested! Please use :yaml, :marshal or :json"
+        end
+        
         self.entities      
         
         log.info "Processing complete."
@@ -239,9 +250,9 @@ module Shibkit
     end
     
     ## Save entity data into a YAML file. 
-    def self.save_cache_file(file_path)
+    def self.save_cache_file(file_path, format=:yaml)
       
-      log.info "Saving object cache file from #{file_path}"
+      log.info "Saving object cache file to #{file_path} as #{format.to_s.upcase}"
       
       ## Will *not* overwrite the example/default file in gem! TODO: this code is awful.
       gem_data_path = "#{::File.dirname(__FILE__)}/data"
@@ -251,7 +262,18 @@ module Shibkit
         
       ## Write the YAML to disk
       File.open(file_path, 'w') do |out|
-        YAML.dump(@federations, out)
+        
+        case format
+        when :yaml
+          YAML.dump(@federations, out)
+        when :marshal
+          Marshal.dump(@federations, out)
+        when :json
+          JSON.dump(@federations, out)
+        else
+          raise "Unexpected cache file format requested! Please use :yaml, :marshal or :json"
+        end
+        
       end
         
       return true
