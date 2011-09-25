@@ -324,6 +324,7 @@ module Shibkit
       return false unless @federations
       return false if @federations.empty? 
       
+      return true
     end
     
     ## Return list of Federations objects (filtered if select_federations is set)

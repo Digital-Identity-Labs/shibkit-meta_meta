@@ -185,7 +185,8 @@ module Shibkit
       ## Should metadata sources and objects be loaded automatically? Normally, yes.
       def autoload?
 
-        return @autoload || true
+        return true unless defined? @autoload
+        return @autoload 
 
       end
       
