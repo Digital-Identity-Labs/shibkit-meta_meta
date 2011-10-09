@@ -47,14 +47,14 @@ module Shibkit
         
         super
         
-        @valid = @xml.xpath('xmlns:SPSSODescriptor[1]').empty?  ? false : true
+        @valid = @noko.xpath('xmlns:SPSSODescriptor[1]').empty?  ? false : true
 
-        proto_set = @xml.xpath('xmlns:SPSSODescriptor/@protocolSupportEnumeration')[0]
+        proto_set = @noko.xpath('xmlns:SPSSODescriptor/@protocolSupportEnumeration')[0]
         @protocols = proto_set.value.split(' ') if proto_set 
         
         ## Include services objects
         @services ||= Array.new
-        @xml.xpath("xmlns:SPSSODescriptor/xmlns:AttributeConsumingService").each do |sx|
+        @noko.xpath("xmlns:SPSSODescriptor/xmlns:AttributeConsumingService").each do |sx|
           
           service = Shibkit::MetaMeta::Service.new(sx).filter
 

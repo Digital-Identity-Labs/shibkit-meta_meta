@@ -198,12 +198,12 @@ module Shibkit
       ## Build the logo object from a suitable chunk of XML
       def parse_xml
         
-        if @xml and @xml.content
+        if @noko and @noko.content
           
-          self.location = @xml.content.to_s.strip || nil
-          self.height   = @xml['height'] ? @xml['height'].to_i : 0 
-          self.width    = @xml['width']  ? @xml['width'].to_i  : 0
-          lang          = @xml['xml:lang'] || :en
+          self.location = @noko.content.to_s.strip || nil
+          self.height   = @noko['height'] ? @noko['height'].to_i : 0 
+          self.width    = @noko['width']  ? @noko['width'].to_i  : 0
+          lang          = @noko['xml:lang'] || :en
           
           @metadata_pixels = height * width
           

@@ -65,12 +65,12 @@ module Shibkit
       
       def parse_xml
         
-        if @xml and @xml.content
+        if @noko and @noko.content
              
-          self.givenname = @xml.xpath('xmlns:GivenName[1]')[0].content    if @xml.xpath('xmlns:GivenName[1]')[0]
-          self.surname   = @xml.xpath('xmlns:SurName[1]')[0].content      if @xml.xpath('xmlns:SurName[1]')[0]
-          self.email_url = @xml.xpath('xmlns:EmailAddress[1]')[0].content if @xml.xpath('xmlns:EmailAddress[1]')[0]
-          self.category  = @xml['contactType'].to_sym
+          self.givenname = @noko.xpath('xmlns:GivenName[1]')[0].content    if @noko.xpath('xmlns:GivenName[1]')[0]
+          self.surname   = @noko.xpath('xmlns:SurName[1]')[0].content      if @noko.xpath('xmlns:SurName[1]')[0]
+          self.email_url = @noko.xpath('xmlns:EmailAddress[1]')[0].content if @noko.xpath('xmlns:EmailAddress[1]')[0]
+          self.category  = @noko['contactType'].to_sym
         
         end
   

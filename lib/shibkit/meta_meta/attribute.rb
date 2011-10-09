@@ -53,16 +53,16 @@ module Shibkit
      
      def parse_xml
       
-      @name = @xml['Name']
+      @name = @noko['Name']
       
-      @is_required = @xml['isRequired'].to_s.downcase == 'true' ? true : false
+      @is_required = @noko['isRequired'].to_s.downcase == 'true' ? true : false
       
-      @name_format = @xml['NameFormat']
+      @name_format = @noko['NameFormat']
       
-      @friendly_name = @xml['FriendlyName']
+      @friendly_name = @noko['FriendlyName']
       
       @values ||= Array.new
-      @xml.xpath('saml:AttributeValue').each { |ax| @values << ax.content.strip }
+      @noko.xpath('saml:AttributeValue').each { |ax| @values << ax.content.strip }
       
     end
         

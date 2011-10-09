@@ -44,27 +44,27 @@ module Shibkit
         
         super
         
-        @scopes = @xml.xpath('xmlns:IDPSSODescriptor/xmlns:Extensions/shibmd:Scope').collect do |sx|
+        @scopes = @noko.xpath('xmlns:IDPSSODescriptor/xmlns:Extensions/shibmd:Scope').collect do |sx|
         
          sx['regexp'] == 'true' ? Regexp.new(sx.text) : sx.text  
           
         end 
        
         
-        @valid = @xml.xpath('xmlns:IDPSSODescriptor[1]').empty? ? false : true
+        @valid = @noko.xpath('xmlns:IDPSSODescriptor[1]').empty? ? false : true
         
-        proto_set = @xml.xpath('xmlns:IDPSSODescriptor/@protocolSupportEnumeration')[0]
+        proto_set = @noko.xpath('xmlns:IDPSSODescriptor/@protocolSupportEnumeration')[0]
         @protocols = proto_set.value.split(' ') if proto_set 
         
         @nameid_formats ||= Array.new
-        @xml.xpath('xmlns:IDPSSODescriptor/xmlns:NameIDFormat').each do |nx|
+        @noko.xpath('xmlns:IDPSSODescriptor/xmlns:NameIDFormat').each do |nx|
           
           @nameid_formats << nx.content
           
         end
         
         @attributes ||= Array.new
-        @xml.xpath('xmlns:IDPSSODescriptor/saml:Attribute').each do |ax|
+        @noko.xpath('xmlns:IDPSSODescriptor/saml:Attribute').each do |ax|
           
           @attributes << Shibkit::MetaMeta::Attribute.new(ax).filter
           

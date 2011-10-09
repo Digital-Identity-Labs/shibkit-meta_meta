@@ -94,22 +94,22 @@ module Shibkit
       ## Special case for federation top-level nodes
       def select_xml(target=nil, options={})
       
-        raise "No suitable XML was selected" unless @xml and
-          @xml.kind_of?(Nokogiri::XML::Element) and
-          @xml.name == ROOT_ELEMENT 
+        raise "No suitable XML was selected" unless @noko and
+          @noko.kind_of?(Nokogiri::XML::Element) and
+          @noko.name == ROOT_ELEMENT 
       
       end
       
       ## Build a federation object out of metadata XML
       def parse_xml
         
-        self.metadata_id    = @xml['ID'].to_s.strip
-        self.federation_uri = @xml['Name'].to_s.strip
-        self.valid_until    = @xml['validUntil'].strip
+        self.metadata_id    = @noko['ID'].to_s.strip
+        self.federation_uri = @noko['Name'].to_s.strip
+        self.valid_until    = @noko['validUntil'].strip
         self.entities       = Array.new
         
         ## Process XML chunk for each entity in turn
-        @xml.xpath("//xmlns:EntityDescriptor").each do |ex|
+        @noko.xpath("//xmlns:EntityDescriptor").each do |ex|
         
           entity = Entity.new(ex)
           entity.primary_federation_uri = self.federation_uri

@@ -48,16 +48,17 @@ module Shibkit
       attr_reader :read_at
       
       ## New object takes XML (as libXML object or text)
-      def initialize(source_xml=nil, target=nil, options={}, &block)
+      def initialize(xml=nil, target=nil, options={}, &block)
         
-        @uuid    = UUID.new.generate
-        @read_at = Time.new
-        @xml     = nil
+        @uuid       = UUID.new.generate
+        @read_at    = Time.new
+        @noko       = nil
+        @source_xml = nil
         
         ## Use XML to build object
-        if source_xml
+        if xml
           
-          prepare_xml(source_xml)
+          prepare_xml(xml)
           select_xml(target, options)
           parse_xml
           #purge_xml
@@ -100,15 +101,30 @@ module Shibkit
         
       end
       
-      def source_xml
+      def to_xml
         
-        return @xml
+        raise "Not Implemented!"
+        
+        return
         
       end
       
+      def source_xml
+        
+        return @source_xml
+        
+      end
+     
+      def parsed_xml
+        
+        return @noko
+        
+      end
+            
       def purge_xml
         
-        @xml = nil
+        @noko       = nil
+        @source_xml = nil
         
         cascade_method(:purge_xml)
         
@@ -118,7 +134,7 @@ module Shibkit
         
         puts "textify called by #{self.to_s} #{self.class}"
         
-        @xml = @xml.to_s
+        @noko = @noko.to_s
         
         cascade_method(:textify_xml)
         
@@ -163,47 +179,49 @@ module Shibkit
       end
       
       ## Make sure we have consistent Nokogiri document whether string or Nokogiri passed
-      def prepare_xml(source_xml)
-      
-        @xml = source_xml
+      def prepare_xml(xml)
         
-        if @xml.kind_of? String
+        if xml.kind_of? String
           
           ## Parse the entire file as an XML document
-          doc = Nokogiri::XML.parse(@xml) do |config|
+          doc = Nokogiri::XML.parse(xml) do |config|
             config.strict.noent.dtdvalid
           end
           
-          @xml  = doc.root
-          
+          @noko = doc.root
+
           ## Add exotic namespaces to make sure we can deal with all metadata
-          NAMESPACES.each_pair { |label, uri| @xml.add_namespace_definition(label,uri) }
-
+          NAMESPACES.each_pair { |label, uri| @noko.add_namespace_definition(label,uri) }
+          
+          @source_xml = xml
+          
         end
-
+        
+        @noko ||= xml
+        
         ## Make sure we get an element object...
-        @xml = @xml.at('/') if @xml.kind_of? Nokogiri::XML::NodeSet
-        @xml = @xml.root if @xml.kind_of? Nokogiri::XML::Document
+        @noko = @noko.at('/') if @noko.kind_of? Nokogiri::XML::NodeSet
+        @noko = @noko.root    if @noko.kind_of? Nokogiri::XML::Document
 
-        raise "Unsuitable data!" unless @xml and @xml.respond_to? 'name'
+        raise "Unsuitable data!" unless @noko and @noko.respond_to? 'name'
         
       end
       
       ## If a target is specified select first matching node, otherwise just grab first node of type
       def select_xml(target=nil, options={})
 
-        unless @xml.name == self.class::ROOT_ELEMENT ## and check for target too 
+        unless @noko.name == self.class::ROOT_ELEMENT ## and check for target too 
              
           if target and TARGET_ATTR
             selector = "xmlns:#{self.class::ROOT_ELEMENT}[@#{self.class::TARGET_ATTR}='#{target}'][1]"
-            @xml = @xml.xpath(selector)[0]
+            @noko = @noko.xpath(selector)[0]
           else
             selector = "xmlns:#{self.class::ROOT_ELEMENT}[1]"
-            @xml = @xml.xpath(selector)[0]
+            @noko = @noko.xpath(selector)[0]
           end  
           
-          raise "No suitable XML was selected: using #{selector}" unless @xml and
-            @xml.kind_of?(Nokogiri::XML::Element) and @xml.name
+          raise "No suitable XML was selected: using #{selector}" unless @noko and
+            @noko.kind_of?(Nokogiri::XML::Element) and @noko.name
           
         end
         

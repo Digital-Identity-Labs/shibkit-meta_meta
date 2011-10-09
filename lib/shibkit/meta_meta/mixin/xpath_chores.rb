@@ -31,7 +31,7 @@ module Shibkit
   
         results = Array.new
   
-        @xml.xpath(xpath).each do |ix|
+        @noko.xpath(xpath).each do |ix|
     
           results << ix.content.to_s.strip
     
@@ -48,7 +48,7 @@ module Shibkit
         results[:en] = Array.new
         
 
-        @xml.xpath(xpath).each do |ix|
+        @noko.xpath(xpath).each do |ix|
 
           lang = ix['lang'] || :en
           results[lang.to_sym] = ix.content.strip.squeeze('')
@@ -65,7 +65,7 @@ module Shibkit
         results      = Hash.new
         results[:en] = Array.new
   
-        @xml.xpath(xpath).each do |ix|
+        @noko.xpath(xpath).each do |ix|
   
           items = ix.content.split(' ')
           items.each { |item| item.gsub!('+',' ') }
@@ -85,7 +85,7 @@ module Shibkit
         results      = Hash.new
         results[:en] = Array.new
   
-        @xml.xpath(xpath).each do |ix|
+        @noko.xpath(xpath).each do |ix|
           
           case req_class.respond_to?(:filter)
           when true

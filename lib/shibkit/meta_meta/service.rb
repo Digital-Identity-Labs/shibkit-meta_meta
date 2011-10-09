@@ -66,9 +66,9 @@ module Shibkit
      
      def parse_xml
 
-       @index = @xml['index'].to_i || 0
+       @index = @noko['index'].to_i || 0
        
-       @default = @xml['isDefault'] || 'false'
+       @default = @noko['isDefault'] || 'false'
        
        ## Display names
        @names = extract_lang_map_of_strings("xmlns:ServiceName")
@@ -77,7 +77,7 @@ module Shibkit
        @descriptions = extract_lang_map_of_strings("xmlns:ServiceDescription")
       
        @attributes ||= Array.new
-       @xml.xpath('xmlns:RequestedAttribute').each do |ax|
+       @noko.xpath('xmlns:RequestedAttribute').each do |ax|
           
          attribute = Shibkit::MetaMeta::RequestedAttribute.new(ax).filter
           

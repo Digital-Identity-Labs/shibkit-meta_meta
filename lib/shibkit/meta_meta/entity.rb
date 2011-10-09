@@ -133,34 +133,34 @@ module Shibkit
       
       def parse_xml
         
-        self.entity_uri     = @xml['entityID'].to_s.strip
-        self.metadata_id    = @xml['ID'].to_s.strip
+        self.entity_uri     = @noko['entityID'].to_s.strip
+        self.metadata_id    = @noko['ID'].to_s.strip
          
         @other_federation_uris        ||= Array.new
               
         ## Boolean flags for common/useful info 
-        self.accountable = @xml.xpath('xmlns:Extensions/ukfedlabel:AccountableUsers').size   > 0 ? true : false
-        self.ukfm        = @xml.xpath('xmlns:Extensions/ukfedlabel:UKFederationMember').size > 0 ? true : false
-        self.athens      = @xml.xpath('xmlns:Extensions/elab:AthensPUIDAuthority').size      > 0 ? true : false
-        self.hide        = @xml.xpath('xmlns:Extensions/wayf:HideFromWAYF').size             > 0 ? true : false
+        self.accountable = @noko.xpath('xmlns:Extensions/ukfedlabel:AccountableUsers').size   > 0 ? true : false
+        self.ukfm        = @noko.xpath('xmlns:Extensions/ukfedlabel:UKFederationMember').size > 0 ? true : false
+        self.athens      = @noko.xpath('xmlns:Extensions/elab:AthensPUIDAuthority').size      > 0 ? true : false
+        self.hide        = @noko.xpath('xmlns:Extensions/wayf:HideFromWAYF').size             > 0 ? true : false
         
-        @scopes = @xml.xpath('xmlns:Extensions/shibmd:Scope').collect do |sx|
+        @scopes = @noko.xpath('xmlns:Extensions/shibmd:Scope').collect do |sx|
         
          sx['regexp'] == 'true' ? Regexp.new(sx.text) : sx.text  
           
         end
         
         ## IDP and SP objects, if available. Based on the same XML as their parent/entity object
-        self.idp         = Shibkit::MetaMeta::IDP.new(@xml).filter
-        self.sp          =  Shibkit::MetaMeta::SP.new(@xml).filter
+        self.idp         = Shibkit::MetaMeta::IDP.new(@noko).filter
+        self.sp          =  Shibkit::MetaMeta::SP.new(@noko).filter
         
         ## Include Contact objects
-        self.support_contact   = Contact.new(@xml.xpath("xmlns:ContactPerson[@contactType='support'][1]")[0]).filter
-        self.technical_contact = Contact.new(@xml.xpath("xmlns:ContactPerson[@contactType='technical'][1]")[0]).filter
-        self.admin_contact     = Contact.new(@xml.xpath("xmlns:ContactPerson[@contactType='administrative'][1]")[0]).filter
+        self.support_contact   = Contact.new(@noko.xpath("xmlns:ContactPerson[@contactType='support'][1]")[0]).filter
+        self.technical_contact = Contact.new(@noko.xpath("xmlns:ContactPerson[@contactType='technical'][1]")[0]).filter
+        self.admin_contact     = Contact.new(@noko.xpath("xmlns:ContactPerson[@contactType='administrative'][1]")[0]).filter
         
         ## Include an organisation object
-        self.organisation     = Organisation.new(@xml.xpath("xmlns:Organization[1]")[0]).filter
+        self.organisation     = Organisation.new(@noko.xpath("xmlns:Organization[1]")[0]).filter
         self.idp.organisation = self.organisation if idp?
         self.sp.organisation  = self.organisation if sp?
         

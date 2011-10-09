@@ -227,6 +227,8 @@ module Shibkit
     ## Loads federation metadata contents 
     def self.load_cache_file(file_or_url, format=:yaml)
         
+        self.reset
+        
         log.info "Loading object cache file from #{file_or_url} as #{format.to_s.upcase}"
         
         @federations = case format
@@ -344,6 +346,7 @@ module Shibkit
       return false if @federations.empty? 
       
       return true
+    
     end
     
     ## Return list of Federations objects (filtered if select_federations is set)

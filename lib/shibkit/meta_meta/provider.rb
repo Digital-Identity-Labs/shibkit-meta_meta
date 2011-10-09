@@ -151,7 +151,7 @@ module Shibkit
       
       def parse_xml
         
-        self.entity_uri     = @xml['entityID']
+        self.entity_uri     = @noko['entityID']
         
         mdui_root = self.class::MDUI_ROOT
         
