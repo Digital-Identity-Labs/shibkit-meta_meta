@@ -98,6 +98,34 @@ module Shibkit
         
       end
       
+      ## Purge all XML data from object after creating object
+      def purge_xml=(bool)
+        
+         @purge_xml = bool ? true : false
+        
+      end
+      
+      ## Should all XML be purged from objects after creation?
+      def purge_xml?
+        
+        return @purge_xml || false
+        
+      end
+      
+      ## Store source XML alongside the parsed XML
+      def remember_source_xml=(bool)
+        
+         @remember_source_xml = bool ? true : false
+        
+      end
+      
+      ## Store source XML alongside the parsed XML
+      def remember_source_xml?
+        
+        return @remember_source_xml || false
+        
+      end
+      
       def smartcache_expiry=(seconds)
         
         @smartcache_expiry = seconds.to_i

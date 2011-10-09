@@ -129,7 +129,7 @@ module Shibkit
         
         @logos.values.each do |logo_set|
           
-          logo_set.each { |logo| puts logo.url ;  logo.purge_xml}
+          logo_set.each { |logo| logo.purge_xml}
           
         end
         
@@ -141,7 +141,7 @@ module Shibkit
         
         @logos.values.each do |logo_set|
           
-          logo_set.each { |logo| puts logo.url ; logo.textify_xml}
+          logo_set.each { |logo| logo.textify_xml}
           
         end
         

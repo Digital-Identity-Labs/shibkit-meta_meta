@@ -61,7 +61,7 @@ module Shibkit
           prepare_xml(xml)
           select_xml(target, options)
           parse_xml
-          #purge_xml
+          purge_xml if ::Shibkit::MetaMeta.config.purge_xml?
           
         end
         
@@ -149,9 +149,7 @@ module Shibkit
         method_name = method_name.to_sym
 
         self.instance_variables.each do |attr_name|
-          
-          puts attr_name 
-          
+
           obj = instance_variable_get attr_name.to_sym
           
           values = obj.values if obj.respond_to? :values 
@@ -193,7 +191,7 @@ module Shibkit
           ## Add exotic namespaces to make sure we can deal with all metadata
           NAMESPACES.each_pair { |label, uri| @noko.add_namespace_definition(label,uri) }
           
-          @source_xml = xml
+          @source_xml = xml if ::Shibkit::MetaMeta.config.remember_source_xml?
           
         end
         

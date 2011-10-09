@@ -9,6 +9,7 @@ Shibkit::MetaMeta.config do |c|
   c.can_delete = false
   c.smartcache_expiry = 60*60
   c.smartcache_active = true
+  c.purge_xml = true
   #c.smartcache_file   = "/Users/pete/Desktop/smart.yaml"
   #c.sources_file = "/Users/pete/Desktop/save.yaml"
 end
@@ -31,6 +32,13 @@ Shibkit::MetaMeta.load_cache_file "/Users/pete/Desktop/dump.rbm", :marshal
 puts "2"
 Shibkit::MetaMeta.entities.each {|e| puts e.uri}
 #Shibkit::MetaMeta.entities.each {|e| puts e.parsed_xml}
+
+Shibkit::MetaMeta.reset 
+Shibkit::MetaMeta.load_sources
+
+Shibkit::MetaMeta.process_sources
+Shibkit::MetaMeta.entities.each {|e| puts e.inspect}
+
 
 exit
 
