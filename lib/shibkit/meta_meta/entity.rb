@@ -106,6 +106,12 @@ module Shibkit
         
       end
       
+      def urn?
+
+        return uri.strip.downcase[0..3] == 'urn:'
+        
+      end
+      
       ##
       def primary?
         

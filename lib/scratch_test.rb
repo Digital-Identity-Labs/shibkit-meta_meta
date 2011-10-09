@@ -30,7 +30,7 @@ Shibkit::MetaMeta.entities.each {|e| puts e.uri}
 Shibkit::MetaMeta.load_cache_file "/Users/pete/Desktop/dump_no_xml.rbm", :marshal
 
 puts "2"
-Shibkit::MetaMeta.entities.each {|e| puts e.uri}
+Shibkit::MetaMeta.entities.each {|e| puts e.uri if e.urn?}
 #Shibkit::MetaMeta.entities.each {|e| puts e.parsed_xml}
 
 exit
