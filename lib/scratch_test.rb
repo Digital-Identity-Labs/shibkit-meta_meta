@@ -3,7 +3,7 @@ require 'shibkit/meta_meta'
 Shibkit::MetaMeta.config do |c|
   c.downloads_logger  = STDOUT
   c.verbose_downloads = true
-  c.autoload   = false
+  c.autoload   = true
   c.can_delete = false
   c.smartcache_expiry = 60*60
   c.smartcache_active = true
@@ -13,9 +13,21 @@ end
 
 #Shibkit::MetaMeta.delete_all_cached_files!
 
-#Shibkit::MetaMeta.load_sources
-
+Shibkit::MetaMeta.entities.each {|e| puts e.uri}
 #Shibkit::MetaMeta.save_cache_file "/Users/pete/Desktop/dump.yaml"
+#Shibkit::MetaMeta.save_cache_file "/Users/pete/Desktop/dump2.yaml", :yaml
+Shibkit::MetaMeta.save_cache_file "/Users/pete/Desktop/dump.rbm",  :marshal
+
+Shibkit::MetaMeta.flush
+Shibkit::MetaMeta.reset
+
+
+
+Shibkit::MetaMeta.load_cache_file "/Users/pete/Desktop/dump.rbm", :marshal
+
+Shibkit::MetaMeta.entities.each {|e| puts e.uri}
+
+exit
 
 Shibkit::MetaMeta.flush
 Shibkit::MetaMeta.reset

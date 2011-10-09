@@ -686,6 +686,7 @@ in MetaMeta. Should be fixed soon.]
 * [Shibboleth software](http://shibboleth.internet2.edu/)
 * [SAML2 Metadata spec](http://www.oasis-open.org/committees/download.php/35391/sstc-saml-metadata-errata-2.0-wd-04-diff.pdf)
 * [Metadata UI spec](http://docs.oasis-open.org/security/saml/Post2.0/sstc-saml-metadata-ui/v1.0/sstc-saml-metadata-ui-v1.0.pdf)
+* [Metadata Correctness](https://wiki.shibboleth.net/confluence/display/SHIB2/MetadataCorrectness)
 * [The SAML2 Spec](http://docs.oasis-open.org/security/saml/v2.0/saml-profiles-2.0-os.pdf)
 * [All the SAML2 specs](http://saml.xml.org/saml-specifications)
 

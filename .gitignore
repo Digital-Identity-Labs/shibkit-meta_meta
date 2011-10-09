@@ -50,3 +50,4 @@ pkg
 ## Cached spec metadata files
 spec/data/metadata_cache/*.xml
 /spec/rspec.log
+/spec/mysaved_sources.yaml
