@@ -117,31 +117,29 @@ module Shibkit
      
       def parsed_xml
         
+        prepare_xml(@noko) if @noko.kind_of? String
+        
         return @noko
         
       end
             
-      def purge_xml
+      def purge_xml(cascade=true)
         
         @noko       = nil
         @source_xml = nil
         
-        cascade_method(:purge_xml)
+        cascade_method(:purge_xml, true) if cascade
         
       end
       
-      def textify_xml
-        
-        puts "textify called by #{self.to_s} #{self.class}"
+      def textify_xml(cascade=true)
         
         @noko = @noko.to_s
         
-        cascade_method(:textify_xml)
+        cascade_method(:textify_xml, true) if cascade
         
       end
-      
-      
-      
+        
       private
       
       def cascade_method(method_name, *params) 

@@ -243,7 +243,7 @@ module Shibkit
         raise "Attempt to overwrite gem's default metadata cache! Please specify your own file to save cache in"
       end
       
-      @federations.each { |f| f.textify_xml }
+      self.textify_xml!
       
       ## Write the YAML to disk
       File.open(file_path, 'w') do |out|
@@ -454,7 +454,19 @@ module Shibkit
       return @by_uri[uri]
       
     end
-     
+    
+    def self.textify_xml! 
+      
+      @federations.each { |f| f.textify_xml(true) }
+      
+    end
+
+    def self.purge_xml! 
+      
+      @federations.each { |f| f.purge_xml(true) }
+      
+    end
+    
     private
     
     ## Logging 

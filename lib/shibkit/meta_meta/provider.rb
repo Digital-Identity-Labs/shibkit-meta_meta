@@ -123,25 +123,29 @@ module Shibkit
         
       end
       
-      def purge_xml
+      def purge_xml(cascade=true)
         
         super
         
+        return unless cascade
+        
         @logos.values.each do |logo_set|
           
-          logo_set.each { |logo| logo.purge_xml}
+          logo_set.each { |logo| logo.purge_xml(cascade)}
           
         end
         
       end
       
-      def textify_xml
+      def textify_xml(cascade=true)
         
         super
         
+        return unless cascade
+        
         @logos.values.each do |logo_set|
           
-          logo_set.each { |logo| logo.textify_xml}
+          logo_set.each { |logo| logo.textify_xml(cascade)}
           
         end
         

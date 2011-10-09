@@ -27,17 +27,23 @@ Shibkit::MetaMeta.entities.each {|e| puts e.uri}
 
 
 
-Shibkit::MetaMeta.load_cache_file "/Users/pete/Desktop/dump.rbm", :marshal
+Shibkit::MetaMeta.load_cache_file "/Users/pete/Desktop/dump_no_xml.rbm", :marshal
 
 puts "2"
 Shibkit::MetaMeta.entities.each {|e| puts e.uri}
 #Shibkit::MetaMeta.entities.each {|e| puts e.parsed_xml}
+
+exit
 
 Shibkit::MetaMeta.reset 
 Shibkit::MetaMeta.load_sources
 
 Shibkit::MetaMeta.process_sources
 Shibkit::MetaMeta.entities.each {|e| puts e.inspect}
+
+Shibkit::MetaMeta.purge_xml!
+Shibkit::MetaMeta.save_cache_file "/Users/pete/Desktop/dump_no_xml.rbm", :marshal
+Shibkit::MetaMeta.load_cache_file "/Users/pete/Desktop/dump_no_xml.rbm", :marshal
 
 
 exit
