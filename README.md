@@ -227,11 +227,6 @@ Source objects can be accessed directly, to be read or adjusted after loading.
 ## List homepages specified in all metadata sources, wherever the source is defined
 Shibkit::MetaMeta.sources.each {|s| puts s.homepage_url}
 
-## All sources loaded from the source list file
-Shibkit::MetaMeta.loaded_sources.each {|s| puts s.uri}
-
-# All sources added by hand
-Shibkit::MetaMeta.additional_sources.each {|s| puts s.uri}
 ```
 
 #### Automatic selection of source lists
@@ -293,7 +288,6 @@ Shibkit::MetaMeta.add_source({
     :description   => 'A single solution for accessing online resources and services',
 })
 
-Shibkit::MetaMeta.additional_sources.each { |s| puts s.display_name }
 
 ```
 

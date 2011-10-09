@@ -112,22 +112,6 @@ module Shibkit
       
     end
 
-    ## Access to all additional sources
-    def self.additional_sources
-      
-      @additional_sources ||= Hash.new
-      return @additional_sources
-    
-    end
-
-    ## Access to all additional sources
-    def self.loaded_sources
-      
-      @loaded_sources ||= Hash.new
-      return @loaded_sources
-    
-    end
-    
     ## Have we loaded any sources?
     def self.loaded_sources?
       
@@ -479,7 +463,25 @@ module Shibkit
       return ::Shibkit::MetaMeta.config.logger
       
     end
-   
+ 
+    private
+    
+    ## Access to all additional sources
+    def self.additional_sources
+      
+      @additional_sources ||= Hash.new
+      return @additional_sources
+    
+    end
+
+    ## Access to all additional sources
+    def self.loaded_sources
+      
+      @loaded_sources ||= Hash.new
+      return @loaded_sources
+    
+    end
+    
  
   end
 end
