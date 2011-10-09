@@ -200,7 +200,7 @@ module Shibkit
         
         if @xml and @xml.content
           
-          self.location = @xml.content.strip || nil
+          self.location = @xml.content.to_s.strip || nil
           self.height   = @xml['height'] ? @xml['height'].to_i : 0 
           self.width    = @xml['width']  ? @xml['width'].to_i  : 0
           lang          = @xml['xml:lang'] || :en

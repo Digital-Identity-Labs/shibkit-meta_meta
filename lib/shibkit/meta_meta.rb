@@ -22,7 +22,6 @@ require 'yaml'
 require 'open-uri'
 require 'logger'
 require 'fileutils'
-require 'json'
 
 require 'shibkit/meta_meta/config'
 require 'shibkit/meta_meta/metadata_item'
@@ -235,10 +234,8 @@ module Shibkit
           YAML.load(File.open(file_or_url))
         when :marshal
           Marshal.load(File.open(file_or_url))
-        when :json
-          JSON.load(File.open(file_or_url))
         else
-          raise "Unexpected cache file format requested! Please use :yaml, :marshal or :json"
+          raise "Unexpected cache file format requested! Please use :yaml or :marshal"
         end
         
         self.entities      
@@ -259,19 +256,19 @@ module Shibkit
       if file_path.include? gem_data_path 
         raise "Attempt to overwrite gem's default metadata cache! Please specify your own file to save cache in"
       end
-        
+      
+      @federations.each { |f| f.textify_xml }
+      
       ## Write the YAML to disk
       File.open(file_path, 'w') do |out|
         
         case format
         when :yaml
           YAML.dump(@federations, out)
-        when :marshal
+        when :marshal        
           Marshal.dump(@federations, out)
-        when :json
-          JSON.dump(@federations, out)
         else
-          raise "Unexpected cache file format requested! Please use :yaml, :marshal or :json"
+          raise "Unexpected cache file format requested! Please use :yaml or :marshal"
         end
         
       end
@@ -352,6 +349,8 @@ module Shibkit
     ## Return list of Federations objects (filtered if select_federations is set)
     def self.federations
       
+      return [] if @federations.nil? and ! config.autoload?
+      
       self.stockup
        
       if self.filtered_sources?
@@ -366,6 +365,8 @@ module Shibkit
     
     ## All primary entities from all federations
     def self.entities
+      
+      return [] if @entities.nil? and ! config.autoload?
       
       ## Populate memoised array of entities if it's empty
       unless @entities and @entities.size > 0

@@ -1,3 +1,5 @@
+require 'rubygems'
+require 'bundler'
 require 'shibkit/meta_meta'
 
 Shibkit::MetaMeta.config do |c|
@@ -13,19 +15,20 @@ end
 
 #Shibkit::MetaMeta.delete_all_cached_files!
 
-Shibkit::MetaMeta.entities.each {|e| puts e.uri}
+#Shibkit::MetaMeta.entities.each {|e| puts e.uri}
 #Shibkit::MetaMeta.save_cache_file "/Users/pete/Desktop/dump.yaml"
 #Shibkit::MetaMeta.save_cache_file "/Users/pete/Desktop/dump2.yaml", :yaml
-Shibkit::MetaMeta.save_cache_file "/Users/pete/Desktop/dump.rbm",  :marshal
+#Shibkit::MetaMeta.save_cache_file  "/Users/pete/Desktop/dump.rbm",  :marshal
 
-Shibkit::MetaMeta.flush
-Shibkit::MetaMeta.reset
+#Shibkit::MetaMeta.flush
+#Shibkit::MetaMeta.reset
 
 
 
 Shibkit::MetaMeta.load_cache_file "/Users/pete/Desktop/dump.rbm", :marshal
 
 Shibkit::MetaMeta.entities.each {|e| puts e.uri}
+Shibkit::MetaMeta.entities.each {|e| puts e.source_xml}
 
 exit
 

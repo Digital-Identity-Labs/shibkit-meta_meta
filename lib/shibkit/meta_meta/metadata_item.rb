@@ -52,6 +52,7 @@ module Shibkit
         
         @uuid    = UUID.new.generate
         @read_at = Time.new
+        @xml     = nil
         
         ## Use XML to build object
         if source_xml
@@ -91,14 +92,6 @@ module Shibkit
         
       end
       
-      def to_json
-        
-        raise "Not Implemented!"
-        
-        return to_hash.to_json
-        
-      end
-      
       def to_rdf
         
         raise "Not Implemented!"
@@ -107,7 +100,60 @@ module Shibkit
         
       end
       
+      def source_xml
+        
+        return @xml
+        
+      end
+      
+      def purge_xml
+        
+        @xml = nil
+        
+        cascade_method(:purge_xml)
+        
+      end
+      
+      def textify_xml
+        
+        puts "textify called by #{self.to_s} #{self.class}"
+        
+        @xml = @xml.to_s
+        
+        cascade_method(:textify_xml)
+        
+      end
+      
+      
+      
       private
+      
+      def cascade_method(method_name, *params) 
+        
+        method_name = method_name.to_sym
+
+        self.instance_variables.each do |attr_name|
+          
+          puts attr_name 
+          
+          obj = instance_variable_get attr_name.to_sym
+          
+          values = obj.values if obj.respond_to? :values 
+          values ||= [obj].flatten
+          
+          values.each do |value|
+          
+            if value.respond_to? method_name
+            
+              value.send method_name, *params
+            
+            end
+          
+          end
+          
+        end
+
+      end
       
       ## Logging 
       def log
@@ -170,11 +216,7 @@ module Shibkit
         
       end
       
-      def purge_xml
-        
-        @xml = nil
-        
-      end
+
       
     end
   end

@@ -123,6 +123,30 @@ module Shibkit
         
       end
       
+      def purge_xml
+        
+        super
+        
+        @logos.values.each do |logo_set|
+          
+          logo_set.each { |logo| puts logo.url ;  logo.purge_xml}
+          
+        end
+        
+      end
+      
+      def textify_xml
+        
+        super
+        
+        @logos.values.each do |logo_set|
+          
+          logo_set.each { |logo| puts logo.url ; logo.textify_xml}
+          
+        end
+        
+      end
+      
       private
       
       def parse_xml
