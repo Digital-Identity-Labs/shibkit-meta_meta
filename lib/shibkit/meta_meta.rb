@@ -188,32 +188,12 @@ module Shibkit
       
     end
     
-    ## Load or save cache if it's recent or, er, something
-    def self.smartcache(force_save=false)
-      
-      log.info "Smart caching"
-      
-      actions = Array.new
-      file    = config.smartcache_file
-      
-      return
-      
-      ## If file does not exist (or is stale) and we have objects, save
-      self.load_cache_file(file)
-      
-      ## If file exists and we do not have objects and it is fresh, load
-      
-      ## If forced to save, save.
-      self.save_cache_file(file)
-
-    end
-    
     ## Loads federation metadata contents 
     def self.load_cache_file(file_or_url, format=:yaml)
         
         self.reset
         
-        log.info "Loading object cache file from #{file_or_url} as #{format.to_s.upcase}"
+        log.info "Loading object cache file from #{file_or_url} as #{format}"
         
         @federations = case format
         when :yaml
@@ -235,7 +215,7 @@ module Shibkit
     ## Save entity data into a YAML file. 
     def self.save_cache_file(file_path, format=:yaml)
       
-      log.info "Saving object cache file to #{file_path} as #{format.to_s.upcase}"
+      log.info "Saving object cache file to #{file_path} as #{format}"
       
       ## Will *not* overwrite the example/default file in gem! TODO: this code is awful.
       gem_data_path = "#{::File.dirname(__FILE__)}/data"
@@ -266,6 +246,10 @@ module Shibkit
     ## Parses sources and returns an array of all federation object
     def self.process_sources
       
+      if config.smartcache_active?
+        return if self.smartcache_load
+      end
+      
       log.info "Processing content of sources into objects..."
       
       raise "MetaMeta sources are not an Array! (Should not be a #{self.sources.class})" unless
@@ -292,6 +276,8 @@ module Shibkit
       self.entities
       
       log.info "Processing complete."
+      
+      self.smartcache_save if config.smartcache_active?
       
       return @federations
          
@@ -494,6 +480,77 @@ module Shibkit
     
     end
     
+    ## 
+    def self.smartcache_load
+      
+      log.info "Checking smartcache status..."
+      
+      object_file   = config.smartcache_object_file
+      scmd_file     = config.smartcache_info_file
+      expiry_period = config.smartcache_expiry
+      
+      ## Do we even have a file?
+      return false unless File.exists? object_file
+      return false unless File.exists? scmd_file
+    
+      ## Make sure the dump metadata is suitable
+      info = YAML.load(File.open(scmd_file))
+      
+      ## Check
+      cache_age = (Time.new.to_i - info[:created_at].to_i)
+      return false unless cache_age < expiry_period.to_i
+      
+      return false unless info[:version] == config.version
+      
+      return false unless info[:platform] == config.platform
+      
+      return false unless info[:format]  == :marshal
+      
+      return false unless info[:object_file] == object_file
+      
+      return false unless info[:purge_xml]  == config.purge_xml?
+      return false unless info[:source_xml] == config.remember_source_xml?
+      
+      log.info "Smartcache is valid: loading objects..."
+      
+      ## If file does not exist (or is stale) and we have objects, save
+      self.load_cache_file(object_file, :marshal)
+      
+      log.info "Loaded #{@federations.count} federations and #{@entities.count} entities from smartcache."
+      
+      return true
+      
+    end
+    
+    ## 
+    def self.smartcache_save
+      
+      object_file = config.smartcache_object_file
+      scmd_file   = config.smartcache_info_file
+      
+      log.info "Saving smartcache with #{@federations.count} and #{@entities.count} entities..."
+      
+      ## Save file in fast marsh
+      self.save_cache_file(object_file, :marshal) 
+
+      info = {
+        :created_at  => Time.new,
+        :version     => config.version,
+        :platform    => config.platform,
+        :object_file => object_file,
+        :format      => :marshal,
+        :purge_xml   => config.purge_xml?,
+        :source_xml  => config.remember_source_xml?
+      }
+
+      File.open(scmd_file, 'w') { |out| YAML.dump(info, out) }
+      
+      log.info "Saved smartcache."
+      
+      return true
+      
+    end
+
  
   end
 end

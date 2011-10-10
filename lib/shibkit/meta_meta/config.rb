@@ -134,7 +134,7 @@ module Shibkit
       
       def smartcache_expiry
         
-       return @smart_cache_expiry || 60*60
+       return @smartcache_expiry || 60*60
       
       end
       
@@ -144,21 +144,21 @@ module Shibkit
         
       end
       
-      def smartcache_active
+      def smartcache_active?
         
-         return @smartcache_active || false
+         return @smartcache_active.nil? ? true : @smartcache_active
         
       end
       
-      def smartcache_file=(file_path) 
-
-        @smartcache_file = file_path
-
-      end 
-       
-      def smartcache_file 
+      def smartcache_object_file 
       
-        return @smartcache_file  || File.join(cache_root, 'smartcache.yml')
+        return File.join(cache_root, 'smartcache.marshal')
+      
+      end
+      
+      def smartcache_info_file 
+      
+        return File.join(cache_root, 'smartcache.yml')
       
       end
       
@@ -349,6 +349,20 @@ module Shibkit
 
         return @cache_root
 
+      end
+      
+      ## 
+      def version
+
+       return 1
+        
+      end
+      
+      ## 
+      def platform
+
+       return [RUBY_VERSION, RUBY_PLATFORM, RUBY_RELEASE_DATE].join(':')
+        
       end
       
       private
