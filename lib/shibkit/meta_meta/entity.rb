@@ -32,6 +32,10 @@ module Shibkit
       TARGET_ATTR  = 'entityID'
       REQUIRED_QUACKS = [:entity_uri]
       
+      LINE_START = "<!--"
+      LINE_END   = "-->"
+      HR_CHAR    = "="
+      
       ## The URI of the entity
       attr_accessor :entity_uri
       alias    :uri :entity_uri
@@ -133,6 +137,16 @@ module Shibkit
         
         return all_fed_uris.uniq
       
+      end
+      
+      def xml_comment
+
+        out = "\n" + LINE_START + (HR_CHAR * 71) + LINE_END + "\n"
+        out << LINE_START + " " + uri + " "  + LINE_END  + "\n"
+        out << LINE_START + (HR_CHAR * 71) + LINE_END + "\n\n"
+        
+        return out
+        
       end
       
       private

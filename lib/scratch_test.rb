@@ -33,6 +33,13 @@ puts "2"
 Shibkit::MetaMeta.entities.each {|e| puts e.uri if e.urn?}
 #Shibkit::MetaMeta.entities.each {|e| puts e.parsed_xml}
 
+puts "3"
+Shibkit::MetaMeta.entities.each { |e| puts e.uri if e.multi_federated? }
+
+puts "4"
+Shibkit::MetaMeta.entities.each { |e| puts e.xml_comment }
+
+
 exit
 
 Shibkit::MetaMeta.reset 
