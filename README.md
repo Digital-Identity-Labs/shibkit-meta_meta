@@ -663,6 +663,47 @@ backends.
 
 ----
 
+### Optimising for speed or memory
+
+There are a few things that can make Shibkit:MetaMeta a little lighter.
+
+#### Speed: smartcache 
+
+MetaMeta's "smartcache" feature will store the objects created from your metadata
+XML on disk and reload them the next time MetaMeta is run. A simple script that takes two
+minutes to download and process metadata when first run may take a couple of seconds
+the second time it's run if you have the smartcache enabled.
+
+Smartcaching is on by default, but can be turned off with Shibkit::MetaMeta::Config's
+ ```#smartcache_active``` method. Smartcache data expires when it's older than the
+ ```#smartcache_expiry``` config setting or when MetaMeta's configuration,
+  platform or Ruby version changes.
+  
+```ruby
+Shibkit::MetaMeta.config do |c|
+  c.autoload          = true
+  c.smartcache_expiry = 60*60
+  c.smartcache_active = true
+end
+```
+
+If the smartcache is turned off then metadata files will be downloaded each time
+your script is run. Download caching will still occur if possible.
+
+#### Memory: Purging XML
+
+MetaMeta objects will normally store the parsed XML used to create them. This can
+take up more RAM can cause larger, slower smartcache files. In many cases you won't
+need this data at all after the object has been created, so you can safely delete it.
+
+```ruby
+Shibkit::MetaMeta.config do |c|
+  c.purge_xml = true
+end
+```
+
+----
+
 ### General Options
 
 [There are a few methods in the Source class that need to be refactored out for use everywhere
@@ -670,9 +711,20 @@ in MetaMeta. Should be fixed soon.]
 
 ----
 
-### Caching Options
+### Download Caching Options
 
 ...
+
+### Debugging Hints
+
+You can dump all objects in a readable format using ```#save_cache_file``` and
+reload them using ```#load_cache_file```. (This can use quite a bit of RAM)
+
+```ruby
+Shibkit::MetaMeta.save_cache_file "/Users/pete/Desktop/dump.yaml"
+# ...
+Shibkit::MetaMeta.load_cache_file "/Users/pete/Desktop/dump.yaml"
+```
 
 ## BACKGROUND READING
 

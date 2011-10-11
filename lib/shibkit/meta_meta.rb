@@ -531,6 +531,7 @@ module Shibkit
       log.info "Saving smartcache with #{@federations.count} and #{@entities.count} entities..."
       
       ## Save file in fast marsh
+      mkdir_p config.cache_root unless File.exists? config.cache_root
       self.save_cache_file(object_file, :marshal) 
 
       info = {
