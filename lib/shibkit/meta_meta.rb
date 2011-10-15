@@ -264,18 +264,23 @@ module Shibkit
           next unless self.selected_federation_uris.include? source.uri
         
         end
+        
+        start_time = Time.new
           
         federation = source.to_federation
         
         ## Store all federations in array
         @federations << federation
         
+        log.info "Loaded #{federation.entities.count} entities from #{federation} metadata file in #{Time.new - start_time} seconds."
+        
+        
       end
       
       ## Bodge to make sure primary ents are set, multifederation calculated, etc
       self.entities
       
-      log.info "Processing complete."
+      log.info "Processing complete. #{@federations.count} sets of metadata have been loaded."
       
       self.smartcache_save if config.smartcache_active?
       
@@ -492,7 +497,9 @@ module Shibkit
       ## Do we even have a file?
       return false unless File.exists? object_file
       return false unless File.exists? scmd_file
-    
+      
+      start_time = Time.new
+      
       ## Make sure the dump metadata is suitable
       info = YAML.load(File.open(scmd_file))
       
@@ -516,7 +523,7 @@ module Shibkit
       ## If file does not exist (or is stale) and we have objects, save
       self.load_cache_file(object_file, :marshal)
       
-      log.info "Loaded #{@federations.count} federations and #{@entities.count} entities from smartcache."
+      log.info "Loaded #{@federations.count} federations and #{@entities.count} entities from smartcache in #{Time.new - start_time} seconds."
       
       return true
       

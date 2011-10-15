@@ -4,13 +4,13 @@ require 'shibkit/meta_meta'
 
 Shibkit::MetaMeta.config do |c|
   c.downloads_logger  = STDOUT
-  c.verbose_downloads = true
+  #c.verbose_downloads = true
   c.autoload   = true
   c.can_delete = false
   c.smartcache_expiry = 60*60
-  c.smartcache_active = false
+  c.smartcache_active = true
   c.purge_xml = true
-  c.logger.level = Logger::DEBUG
+  #c.logger.level = Logger::DEBUG
   #c.sources_file = "/Users/pete/Desktop/save.yaml"
 end
 
