@@ -109,6 +109,7 @@ module Shibkit
         self.entities       = Array.new
         
         ## Process XML chunk for each entity in turn
+        log.info "Building entities for federation (#{uri})..."
         @noko.xpath("//xmlns:EntityDescriptor").each do |ex|
         
           entity = Entity.new(ex)
@@ -118,6 +119,8 @@ module Shibkit
           self.entities << entity
           
         end
+
+        log.debug "Derived federation #{self.uri} from XML"
 
       end
       

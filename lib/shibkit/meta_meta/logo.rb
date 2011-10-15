@@ -207,6 +207,8 @@ module Shibkit
           
           @metadata_pixels = height * width
           
+          log.debug "   Derived logo #{url} from XML"
+          
         end
       end
     end

@@ -64,6 +64,8 @@ module Shibkit
       @values ||= Array.new
       @noko.xpath('saml:AttributeValue').each { |ax| @values << ax.content.strip }
       
+      log.debug "    Derived attribute #{name} from XML"
+      
     end
         
     end

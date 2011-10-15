@@ -85,6 +85,8 @@ module Shibkit
           
        end
        
+       log.debug "   Derived service #{name} from XML"
+       
     end
         
     end

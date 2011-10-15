@@ -186,7 +186,7 @@ module Shibkit
         
         ## Geolocations
         @geolocations = extract_simple_list("xmlns:#{mdui_root}/xmlns:Extensions/mdui:DiscoHints/mdui:GeolocationHint")
-  
+    
       end
       
     end

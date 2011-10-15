@@ -62,7 +62,9 @@ module Shibkit
 
       
       @url          = @noko.xpath('xmlns:OrganizationURL[1]')[0].content.strip
-
+      
+      
+      log.debug "  Derived organisation #{url} from XML"
       
     end
         

@@ -70,6 +70,8 @@ module Shibkit
           
         end
         
+        log.debug "  Derived IdP from XML" if filter
+        
       end
       
     end

@@ -72,8 +72,12 @@ module Shibkit
           self.email_url = @noko.xpath('xmlns:EmailAddress[1]')[0].content if @noko.xpath('xmlns:EmailAddress[1]')[0]
           self.category  = @noko['contactType'].to_sym
         
+          log.debug "  Derived contact #{email_url} from XML"
+        
         end
-  
+        
+        
+        
       end
 
     end

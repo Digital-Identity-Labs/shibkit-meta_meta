@@ -184,7 +184,7 @@ module Shibkit
         self.idp.organisation = self.organisation if idp?
         self.sp.organisation  = self.organisation if sp?
 
-        log.debug "Created #{self.uri}"
+        log.debug " Derived entity #{self.uri} from XML"
         
       end
       

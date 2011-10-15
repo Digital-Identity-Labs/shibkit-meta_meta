@@ -68,8 +68,10 @@ module Shibkit
         @services.sort! { |a,b| a.index <=> b.index }
         @default_service = @services[0] unless @default_service
         
+        log.debug "  Derived SP from XML" if filter
+        
       end
-      
+    
     end
 
 
