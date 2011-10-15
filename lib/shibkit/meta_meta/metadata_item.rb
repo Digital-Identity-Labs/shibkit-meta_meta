@@ -83,6 +83,12 @@ module Shibkit
         
       end
       
+      def hashed_id
+        
+        return Digest::SHA1.hexdigest uri || url || to_s
+        
+      end
+      
       def to_hash
         
         raise "Not Implemented!"
