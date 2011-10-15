@@ -122,7 +122,7 @@ module Shibkit
       ## Store source XML alongside the parsed XML
       def remember_source_xml?
         
-        return @remember_source_xml || false
+        return @remember_source_xml.nil? ? false : @remember_source_xml
         
       end
       
@@ -171,7 +171,7 @@ module Shibkit
 
       def verbose_downloads?
 
-       return @verbose || false
+       return @verbose.nil? ? false : @verbose 
 
       end
       
