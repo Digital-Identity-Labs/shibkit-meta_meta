@@ -667,7 +667,7 @@ backends.
 
 There are a few things that can make Shibkit:MetaMeta a little lighter.
 
-#### Speed: smartcache 
+#### Speed: Smartcache 
 
 MetaMeta's "smartcache" feature will store the objects created from your metadata
 XML on disk and reload them the next time MetaMeta is run. A simple script that takes two
@@ -693,7 +693,7 @@ your script is run. Download caching will still occur if possible.
 #### Memory: Purging XML
 
 MetaMeta objects will normally store the parsed XML used to create them. This can
-take up more RAM can cause larger, slower smartcache files. In many cases you won't
+take up more RAM and will cause larger, slower smartcache files. In many cases you won't
 need this data at all after the object has been created, so you can safely delete it.
 
 ```ruby

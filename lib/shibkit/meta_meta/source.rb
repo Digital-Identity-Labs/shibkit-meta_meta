@@ -399,12 +399,12 @@ module Shibkit
       ## Return Nokogiri object tree for the metadata
       ## @return [Nokogiri::XML::Document] Nokogiri document
       def parse_xml
-        
+
         ## Parse the entire file as an XML document
         doc = Nokogiri::XML.parse(content) do |config|
-          config.strict.noent.dtdvalid
+          #config.strict.noent.dtdvalid
         end
-
+        
         ## Select the top node  
         xml  = doc.root
         

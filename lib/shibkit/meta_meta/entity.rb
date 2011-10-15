@@ -183,6 +183,8 @@ module Shibkit
         self.organisation     = Organisation.new(@noko.xpath("xmlns:Organization[1]")[0]).filter
         self.idp.organisation = self.organisation if idp?
         self.sp.organisation  = self.organisation if sp?
+
+        log.debug "Created #{self.uri}"
         
       end
       

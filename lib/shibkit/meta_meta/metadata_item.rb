@@ -181,7 +181,8 @@ module Shibkit
           
           ## Parse the entire file as an XML document
           doc = Nokogiri::XML.parse(xml) do |config|
-            config.strict.noent.dtdvalid
+            #config.strict.noent.dtdvalid
+            config.default_xml.nonet
           end
           
           @noko = doc.root
