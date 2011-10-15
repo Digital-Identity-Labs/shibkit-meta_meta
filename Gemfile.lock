@@ -15,8 +15,6 @@ GEM
       rake
     json (1.6.1)
     json (1.6.1-java)
-    macaddr (1.4.0)
-      systemu (~> 2.2.0)
     mime-types (1.16)
     multi_json (1.0.3)
     multi_xml (0.4.1)
@@ -39,9 +37,6 @@ GEM
     rspec-expectations (2.3.0)
       diff-lcs (~> 1.1.2)
     rspec-mocks (2.3.0)
-    systemu (2.2.0)
-    uuid (2.3.4)
-      macaddr (~> 1.0)
 
 PLATFORMS
   java
@@ -61,4 +56,3 @@ DEPENDENCIES
   rest-client
   rest-client-components
   rspec (~> 2.3.0)
-  uuid

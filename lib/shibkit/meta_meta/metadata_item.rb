@@ -22,7 +22,7 @@ module Shibkit
     class MetadataItem
       
       require 'nokogiri'
-      require 'uuid'
+      require 'digest/sha1'
       
       ## A few simple utility functions for slurping data from XML
       require 'shibkit/meta_meta/mixin/xpath_chores'
@@ -44,13 +44,11 @@ module Shibkit
         'shibmd'     => 'urn:mace:shibboleth:metadata:1.0'
       }
       
-      attr_reader :uuid
       attr_reader :read_at
       
       ## New object takes XML (as libXML object or text)
       def initialize(xml=nil, target=nil, options={}, &block)
         
-        @uuid       = UUID.new.generate
         @read_at    = Time.new
         @noko       = nil
         @source_xml = nil

@@ -115,14 +115,6 @@ describe Shibkit::MetaMeta::Source do
     end
 
   
-    describe "#uuid" do
-    
-      it ""
-      it ""
-
-    end
-
-  
     describe "#fetched_at" do
     
       it ""
@@ -355,3 +347,7 @@ describe Shibkit::MetaMeta::Source do
   end
 
 end
+
+## Must have an ID/URI before considered useful - various method should raise
+# exceptions when object is unsuitable.
+

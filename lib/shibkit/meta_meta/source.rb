@@ -15,7 +15,6 @@
 ## limitations under the License.
 ##
 
-require 'uuid'
 require 'yaml'
 require 'rest_client'
 require 'restclient/components'
@@ -102,9 +101,6 @@ module Shibkit
       ## @return [String] Brief description of the federation or collection
       attr_accessor :description
       
-      ## @return [String] Unique UUID for the federation or collection
-      attr_reader   :uuid
-      
       ## @return [String] Time the metadata for this federation was last fetched
       ## @note This is not persistent between uses of this class
       attr_reader   :fetched_at
@@ -137,8 +133,7 @@ module Shibkit
       ## @return [Source]
       def initialize(&block)
   
-        @uuid       = UUID.new.generate
-        @name_uri   = "urn:uuid:" + @uuid
+        @name_uri   = ""
         @created_at = Time.new
         @name       = "Unnown"
         @refresh_delay = 86400

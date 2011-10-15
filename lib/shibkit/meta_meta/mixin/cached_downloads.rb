@@ -33,6 +33,7 @@ module Shibkit
         require 'addressable/uri'
         require 'fileutils'
         
+        
         ## Automatically add class methods to the including class
         def self.included(receiver)
 
@@ -49,7 +50,7 @@ module Shibkit
           raise "Can't access file #{file_path}!" unless ::File.exists?(file_path) and
             ::File.readable?(file_path)
 
-          file = Tempfile.new(uuid)
+          file = Tempfile.new(Time.new.to_i.to_s) 
           open(file_path, 'w') { |f| f << http_response.to_s }
 
           return file
@@ -63,7 +64,7 @@ module Shibkit
  
           http_response = RestClient.get(url)
 
-          file = Tempfile.new(uuid)
+          file = Tempfile.new(Time.new.to_i.to_s)
           open(file.path, 'w') { |f| f << http_response.to_s }
 
           return file

@@ -8,7 +8,7 @@ Shibkit::MetaMeta.config do |c|
   c.autoload   = true
   c.can_delete = false
   c.smartcache_expiry = 60*60
-  c.smartcache_active = true
+  c.smartcache_active = false
   c.purge_xml = true
   c.logger.level = Logger::DEBUG
   #c.sources_file = "/Users/pete/Desktop/save.yaml"
@@ -20,7 +20,7 @@ puts "1"
 puts Shibkit::MetaMeta.entities.count
 puts Shibkit::MetaMeta.orgs.count
 
-Shibkit::MetaMeta.entities.each {|e| puts e.metadata_id}
+#Shibkit::MetaMeta.entities.each {|e| puts e.metadata_id}
 
 #Shibkit::MetaMeta.entities.each {|e| puts e.uri if ((e.idp? and e.idp.geolocation_urls) or (e.sp? and e.sp.geolocation_urls))}
 #Shibkit::MetaMeta.save_cache_file "/Users/pete/Desktop/dump.yaml"

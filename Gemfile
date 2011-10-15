@@ -1,7 +1,6 @@
 source 'http://rubygems.org'
 
 gem 'rake'
-gem 'uuid'
 gem 'nokogiri'
 gem 'rest-client'
 gem 'rest-client-components'
