@@ -78,6 +78,7 @@ module Shibkit
       
       ## @return [String] URL or filesystem path of the metadata file to be used 
       attr_accessor :metadata_source
+      alias :url    :metadata_source
       
       ## @return [String] URL or filesystem path of the metadata certificate to be used 
       attr_accessor :certificate_source
@@ -179,21 +180,24 @@ module Shibkit
           source.refresh_delay      = data[:refresh].to_i || 86400
           source.display_name       = data[:display_name] || data['name'] || uri
           source.type               = data[:type].to_sym  || :collection
-          source.countries          = data[:countries]    || []
+
           source.metadata_source    = data[:metadata]
           source.certificate_source = data[:certificate]
           source.fingerprint        = data[:fingerprint]
           source.refeds_url         = data[:refeds_info]
           source.homepage           = data[:homepage]
-          source.languages          = data[:languages]     || ['en']
+
           source.support_email      = data[:support_email] || nil
           source.description        = data[:description]   || ""
           source.trustiness         = data[:trustiness].to_f || 1
-          source.groups             = data[:groups] || []
-          source.tags               = data[:tags] || []
+          
+          source.languages = data[:languages].inject([]){|m,v| m << v.to_sym } || [:en]
+          source.countries = data[:countries].inject([]){|m,v| m << v.to_sym } || []
+          source.groups    = data[:groups].inject([])   {|m,v| m << v.to_sym } || []
+          source.tags      = data[:tags].inject([])     {|m,v| m << v.to_sym } || []
           
         end
-
+        
         return new_source
         
       end
@@ -448,7 +452,7 @@ module Shibkit
       ##   :real for included list of real sources, :dev for mock sources, or
       ##   :auto for either :real or :dev, based on environment
       ## @return [Array] Array of metadata source objects
-      def self.load(source_list=:auto, options={})
+      def self.load(source_list=:auto, *groups)
         
         file = self.locate_sources_file(source_list)
         

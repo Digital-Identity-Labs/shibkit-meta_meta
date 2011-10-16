@@ -29,14 +29,19 @@
   name: UK Access Management Federation For Education And Research
   display_name: UK Access Management Federation
   type: federation
-  countries: ['gb']
+  countries: [:gb]
   metadata:    http://metadata.ukfederation.org.uk/ukfederation-metadata.xml
   certificate: http://metadata.ukfederation.org.uk/ukfederation.pem
   fingerprint: ~
   refeds_info: https://refeds.terena.org/index.php/FederationUkfed
   homepage:    http://www.ukfederation.org.uk
-  languages: ['en-gb', 'en']
+  languages: ['en-gb', :en]
   support_email: service@ukfederation.org.uk
+  tags: 
+    - :refeds
+  groups: 
+    - :spec_set_1
+    - :spec_set_2
   description: >
     A single solution for accessing online resources and services for
     education and research in the UK.
@@ -46,7 +51,7 @@
   name: inCommon Federation
   display_name: inCommon
   type: federation
-  countries: ['us']
+  countries: [:us]
   metadata:    https://wayf.incommonfederation.org/InCommon/InCommon-metadata.xml
   certificate: https://wayf.incommonfederation.org/bridge/certs/incommon.pem
   fingerprint: ~
@@ -54,6 +59,10 @@
   homepage:    http://www.incommon.org
   languages: ['en-us', 'en']
   support_email: incommon-admin@incommonfederation.org
+  tags: 
+    - refeds
+  groups: 
+    - spec_set_2
   description: > 
     Providing a secure and privacy-preserving trust fabric for research and
     higher education institutions, and their partners, in the United States.
@@ -71,6 +80,10 @@
   homepage:    http://www.aaf.edu.au/
   languages: ['en']
   support_email: enquiries@aaf.edu.au
+  tags: 
+    - refeds
+  groups: 
+    - spec_set_2
   description: > 
     The Australian Access Federation.
 
@@ -87,6 +100,10 @@
   homepage: http://www.cuccio-cdpiuc.ca/en/index.php
   languages: ['en']
   support_email: ~
+  tags: 
+    - refeds
+  groups: 
+    - spec_set_1
   description: >
     Canadian Access Federation
 
