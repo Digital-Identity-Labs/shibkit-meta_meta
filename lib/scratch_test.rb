@@ -8,7 +8,7 @@ Shibkit::MetaMeta.config do |c|
   c.autoload   = true
   c.can_delete = false
   c.smartcache_expiry = 60*60
-  c.smartcache_active = true
+  c.smartcache_active = false
   c.purge_xml = true
   #c.logger.level = Logger::DEBUG
   #c.sources_file = "/Users/pete/Desktop/save.yaml"
@@ -25,6 +25,7 @@ puts Shibkit::MetaMeta.config.selected_groups
 
 puts Shibkit::MetaMeta.entities.count.to_s + " ents"
 
+#exit
 
 
 #puts "Tags"
@@ -36,7 +37,11 @@ puts Shibkit::MetaMeta.entities.count.to_s + " ents"
 
 
 puts Shibkit::MetaMeta.entities.count
-puts Shibkit::MetaMeta.orgs.count
+
+
+
+
+puts 
 
 puts Shibkit::MetaMeta.stats.to_yaml
 

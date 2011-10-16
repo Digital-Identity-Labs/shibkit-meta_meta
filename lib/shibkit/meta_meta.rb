@@ -279,7 +279,7 @@ module Shibkit
       end
       
       ## Bodge to make sure primary ents are set, multifederation calculated, etc
-      self.entities
+      #self.entities # Issue 14
       
       log.info "Processing complete. #{@federations.count} sets of metadata have been loaded."
       
@@ -382,8 +382,11 @@ module Shibkit
             @entities << e 
 
           end
-
+          
         end
+
+        ## BODGE: Needs a better fix. Issue 14
+        #@entities = @entities.compact
         
       end
       
@@ -582,9 +585,10 @@ module Shibkit
         
       end
       
-      stats[:federation_count] = self.federations.count
-      stats[:entities_count]   = self.federations.inject(0) {|m,f| m+f.entities.count}
-      stats[:primary_entities_count]  = self.entities.count
+      stats[:federation_count]       = self.federations.count
+      stats[:entities_count]         = self.federations.inject(0) {|m,f| m+f.entities.count}
+      stats[:primary_entities_count] = self.entities.count
+      stats[:organisation_count]     = self.orgs.count
       
       return stats
       
