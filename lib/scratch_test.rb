@@ -8,7 +8,7 @@ Shibkit::MetaMeta.config do |c|
   c.autoload   = true
   c.can_delete = false
   c.smartcache_expiry = 60*60
-  c.smartcache_active = false
+  c.smartcache_active = true
   c.purge_xml = true
   #c.logger.level = Logger::DEBUG
   #c.sources_file = "/Users/pete/Desktop/save.yaml"
