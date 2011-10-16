@@ -3,24 +3,39 @@ require 'bundler'
 require 'shibkit/meta_meta'
 
 Shibkit::MetaMeta.config do |c|
-  c.downloads_logger  = STDOUT
+  #c.downloads_logger  = STDOUT
   #c.verbose_downloads = true
   c.autoload   = true
   c.can_delete = false
   c.smartcache_expiry = 60*60
   c.smartcache_active = true
   c.purge_xml = true
-  c.logger.level = Logger::DEBUG
+  #c.logger.level = Logger::DEBUG
   #c.sources_file = "/Users/pete/Desktop/save.yaml"
+  c.selected_groups = :spec_set_2
 end
+
+puts "Selected groups"
+puts Shibkit::MetaMeta.config.selected_groups
 
 #Shibkit::MetaMeta.delete_all_cached_files!
 
-puts "1"
+
+puts Shibkit::MetaMeta.entities.count.to_s + " ents"
+
+#puts "Tags"
+
+#Shibkit::MetaMeta.sources.each { |s| puts s.url ; puts s.tags.join(', ') ; puts s.groups.join(', ') }
+
+#Shibkit::MetaMeta.tagged_federations
+
+
+exit
+
 puts Shibkit::MetaMeta.entities.count
 puts Shibkit::MetaMeta.orgs.count
 
-Shibkit::MetaMeta.entities.each {|e| puts e.hashed_id}
+#Shibkit::MetaMeta.entities.each {|e| puts e.hashed_id}
 
 #Shibkit::MetaMeta.entities.each {|e| puts e.uri if ((e.idp? and e.idp.geolocation_urls) or (e.sp? and e.sp.geolocation_urls))}
 #Shibkit::MetaMeta.save_cache_file "/Users/pete/Desktop/dump.yaml"

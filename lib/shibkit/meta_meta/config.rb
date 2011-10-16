@@ -170,7 +170,7 @@ module Shibkit
       end
 
       def verbose_downloads?
-
+      
        return @verbose.nil? ? false : @verbose 
 
       end
@@ -218,12 +218,27 @@ module Shibkit
 
       end
       
+      ## 
+      def selected_groups=(*list)
+        
+        @selected_groups = [list].flatten 
+        @selected_groups = [] if @selected_groups.include? :all
+        
+      end
+
+      ## 
+      def selected_groups
+
+        return @selected_groups || []
+
+      end
+      
       ## Only use these federations/sources even if know about 100s - works on 
       ## various functions (loading, processing and listing *after* it is set)
       def only_use(selection)
 
         @selected_federation_uris ||= []
-
+        
         case selection
         when String
           @selected_federation_uris << selection
@@ -237,7 +252,7 @@ module Shibkit
           raise "Expected federation/source selection to be single uri or array"
         end
 
-      end
+      end 
       
       ## List of federation/collection uris
       def selected_federation_uris=(selection)
@@ -310,7 +325,7 @@ module Shibkit
 
       ## Returns hash of options to set how remote files are cached and expired
       def download_cache_options
-
+        
         return @download_cache_options
 
       end

@@ -454,7 +454,7 @@ module Shibkit
       ## @return [Array] Array of metadata source objects
       def self.load(source_list=:auto, *selected_groups)
         
-        selected_groups ||= []
+        selected_groups = selected_groups.empty? ? ::Shibkit::MetaMeta.config.selected_groups : []
         
         Shibkit::MetaMeta.log.debug "Load sources from #{source_list.to_s}"
         
@@ -476,10 +476,12 @@ module Shibkit
             raise "Don't know how to convert #{source_data.class} to Source"
           end
         end
-        
-        ## If groups are specified then trim off any non-matching sources
-        unless selected_groups.empty?
 
+        ## If groups are specified then trim off any non-matching sources
+        unless selected_groups.empty? or selected_groups.include? :all
+          
+          Shibkit::MetaMeta.log.info "Filtering source/federations by selected groups"          
+          
           selected_groups.inject([]){|m,v| m << v.to_s.downcase.to_sym }
           
           group_set = Set.new selected_groups
