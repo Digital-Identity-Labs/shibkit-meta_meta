@@ -141,13 +141,22 @@ module Shibkit
       
       def tags=(tags)
         
-        @tags = [tags].flatten.uniq
+        @tags ||= []
+        
+        if Shibkit::MetaMeta.config.auto_tag?
+          
+          @tags << :idp if idp?
+          @tags << :sp  if sp?
+          
+        end
+        
+        @tags = @tags.concat([tags].flatten).uniq
        
       end
       
       def tags
         
-        return @tags.nil? ? [] : @tags
+        return @tags.nil? ? [] : @tags.collect { |t| t.to_sym }
         
       end
       

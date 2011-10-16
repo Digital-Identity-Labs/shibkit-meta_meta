@@ -93,7 +93,7 @@ module Shibkit
         
         @tags = [tags].flatten.uniq
         
-        if entities
+        if entities and ::Shibkit::MetaMeta.config.auto_tag?
           entities.each { |e| e.tags = e.tags << @tags } unless tags.empty?
         end
         

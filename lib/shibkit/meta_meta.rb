@@ -367,6 +367,9 @@ module Shibkit
               primary = processed[e.uri]              
               primary.other_federation_uris << f.uri
               
+              ## Add tags from the non-primary to the primary
+              primary.tags << e.tags if config.merge_primary_tags?
+              
               next
            
             end

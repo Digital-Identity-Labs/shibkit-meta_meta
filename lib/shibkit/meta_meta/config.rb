@@ -293,7 +293,35 @@ module Shibkit
         return @can_delete || false
         
       end
-            
+      
+      ## 
+      def auto_tag=(bool)
+        
+         @auto_tag = bool ? true : false
+        
+      end
+      
+      ## 
+      def auto_tag?
+        
+        return @auto_tag || false
+        
+      end
+      
+      ## 
+      def merge_primary_tags=(bool)
+        
+         @merge_primary_tags = bool ? true : false
+        
+      end
+      
+      ## 
+      def merge_primary_tags?
+        
+        return @merge_primary_tags || true
+        
+      end
+          
       ## Forcibly set environment (not normally needed)
       ## @return [String]
       def environment=(environ)
