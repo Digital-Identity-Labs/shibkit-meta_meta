@@ -12,7 +12,7 @@ Shibkit::MetaMeta.config do |c|
   c.purge_xml = true
   #c.logger.level = Logger::DEBUG
   #c.sources_file = "/Users/pete/Desktop/save.yaml"
-  c.selected_groups = :spec_set_2
+  c.selected_groups = :spec_set_1
 end
 
 puts "Selected groups"

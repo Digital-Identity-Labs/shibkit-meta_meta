@@ -22,6 +22,7 @@ require 'yaml'
 require 'open-uri'
 require 'logger'
 require 'fileutils'
+require 'digest/sha1'
 
 require 'shibkit/meta_meta/config'
 require 'shibkit/meta_meta/metadata_item'
@@ -120,13 +121,13 @@ module Shibkit
     end
     
     ## Load sources from a YAML file
-    def self.load_sources
+    def self.load_sources(filename=self.config.sources_file)
       
       log.info "Loading sources from disk..."
       
       @loaded_sources = Hash.new
       
-      Source.load(self.config.sources_file).each do |source|
+      Source.load(filename).each do |source|
         
         ## More than one definition for a source is a problem 
         raise "Duplicate source for #{source.uri}!" if @loaded_sources[source.uri]
@@ -140,7 +141,7 @@ module Shibkit
     ## Save all known sources to sources list file
     def self.save_sources(filename)
       
-      log.info "Saving sources to disk..."
+      log.info "Saving sources to #{filename}..."
       
       src_dump = Hash.new
       self.sources.each { |s| src_dump[s.uri] = s.to_hash }
@@ -517,6 +518,7 @@ module Shibkit
       
       return false unless info[:purge_xml]  == config.purge_xml?
       return false unless info[:source_xml] == config.remember_source_xml?
+      return false unless info[:groups]     == Digest::SHA1.hexdigest(config.selected_groups.join)
       
       log.info "Smartcache is valid: loading objects..."
       
@@ -535,7 +537,7 @@ module Shibkit
       object_file = config.smartcache_object_file
       scmd_file   = config.smartcache_info_file
       
-      log.info "Saving smartcache with #{@federations.count} and #{@entities.count} entities..."
+      log.info "Saving smartcache with #{@federations.count} federations and #{@entities.count} entities..."
       
       ## Save file in fast marsh
       mkdir_p config.cache_root unless File.exists? config.cache_root
@@ -548,7 +550,8 @@ module Shibkit
         :object_file => object_file,
         :format      => :marshal,
         :purge_xml   => config.purge_xml?,
-        :source_xml  => config.remember_source_xml?
+        :source_xml  => config.remember_source_xml?,
+        :groups      => Digest::SHA1.hexdigest(config.selected_groups.join)
       }
 
       File.open(scmd_file, 'w') { |out| YAML.dump(info, out) }
