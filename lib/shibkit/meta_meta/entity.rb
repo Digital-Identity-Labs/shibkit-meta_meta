@@ -139,6 +139,18 @@ module Shibkit
       
       end
       
+      def tags=(tags)
+        
+        @tags = [tags].flatten.uniq
+       
+      end
+      
+      def tags
+        
+        return @tags.nil? ? [] : @tags
+        
+      end
+      
       def xml_comment
 
         out = "\n" + LINE_START + (HR_CHAR * 71) + LINE_END + "\n"
@@ -183,7 +195,9 @@ module Shibkit
         self.organisation     = Organisation.new(@noko.xpath("xmlns:Organization[1]")[0]).filter
         self.idp.organisation = self.organisation if idp?
         self.sp.organisation  = self.organisation if sp?
-
+        
+        self.tags ||= []
+       
         log.debug " Derived entity #{self.uri} from XML"
         
       end

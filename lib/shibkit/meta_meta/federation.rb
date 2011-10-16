@@ -77,8 +77,7 @@ module Shibkit
       attr_accessor :trustiness
       
       attr_accessor :groups
-      
-      attr_accessor :tags
+
       
       ## Time the Federation metadata was parsed
       attr_reader :read_at
@@ -86,6 +85,23 @@ module Shibkit
       def to_s
         
         return uri
+        
+      end
+      
+      
+      def tags=(tags)
+        
+        @tags = [tags].flatten.uniq
+        
+        if entities
+          entities.each { |e| e.tags = e.tags << @tags } unless tags.empty?
+        end
+        
+      end
+      
+      def tags
+        
+        return @tags.nil? ? [] : @tags
         
       end
       
@@ -114,7 +130,9 @@ module Shibkit
         
           entity = Entity.new(ex)
           entity.primary_federation_uri = self.federation_uri
-        
+          
+          entity.tags << self.tags
+          
           ## Collect this entity in the federation object
           self.entities << entity
           
