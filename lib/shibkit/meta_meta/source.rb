@@ -251,6 +251,8 @@ module Shibkit
         federation.tags          = tags
         federation.trustiness    = trustiness
         
+        #federation.from_xml(fx)
+        
         return federation
         
       end

@@ -23,6 +23,8 @@ puts Shibkit::MetaMeta.config.selected_groups
 
 puts Shibkit::MetaMeta.entities.count.to_s + " ents"
 
+
+
 #puts "Tags"
 
 #Shibkit::MetaMeta.sources.each { |s| puts s.url ; puts s.tags.join(', ') ; puts s.groups.join(', ') }
@@ -30,12 +32,17 @@ puts Shibkit::MetaMeta.entities.count.to_s + " ents"
 #Shibkit::MetaMeta.tagged_federations
 
 
-exit
 
 puts Shibkit::MetaMeta.entities.count
 puts Shibkit::MetaMeta.orgs.count
 
-#Shibkit::MetaMeta.entities.each {|e| puts e.hashed_id}
+puts
+puts "listing tags for all federations"
+Shibkit::MetaMeta.federations.each {|f| puts f.uri + " -> " + f.tags.join(', ')}
+
+puts
+puts "listing tags for all entities"
+Shibkit::MetaMeta.entities.each {|e| puts e.uri + " -> " + e.tags.join(', ')}
 
 #Shibkit::MetaMeta.entities.each {|e| puts e.uri if ((e.idp? and e.idp.geolocation_urls) or (e.sp? and e.sp.geolocation_urls))}
 #Shibkit::MetaMeta.save_cache_file "/Users/pete/Desktop/dump.yaml"
@@ -46,7 +53,6 @@ puts Shibkit::MetaMeta.orgs.count
 #Shibkit::MetaMeta.reset
 
 exit
-
 
 Shibkit::MetaMeta.load_cache_file "/Users/pete/Desktop/dump_no_xml.rbm", :marshal
 

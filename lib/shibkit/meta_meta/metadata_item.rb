@@ -54,14 +54,7 @@ module Shibkit
         @source_xml = nil
         
         ## Use XML to build object
-        if xml
-          
-          prepare_xml(xml)
-          select_xml(target, options)
-          parse_xml
-          purge_xml if ::Shibkit::MetaMeta.config.purge_xml?
-          
-        end
+        from_xml(xml) if xml
         
         ## Use block for further configuration or manual creation
         self.instance_eval(&block) if block
@@ -143,7 +136,16 @@ module Shibkit
         cascade_method(:textify_xml, true) if cascade
         
       end
+      
+      def from_xml(xml, target=nil, options={})
         
+        prepare_xml(xml)
+        select_xml(target, options)
+        parse_xml
+        purge_xml if ::Shibkit::MetaMeta.config.purge_xml?
+         
+      end
+      
       private
       
       def cascade_method(method_name, *params) 

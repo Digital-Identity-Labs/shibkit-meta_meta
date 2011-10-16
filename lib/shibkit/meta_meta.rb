@@ -194,7 +194,7 @@ module Shibkit
         
         self.reset
         
-        log.info "Loading object cache file from #{file_or_url} as #{format}"
+        log.info "Loading object cache file from #{file_or_url} as #{format} data..."
         
         @federations = case format
         when :yaml
@@ -216,7 +216,7 @@ module Shibkit
     ## Save entity data into a YAML file. 
     def self.save_cache_file(file_path, format=:yaml)
       
-      log.info "Saving object cache file to #{file_path} as #{format}"
+      log.info "Saving object cache file to #{file_path} as #{format} data..."
       
       ## Will *not* overwrite the example/default file in gem! TODO: this code is awful.
       gem_data_path = "#{::File.dirname(__FILE__)}/data"
