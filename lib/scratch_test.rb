@@ -38,6 +38,10 @@ puts Shibkit::MetaMeta.entities.count.to_s + " ents"
 puts Shibkit::MetaMeta.entities.count
 puts Shibkit::MetaMeta.orgs.count
 
+puts Shibkit::MetaMeta.stats.to_yaml
+
+exit
+
 puts
 puts "listing tags for all federations"
 Shibkit::MetaMeta.federations.each {|f| puts f.uri + " -> " + f.tags.join(', ')}

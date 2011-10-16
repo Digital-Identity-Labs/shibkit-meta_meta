@@ -565,6 +565,32 @@ module Shibkit
       
     end
 
- 
+    ## Stats
+    def self.stats
+      
+      stats = Hash.new
+      
+      stats[:federations] = Hash.new
+      
+      self.federations.each do |f|
+        
+        stats[:federations][f.uri] = Hash.new
+        stats[:federations][f.uri][:sp_count]  = f.sps.count
+        stats[:federations][f.uri][:idp_count] = f.idps.count
+        stats[:federations][f.uri][:entities]  = f.entities.count
+        stats[:federations][f.uri][:uri_count] = f.entities.collect {|e| e.uri}.uniq.count
+        
+      end
+      
+      stats[:federation_count] = self.federations.count
+      stats[:entities_count]   = self.federations.inject(0) {|m,f| m+f.entities.count}
+      stats[:primary_entities_count]  = self.entities.count
+      
+      return stats
+      
+    end
+    
+    
+    
   end
 end

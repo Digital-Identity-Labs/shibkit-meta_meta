@@ -61,6 +61,7 @@
   support_email: incommon-admin@incommonfederation.org
   tags: 
     - refeds
+    - :test_tag1
   groups: 
     - spec_set_2
   description: > 

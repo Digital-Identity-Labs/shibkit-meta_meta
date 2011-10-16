@@ -105,6 +105,18 @@ module Shibkit
         
       end
       
+      def sps
+        
+        return entities.select { |e| e.sp? }
+        
+      end
+      
+      def idps
+        
+        return entities.select { |e| e.idp? }
+        
+      end
+      
       private
       
       ## Special case for federation top-level nodes
