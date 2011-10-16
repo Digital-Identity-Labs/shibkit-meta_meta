@@ -191,10 +191,10 @@ module Shibkit
           source.description        = data[:description]   || ""
           source.trustiness         = data[:trustiness].to_f || 1
           
-          source.languages = data[:languages].inject([]){|m,v| m << v.to_sym } || [:en]
-          source.countries = data[:countries].inject([]){|m,v| m << v.to_sym } || []
-          source.groups    = data[:groups].inject([])   {|m,v| m << v.to_sym } || []
-          source.tags      = data[:tags].inject([])     {|m,v| m << v.to_sym } || []
+          source.languages = data[:languages].inject([]){|m,v| m << v.to_s.downcase.to_sym } || [:en]
+          source.countries = data[:countries].inject([]){|m,v| m << v.to_s.downcase.to_sym } || []
+          source.groups    = data[:groups].inject([])   {|m,v| m << v.to_s.downcase.to_sym } || []
+          source.tags      = data[:tags].inject([])     {|m,v| m << v.to_s.downcase.to_sym } || []
           
         end
         
@@ -452,15 +452,21 @@ module Shibkit
       ##   :real for included list of real sources, :dev for mock sources, or
       ##   :auto for either :real or :dev, based on environment
       ## @return [Array] Array of metadata source objects
-      def self.load(source_list=:auto, *groups)
+      def self.load(source_list=:auto, *selected_groups)
+        
+        selected_groups ||= []
+        
+        Shibkit::MetaMeta.log.debug "Load sources from #{source_list.to_s}"
         
         file = self.locate_sources_file(source_list)
         
-        Shibkit::MetaMeta.log.debug "Load sources from #{source_list.to_s}"
         sources = Array.new
         source_data = YAML::load(File.open(file))
         Shibkit::MetaMeta.log.debug "Source YAML:\n#{source_data.inspect}"
+        
+        ## Load records from the YAML-derived hash rather than directly to process them first
         source_data.each_pair do |id, data|
+          
           case data
           when Source
             sources << data
@@ -471,6 +477,18 @@ module Shibkit
           end
         end
         
+        ## If groups are specified then trim off any non-matching sources
+        unless selected_groups.empty?
+
+          selected_groups.inject([]){|m,v| m << v.to_s.downcase.to_sym }
+          
+          group_set = Set.new selected_groups
+          sources = sources.delete_if { |s| group_set.intersection(s.groups).empty? }
+          
+          Shibkit::MetaMeta.log.debug "Rejected sources that aren't in #{selected_groups.join(', ')}"
+        
+        end
+
         return sources 
         
       end
