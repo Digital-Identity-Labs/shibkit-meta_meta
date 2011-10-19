@@ -492,7 +492,7 @@ module Shibkit
           Shibkit::MetaMeta.log.debug "Rejected sources that aren't in #{selected_groups.join(', ')}"
         
         end
-
+        
         return sources 
         
       end
