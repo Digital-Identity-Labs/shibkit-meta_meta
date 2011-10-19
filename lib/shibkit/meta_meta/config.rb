@@ -61,7 +61,10 @@ module Shibkit
           :metastore   => Addressable::URI.convert_path(File.join(cache_root, 'meta')).to_s,
           :entitystore => Addressable::URI.convert_path(File.join(cache_root, 'body')).to_s            
         }
-         
+        
+        ## Execute block if passed one      
+        instance_eval(&block) if block
+        
       end
       
       def configure(&block)
@@ -278,7 +281,7 @@ module Shibkit
       ## @return [String]
       def auto_refresh?
 
-       return @auto_refresh || true
+       return @auto_refresh.nil? ? true : @auto_refresh
 
       end
       
