@@ -9,6 +9,8 @@ require 'digest/md5'
 # in ./support/ and its subdirectories.
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each {|f| require f}
 
+URL_REGEX = Regexp.new('(https?|ftp|file)://[-A-Za-z0-9+&@#/%?=~_|!:,.;]*[-A-Za-z0-9+&@#/%=~_|]')
+
 ## Configure RSpec options
 RSpec.configure do |config|
   
