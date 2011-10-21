@@ -49,18 +49,11 @@ module Shibkit
         
         @download_log_file  = nil
         
-        @quickload = false
-        
+        @download_cache_options = Hash.new
         @sources_file  = :auto
         
         @selected_federation_uris = []
-        
-        @download_cache_options = {
-          :default_ttl => 60*60*2,
-          :verbose     => false,
-          :metastore   => Addressable::URI.convert_path(File.join(cache_root, 'meta')).to_s,
-          :entitystore => Addressable::URI.convert_path(File.join(cache_root, 'body')).to_s            
-        }
+
         
         ## Execute block if passed one      
         instance_eval(&block) if block
@@ -178,6 +171,20 @@ module Shibkit
 
       end
       
+      def cache_fallback_ttl=(seconds)
+        
+        @cache_fallback_ttl = seconds.to_i
+        self.download_cache_options = { :default_ttl => @cache_fallback_ttl }
+        
+      end
+
+      def cache_fallback_ttl
+        
+        return @cache_fallback_ttl.nil? ? 7200 : @cache_fallback_ttl 
+
+        
+      end
+            
       ## Set main logger
       def logger=(logger)
         
@@ -346,6 +353,8 @@ module Shibkit
       ## @see http://rtomayko.github.com/rack-cache/ Rack::Cache for more information
       def download_cache_options=(options)
         
+        @download_cache_options ||= Hash.new
+        
         if download_cache_options
           @download_cache_options.merge!(options) 
         else
@@ -357,7 +366,9 @@ module Shibkit
       ## Returns hash of options to set how remote files are cached and expired
       def download_cache_options
         
-        return @download_cache_options
+        @download_cache_options ||= Hash.new
+
+        return download_cache_defaults.merge(@download_cache_options).freeze
 
       end
       
@@ -419,7 +430,18 @@ module Shibkit
         return ::Config::CONFIG['host_os'] =~ /mswin|mingw/ ? false : true
 
       end
+      
+      ## 
+      def download_cache_defaults
+        
+        return {
+            :default_ttl => cache_fallback_ttl,
+            :verbose     => verbose_downloads?,
+            :metastore   => Addressable::URI.convert_path(File.join(cache_root, 'meta')).to_s,
+            :entitystore => Addressable::URI.convert_path(File.join(cache_root, 'body')).to_s            
+        }
 
+      end
 
     end
   end
