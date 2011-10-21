@@ -17,6 +17,8 @@ describe Shibkit::MetaMeta::Config, "download and file caching settings" do
   it { should respond_to :verbose_downloads? }
   it { should respond_to :cache_fallback_ttl= }
   it { should respond_to :cache_fallback_ttl }
+  it { should respond_to :cache_root= }
+  it { should respond_to :cache_root }
   
   it "should return a hash of cache options" do
     
@@ -75,9 +77,43 @@ describe Shibkit::MetaMeta::Config, "download and file caching settings" do
       @config.verbose_downloads?.should be_false
     end
     
+    context "on Windows" do
+      
+      it "should store cache files in the default TEMP directory" do
+        
+        @config_class.any_instance.stub(:sensible_os?).and_return(false)
+        tempbase = 'c:\Temp'
+        ENV['TEMP'] = tempbase
+        
+        @config.download_cache_options[:entitystore].should include tempbase.gsub('\\','/')
+        
+      end
+    
+    end
+    
+    context "on sensible operating systems" do
+      
+      it "should store cache files in /tmp/" do
+        
+        @config_class.any_instance.stub(:sensible_os?).and_return(true)
+        tempbase = '/tmp'
+        
+        @config.download_cache_options[:entitystore].should include tempbase
+        
+      end
+      
+    end
+    
   end
   
   context "When changing settings" do
+    
+    it "should allow the cache directory to be changed" do
+      
+      @config.cache_root = "/tmp/bananas"
+      @config.cache_root.should == "/tmp/bananas"
+      
+    end
     
     it "should change the configuration hash when verbose downloads setting is changed" do
       
@@ -89,7 +125,7 @@ describe Shibkit::MetaMeta::Config, "download and file caching settings" do
       
     end
     
-    it "should change the configuration hash when cache root is changed" do
+    it "should change the default configuration hash when cache root is changed" do
         
       @config.cache_root = "/tmp/work"
       @config.download_cache_options[:entitystore].should include "/tmp/work" 
@@ -97,24 +133,59 @@ describe Shibkit::MetaMeta::Config, "download and file caching settings" do
     
     end
     
-    it "should change the configuration hash when default ttl is changed" do
-           
-      @config.cache_fallback_ttl = 808
-      @config.download_cache_options[:default_ttl].should == 808
+    context "if an equivalent Rack::Cache setting is configured directing using #download_cache_options" do 
+    
+      it "should not change the cache storage settings when #cache_root is changed " do
+      
+        @config.download_cache_options = { :entitystore => 'heap:/' }
+        @config.download_cache_options = { :metastore   => 'heap:/' }
+      
+        @config.cache_root = "/tmp/scratch"
+      
+        @config.download_cache_options[:entitystore].should == 'heap:/'
+        @config.download_cache_options[:metastore ].should  == 'heap:/'      
+      
+      end
+      
+      it "should always change the configuration hash when #default_ttl is changed" do
+
+        @config.cache_fallback_ttl = 808
+        @config.download_cache_options[:default_ttl].should == 808
+
+      end
+      
+      it "changing the configuration hash does not change #default_ttl" do
+
+        @config.download_cache_options = { :default_ttl => 909 }
+        @config.cache_fallback_ttl.should_not == 909
+
+      end
+      
+      it "should always change the configuration hash when #verbose_downloads is changed" do
+        
+        @config.download_cache_options = { :verbose => false }
+        @config.verbose_downloads = true
+        @config.download_cache_options[:verbose].should == true
+      
+      end
+      
+      it "changing the configuration hash does not change #verbose_downloads" do
+        
+        @config.verbose_downloads = true
+        @config.download_cache_options = { :verbose => false }
+        @config.verbose_downloads?.should == true
+      
+      end
       
     end
     
-    it "should allow direct manipulation of the config hash" do
+    it "should not allow direct manipulation of the returned config hash" do
       
-      @config.verbose_downloads?.should be_false
-      @config.download_cache_options[:verbose].should be_false
-           
-      @config.download_cache_options[:verbose] = true
-      @config.download_cache_options[:verbose].should be_true
+      expect { @config.download_cache_options[:verbose] = true }.should raise_error
         
     end
     
-    it "should allow new options to be merged into the default config hash" do
+    it "should allow new options to be merged into the default config hash, overloading those controlled by other methods" do
       
       @config.verbose_downloads?.should be_false
       @config.download_cache_options[:verbose].should be_false
@@ -125,18 +196,17 @@ describe Shibkit::MetaMeta::Config, "download and file caching settings" do
         
     end
     
-    it "should allow other, more obscure Rack::Cache options to be set directly" do
+    it "should allow other, more obscure Rack::Cache options to be set" do
 
       @config.download_cache_options[:allow_reload].should be_nil
       @config.download_cache_options[:allow_revalidate].should be_nil
            
       @config.download_cache_options = { :allow_reload => true }
-      @config.download_cache_options[:allow_revalidate] = true
+      @config.download_cache_options = { :allow_revalidate => true }
       
       @config.download_cache_options[:allow_reload].should     be_true
       @config.download_cache_options[:allow_revalidate].should be_true
-      
-      
+           
     end
     
   end
