@@ -51,8 +51,6 @@ module Shibkit
         @logger.formatter       = proc { |severity, datetime, progname, msg| "#{datetime}: #{severity} #{msg}\n" }
         @logger.progname        = "MetaMeta"
         
-        @download_log_file  = nil
-        
         @download_cache_options = Hash.new
         @sources_file  = :auto
         
