@@ -110,7 +110,7 @@ module Shibkit
       ## Should all XML be purged from objects after creation?
       def purge_xml?
         
-        return @purge_xml || false
+        return @purge_xml.nil? ? true : @purge_xml
         
       end
       
