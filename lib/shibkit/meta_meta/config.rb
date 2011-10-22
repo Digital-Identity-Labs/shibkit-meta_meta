@@ -34,7 +34,10 @@ module Shibkit
       REAL_SOURCES_FILE = "#{::File.dirname(__FILE__)}/data/real_sources.yml"
       
       ## Location of default mock sources list (contains small fictional federations)
-      DEV_SOURCES_FILE  = "#{::File.dirname(__FILE__)}/data/dev_sources.yml"
+      DEV_SOURCES_FILE  = "#{::File.dirname(__FILE__)}/data/real_sources.yml"
+      
+      ## Location of default test sources list # TODO
+      TEST_SOURCES_FILE  = "#{::File.dirname(__FILE__)}/data/real_sources.yml"
       
       ## Slurp
       VERSION_FILE = "#{::File.dirname(__FILE__)}/../../../VERSION"
@@ -81,10 +84,13 @@ module Shibkit
         
         case @sources_file
         when :auto
-          file_path = self.in_production? ? REAL_SOURCES_FILE : DEV_SOURCES_FILE
-        when :dev, :test
+          #file_path = self.in_production? ? REAL_SOURCES_FILE : DEV_SOURCES_FILE
+          file_path = REAL_SOURCES_FILE
+        when :dev, :development
           file_path = DEV_SOURCES_FILE
-        when :real, :prod, :production
+        when :test, :testing
+          file_path = TEST_SOURCES_FILE
+        when :real, :prod, :production, :all, :full
           file_path = REAL_SOURCES_FILE
         else
           file_path = @sources_file
