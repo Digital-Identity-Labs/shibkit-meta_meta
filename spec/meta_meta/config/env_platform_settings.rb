@@ -65,7 +65,7 @@ describe Shibkit::MetaMeta::Config, "platform settings" do
     
     it "should return true if Rails environment set and is production" do
        
-      Rails = Class.new unless defined? Rails
+      Rails = Class.new unless defined? Rails # Smells...
       Rails.stub_chain(:env,:production?).and_return(true)
 
       @config.in_production?.should be_true
@@ -74,7 +74,7 @@ describe Shibkit::MetaMeta::Config, "platform settings" do
     
     it "should return false if Rails environment set and is not :production" do
       
-      Rails = Class.new unless defined? Rails
+      Rails = Class.new unless defined? Rails # Smells...
       
       Rails.stub_chain(:env,:production?).and_return(false)      
       @config.in_production?.should be_false
@@ -83,7 +83,7 @@ describe Shibkit::MetaMeta::Config, "platform settings" do
     
     it "should return true if Rack environment set and is 'production'" do
       
-      Rack = Class.new
+      Rack = Class.new unless defined? Rack # Smells...
       RACK_ENV = 'production'
       
       @config.in_production?.should be_true
@@ -92,7 +92,7 @@ describe Shibkit::MetaMeta::Config, "platform settings" do
     
     it "should return false if Rack environment set is not :production" do
       
-      Rack = Class.new
+      Rack = Class.new unless defined Rack # Smells...
       RACK_ENV = 'development'
       
       @config.in_production?.should be_false

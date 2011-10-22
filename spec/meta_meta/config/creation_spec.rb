@@ -7,6 +7,11 @@ describe Shibkit::MetaMeta::Config, "creation and singleton behaviour" do
     @config_class = Shibkit::MetaMeta::Config.clone                                
   end
   
+  subject { @config_class }
+  
+  it { should respond_to :instance }
+  
+  
   it "Should raise an exception if #new is called" do
     
     expect {  @config_class.new }.should raise_error
