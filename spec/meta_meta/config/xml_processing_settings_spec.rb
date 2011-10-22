@@ -31,6 +31,7 @@ describe Shibkit::MetaMeta::Config, "XML processing settings behaviour" do
     
   end
   
+  
   it "should return if the #purge_xml? setting is active or not, only as a boolean" do
     
     @config.purge_xml = false
