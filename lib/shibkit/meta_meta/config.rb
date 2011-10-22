@@ -36,11 +36,12 @@ module Shibkit
       ## Location of default mock sources list (contains small fictional federations)
       DEV_SOURCES_FILE  = "#{::File.dirname(__FILE__)}/data/dev_sources.yml"
       
+      ## Slurp
+      VERSION_FILE = "#{::File.dirname(__FILE__)}/../../../VERSION"
+      
       ##
       def initialize(&block)
-        
-        @environment   = :development
-        
+ 
         @logger                 = ::Logger.new(STDOUT)
         @logger.level           = ::Logger::INFO
         @logger.datetime_format = "%Y-%m-%d %H:%M:%S"
@@ -54,8 +55,7 @@ module Shibkit
         
         @selected_federation_uris = []
 
-        
-        ## Execute block if passed one      
+        ## Execute block if passed one  ## Does not get one. Needs a work around, eventually.    
         instance_eval(&block) if block
         
       end
@@ -336,7 +336,7 @@ module Shibkit
       ## @return [String]
       def environment=(environ)
 
-        @environment = environ
+        @environment = environ.to_sym
 
       end
 
@@ -344,7 +344,7 @@ module Shibkit
       ## @return [String]
       def environment
 
-        return @environment || 'production'
+        return @environment || :development
 
       end
 
@@ -374,14 +374,20 @@ module Shibkit
       
       
       ## Work out if we are in production or not by snooping on environment
-      ## This is a magical bodge to make :auto option in #load vaguely useful
       def in_production?
+
+        ## Use attribute rather than method so we can distinguish between default and set values
+        return true  if @environment == :production
+        return false if @environment == :development
+        return false if @environment == :test
+
+        if defined? Rails and Rails.respond_to? :env
+          return Rails.env.production?
+        end
         
-        return true # Obviously temporary until the dev metadata is fixed
-        
-        return true if self.environment == :production
-        return true if defined? Rails and Rails.env.production? 
-        return true if defined? Rack and defined? RACK_ENV and RACK_ENV == 'production'
+        if defined? Rack and defined? RACK_ENV
+          return true if RACK_ENV == 'production'
+        end        
         
         return false
         
@@ -411,7 +417,13 @@ module Shibkit
       ## 
       def version
 
-       return 1
+        unless @version
+        
+          @version = File.open(VERSION_FILE, 'r') { |file| file.gets.strip }
+          
+        end
+      
+        return @version
         
       end
       
