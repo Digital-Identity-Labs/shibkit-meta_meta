@@ -23,7 +23,7 @@ describe Shibkit::MetaMeta::Config, "automatic download and refresh settings" do
       
     end
     
-    it "should have autorefresh set to active" do
+    it "should have auto_refresh set to active" do
       
       @config.auto_refresh?.should == true
       
@@ -42,7 +42,7 @@ describe Shibkit::MetaMeta::Config, "automatic download and refresh settings" do
     
     end
     
-    it "should allow autorefresh setting to be enabled or disabled" do
+    it "should allow auto_refresh setting to be enabled or disabled" do
       
       @config.auto_refresh=true
       @config.auto_refresh?.should == true
