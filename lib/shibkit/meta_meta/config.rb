@@ -185,8 +185,7 @@ module Shibkit
       def cache_fallback_ttl
         
         return @cache_fallback_ttl.nil? ? 7200 : @cache_fallback_ttl 
-
-        
+      
       end
             
       ## Set main logger
@@ -251,7 +250,7 @@ module Shibkit
       ## various functions (loading, processing and listing *after* it is set)
       def only_use(selection)
 
-        @selected_federation_uris ||= []
+        @selected_federation_uris = []
         
         case selection
         when String
@@ -318,7 +317,7 @@ module Shibkit
       ## 
       def auto_tag?
         
-        return @auto_tag || false
+        return @auto_tag.nil? ? false : @auto_tag
         
       end
       
@@ -332,7 +331,7 @@ module Shibkit
       ## 
       def merge_primary_tags?
         
-        return @merge_primary_tags || true
+        return @merge_primary_tags.nil? ? true : @merge_primary_tags
         
       end
           
