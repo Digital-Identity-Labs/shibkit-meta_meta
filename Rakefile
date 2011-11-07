@@ -20,7 +20,7 @@ Jeweler::Tasks.new do |gem|
   gem.summary = %Q{Downloads and parses Shibboleth (SAML2) metadata.}
   gem.description = %Q{Utilities for friendly handling of Shibboleth/SAML2 metadata. Easily download and parse metadata XML into Ruby objects.}
   gem.email = "gems@digitalidentitylabs.com"
-  gem.authors = ["Pete Birkinshaw"]
+  gem.authors = ["Pete Birkinshaw", "Sam Jones"]
   gem.files.exclude 'lib/scratch_test.rb'
   # dependencies defined in Gemfile
 end
