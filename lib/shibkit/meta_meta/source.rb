@@ -94,6 +94,7 @@ module Shibkit
       
       ## @return [String] URL of the federation or collection's home page
       attr_accessor :homepage
+      alias :homepage_url :homepage
       
       ## @return [Array] Array of languages supported by the federation or collection
       attr_accessor :languages
@@ -159,7 +160,7 @@ module Shibkit
       
       def to_s
         
-        return uri
+        return metadata_source || nil
         
       end
       
