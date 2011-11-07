@@ -54,3 +54,6 @@ spec/data/metadata_cache/*.xml
 /rspec.log
 /lib/.rbx/
 spec/meta_meta/meta_meta/mysaved_sources.yaml
+mysaved_sources.yaml
+lib/.rbx
+lib/.yardoc
