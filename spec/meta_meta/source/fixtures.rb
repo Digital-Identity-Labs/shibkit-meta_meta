@@ -2,7 +2,6 @@
 default_source_object = Shibkit::MetaMeta::Source.new
 
 TYPICAL_SOURCE_OBJECT = Shibkit::MetaMeta::Source.new do |s|
-  
   s.name_uri   = ""
   s.name       = "Unnown"
   s.refresh_delay = 86400

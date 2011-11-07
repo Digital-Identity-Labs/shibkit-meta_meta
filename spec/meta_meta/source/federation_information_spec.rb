@@ -7,3 +7,5 @@ describe Shibkit::MetaMeta::Config, "automatic download and refresh settings" do
     @config_class = Shibkit::MetaMeta::Config.clone                                                             
     @config = @config_class.instance                                
   end
+
+end

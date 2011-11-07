@@ -6,7 +6,7 @@ require 'shibkit/meta_meta'
 require 'digest/md5'
 require 'logger'
 
-require 'reek/spec'
+#require 'reek/spec'
 
 # Requires supporting files with custom matchers and macros, etc,
 # in ./support/ and its subdirectories.
@@ -17,7 +17,7 @@ URL_REGEX = Regexp.new('(https?|ftp|file)://[-A-Za-z0-9+&@#/%?=~_|!:,.;]*[-A-Za-
 ## Configure RSpec options
 RSpec.configure do |config|
 
-  config.include(Reek::Spec)
+#  config.include(Reek::Spec)
 
 end
 
