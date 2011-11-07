@@ -27,7 +27,6 @@ Gem::Specification.new do |s|
     "Rakefile",
     "VERSION",
     "examples/biggest_entity_id.rb",
-    "lib/scratch_test.rb",
     "lib/shibkit/meta_meta.rb",
     "lib/shibkit/meta_meta/attribute.rb",
     "lib/shibkit/meta_meta/config.rb",
@@ -53,6 +52,7 @@ Gem::Specification.new do |s|
     "lib/shibkit/meta_meta/source.rb",
     "lib/shibkit/meta_meta/sp.rb",
     "shibkit-meta_meta.gemspec",
+    "spec/meta_meta/attribute/token",
     "spec/meta_meta/config/autoloading_and_refreshing_spec.rb",
     "spec/meta_meta/config/code_nspec.rb",
     "spec/meta_meta/config/configuration_spec.rb",
@@ -70,10 +70,16 @@ Gem::Specification.new do |s|
     "spec/meta_meta/contact/contact_oldspec.rb",
     "spec/meta_meta/entity/entity_oldspec.rb",
     "spec/meta_meta/federation/federation_oldspec.rb",
+    "spec/meta_meta/idp/token",
+    "spec/meta_meta/logo/token",
     "spec/meta_meta/meta_meta/cache_example.yaml",
     "spec/meta_meta/meta_meta/meta_meta_spec.rb",
     "spec/meta_meta/meta_meta/saved_sources.yaml",
+    "spec/meta_meta/metadata_item/token",
     "spec/meta_meta/organisation/organisation_oldspec.rb",
+    "spec/meta_meta/provider/token",
+    "spec/meta_meta/requested_attribute/token",
+    "spec/meta_meta/service/token",
     "spec/meta_meta/source/application_extras_spec.rb",
     "spec/meta_meta/source/conversion_spec.rb",
     "spec/meta_meta/source/creation_spec.rb",
@@ -87,13 +93,14 @@ Gem::Specification.new do |s|
     "spec/meta_meta/source/selection_spec.rb",
     "spec/meta_meta/source/source_oldspec.rb",
     "spec/meta_meta/source/xml_parsing_spec.rb",
+    "spec/meta_meta/sp/token",
     "spec/meta_meta/template",
     "spec/moi/config_spec.rb",
     "spec/spec.opts",
     "spec/spec_helper.rb",
     "spec/support/supply_xml.rb"
   ]
-  s.homepage = %q{http://github.com/binaryape/shibkit-meta_meta}
+  s.homepage = %q{https://github.com/Digital-Identity-Labs/shibkit-meta_meta}
   s.licenses = [%q{Apache 2.0}]
   s.require_paths = [%q{lib}]
   s.rubygems_version = %q{1.8.8}
