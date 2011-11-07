@@ -15,7 +15,7 @@ require 'jeweler'
 Jeweler::Tasks.new do |gem|
   # gem is a Gem::Specification... see http://docs.rubygems.org/read/chapter/20 for more options
   gem.name = "shibkit-meta_meta"
-  gem.homepage = "http://github.com/binaryape/shibkit-meta_meta"
+  gem.homepage = "https://github.com/Digital-Identity-Labs/shibkit-meta_meta"
   gem.license = "Apache 2.0"
   gem.summary = %Q{Downloads and parses Shibboleth (SAML2) metadata.}
   gem.description = %Q{Utilities for friendly handling of Shibboleth/SAML2 metadata. Easily download and parse metadata XML into Ruby objects.}
