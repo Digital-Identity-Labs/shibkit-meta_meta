@@ -40,13 +40,15 @@ module Shibkit
       ## @note This class currently lacks the ability to properly validate
       ##   metadata.
       
-      ## Location of default real sources list (contains real-world federation details)
+      ## Location of default real sources list (contains real-world federation details) # REMOVE
       REAL_SOURCES_FILE = "#{::File.dirname(__FILE__)}/data/real_sources.yml"
       
-      ## Location of default mock sources list (contains small fictional federations)
+      ## Location of default mock sources list (contains small fictional federations) # REMOVE
       DEV_SOURCES_FILE  = "#{::File.dirname(__FILE__)}/data/dev_sources.yml"
       
-      ## Additional namespaces that Nokogiri needs to know about
+      PERCENTAGE_PATTERN = /(\d+)\s*%/
+      
+      ## Additional namespaces that Nokogiri needs to know about # TODO Move to Config?
       NAMESPACES = {
         'ukfedlabel' => 'http://ukfederation.org.uk/2006/11/label',
         'elab'       => 'http://eduserv.org.uk/labels',
@@ -112,11 +114,6 @@ module Shibkit
       
       ## @return [String] Status of the source: indicates success of last operation
       attr_reader   :status
-      
-      ## Group names (for loading sets of )
-      attr_accessor   :groups
-
-      attr_accessor   :tags
       
       attr_accessor   :active
       alias :active?  :active
@@ -193,8 +190,8 @@ module Shibkit
           
           source.languages = data[:languages].inject([]){|m,v| m << v.to_s.downcase.to_sym } || [:en]
           source.countries = data[:countries].inject([]){|m,v| m << v.to_s.downcase.to_sym } || []
-          source.groups    = data[:groups].inject([])   {|m,v| m << v.to_s.downcase.to_sym } || []
-          source.tags      = data[:tags].inject([])     {|m,v| m << v.to_s.downcase.to_sym } || []
+          source.groups    = data[:groups] || []
+          source.tags      = data[:tags]   || []
           
         end
         
@@ -256,23 +253,61 @@ module Shibkit
         return federation
         
       end
-
-      def trustiness=(level)
+      
+      def groups=(group_names)
         
-        @trustiness = level.to_f
+        @groups ||= Array.new
+        @groups = [group_names].flatten.inject([]) {|m,v| m << v.to_s.downcase.to_sym }
+        
+      end
+      
+      def groups
+        
+        return @groups
+        
+      end
+      
+      def tags=(tag_names)
+        
+        @tags ||= Array.new
+        @tags = [tag_names].flatten.inject([]) {|m,v| m << v.to_s.downcase.to_sym }
+        
+      end
+      
+      def tags
+        
+        return @tags
+        
+      end  
+      
+      def trustiness=(level)
+
+        ## Convert strings
+        if level.kind_of? String 
+          
+          ## Percentages as strings become decimal fractions, otherwise directly converted.
+          level = level.match(PERCENTAGE_PATTERN) ? level.to_f / 100 : level.to_f
+
+        end
+        
+        case 
+        when level > 1
+          log.warn "Setting trustiness greater than 1 is ambiguous, so storing as 1. Use decimal fraction or percentage."
+          @trustiness = 1.0
+        when level < 0
+          log.warn "Setting trustiness less than 1 is ambiguous, so storing as 0. Use decimal fraction or percentage."
+          @trustiness = 0.0
+        else
+          @trustiness = level.to_f
+        end  
+        
+        return @trustiness
         
       end
       
       def trustiness
         
-        case 
-        when @trustiness > 1
-          return 1
-        when @trustiness < 0
-          return 0
-        else
-          return @strustiness
-        end  
+        return @trustiness || 1.0 # TODO should be able to configure default trustiness
         
       end
       
