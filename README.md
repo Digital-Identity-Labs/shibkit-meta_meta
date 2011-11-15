@@ -39,7 +39,7 @@ but does not include any persistence or query facilities, discovery protocol sup
 If you are planning to use SAML metadata within your application you might be better
 using Shibkit::Disco, a library that builds on Shibkit::MetaMeta to provide a 
 SAML discovery framework. Most features of Shibkit::MetaMeta will still be available inside
-Shibkit::Disco.
+Shibkit::Disco. Shibkit::Disco will be available in early 2012.
 
 >I feel the same way about disco as I do about herpes. 
 >*Hunter S. Thompson*
@@ -63,16 +63,14 @@ MetaMeta is still early in development so please bear the following in mind when
 
 ## INSTALLATION
 
-Please note: we haven't actually released the gem yet! It's best to download
-the source from Github and then run `rake install`
-
 ### Requirements
 Shibkit::MetaMeta is available as a gem and should bring in most dependencies itself
 when installed. It does need a few of other things as well:
 
 * Ruby 1.8.7+ or Ruby 1.9.2+
 * Rubygems (not required but makes things much simpler)
-* LibXML2 (including LibXML2-devel on Linux)
+* LibXML2 (including LibXML2-devel on most Linux distros)
+* LibXSLT (including libXSLT-devel on most Linux distros)
 * Linux, Mac OS, *BSD, Solaris (Windows is unsupported at present)
 
 ### As a released Ruby Gem
@@ -88,6 +86,7 @@ gem install shibkit-meta_meta
 and require the gem in your code
 
 ```ruby
+require 'rubygems'
 require 'shibkit/meta_meta'
 ```
 
