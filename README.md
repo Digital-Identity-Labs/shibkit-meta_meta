@@ -166,13 +166,29 @@ Shibkit::MetaMeta.orgs.each { |o| puts o }
 
 #### Select an entity by URI
 If you already know the URI of an entity in a loaded federation then you can get it directly using
-`#from_uri`.
+`#from_uri`
 
 ```ruby
 entity = Shibkit::MetaMeta.from_uri('https://shib.manchester.ac.uk/shibboleth')
 
 puts entity.idp?         
 puts entity.accountable? 
+```
+
+The same thing can be achieved a little more compactly using the [] method:
+
+```ruby
+entity = Shibkit::MetaMeta['https://shib.manchester.ac.uk/shibboleth']
+
+puts entity.idp?         
+puts entity.accountable? 
+```
+
+My aliasing the rather long Shibkit::MetaMeta class name, you can reduce it further:
+
+```
+MM = Shibkit::MetaMeta
+entity = MM['https://shib.manchester.ac.uk/shibboleth']
 ```
 
 Read more about the Shibkit::MetaMeta class
