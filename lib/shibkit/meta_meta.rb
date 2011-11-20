@@ -37,6 +37,12 @@ module Shibkit
   ## Simple library to parse Shibboleth metadata files into Ruby objects
   class MetaMeta
     
+    def self.[](uri)
+      
+      return self.from_uri(uri)
+      
+    end
+    
     ## 
     def self.config(&block)
 
@@ -446,7 +452,8 @@ module Shibkit
         
         self.federations.each { |f| @by_uri[f.uri] = f unless @by_uri[f.uri] }
         self.entities.each    { |e| @by_uri[e.uri] = e unless @by_uri[e.uri] }
-          
+        self.sources.each     { |s| @by_uri[s.uri] = s unless @by_uri[s.uri] }
+         
       end
       
       return @by_uri[uri]

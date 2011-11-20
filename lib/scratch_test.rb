@@ -2,6 +2,8 @@ require 'rubygems'
 require 'bundler'
 require 'shibkit/meta_meta'
 
+MM=Shibkit::MetaMeta
+
 Shibkit::MetaMeta.config do |c|
   #c.downloads_logger  = STDOUT
   #c.verbose_downloads = true
@@ -25,7 +27,10 @@ puts Shibkit::MetaMeta.config.selected_groups
 
 puts Shibkit::MetaMeta.entities.count.to_s + " ents"
 
-#exit
+puts MM['http://ukfederation.org.uk'].uri
+puts MM['https://shib.manchester.ac.uk/shibboleth'].uri
+
+exit
 
 
 #puts "Tags"
