@@ -117,7 +117,7 @@
   metadata:    https://edugate.heanet.ie/edugate-metadata-signed.xml
   certificate: https://edugate.heanet.ie/metadata-signer.crt
   fingerprint: ~
-  #refeds_info: https://refeds.terena.org/index.php/FederationUkfed
+  refeds_info: https://refeds.terena.org/index.php/FederationEdugate
   homepage:    http://www.edugate.ie/
   languages: ['en-ie', :en]
   support_email: noc@heanet.ie
