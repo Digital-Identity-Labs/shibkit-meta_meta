@@ -108,6 +108,29 @@
   description: >
     Canadian Access Federation
 
+## Edugate  
+'http://edugate.heanet.ie':
+  name: The Edugate Federation
+  display_name: Edugate
+  type: federation
+  countries: [:gb]
+  metadata:    https://edugate.heanet.ie/edugate-metadata-signed.xml
+  certificate: https://edugate.heanet.ie/metadata-signer.crt
+  fingerprint: ~
+  #refeds_info: https://refeds.terena.org/index.php/FederationUkfed
+  homepage:    http://www.edugate.ie/
+  languages: ['en-ie', :en]
+  support_email: noc@heanet.ie
+  tags: 
+    - :refeds
+  groups: 
+    - :spec_set_2
+  description: >
+    The Edugate federation is comprised of Irish Higher Education Institutions and Research Organisations that
+    have agreed upon a standard procedure for exchanging information about users and resources to enable access
+    and use of those resources and services. The Edugate federation is a service operated by HEAnet in co-operation
+    with HEAnet client institutions
+
 ## Partial sources disabled with comment # until complete
 
 ## Swiss Access Federation
