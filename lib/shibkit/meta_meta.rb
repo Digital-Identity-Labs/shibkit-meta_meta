@@ -530,7 +530,8 @@ module Shibkit
       
       return false unless info[:purge_xml]  == config.purge_xml?
       return false unless info[:source_xml] == config.remember_source_xml?
-      return false unless info[:groups]     == Digest::SHA1.hexdigest(config.selected_groups.join)
+      return false unless info[:sources]    == Digest::SHA1.hexdigest(sources.collect { |s| s.uri }.join)
+      return false unless info[:groups]     == Digest::SHA1.hexdigest(config.selected_groups.join)       
       
       log.info "Smartcache is valid: loading objects..."
       
@@ -563,7 +564,8 @@ module Shibkit
         :format      => :marshal,
         :purge_xml   => config.purge_xml?,
         :source_xml  => config.remember_source_xml?,
-        :groups      => Digest::SHA1.hexdigest(config.selected_groups.join)
+        :sources     => Digest::SHA1.hexdigest(sources.collect { |s| s.uri }.join), 
+        :groups      => Digest::SHA1.hexdigest(config.selected_groups.join)       
       }
 
       File.open(scmd_file, 'w') { |out| YAML.dump(info, out) }
