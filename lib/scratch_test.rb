@@ -1,6 +1,4 @@
-require 'rubygems'
-require 'bundler'
-require 'shibkit/meta_meta'
+require './shibkit/meta_meta.rb'
 
 MM=Shibkit::MetaMeta
 
