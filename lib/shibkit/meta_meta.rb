@@ -15,8 +15,6 @@
 ## limitations under the License.
 ##
 
-require 'rubygems'
-
 require 'nokogiri'
 require 'yaml'
 require 'open-uri'
