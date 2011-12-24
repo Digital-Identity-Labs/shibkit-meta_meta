@@ -20,14 +20,15 @@ module Shibkit
   class MetaMeta
   
     class Config
-      
+
       require 'logger'
       require 'rbconfig'
       require 'tempfile'
       require 'addressable/uri'
       require 'fileutils'
       require 'singleton'
-          
+      require 'rbconfig'
+      
       include Singleton
       
       ## Location of default real sources list (contains real-world federation details)
@@ -38,9 +39,6 @@ module Shibkit
       
       ## Location of default test sources list # TODO
       TEST_SOURCES_FILE  = "#{::File.dirname(__FILE__)}/data/real_sources.yml"
-      
-      ## Slurp
-      VERSION_FILE = "#{::File.dirname(__FILE__)}/../../../VERSION"
       
       ##
       def initialize(&block)
@@ -420,13 +418,7 @@ module Shibkit
       ## 
       def version
 
-        unless @version
-        
-          @version = File.open(VERSION_FILE, 'r') { |file| file.gets.strip }
-          
-        end
-      
-        return @version
+        return  Shibkit::MetaMeta::VERSION
         
       end
       
@@ -442,7 +434,7 @@ module Shibkit
       ## Are we on a POSIX standard system or on MS-DOS/Windows, etc?
       def sensible_os?
 
-        return ::Config::CONFIG['host_os'] =~ /mswin|mingw/ ? false : true
+        return ::RbConfig::CONFIG['host_os'] =~ /mswin|mingw/ ? false : true
 
       end
       

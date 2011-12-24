@@ -18,8 +18,6 @@
 module Shibkit
   class MetaMeta
     
-    require 'file'
-    
     module Version
         
         VERSION_FILE = "#{::File.dirname(__FILE__)}/../../../VERSION"

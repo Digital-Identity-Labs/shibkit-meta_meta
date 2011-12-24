@@ -22,6 +22,7 @@ require 'logger'
 require 'fileutils'
 require 'digest/sha1'
 
+require 'shibkit/meta_meta/version'
 require 'shibkit/meta_meta/config'
 require 'shibkit/meta_meta/metadata_item'
 require 'shibkit/meta_meta/contact'
