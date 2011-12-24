@@ -9,7 +9,13 @@ gem 'addressable'
 gem 'chunky_png'
 gem 'dimensions'
 gem 'json'
+gem 'domo-rb'
 
+#platforms :jruby do
+#  gem 'jruby-jars'
+#  gem 'jruby-openssl'
+#  gem 'jruby-rack'
+#end
 
 group :development do
   gem "rspec",   "~> 2.7.0"
