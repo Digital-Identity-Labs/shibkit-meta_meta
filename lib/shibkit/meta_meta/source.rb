@@ -48,16 +48,6 @@ module Shibkit
       
       PERCENTAGE_PATTERN = /(\d+)\s*%/
       
-      ## Additional namespaces that Nokogiri needs to know about # TODO Move to Config?
-      NAMESPACES = {
-        'ukfedlabel' => 'http://ukfederation.org.uk/2006/11/label',
-        'elab'       => 'http://eduserv.org.uk/labels',
-        'wayf'       => 'http://sdss.ac.uk/2006/06/WAYF',
-        'mdui'       => 'urn:oasis:names:tc:SAML:metadata:ui',
-        'saml'       => 'urn:oasis:names:tc:SAML:2.0:assertion',
-        'shibmd'     => 'urn:mace:shibboleth:metadata:1.0'
-      }
-      
       ## @return [String] the URI identifier for the federation or collection
       attr_accessor :name_uri
       alias    :uri :name_uri
@@ -446,7 +436,8 @@ module Shibkit
         xml  = doc.root
         
         ## Add exotic namespaces to make sure we can deal with all metadata # TODO
-        NAMESPACES.each_pair { |label, uri| xml.add_namespace_definition(label,uri) }
+        namespaces = ::Shibkit::MetaMeta.config.metadata_namespaces
+        namespaces.each_pair { |label, uri| xml.add_namespace_definition(label,uri) }
         
         return xml
        

@@ -229,6 +229,34 @@ module Shibkit
 
       end
       
+      def metadata_namespaces=(hash)
+        
+        @metadata_namespaces = hash
+                
+      end
+      
+      ## Return all XML namespaces needed/used by metadata
+      def metadata_namespaces
+        
+        ## Possible to automate this if I bodge the XML processing less...?
+        ## This is not a good solution, it would be better if Nokogiri was allowed
+        ## to sort this out itself.
+        
+        @metadata_namespaces ||= {
+          'ukfedlabel' => 'http://ukfederation.org.uk/2006/11/label',
+          'elab'       => 'http://eduserv.org.uk/labels',
+          'wayf'       => 'http://sdss.ac.uk/2006/06/WAYF',
+          'mdui'       => 'urn:oasis:names:tc:SAML:metadata:ui',
+          'saml'       => 'urn:oasis:names:tc:SAML:2.0:assertion',
+          'md'         => 'urn:oasis:names:tc:SAML:2.0:metadata',
+           nil         => 'urn:oasis:names:tc:SAML:2.0:metadata',
+          'shibmd'     => 'urn:mace:shibboleth:metadata:1.0'
+        }
+        
+        return @metadata_namespaces
+        
+      end
+      
       ## 
       def selected_groups=(*list)
         

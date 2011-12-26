@@ -34,16 +34,6 @@ module Shibkit
       TARGET_ATTR     = 'ID'
       REQUIRED_QUACKS = [:bananas]
       
-      ## Additional namespaces that Nokogiri needs to know about
-      NAMESPACES = {
-        'ukfedlabel' => 'http://ukfederation.org.uk/2006/11/label',
-        'elab'       => 'http://eduserv.org.uk/labels',
-        'wayf'       => 'http://sdss.ac.uk/2006/06/WAYF',
-        'mdui'       => 'urn:oasis:names:tc:SAML:metadata:ui',
-        'saml'       => 'urn:oasis:names:tc:SAML:2.0:assertion',
-        'shibmd'     => 'urn:mace:shibboleth:metadata:1.0'
-      }
-      
       attr_reader :read_at
       
       ## New object takes XML (as libXML object or text)
@@ -193,8 +183,9 @@ module Shibkit
           
           @noko = doc.root
 
-          ## Add exotic namespaces to make sure we can deal with all metadata
-          NAMESPACES.each_pair { |label, uri| @noko.add_namespace_definition(label,uri) }
+          ## Add exotic namespaces to make sure we can deal with all metadata # TODO
+          namespaces = ::Shibkit::MetaMeta.config.metadata_namespaces
+          namespaces.each_pair { |label, uri| xml.add_namespace_definition(label,uri) }
           
           @source_xml = xml if ::Shibkit::MetaMeta.config.remember_source_xml?
           
