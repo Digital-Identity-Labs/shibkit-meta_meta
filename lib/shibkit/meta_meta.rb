@@ -65,6 +65,8 @@ module Shibkit
       ## Clear federation entity data
       self.flush
       
+      return true
+      
     end
     
     ## Clear all loaded entity & federation data 
@@ -76,6 +78,8 @@ module Shibkit
       @entities    = Array.new
       @federations = Array.new
       @by_uri      = Hash.new
+      
+      return true
       
     end
     
@@ -90,9 +94,13 @@ module Shibkit
         FileUtils.rm_rf   dir
         FileUtils.mkdir_p dir
         
+        return true
+        
       else
         
         log.warn "Cannot delete files at #{dir} - check config settings."
+        
+        return false
         
       end
       
@@ -169,7 +177,7 @@ module Shibkit
       sources = all_sources_indexed.values
 
       sources = sources.sort {|a,b| a.created_at <=> b.created_at }
-
+      
       if self.filtered_sources?
         
         sources = sources.select { |s| self.selected_federation_uris.include? s.uri }
@@ -383,16 +391,19 @@ module Shibkit
             e.primary = true
             processed[e.uri] = e
             
+            ## This is where the bug is. Eventually.
+            
             ## Collect entity
-            @entities << e 
-
+            @entities << e
+            
           end
           
         end
 
         ## BODGE: Needs a better fix. Issue 14
-        #@entities = @entities.compact
-        
+        darn_it = @entities.uniq! # TODO/BUG: not optimal, should not be needed. Quick fix.
+        log.warn "Duplicate entities were loaded but spotted and removed. This is a bug." if darn_it
+               
       end
       
       return @entities
