@@ -138,7 +138,7 @@ module Shibkit
         @metadata_source = nil
         @certificate_source = nil
         @fingerprint = nil
-        @refeds_info = nil
+        @refeds_url = nil
         @homepage  = nil
         @languages = []
         @support_email = nil
