@@ -131,9 +131,10 @@ module Shibkit
       ## Build a federation object out of metadata XML
       def parse_xml
         
-        self.metadata_id    = @noko['ID'].to_s.strip
+        self.metadata_id    = @noko['ID'].to_s.strip # TODO: Not always present  - need to deal with that better
         self.federation_uri = @noko['Name'].to_s.strip
-        self.valid_until    = @noko['validUntil'].strip
+        self.valid_until    = @noko['validUntil'].to_s.strip # TODO: Not always present  - need to deal with that better
+        # TODO: cacheDuration also needs to be here... and used by refresh.
         self.entities       = Array.new
         
         ## Process XML chunk for each entity in turn
