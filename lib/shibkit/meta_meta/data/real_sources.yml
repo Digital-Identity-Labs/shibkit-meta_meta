@@ -29,6 +29,7 @@
   name: UK Access Management Federation For Education And Research
   display_name: UK Access Management Federation
   type: federation
+  structure: mesh
   countries: ['gb']
   metadata:    http://metadata.ukfederation.org.uk/ukfederation-metadata.xml
   certificate: http://metadata.ukfederation.org.uk/ukfederation.pem
@@ -51,6 +52,7 @@
   name: inCommon Federation
   display_name: inCommon
   type: federation
+  structure: mesh
   countries: ['us']
   metadata:    https://wayf.incommonfederation.org/InCommon/InCommon-metadata.xml
   certificate: https://wayf.incommonfederation.org/bridge/certs/incommon.pem
@@ -73,6 +75,7 @@
   name: Australian Access Federation
   display_name: AAF
   type: federation
+  structure: mesh
   countries: ['au']
   metadata:    http://manager.aaf.edu.au/metadata/metadata.aaf.signed.complete.xml
   certificate: https://manager.aaf.edu.au/metadata/metadata-cert.pem
@@ -93,6 +96,7 @@
   name: Canadian Access Federation
   display_name: CAF
   type: federation
+  structure: mesh
   countries: ['ca']
   metadata:    https://caf-shibops.ca/CoreServices/cafshib_metadata_signed.xml
   certificate: https://caf-shibops.ca/CoreServices/cafshib_metadata_verify.pem
@@ -113,6 +117,7 @@
   name: The Edugate Federation
   display_name: Edugate
   type: federation
+  structure: mesh
   countries: ['gb']
   metadata:    https://edugate.heanet.ie/edugate-metadata-signed.xml
   certificate: https://edugate.heanet.ie/metadata-signer.crt
@@ -136,6 +141,7 @@
   name: Haka
   display_name: Haka
   type: federation
+  structure: mesh
   countries: ['fi']
   metadata:    https://haka.funet.fi/fed/haka-metadata.xml
   certificate: http://www.csc.fi/hallinto/haka/maaritykset/haka-metatieto/haka-sign.csc.fi.pem
@@ -155,7 +161,8 @@
 'http://md.swamid.se/md/swamid-2.0.xml':
   name: Swedish Academic Identity - SWAMID
   display_name: SWAMID
-  type: federation
+  type: interfederation
+  structure: mesh
   countries: ['se']
   metadata:    http://md.swamid.se/md/swamid-2.0.xml
   certificate: https://portal.nordu.net/display/SWAMI/SAML+Metadata

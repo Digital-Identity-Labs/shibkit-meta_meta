@@ -53,6 +53,9 @@ module Shibkit
       ##   simple collections of entities.
       attr_accessor :type
       
+      ## @return [String] :mesh or :hub
+      attr_accessor :structure
+      
       ## @return [Array] country codes for areas served by the federation 
       attr_accessor :countries
       

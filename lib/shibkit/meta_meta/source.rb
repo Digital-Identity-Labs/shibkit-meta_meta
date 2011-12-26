@@ -58,9 +58,12 @@ module Shibkit
       ## @return [String] the common, friendler name of the federation or collection
       attr_accessor :display_name
       
-      ## @return [String] :federation for proper federations, :collection for 
-      ##   simple collections of entities.
+      ## @return [Symbol] :federation for proper federations, :collection for 
+      ##   simple collections of entities, :interfederation (or :aggregation, later).
       attr_accessor :type
+      
+      ## @return [Symbol] 
+      attr_accessor :structure
       
       ## @return [Fixednum] the recommended refresh period for the federation, in seconds
       attr_accessor :refresh_delay
@@ -168,6 +171,7 @@ module Shibkit
           source.refresh_delay      = data[:refresh].to_i || 86400
           source.display_name       = data[:display_name] || data['name'] || uri
           source.type               = data[:type].to_sym  || :collection
+          source.structure          = data[:structure].to_sym || :mesh
 
           source.metadata_source    = data[:metadata]
           source.certificate_source = data[:certificate]
@@ -200,6 +204,7 @@ module Shibkit
         data['refresh']       = refresh_delay.to_i
         data['display_name']  = display_name
         data['type']          = type.to_s
+        data['structure']     = structure.to_s
         data['countries']     = countries
         data['metadata']      = metadata_source
         data['certificate']   = certificate_source
@@ -228,7 +233,8 @@ module Shibkit
         ## Pass additional information from source into federation object  
         federation.name          = name || uri
         federation.display_name  = display_name || name
-        federation.type          = type 
+        federation.type          = type
+        federation.structure     = structure 
         federation.refeds_url    = refeds_info 
         federation.countries     = countries
         federation.languages     = languages

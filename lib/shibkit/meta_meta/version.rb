@@ -26,6 +26,12 @@ module Shibkit
         
         raise "Badly defined version!" unless MAJOR && MINOR && TINY
         
+        def self.to_s
+          
+          return Shibkit::MetaMeta::VERSION
+          
+        end
+        
     end
 
     VERSION = [Version::MAJOR, Version::MINOR, Version::TINY].compact * '.'
