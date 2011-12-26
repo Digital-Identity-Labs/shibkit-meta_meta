@@ -65,6 +65,9 @@ module Shibkit
       ## @return [Symbol] 
       attr_accessor :structure
       
+      ## @return [Symbol] 
+      attr_accessor :stage
+      
       ## @return [Fixednum] the recommended refresh period for the federation, in seconds
       attr_accessor :refresh_delay
       
@@ -172,6 +175,7 @@ module Shibkit
           source.display_name       = data[:display_name] || data['name'] || uri
           source.type               = data[:type].to_sym  || :collection
           source.structure          = data[:structure].to_sym || :mesh
+          source.stage              = data[:stage].to_sym || :production
 
           source.metadata_source    = data[:metadata]
           source.certificate_source = data[:certificate]
@@ -205,6 +209,7 @@ module Shibkit
         data['display_name']  = display_name
         data['type']          = type.to_s
         data['structure']     = structure.to_s
+        data['stage']         = stage.to_s
         data['countries']     = countries
         data['metadata']      = metadata_source
         data['certificate']   = certificate_source
@@ -234,7 +239,8 @@ module Shibkit
         federation.name          = name || uri
         federation.display_name  = display_name || name
         federation.type          = type
-        federation.structure     = structure 
+        federation.structure     = structure
+        federation.stage         = stage
         federation.refeds_url    = refeds_info 
         federation.countries     = countries
         federation.languages     = languages

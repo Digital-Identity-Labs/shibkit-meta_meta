@@ -56,6 +56,9 @@ module Shibkit
       ## @return [String] :mesh or :hub
       attr_accessor :structure
       
+      ## @return [String] :production :test or :development
+      attr_accessor :stage
+      
       ## @return [Array] country codes for areas served by the federation 
       attr_accessor :countries
       
