@@ -131,6 +131,76 @@
     and use of those resources and services. The Edugate federation is a service operated by HEAnet in co-operation
     with HEAnet client institutions
 
+## Haka
+'urn:mace:funet.fi:haka':
+  name: Haka
+  display_name: Haka
+  type: federation
+  countries: ['fi']
+  metadata:    https://haka.funet.fi/fed/haka-metadata.xml
+  certificate: http://www.csc.fi/hallinto/haka/maaritykset/haka-metatieto/haka-sign.csc.fi.pem
+  fingerprint: ~
+  refeds_info: https://refeds.terena.org/index.php/FederationHaka
+  homepage:    http://www.csc.fi/english/institutions/haka
+  languages: ['fi', 'en']
+  support_email: haka@csc.fi
+  tags: 
+    - :refeds
+  groups: 
+    - :spec_set_2
+  description: >
+    Haka is the identity federation of the Finnish universities, polytechnics and research institutions.
+
+## Swamid
+'http://md.swamid.se/md/swamid-2.0.xml':
+  name: Swedish Academic Identity - SWAMID
+  display_name: SWAMID
+  type: federation
+  countries: ['se']
+  metadata:    http://md.swamid.se/md/swamid-2.0.xml
+  certificate: https://portal.nordu.net/display/SWAMI/SAML+Metadata
+  fingerprint: 12:60:D7:09:6A:D9:C1:43:AD:31:88:14:3C:A8:C4:B7:33:8A:4F:CB
+  mdaup:       http://md.swamid.se/md/swamid-tou-en.txt 
+  refeds_info: https://refeds.terena.org/index.php/FederationSwamid
+  homepage:  http://www.swamid.se/
+  languages: ['se', 'en']
+  support_email: operations@swamid.se
+  tags: 
+    - :refeds
+  groups: 
+    - :spec_set_2
+  description: >
+    SWAMID is an identity federation that includes most higher education
+    institutions and government agencies that is involved in higher education 
+    and research in Sweden. SWAMID offers quality assured and secure 
+    identification of employees, students, alumni and other associated in 
+    higher education in Sweden, in the Nordic countries, in the rest of 
+    Europe and also in North America and Asia.
+
+## KALMAR2
+'kalmarcentral2':
+  name: Kalmar Union
+  display_name: Kalmar2
+  type: federation
+  countries: ['fi','dk','no','se','is']
+  metadata:    "http://kalmar2.org/simplesaml/module.php/aggregator/?id=kalmarcentral2&set=saml2"
+  certificate:  https://www.kalmar2.org/kalmar2web/metadata_signing_certificate.html
+  fingerprint: ~
+  refeds_info: ~
+  homepage:  https://www.kalmar2.org/kalmar2web/front_page.html
+  languages: ['en','se','no','fi','da','is']
+  support_email: ~
+  tags: 
+    - :confederation
+  groups: 
+    - :spec_set_2
+  description: >
+    The Kalmar e-identity Union is a cross-Nordic authentication system for 
+    higher education and research. Students and staff members in a Nordic 
+    university or research institution can use a single username and password 
+    to access services in other Nordic countries.
+
+
 ## Partial sources disabled with comment # until complete
 
 ## Swiss Access Federation
