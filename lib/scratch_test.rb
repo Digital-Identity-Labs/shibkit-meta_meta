@@ -1,3 +1,6 @@
+
+
+
 require './shibkit/meta_meta.rb'
 
 MM=Shibkit::MetaMeta
@@ -17,16 +20,19 @@ Shibkit::MetaMeta.config do |c|
   #c.auto_tag = false
 end
 
-puts "Selected groups"
-puts Shibkit::MetaMeta.config.selected_groups
+#puts "Selected groups"
+#puts Shibkit::MetaMeta.config.selected_groups
 
 #Shibkit::MetaMeta.delete_all_cached_files!
 
 
 puts Shibkit::MetaMeta.entities.count.to_s + " ents"
 
-puts MM['http://ukfederation.org.uk'].uri
-puts MM['https://shib.manchester.ac.uk/shibboleth'].uri
+puts Shibkit::MetaMeta['http://ukfederation.org.uk'].to_yaml
+puts "+++++++++++++++"
+puts Shibkit::MetaMeta['https://shib.manchester.ac.uk/shibboleth'].to_yaml
+puts "+++++++++++++++"
+puts Shibkit::MetaMeta['http://metadata.ukfederation.org.uk/ukfederation-metadata.xml'].to_yaml
 
 exit
 
