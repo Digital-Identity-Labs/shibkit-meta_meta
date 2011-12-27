@@ -462,7 +462,6 @@ module Shibkit
         
         self.federations.each { |f| @by_uri[f.uri] = f unless @by_uri[f.uri] }
         self.entities.each    { |e| @by_uri[e.uri] = e unless @by_uri[e.uri] }
-        self.sources.each     { |s| @by_uri[s.url] = s unless @by_uri[s.url] }
          
       end
       
