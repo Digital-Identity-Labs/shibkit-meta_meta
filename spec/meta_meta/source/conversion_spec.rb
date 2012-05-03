@@ -33,13 +33,17 @@ describe Shibkit::MetaMeta::Source, "conversion to and from other classes" do
   it { should respond_to :to_federation }
   it { should respond_to :to_s }
   
-  it "should be able to output a hash"
+  it "should be able to output a hash" do
+    @source.to_hash.should be_kind_of Hash
+  end
 
   describe "the saved hash" do
     
     @parent = TYPICAL_SOURCE_OBJECT
     
-    it "should have all keys as symbols"
+    it "should have all keys as symbols" do
+    end
+
     it "should have the same name_uri"
     it "should have the same name"     
     it "should have the same refresh_delay (stored as epoch seconds)" 
@@ -61,13 +65,17 @@ describe Shibkit::MetaMeta::Source, "conversion to and from other classes" do
     
   end
   
-  it "should be able to create a federation object"
+  it "should be able to create a federation object" do
+    @source.to_federation.class.should be_kind_of Federation
+  end
   
   describe "the federation object" do
     
   end
   
-  it "should have a special to_s method that is its URI"
+  it "should have a special to_s method that is its URI" do
+    @source.to_s.should == @source.uri
+  end
   
 end
 
