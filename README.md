@@ -1,6 +1,8 @@
 Shibkit::MetaMeta - Lazy Access To SAML Metadata
 ================================================
 
+[![Gem Version](https://badge.fury.io/rb/shibkit-meta_meta.png)](http://badge.fury.io/rb/shibkit-meta_meta)
+
 ## DESCRIPTION
 
 Shibkit::MetaMeta aims to provide lazy, friendly handling of
