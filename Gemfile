@@ -18,9 +18,11 @@ gem 'domo-rb'
 #end
 
 group :development do
-  gem "rspec",   "~> 2.7.0"
-  gem "bundler", "~> 1.0.0"
-  gem "jeweler", "~> 1.6.2"
+  gem "rspec"
+  gem "bundler"
+  gem "jeweler"
+  gem 'transpec'
+  gem 'rubocop'
   #gem "rcov", ">= 0"
 #  gem "httparty"
   #gem 'reek'
