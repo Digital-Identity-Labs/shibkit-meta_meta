@@ -10,12 +10,12 @@ describe Shibkit::MetaMeta::Config, "configuration blocks" do
   
   subject { @config }
   
-  it { should respond_to :configure }
+  it { is_expected.to respond_to :configure }
   
-  it "Should allow a configuration block to be used at object creation" do
+  xit "Should allow a configuration block to be used at object creation" do
     
     my_config = @config_class.instance { |c| c.smartcache_expiry = 12345 }
-    my_config.smartcache_expiry.should == 12345
+    expect(my_config.smartcache_expiry).to eq(12345)
         
   end
   
@@ -23,7 +23,7 @@ describe Shibkit::MetaMeta::Config, "configuration blocks" do
     
     my_config = @config_class.instance
     my_config.configure { |c| c.smartcache_expiry = 3333 }
-    my_config.smartcache_expiry.should == 3333
+    expect(my_config.smartcache_expiry).to eq(3333)
     
   end
     

@@ -10,55 +10,55 @@ describe Shibkit::MetaMeta::Config, "Source file location behaviour" do
   
   subject { @config }
   
-  it { should respond_to :sources_file= }
-  it { should respond_to :sources_file  }
+  it { is_expected.to respond_to :sources_file= }
+  it { is_expected.to respond_to :sources_file  }
   
   it "should allow setting of source file location to any filesystem path" do
     
     @config.sources_file = "/tmp/sources.yml"
-    @config.sources_file.should == "/tmp/sources.yml"
+    expect(@config.sources_file).to eq("/tmp/sources.yml")
     
   end
   
   it "should allow setting of source file location to any HTTP or HTTPS URL" do
     
     @config.sources_file = "http://localhost/sources.yml"
-    @config.sources_file.should == "http://localhost/sources.yml"
+    expect(@config.sources_file).to eq("http://localhost/sources.yml")
     
   end
  
   it "should return the actual file location" do
     
     @config.sources_file = "/tmp/test.yml"
-    @config.sources_file.should == "/tmp/test.yml"
+    expect(@config.sources_file).to eq("/tmp/test.yml")
     
   end
 
   it "should allow source file to be set automatically from default data by passing :auto [TODO]" do 
     
     @config.sources_file = :auto
-    @config.sources_file.should match /\/data\/(.+)_sources.yml$/
+    expect(@config.sources_file).to match /\/data\/(.+)_sources.yml$/
     
   end
   
   it "should automatically select source data suitable for dev environment if file isn't set [TODO]" do
     
     @config.environment = :development
-    @config.sources_file.should match /\/data\/real_sources.yml$/ ## Temp - needs suitable file
+    expect(@config.sources_file).to match /\/data\/real_sources.yml$/ ## Temp - needs suitable file
     
   end
   
   it "should automatically select source data suitable for production environment if file isn't set" do
     
     @config.environment = :production 
-    @config.sources_file.should match /\/data\/real_sources.yml$/ ## Temp - needs suitable file
+    expect(@config.sources_file).to match /\/data\/real_sources.yml$/ ## Temp - needs suitable file
     
   end
   
   it "should automatically select source data suitable for test environment if file isn't set [TODO]" do
     
     @config.environment = :test
-    @config.sources_file.should match /\/data\/real_sources.yml$/ ## Temp - needs suitable file
+    expect(@config.sources_file).to match /\/data\/real_sources.yml$/ ## Temp - needs suitable file
     
   end
   
@@ -67,7 +67,7 @@ describe Shibkit::MetaMeta::Config, "Source file location behaviour" do
     [:dev, :development].each do |sym|
       
       @config.sources_file = sym
-      @config.sources_file.should match /\/data\/real_sources.yml$/ ## Temp - needs suitable file
+      expect(@config.sources_file).to match /\/data\/real_sources.yml$/ ## Temp - needs suitable file
       
     end
     
@@ -78,7 +78,7 @@ describe Shibkit::MetaMeta::Config, "Source file location behaviour" do
     [:test, :testing].each do |sym|
       
       @config.sources_file = sym
-      @config.sources_file.should match /\/data\/real_sources.yml$/ ## Temp - needs suitable file
+      expect(@config.sources_file).to match /\/data\/real_sources.yml$/ ## Temp - needs suitable file
       
     end
     
@@ -89,7 +89,7 @@ describe Shibkit::MetaMeta::Config, "Source file location behaviour" do
     [:real, :prod, :production, :all, :full].each do |sym|
       
       @config.sources_file = sym
-      @config.sources_file.should match /\/data\/real_sources.yml$/ ## Temp - needs suitable file
+      expect(@config.sources_file).to match /\/data\/real_sources.yml$/ ## Temp - needs suitable file
       
     end
     

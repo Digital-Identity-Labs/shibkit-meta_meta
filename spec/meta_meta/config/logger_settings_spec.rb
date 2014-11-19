@@ -10,42 +10,42 @@ describe Shibkit::MetaMeta::Config, "logging settings" do
   
   subject { @config }
   
-  it { should respond_to :logger=  }
-  it { should respond_to :logger }
-  it { should respond_to :verbose_downloads= }
-  it { should respond_to :verbose_downloads? }
-  it { should respond_to :downloads_logger= }
-  it { should respond_to :downloads_logger }
+  it { is_expected.to respond_to :logger=  }
+  it { is_expected.to respond_to :logger }
+  it { is_expected.to respond_to :verbose_downloads= }
+  it { is_expected.to respond_to :verbose_downloads? }
+  it { is_expected.to respond_to :downloads_logger= }
+  it { is_expected.to respond_to :downloads_logger }
 
   it "should allow any standard Ruby logger to be set as #logger" do
     
     log_to_stdout = Logger.new(STDOUT)
-    expect { @config.logger = log_to_stdout }.should_not raise_error
+    expect { @config.logger = log_to_stdout }.not_to raise_error
     
   end
   
   it "should allow normal logger options to be set on logger" do
     
-    expect { @config.logger.level = ::Logger::DEBUG }.should_not raise_error
+    expect { @config.logger.level = ::Logger::DEBUG }.not_to raise_error
     
   end
   
   it "should allow a standard Ruby logger to be set as the download logger" do
     
     mrlog = Logger.new(STDOUT)
-    expect { @config.downloads_logger = mrlog }.should_not raise_error
+    expect { @config.downloads_logger = mrlog }.not_to raise_error
     
   end
   
   it "should allow normal logging options to be set on the download logger" do
     
-    expect { @config.logger.level = ::Logger::DEBUG }.should_not raise_error
+    expect { @config.logger.level = ::Logger::DEBUG }.not_to raise_error
         
   end
   
   it "should allow the downloads logger to be set to the main logger" do
     
-    expect { @config.downloads_logger = @config.logger }.should_not raise_error
+    expect { @config.downloads_logger = @config.logger }.not_to raise_error
     expect { @config.downloads_logger.info "Boo" }
     
   end
@@ -54,19 +54,19 @@ describe Shibkit::MetaMeta::Config, "logging settings" do
     
     it "should have verbose downloads turned off" do
       
-      @config.verbose_downloads?.should be_false
+      expect(@config.verbose_downloads?).to be_falsey
       
     end
     
     it "should not have a download logger specified" do
     
-      @config.downloads_logger.should be_nil  
+      expect(@config.downloads_logger).to be_nil  
       
     end
     
     it "should have a default logger" do
       
-      @config.logger.should be_kind_of Logger
+      expect(@config.logger).to be_kind_of Logger
       
     end
     
@@ -78,7 +78,7 @@ describe Shibkit::MetaMeta::Config, "logging settings" do
     
     it "should be set to INFO output level" do
       
-      @config.logger.level.should == Logger::INFO
+      expect(@config.logger.level).to eq(Logger::INFO)
       
     end
     

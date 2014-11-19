@@ -10,41 +10,41 @@ describe Shibkit::MetaMeta::Config, "tag settings behaviour" do
   
   subject { @config }
   
-  it { should respond_to :auto_tag= }
-  it { should respond_to :auto_tag?  }
-  it { should respond_to :merge_primary_tags= }
-  it { should respond_to :merge_primary_tags? }
+  it { is_expected.to respond_to :auto_tag= }
+  it { is_expected.to respond_to :auto_tag?  }
+  it { is_expected.to respond_to :merge_primary_tags= }
+  it { is_expected.to respond_to :merge_primary_tags? }
 
   it "should allow autotagging to be enabled and disabled" do
     
     @config.auto_tag = false
-    @config.auto_tag?.should == false
+    expect(@config.auto_tag?).to eq(false)
     
     @config.auto_tag = true
-    @config.auto_tag?.should == true
+    expect(@config.auto_tag?).to eq(true)
     
   end
   
   it "should return current autotagging setting, as a boolean" do
   
     @config.auto_tag = false
-    @config.auto_tag?.should == false
+    expect(@config.auto_tag?).to eq(false)
     
     @config.auto_tag = true
-    @config.auto_tag?.should == true
+    expect(@config.auto_tag?).to eq(true)
     
     @config.auto_tag = nil 
-    @config.auto_tag?.should == false 
+    expect(@config.auto_tag?).to eq(false) 
   
   end
    
   it "should allow merging of primary tags to be enabled and disabled" do
     
     @config.merge_primary_tags = false
-    @config.merge_primary_tags?.should == false
+    expect(@config.merge_primary_tags?).to eq(false)
     
     @config.merge_primary_tags = true
-    @config.merge_primary_tags?.should == true
+    expect(@config.merge_primary_tags?).to eq(true)
     
     
   end
@@ -52,13 +52,13 @@ describe Shibkit::MetaMeta::Config, "tag settings behaviour" do
   it "should return current setting for merging of primary tags, as a boolean" do
     
     @config.merge_primary_tags = false
-    @config.merge_primary_tags?.should == false
+    expect(@config.merge_primary_tags?).to eq(false)
     
     @config.merge_primary_tags = true
-    @config.merge_primary_tags?.should == true
+    expect(@config.merge_primary_tags?).to eq(true)
     
     @config.merge_primary_tags = nil 
-    @config.merge_primary_tags?.should == false
+    expect(@config.merge_primary_tags?).to eq(false)
     
   end
   
@@ -66,13 +66,13 @@ describe Shibkit::MetaMeta::Config, "tag settings behaviour" do
     
     it "should have autotagging disabled by default" do
       
-      @config.auto_tag?.should == false
+      expect(@config.auto_tag?).to eq(false)
       
     end
     
     it "should have merging of primary tags enabled by default" do
       
-      @config.merge_primary_tags?.should == true
+      expect(@config.merge_primary_tags?).to eq(true)
       
     end
     

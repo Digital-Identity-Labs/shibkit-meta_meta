@@ -6,7 +6,7 @@ describe Shibkit::MetaMeta::Config, "class source code quality" do
     
     source_code = File.expand_path(File.dirname(__FILE__) + '../../../../lib/shibkit/meta_meta/config.rb')
     
-    source_code.should_not reek
+    expect(source_code).not_to reek
   
   end
   

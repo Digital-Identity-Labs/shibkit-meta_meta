@@ -10,76 +10,76 @@ describe Shibkit::MetaMeta::Config, "Smartcache settings behavior" do
   
   subject { @config }
   
-  it { should respond_to :smartcache_expiry= }
-  it { should respond_to :smartcache_expiry }
-  it { should respond_to :smartcache_active= }
-  it { should respond_to :smartcache_active? }
-  it { should respond_to :smartcache_object_file }
-  it { should respond_to :smartcache_info_file }
+  it { is_expected.to respond_to :smartcache_expiry= }
+  it { is_expected.to respond_to :smartcache_expiry }
+  it { is_expected.to respond_to :smartcache_active= }
+  it { is_expected.to respond_to :smartcache_active? }
+  it { is_expected.to respond_to :smartcache_object_file }
+  it { is_expected.to respond_to :smartcache_info_file }
  
   it "should allow the #smartcache_expiry time to be set in seconds, with integer or string" do
     
     @config.smartcache_expiry = 600
-    @config.smartcache_expiry.should == 600
+    expect(@config.smartcache_expiry).to eq(600)
     @config.smartcache_expiry = "700"
-    @config.smartcache_expiry.should == 700
+    expect(@config.smartcache_expiry).to eq(700)
     @config.smartcache_expiry = "800s"
-    @config.smartcache_expiry.should == 800    
+    expect(@config.smartcache_expiry).to eq(800)    
         
   end
   
   it "should return the #smartcache_expiry time to be returned as an integer" do
     
     @config.smartcache_expiry = 400
-    @config.smartcache_expiry.should be_a_kind_of Fixnum
+    expect(@config.smartcache_expiry).to be_a_kind_of Fixnum
     
   end
   
   it "should allow the smartcache to be enabled or disabled" do
     
     @config.smartcache_active = true
-    @config.smartcache_active?.should be_true
+    expect(@config.smartcache_active?).to be_truthy
     
     @config.smartcache_active = false
-    @config.smartcache_active?.should be_false
+    expect(@config.smartcache_active?).to be_falsey
     
     @config.smartcache_active = nil
-    @config.smartcache_active?.should be_false
+    expect(@config.smartcache_active?).to be_falsey
     
   end
   
   it "should return if the smartcache is enabled or disabled" do
     @config.smartcache_active = true
-    @config.smartcache_active?.should be_true
+    expect(@config.smartcache_active?).to be_truthy
     
     @config.smartcache_active = false
-    @config.smartcache_active?.should be_false
+    expect(@config.smartcache_active?).to be_falsey
     
   end
   
   it "should return the location of the smartcache object data" do
     
-    @config.smartcache_object_file.should be_kind_of String
-    @config.smartcache_object_file.should match /\/smartcache.marshal$/
+    expect(@config.smartcache_object_file).to be_kind_of String
+    expect(@config.smartcache_object_file).to match /\/smartcache.marshal$/
     
   end
   
   it "should return the location of the smartcache metadata" do
     
-    @config.smartcache_info_file.should be_kind_of String
-    @config.smartcache_info_file.should match /\/smartcache.yml$/
+    expect(@config.smartcache_info_file).to be_kind_of String
+    expect(@config.smartcache_info_file).to match /\/smartcache.yml$/
     
   end
   
   it "should save smartcache files in the cache_root, even if it changes" do
     
-    @config.smartcache_object_file.should include @config.cache_root
-    @config.smartcache_object_file.should include @config.cache_root
+    expect(@config.smartcache_object_file).to include @config.cache_root
+    expect(@config.smartcache_object_file).to include @config.cache_root
 
     @config.cache_root = "/tmp/another_root"
     
-    @config.smartcache_object_file.should include @config.cache_root
-    @config.smartcache_object_file.should include @config.cache_root
+    expect(@config.smartcache_object_file).to include @config.cache_root
+    expect(@config.smartcache_object_file).to include @config.cache_root
     
 
   end
@@ -88,20 +88,20 @@ describe Shibkit::MetaMeta::Config, "Smartcache settings behavior" do
     
     it "should have smartcache enabled" do
       
-      @config.smartcache_active?.should == true
+      expect(@config.smartcache_active?).to eq(true)
       
     end
     
     it "should have smartcache set to expire in two hours" do
       
-      @config.smartcache_expiry.should == 3600
+      expect(@config.smartcache_expiry).to eq(3600)
       
     end
     
     it "should save smartcache files in the default cache_root" do
 
-      @config.smartcache_object_file.should include @config.cache_root
-      @config.smartcache_object_file.should include @config.cache_root
+      expect(@config.smartcache_object_file).to include @config.cache_root
+      expect(@config.smartcache_object_file).to include @config.cache_root
 
     end
     

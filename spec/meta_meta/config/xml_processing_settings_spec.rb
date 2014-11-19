@@ -10,22 +10,22 @@ describe Shibkit::MetaMeta::Config, "XML processing settings behaviour" do
   
   subject { @config }
   
-  it { should respond_to :purge_xml= }
-  it { should respond_to :purge_xml? }
-  it { should respond_to :remember_source_xml= }
-  it { should respond_to :remember_source_xml? }
+  it { is_expected.to respond_to :purge_xml= }
+  it { is_expected.to respond_to :purge_xml? }
+  it { is_expected.to respond_to :remember_source_xml= }
+  it { is_expected.to respond_to :remember_source_xml? }
   
   context "By default" do
     
     it "should have #purge_xml set to true" do 
       
-      @config.purge_xml?.should be_true
+      expect(@config.purge_xml?).to be_truthy
       
     end
     
     it "should have #remember_source_xml set to false" do
       
-      @config.remember_source_xml?.should be_false
+      expect(@config.remember_source_xml?).to be_falsey
       
     end
     
@@ -35,40 +35,40 @@ describe Shibkit::MetaMeta::Config, "XML processing settings behaviour" do
   it "should return if the #purge_xml? setting is active or not, only as a boolean" do
     
     @config.purge_xml = false
-    @config.purge_xml?.should be_false
+    expect(@config.purge_xml?).to be_falsey
     @config.purge_xml = nil
-    @config.purge_xml?.should be_false
+    expect(@config.purge_xml?).to be_falsey
     @config.purge_xml = true
-    @config.purge_xml?.should be_true
+    expect(@config.purge_xml?).to be_truthy
     
   end
 
   it "should return if the #remember_source_xml? setting is active or not, only as a boolean" do
     
     @config.remember_source_xml = false
-    @config.remember_source_xml?.should be_false
+    expect(@config.remember_source_xml?).to be_falsey
     @config.remember_source_xml = nil
-    @config.remember_source_xml?.should be_false
+    expect(@config.remember_source_xml?).to be_falsey
     @config.remember_source_xml = true
-    @config.remember_source_xml?.should be_true
+    expect(@config.remember_source_xml?).to be_truthy
     
   end
 
   it "should allow #purge_xml setting to be activated and deactivated" do
     
     @config.purge_xml = false
-    @config.purge_xml?.should be_false    
+    expect(@config.purge_xml?).to be_falsey    
     @config.purge_xml = true
-    @config.purge_xml?.should be_true
+    expect(@config.purge_xml?).to be_truthy
     
   end
   
   it "should allow #remember_source_xml setting to be activated and deactivated" do
     
     @config.remember_source_xml = false
-    @config.remember_source_xml?.should be_false
+    expect(@config.remember_source_xml?).to be_falsey
     @config.remember_source_xml = true
-    @config.remember_source_xml?.should be_true
+    expect(@config.remember_source_xml?).to be_truthy
     
   end
 

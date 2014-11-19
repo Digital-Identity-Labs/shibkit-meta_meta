@@ -10,22 +10,22 @@ describe Shibkit::MetaMeta::Config, "automatic download and refresh settings" do
   
   subject { @config }
   
-  it { should respond_to :autoload=  }
-  it { should respond_to :autoload? }
-  it { should respond_to :auto_refresh= }
-  it { should respond_to :auto_refresh? }
+  it { is_expected.to respond_to :autoload=  }
+  it { is_expected.to respond_to :autoload? }
+  it { is_expected.to respond_to :auto_refresh= }
+  it { is_expected.to respond_to :auto_refresh? }
   
   context "When using default settings" do
     
     it "should have autoload set to be active" do
       
-      @config.autoload?.should == true
+      expect(@config.autoload?).to eq(true)
       
     end
     
     it "should have auto_refresh set to active" do
       
-      @config.auto_refresh?.should == true
+      expect(@config.auto_refresh?).to eq(true)
       
     end
     
@@ -36,35 +36,35 @@ describe Shibkit::MetaMeta::Config, "automatic download and refresh settings" do
     it "should allow autoload setting to be enable or disabled" do
       
       @config.autoload=true
-      @config.autoload?.should == true
+      expect(@config.autoload?).to eq(true)
       @config.autoload=false
-      @config.autoload?.should == false
+      expect(@config.autoload?).to eq(false)
     
     end
     
     it "should allow auto_refresh setting to be enabled or disabled" do
       
       @config.auto_refresh=true
-      @config.auto_refresh?.should == true
+      expect(@config.auto_refresh?).to eq(true)
       @config.auto_refresh=false
-      @config.auto_refresh?.should == false
+      expect(@config.auto_refresh?).to eq(false)
       
     end
     
     it "should only return true or false for #autoload?" do
       
       @config.autoload="yup" # Potentially misleading
-      @config.autoload?.should == true
+      expect(@config.autoload?).to eq(true)
       @config.autoload=nil
-      @config.autoload?.should == false
+      expect(@config.autoload?).to eq(false)
       
     end
     
     it "should only return true or false for #auto_refresh?" do
       @config.auto_refresh="yup" # Potentially misleading
-      @config.auto_refresh?.should == true
+      expect(@config.auto_refresh?).to eq(true)
       @config.auto_refresh=nil
-      @config.auto_refresh?.should == false
+      expect(@config.auto_refresh?).to eq(false)
     end
     
   end

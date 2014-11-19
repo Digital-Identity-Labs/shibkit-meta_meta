@@ -10,29 +10,29 @@ describe Shibkit::MetaMeta::Config, "platform settings" do
   
   subject { @config }
   
-  it { should respond_to :environment=  }
-  it { should respond_to :environment }
-  it { should respond_to :in_production? }
-  it { should respond_to :version }
-  it { should respond_to :platform }
+  it { is_expected.to respond_to :environment=  }
+  it { is_expected.to respond_to :environment }
+  it { is_expected.to respond_to :in_production? }
+  it { is_expected.to respond_to :version }
+  it { is_expected.to respond_to :platform }
   
   it "should allow the #environment to be set" do
     
     @config.environment = :porcupine
-    @config.environment.should == :porcupine
+    expect(@config.environment).to eq(:porcupine)
     
   end
   
   it "should return an environment as a symbol when set" do
     
     @config.environment = "testing"
-    @config.environment.should == :testing
+    expect(@config.environment).to eq(:testing)
     
   end
   
   it "should return :development from #environment by default" do
     
-    @config.environment.should == :development
+    expect(@config.environment).to eq(:development)
     
   end
   
@@ -41,21 +41,21 @@ describe Shibkit::MetaMeta::Config, "platform settings" do
     it "should return true if #environment is :production" do
       
       @config.environment = :production
-      @config.in_production?.should be_true
+      expect(@config.in_production?).to be_truthy
       
     end
     
     it "should return false if #environment is :development" do
       
       @config.environment = :development
-      @config.in_production?.should be_false
+      expect(@config.in_production?).to be_falsey
       
     end
     
     it "should return false if #environment is :test" do
       
       @config.environment = :test
-      @config.in_production?.should be_false
+      expect(@config.in_production?).to be_falsey
       
     end
     
@@ -66,9 +66,9 @@ describe Shibkit::MetaMeta::Config, "platform settings" do
     it "should return true if Rails environment set and is production" do
        
       Rails = Class.new unless defined? Rails # Smells...
-      Rails.stub_chain(:env,:production?).and_return(true)
+      allow(Rails).to receive_message_chain(:env,:production?).and_return(true)
 
-      @config.in_production?.should be_true
+      expect(@config.in_production?).to be_truthy
       
     end
     
@@ -76,8 +76,8 @@ describe Shibkit::MetaMeta::Config, "platform settings" do
       
       Rails = Class.new unless defined? Rails # Smells...
       
-      Rails.stub_chain(:env,:production?).and_return(false)      
-      @config.in_production?.should be_false
+      allow(Rails).to receive_message_chain(:env,:production?).and_return(false)      
+      expect(@config.in_production?).to be_falsey
       
     end
     
@@ -86,7 +86,7 @@ describe Shibkit::MetaMeta::Config, "platform settings" do
       Rack = Class.new unless defined? Rack # Smells...
       RACK_ENV = 'production'
       
-      @config.in_production?.should be_true
+      expect(@config.in_production?).to be_truthy
       
     end
     
@@ -95,13 +95,13 @@ describe Shibkit::MetaMeta::Config, "platform settings" do
       Rack = Class.new unless defined Rack # Smells...
       RACK_ENV = 'development'
       
-      @config.in_production?.should be_false
+      expect(@config.in_production?).to be_falsey
       
     end
     
     it "should return false if environment, Rack and Rails are all undefined" do
       
-      @config.in_production?.should be_false
+      expect(@config.in_production?).to be_falsey
     
     end
     
@@ -109,20 +109,20 @@ describe Shibkit::MetaMeta::Config, "platform settings" do
   
   it "should return a version string from #version with at least three parts" do
     
-    @config.version.should be_a_kind_of String
-    @config.version.split('.').count.should be > 2
+    expect(@config.version).to be_a_kind_of String
+    expect(@config.version.split('.').count).to be > 2
         
   end
   
   it "should return a version string matching the MAJOR.MINOR.PATCH pattern" do
     
-    @config.version.should match /^(\d+)\.(\d+)\.(\d+)/
+    expect(@config.version).to match /^(\d+)\.(\d+)\.(\d+)/
         
   end
   
   it "should return a string for #platform made up of three parts" do
     
-    @config.platform.split(':').count.should == 3
+    expect(@config.platform.split(':').count).to eq(3)
     
   end
     

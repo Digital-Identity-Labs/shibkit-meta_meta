@@ -9,12 +9,12 @@ describe Shibkit::MetaMeta::Config, "creation and singleton behaviour" do
   
   subject { @config_class }
   
-  it { should respond_to :instance }
+  it { is_expected.to respond_to :instance }
   
   
   it "Should raise an exception if #new is called" do
     
-    expect {  @config_class.new }.should raise_error
+    expect {  @config_class.new }.to raise_error
     
   end
   
@@ -22,7 +22,7 @@ describe Shibkit::MetaMeta::Config, "creation and singleton behaviour" do
     
     it "should return a Config object" do
       
-      Shibkit::MetaMeta::Config.instance.class.should == Shibkit::MetaMeta::Config
+      expect(Shibkit::MetaMeta::Config.instance.class).to eq(Shibkit::MetaMeta::Config)
       
     end
     
@@ -34,7 +34,7 @@ describe Shibkit::MetaMeta::Config, "creation and singleton behaviour" do
       
       first  = @config_class.instance
       second = @config_class.instance
-      first.should == second
+      expect(first).to eq(second)
       
     end
   

@@ -15,7 +15,7 @@ describe Shibkit::MetaMeta::Source, "conversion to and from other classes" do
     
     it "should respond to from_hash" do
       
-      Shibkit::MetaMeta::Source.should respond_to :from_hash
+      expect(Shibkit::MetaMeta::Source).to respond_to :from_hash
       
     end
     
@@ -29,9 +29,9 @@ describe Shibkit::MetaMeta::Source, "conversion to and from other classes" do
     
   subject { @source }
 
-  it { should respond_to :to_hash }
-  it { should respond_to :to_federation }
-  it { should respond_to :to_s }
+  it { is_expected.to respond_to :to_hash }
+  it { is_expected.to respond_to :to_federation }
+  it { is_expected.to respond_to :to_s }
   
   it "should be able to output a hash"
 
