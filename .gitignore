@@ -1,20 +1,15 @@
 # rcov generated
 coverage
-
 # rdoc generated
 rdoc
-
 # yard generated
 doc
 .yardoc
-
 # bundler
 .bundle
-
 # jeweler generated
 pkg
-
-# Have editor/IDE/OS specific files you need to ignore? Consider using a global gitignore: 
+# Have editor/IDE/OS specific files you need to ignore? Consider using a global gitignore:
 #
 # * Create a file at ~/.gitignore
 # * Include files you want ignored
@@ -28,25 +23,19 @@ pkg
 # For MacOS:
 #
 .DS_Store
-
 # For TextMate
 #*.tmproj
 #tmtags
-
 # For emacs:
 #*~
 #\#*
 #.\#*
-
 # For vim:
 #*.swp
-
 # For redcar:
 #.redcar
-
 # For rubinius:
 #*.rbc
-
 ## Cached spec metadata files
 spec/data/metadata_cache/*.xml
 /spec/rspec.log
@@ -57,3 +46,4 @@ spec/meta_meta/meta_meta/mysaved_sources.yaml
 mysaved_sources.yaml
 lib/.rbx
 lib/.yardoc
+.idea
