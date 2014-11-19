@@ -62,7 +62,7 @@ module Shibkit
 
           self.class.init_caches 
  
-          http_response = RestClient.get(url)
+          http_response = RestClient.get(url).force_encoding("utf-8")
 
           file = Tempfile.new(Time.new.to_i.to_s)
           open(file.path, 'w') { |f| f << http_response.to_s }
