@@ -118,8 +118,7 @@ module Shibkit
       end
       
       def logos(lang=:en)
-        
-        return logos[lang] || []
+        return @logos[lang] || [] ## TODO: What the heck was I doing here? This needs to be sorted out (look at methods calling methods with same name)
         
       end
       
