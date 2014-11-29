@@ -64,14 +64,14 @@ module Shibkit
       ## I'm not sure about these.
       def size
         
-        return case 
+        return case
         when pixels <= (16*16)
           :tiny
         when pixels <= (32*32)
           :small
         when pixels <= (64*64)
           :icon
-        when pixels <= (4200..6200)
+        when pixels === (4200..6200)
           :default
         when pixels <= (128*128)
           :medium
@@ -197,7 +197,7 @@ module Shibkit
       
       ## Build the logo object from a suitable chunk of XML
       def parse_xml
-        
+
         if @noko and @noko.content
           
           self.location = @noko.content.to_s.strip || nil
