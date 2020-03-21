@@ -8,7 +8,7 @@ gem 'rack-cache'
 gem 'addressable'
 gem 'chunky_png'
 gem 'dimensions'
-gem 'json'
+gem 'json', '>= 2.3.0'
 gem 'domo-rb'
 
 #platforms :jruby do
