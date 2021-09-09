@@ -1,7 +1,7 @@
 source 'http://rubygems.org'
 
 gem 'rake'
-gem 'nokogiri'
+gem 'nokogiri', '>= 1.8.2'
 gem 'rest-client'
 gem 'rest-client-components'
 gem 'rack-cache'
