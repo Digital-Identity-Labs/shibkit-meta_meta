@@ -1,10 +1,10 @@
 source 'http://rubygems.org'
 
 gem 'rake'
-gem 'nokogiri'
+gem 'nokogiri', '>= 1.15.6'
 gem 'rest-client'
-gem 'rest-client-components'
-gem 'rack-cache'
+gem 'rest-client-components', '>= 1.3.0'
+gem 'rack-cache', '>= 1.2'
 gem 'addressable'
 gem 'chunky_png'
 gem 'dimensions'
