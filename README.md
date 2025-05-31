@@ -7,6 +7,7 @@ Shibkit::MetaMeta - Lazy Access To SAML Metadata
 
 > [!CAUTION]
 > THIS PROJECT IS ANCIENT, UNSUPPORTED AND ARCHIVED
+> 
 > Please see [Smee](https://github.com/Digital-Identity-Labs/smee) for a fast, efficient alternative 
 > written in Elixir.
 > 
