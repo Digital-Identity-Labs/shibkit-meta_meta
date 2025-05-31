@@ -3,6 +3,18 @@ Shibkit::MetaMeta - Lazy Access To SAML Metadata
 
 [![Gem Version](https://badge.fury.io/rb/shibkit-meta_meta.png)](http://badge.fury.io/rb/shibkit-meta_meta)
 
+----------
+
+> [!CAUTION]
+> THIS PROJECT IS ANCIENT, UNSUPPORTED AND ARCHIVED
+> Please see [Smee](https://github.com/Digital-Identity-Labs/smee) for a fast, efficient alternative 
+> written in Elixir.
+> 
+> This library is no longer safe to use, as the dependencies are very out of date.
+> If it's useful to you please feel free to fork it and update it yourself. 
+
+------------
+
 ## DESCRIPTION
 
 Shibkit::MetaMeta aims to provide lazy, friendly handling of
